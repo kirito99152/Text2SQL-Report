@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek-Chat Benchmark Dashboard</title>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-main: #c9d1d9;
+            --text-dim: #8b949e;
+            --accent: #7c3aed;
+            /* Purple for DeepSeek */
+            --success: #238636;
+            --warning: #d29922;
+            --error: #f85149;
+            --border: #30363d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 2rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        .controls {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding-bottom: 0.625rem;
+        }
+
+        .input-group label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        input[type="number"] {
+            background: var(--bg-color);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.625rem 1rem;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            width: 120px;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+        }
+
+        button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.625rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            background: var(--border);
+            color: var(--text-dim);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .strict-match {
+            color: var(--success);
+        }
+
+        .progress-container {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .progress-bar-bg {
+            height: 12px;
+            background: var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, #4c1d95 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .results-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .results-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+        }
+
+        .result-item {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: 80px 1fr 100px 80px;
+            gap: 1rem;
+            align-items: center;
+            font-size: 0.875rem;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .idx {
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .question {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .match-badge {
+            text-align: center;
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .match-true {
+            background: rgba(35, 134, 54, 0.2);
+            color: #3fb950;
+        }
+
+        .match-false {
+            background: rgba(248, 81, 73, 0.2);
+            color: #f85149;
+        }
+
+        .score-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            text-align: center;
+            color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🔮 DeepSeek-Chat Benchmark</h1>
+            <div id="status" class="status-badge">Awaiting Connection...</div>
+        </header>
+
+        <div class="controls">
+            <div class="input-group">
+                <label for="start-idx">Start Index</label>
+                <input type="number" id="start-idx" value="0">
+            </div>
+            <div class="input-group">
+                <label for="end-idx">End Index</label>
+                <input type="number" id="end-idx" value="10">
+            </div>
+            <div class="input-group">
+                <label for="concurrency">Workers</label>
+                <input type="number" id="concurrency" value="1" min="1" max="10">
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="enable-ai" checked>
+                <label for="enable-ai" style="font-size: 0.875rem; cursor: pointer;">Enable AI Score</label>
+            </div>
+
+            <div class="input-group"
+                style="width: 100%; border-top: 1px solid var(--border); padding-top: 1rem; margin-top: 0.5rem;">
+                <label>Evaluation Mode</label>
+                <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="radio" id="mode-execution" name="evalMode" value="execution" checked>
+                        <label for="mode-execution"
+                            style="font-size: 0.875rem; cursor: pointer; text-transform: none; color: var(--text-main);">Execution
+                            Match</label>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="radio" id="mode-aiscore" name="evalMode" value="ai_score">
+                        <label for="mode-aiscore"
+                            style="font-size: 0.875rem; cursor: pointer; text-transform: none; color: var(--text-main);">AI
+                            Score (>=95)</label>
+                    </div>
+                </div>
+            </div>
+            <button id="start-btn" onclick="startBenchmark()">
+                <span>▶</span> Start Benchmark
+            </button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Processed</div>
+                <div id="processed-count" class="stat-value">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Matches</div>
+                <div id="strict-count" class="stat-value strict-match">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Accuracy</div>
+                <div id="accuracy-value" class="stat-value">0%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg Score</div>
+                <div id="avg-score-value" class="stat-value">0</div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-info">
+                <span>Running Benchmark</span>
+                <span id="progress-text">0 / 0</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div id="progress-bar"></div>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <div class="results-header">Recent Results (Last 10)</div>
+            <div id="results-list"></div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        let recentResults = [];
+        let stats = { processed: 0, strict: 0, total: 0, totalScore: 0 };
+
+        socket.on('connect', () => { document.getElementById('status').innerText = 'Connected Live'; });
+
+        socket.on('benchmark_restore', (data) => {
+            if (data.total === 0) return;
+            stats = { total: data.total, processed: data.processed, strict: data.strict, totalScore: data.totalScore || 0 };
+            recentResults = data.recentResults;
+            if (data.isRunning) { document.getElementById('start-btn').disabled = true; document.getElementById('status').innerText = 'Running...'; }
+            updateUI();
+        });
+
+        socket.on('benchmark_start', (data) => {
+            stats = { total: data.total, processed: 0, strict: 0, totalScore: 0 };
+            recentResults = [];
+            document.getElementById('start-btn').disabled = true;
+            updateUI();
+        });
+
+        socket.on('benchmark_finished', () => {
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('status').innerText = 'Finished';
+        });
+
+        function startBenchmark() {
+            const start = parseInt(document.getElementById('start-idx').value);
+            const end = parseInt(document.getElementById('end-idx').value);
+            const concurrency = parseInt(document.getElementById('concurrency').value) || 1;
+            const enableAI = document.getElementById('enable-ai').checked;
+            const evalMode = document.querySelector('input[name="evalMode"]:checked').value;
+            socket.emit('start_benchmark', { start, end, enableAI, concurrency, evalMode });
+        }
+
+        socket.on('test_update', (data) => {
+            stats.processed++;
+            if (data.isStrict) stats.strict++;
+            stats.totalScore += (data.score || 0);
+            recentResults.unshift(data);
+            if (recentResults.length > 10) recentResults.pop();
+            updateUI();
+        });
+
+        function updateUI() {
+            document.getElementById('processed-count').innerText = stats.processed;
+            document.getElementById('strict-count').innerText = stats.strict;
+            const acc = stats.processed > 0 ? (stats.strict / stats.processed * 100).toFixed(1) : 0;
+            document.getElementById('accuracy-value').innerText = acc + '%';
+            const avgScore = stats.processed > 0 ? (stats.totalScore / stats.processed).toFixed(2) : 0;
+            document.getElementById('avg-score-value').innerText = avgScore;
+            const progress = stats.total > 0 ? (stats.processed / stats.total * 100) : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+            document.getElementById('progress-text').innerText = `${stats.processed} / ${stats.total}`;
+
+            document.getElementById('results-list').innerHTML = recentResults.map(r => `
+                <div class="result-item">
+                    <span class="idx">#${r.index}</span>
+                    <span class="question" title="${r.question}">${r.question}</span>
+                    <span class="match-badge ${r.isStrict ? 'match-true' : 'match-false'}">${r.isStrict ? 'Match' : 'Mismatch'}</span>
+                    <span class="score-badge">${r.score !== undefined ? r.score : '-'}</span>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+
+</html>

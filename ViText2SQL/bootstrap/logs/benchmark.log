@@ -1,0 +1,26 @@
+--- Benchmark Started at 2026-02-16T13:31:57.948Z ---
+[2] DB: assets_maintenance | Strict: true | Loose: true
+   Q: Đếm số lượng tài sản được cung cấp bởi từng công ty bên thứ ba . Hiển thị đồng thời id của những công ty này .
+   GEN:  SELECT T1.id_cong_ty, COUNT(*) AS so_luong_tai_san FROM cong_ty_ben_thu_ba T1 JOIN tai_san T2 ON T1.id_cong_ty = T2.id_cong_ty_cung_cap GROUP BY T1.id_cong_ty
+   GOLD: select count ( * ) , t1.id công ty from công ty bên thứ ba as t1 join tài sản as t2 on t1.id công ty = t2.id công ty cung cấp group by t1.id công ty
+   SCORE: 100 | REASON: EA: Match | AI: The queries are semantically identical after normalizing Vietnamese accents and ignoring cosmetic differences like aliases, keyword case, and column order in SELECT.
+---------------------------------------
+[1] DB: assets_maintenance | Strict: false | Loose: false
+   Q: Mỗi hợp đồng bảo trì có bao nhiêu tài sản ? Liệt kê id hợp đồng và số lượng tài sản trong từng hợp đồng .
+   GEN:  SELECT T1.id_hop_dong_bao_tri, COUNT(*) 
+FROM dbo.hop_dong_bao_tri T1 
+JOIN dbo.tai_san T2 ON T1.id_hop_dong_bao_tri = T2.id_hop_dong_bao_tri 
+GROUP BY T1.id_hop_dong_bao_tri
+   GOLD: select count ( * ) , t1.id hợp đồng bảo trì from hợp đồng bảo trì as t1 join tài sản as t2 on t1.id hợp đồng bảo trì = t2.id hợp đồng bảo trì group by t1.id hợp đồng bảo trì
+   SCORE: 100 | REASON: EA: Execution Error | AI: The queries are semantically identical after normalizing table/column names (ignoring accents and schema prefixes), aliases, and column order. Both perform the same JOIN with identical conditions and aggregation.
+---------------------------------------
+[4] DB: assets_maintenance | Strict: true | Loose: true
+   Q: Cho biết tên và id của những nhân viên đã ghi lại nhật ký lỗi nhưng chưa liên hệ với bất kỳ kỹ sư nào .
+   GEN:  SELECT T1.id_nhan_vien, T1.ten_nhan_vien FROM nhan_vien T1 JOIN nhat_ky_loi T2 ON T1.id_nhan_vien = T2.duoc_ghi_lai_boi_nhan_vien_co_id EXCEPT SELECT T1.id_nhan_vien, T1.ten_nhan_vien FROM nhan_vien T1 JOIN chuyen_tham_cua_ky_su T2 ON T1.id_nhan_vien = T2.id_nhan_vien_lien_lac
+   GOLD: select t1.tên nhân viên , t1.id nhân viên from nhân viên as t1 join nhật ký lỗi as t2 on t1.id nhân viên = t2.được ghi lại bởi nhân viên có id except select t3.tên nhân viên , t3.id nhân viên from nhân viên as t3 join chuyến thăm của kỹ sư as t4 on t3.id nhân viên = t4.id nhân viên liên lạc
+   SCORE: 100 | REASON: EA: Match | AI: Both queries use EXCEPT to find employees in error logs but not in engineer visits, with identical table joins and conditions after normalizing Vietnamese accents and aliases.
+---------------------------------------
+[3] DB: assets_maintenance | ERROR
+   Q: Công ty bên thứ ba nào có ít nhất 2 kỹ sư bảo trì hoặc có ít nhất 2 hợp đồng bảo trì ? Liệt kê tên và id của những công ty này .
+   ERR: Request failed with status code 500
+---------------------------------------
