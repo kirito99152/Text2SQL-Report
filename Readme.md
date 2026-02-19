@@ -12,14 +12,14 @@ Báo cáo này tổng hợp kết quả đánh giá hiệu năng của hai mô h
     - **Strict Match**: Kết quả thực thi hoàn toàn khớp.
     - **Loose Match**: (Nếu có) Kết quả khớp nhưng có thể khác biệt nhỏ (ví dụ thứ tự dòng nếu không có ORDER BY), hoặc điểm AI chấm cao.
 - **Hệ thống so sánh**:
-    1. **Bootstrap (TensorSQL)**: Hệ thống baseline/bootstrap hiện tại.
+    1. **Qwen3-8B INT8 (TensorSQL)**: Hệ thống baseline/Qwen3-8B INT8 hiện tại.
     2. **DeepSeek-V3**: Mô hình DeepSeek được benchmark qua API.
 
 ## 2. Kết quả Thống kê
 
 Dưới đây là bảng so sánh hiệu năng giữa hai mô hình dựa trên log kết quả benchmark.
 
-| Chỉ số | Bootstrap (TensorSQL) | DeepSeek-V3 |
+| Chỉ số | Qwen3-8B INT8 (TensorSQL) | DeepSeek-V3 |
 | :--- | :--- | :--- |
 | **Tổng số câu hỏi (Total)** | 1499 | 1500 |
 | **Độ chính xác (Strict Accuracy)** | **58.44%** (876/1499) | **58.13%** (872/1500) |
@@ -33,16 +33,16 @@ Dưới đây là bảng so sánh hiệu năng giữa hai mô hình dựa trên 
 ## 3. Phân tích chi tiết
 
 ### Hiệu năng (Performance)
-- **Độ chính xác**: Hai mô hình có độ chính xác Execution-based gần như tương đương nhau (~58%). Bootstrap nhỉnh hơn một chút (0.31%).
-- **Tốc độ**: **DeepSeek-V3 nhanh hơn vượt trội**, chỉ mất trung bình **2 giây** cho mỗi câu hỏi, trong khi Bootstrap mất tới **~65 giây**. Điều này cho thấy Bootstrap có thể đang chạy một quy trình rất nặng (ví dụ: suy luận local model lớn, hoặc agentic loop nhiều bước, hoặc retry nhiều lần).
+- **Độ chính xác**: Hai mô hình có độ chính xác Execution-based gần như tương đương nhau (~58%). Qwen3-8B INT8 nhỉnh hơn một chút (0.31%).
+- **Tốc độ**: **DeepSeek-V3 nhanh hơn vượt trội**, chỉ mất trung bình **2 giây** cho mỗi câu hỏi, trong khi Qwen3-8B INT8 mất tới **~65 giây**. Điều này cho thấy Qwen3-8B INT8 có thể đang chạy một quy trình rất nặng (ví dụ: suy luận local model lớn, hoặc agentic loop nhiều bước, hoặc retry nhiều lần).
 
 ### Độ ổn định (Stability)
 - **DeepSeek-V3**: Không ghi nhận lỗi (Errors = 0) trong quá trình benchmark.
-- **Bootstrap**: Có **48 lỗi** xảy ra (chiếm ~3.2%), có thể do timeout, lỗi kết nối hoặc crash trong quá trình xử lý phức tạp.
+- **Qwen3-8B INT8**: Có **48 lỗi** xảy ra (chiếm ~3.2%), có thể do timeout, lỗi kết nối hoặc crash trong quá trình xử lý phức tạp.
 
 ## 4. Kết luận
 - Nếu ưu tiên **tốc độ phản hồi**, **DeepSeek-V3** là lựa chọn tối ưu với độ chính xác ngang ngửa hệ thống hiện tại nhưng nhanh hơn gấp 30 lần.
-- Hệ thống **Bootstrap** hiện tại dù chậm hơn nhiều nhưng vẫn duy trì độ chính xác cạnh tranh. Cần xem xét tối ưu hóa thời gian thực thi của Bootstrap nếu muốn đưa vào ứng dụng thực tế thời gian thực.
+- Hệ thống **Qwen3-8B INT8** hiện tại dù chậm hơn nhiều nhưng vẫn duy trì độ chính xác cạnh tranh. Cần xem xét tối ưu hóa thời gian thực thi của Qwen3-8B INT8 nếu muốn đưa vào ứng dụng thực tế thời gian thực.
 
 ---
 *Dữ liệu được trích xuất từ logs ngày 19/02/2026.*
