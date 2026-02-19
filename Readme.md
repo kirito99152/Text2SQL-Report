@@ -2,10 +2,10 @@
 
 ## 1. Tổng quan & Phương pháp
 
-Báo cáo này tổng hợp kết quả đánh giá hiệu năng của hai mô hình/hệ thống Text-to-SQL trên tập dữ liệu tiếng Việt `syllable-level`.
+Báo cáo này tổng hợp kết quả đánh giá hiệu năng của hai mô hình/hệ thống Text-to-SQL trên tập dữ liệu tiếng Việt `Vitext2sql`.
 
 ### Thông tin Dataset & Môi trường
-- **Dataset**: `syllable-level` (các câu hỏi tiếng Việt mức độ âm tiết).
+- **Dataset**: `Vitext2sql` (các câu hỏi tiếng Việt mức độ âm tiết).
 - **Phương pháp đánh giá (Evaluation Mode)**: **Execution-based**.
     - Câu lệnh SQL sinh ra được thực thi trên database SQLite thực tế.
     - Kết quả trả về được so sánh 1:1 với kết quả của câu lệnh Gold SQL.
