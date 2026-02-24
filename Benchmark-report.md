@@ -97,8 +97,6 @@ Trong quá trình benchmark và re-evaluate, chúng tôi phát hiện nhiều v�
 | 2 | **Bất nhất ngôn ngữ giá trị (Literals)** — Dataset không nhất quán giữa tiếng Anh và tiếng Việt cho các giá trị chuỗi (ví dụ: `'Male'` vs `'Nam'`, `'Spouse'` vs `'Vợ/Chồng'`). | Cao | **Đã giải quyết** bằng AI Judge linh hoạt |
 | 3 | **Over-specification trong Gold SQL** — Câu hỏi chỉ yêu cầu "Lấy tên...", nhưng Gold SQL lại `SELECT tên, id, COUNT(*)`. Model làm đúng yêu cầu nhưng bị trừ điểm. | Trung bình | Chưa sửa |
 | 4 | **Logic ngược trong Gold SQL** — Một số câu Gold SQL không phản ánh đúng ý định phủ định của câu hỏi tự nhiên (ví dụ: dùng `JOIN` thay vì `NOT IN`/`EXCEPT`). | Cao | Chưa sửa |
-| 5 | **Bất nhất dấu tiếng Việt** — Tên bảng/cột lúc có dấu lúc không (`hợp_đồng` vs `hop_dong`). | Thấp | **Đã giải quyết** bằng AI Judge linh hoạt |
-
 ### 5.2. Phân bổ Điểm số (Score Distribution)
 
 Để đánh giá accuracy thực tế vượt ra ngoài ngưỡng cứng Score ≥ 95, chúng tôi phân tích phân bổ điểm của toàn bộ 1499 câu:
