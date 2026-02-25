@@ -169,6 +169,9 @@ def parse_col(toks, start_idx, tables_with_alias, schema, default_tables=None):
         :returns next idx, column id
     """
     tok = toks[start_idx]
+    if (tok.startswith('"') and tok.endswith('"')) or (tok.startswith("'") and tok.endswith("'")):
+        tok = tok[1:-1]
+
     if tok == "*":
         return start_idx + 1, schema.idMap[tok]
 
