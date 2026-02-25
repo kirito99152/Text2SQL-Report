@@ -93,7 +93,8 @@ C) GLOBAL_AGGREGATION - COUNT/SUM/AVG entire table (no "mỗi"/"từng")
 D) ENTITY_AGGREGATION - "mỗi"/"từng" + aggregation + GROUP BY
 E) ORDERED_RESULT - Has "sắp xếp"/"xếp theo", no aggregation
 F) EXTREME_VALUE - "nhất"/"đầu tiên"/"cuối cùng" → ORDER BY + LIMIT 1
-G) SET_OPERATION - "nhưng không"→EXCEPT | "hoặc"+diff agg→UNION | "và"→INTERSECT
+G) SET_OPERATION - "nhưng không"/"chưa"→EXCEPT | "vừa...vừa"/"cả...và"→INTERSECT
+H) UNION_OPERATION - "A hoặc B nhưng C" where C applies only to B → SELECT...WHERE A UNION SELECT...WHERE B AND C
 
 JOIN RULES:
 - Question names entity → That table in FROM
@@ -107,13 +108,13 @@ INTENT_TYPE: <A-G>
 MAIN_ENTITY: <table>
 JOINED_TABLES: <tables> | NONE
 JOIN_CONDITIONS: <T1.col=T2.col> | NONE
-SELECT_COLUMNS: <columns>
+SELECT_COLUMNS: <ONLY columns asked in question, nothing extra>
 FILTER_CONDITIONS: <conditions> | NONE
 AGGREGATION:
 - TYPE: NONE|GLOBAL|ENTITY
 - FUNCTION: COUNT|SUM|AVG|MIN|MAX|NONE
 - TARGET_COLUMN: <col|*>
-- GROUP_BY: <PK only> | NONE
+- GROUP_BY: <use joined/child table alias: T2.col or T1.FK_col> | NONE
 - HAVING: <condition> | NONE
 ORDERING:
 - ORDER_BY: <expr> | NONE
@@ -126,21 +127,21 @@ SET_OPERATION: NONE|EXCEPT|UNION|INTERSECT
 ==================================================
 EXAMPLES (use as templates):
 
-Ex1: "Mỗi hợp đồng có bao nhiêu tài sản?"
+Ex1: "Mỗi hợp đồng có bao nhiêu tài sản?" → asks for: id + count
 INTENT_TYPE: ENTITY_AGGREGATION
 MAIN_ENTITY: hop_dong_bao_tri
 JOINED_TABLES: tai_san
 JOIN_CONDITIONS: T1.id_hop_dong_bao_tri = T2.id_hop_dong_bao_tri
-SELECT_COLUMNS: T1.id_hop_dong_bao_tri, COUNT(*)
+SELECT_COLUMNS: T1.id_hop_dong_bao_tri, COUNT(*) ← ONLY these 2, nothing extra
 AGGREGATION: TYPE: ENTITY | FUNCTION: COUNT | TARGET_COLUMN: * | GROUP_BY: T1.id_hop_dong_bao_tri
 FILTER_CONDITIONS: NONE | ORDERING: NONE | SET_OPERATION: NONE
 
-Ex2: "Kỹ sư nào đến nhiều lần nhất?"
+Ex2: "Kỹ sư nào đến nhiều lần nhất?" → asks for: id, ten, ho (NO COUNT in SELECT)
 INTENT_TYPE: EXTREME_VALUE
 MAIN_ENTITY: ky_su_bao_tri
 JOINED_TABLES: chuyen_tham_cua_ky_su
 JOIN_CONDITIONS: T1.id_ky_su = T2.id_ky_su
-SELECT_COLUMNS: T1.id_ky_su, T1.ten, T1.ho
+SELECT_COLUMNS: T1.id_ky_su, T1.ten, T1.ho ← NO COUNT(*) here, only in ORDER BY
 AGGREGATION: TYPE: ENTITY | FUNCTION: COUNT | TARGET_COLUMN: * | GROUP_BY: T1.id_ky_su
 ORDERING: ORDER_BY: COUNT(*) | DIRECTION: DESC | LIMIT: 1
 SET_OPERATION: NONE
@@ -162,12 +163,20 @@ FILTER_CONDITIONS: id_khach_hang NOT IN (SELECT id_khach_hang FROM tai_khoan)
 RULES:
 - "mỗi"/"từng" → ENTITY_AGGREGATION
 - "nhất" → EXTREME_VALUE (ORDER BY+LIMIT, not MIN/MAX in WHERE)
-- "nhưng không"/"chưa" → EXCEPT or NOT IN (subquery). NEVER LEFT JOIN IS NULL.
-- "hoặc ... hoặc" with 2-3 values → Use OR, not IN
+- "nhưng không"/"chưa"/"không có" → EXCEPT or NOT IN (subquery). NEVER LEFT JOIN IS NULL.
+- "vừa...vừa"/"cả...và" with separate sets → INTERSECT
+- "A hoặc B nhưng C" where C only applies to B → UNION (SELECT...WHERE A UNION SELECT...WHERE B AND C)
+- "hoặc ... hoặc" with 2-3 values on same column → Use OR, not IN
 - Range comparison → Use BETWEEN, not >= AND <=
 - Literals: copy EXACTLY from schema/data (no Vietnamese translation of values)
-- GROUP BY: PK only (not name columns)
+- GROUP BY: Use the JOINED/CHILD table's column (T2.col) when aggregating over a junction. If gold uses T1.FK, match the FK column.
 - COUNT: Always COUNT(*), never COUNT(column)
+- SELECT: ONLY columns the question asks for. Do NOT add extra columns.
+- "tên" alone → SELECT ten only. NOT ho, ten. NOT ho || ten.
+- "tên đầy đủ"/"họ và tên" → SELECT ho, ten (two separate columns). NEVER use || or CONCAT.
+- "một vài"/"một số"/"các" → SIMPLE_SELECT with DISTINCT (not GROUP BY HAVING)
+- If query needs only 1 table → Do NOT add unnecessary JOINs. Query the table directly.
+- "số lượng" / "bao nhiêu loại" → COUNT(DISTINCT col), not GROUP BY + COUNT
 
 OUTPUT PLAN ONLY. NO EXPLANATION.
 `;
@@ -188,21 +197,28 @@ PLAN
 CURRENT DATETIME: {{current_datetime}}
 
 ==================================================
-STRICT SQL STYLE RULES:
+⚠️ STRICT SQL STYLE RULES (MUST FOLLOW ALL):
 
-1) SELECT: Plan columns ONLY (T1.col, T2.col). NO extra columns. NO column aliases (AS name). NO semicolons at end.
-2) FROM: MAIN_ENTITY AS T1. Always use "AS" keyword for aliases. Plain JOIN only. NEVER INNER JOIN, LEFT JOIN, RIGHT JOIN.
-3) WHERE: Literals: keep EXACT from schema (no Vietnamese translation). Strings='single quotes', numbers=no quotes.
-   - 2-3 values: Use OR (col='a' OR col='b'), NOT IN('a','b')
-   - Range: Use BETWEEN (col BETWEEN a AND b), NOT col>=a AND col<=b
-4) GROUP BY: PK only (NOT name cols). Ex: GROUP BY T1.id_cong_ty
-5) HAVING: Use if in plan, else skip
-6) ORDER BY: Use expression directly (COUNT(*), T1.col). NEVER use alias names.
-7) LIMIT: Use if in plan
-8) SET OPS: EXCEPT/UNION/INTERSECT → SELECT...FROM...OPERATOR SELECT...FROM...
-9) EXCLUSION ("không có"/"chưa"): Use NOT IN (subquery) or EXCEPT. NEVER LEFT JOIN...IS NULL or NOT EXISTS.
-10) COUNT: Always COUNT(*). NEVER COUNT(column_name) or COUNT(T1.id).
-11) SQLite only: No dbo. prefix, no backticks, no semicolons
+1) SELECT: EXACTLY plan columns. ⛔ NEVER add extra columns. ⛔ NEVER use column aliases (AS name).
+   - "tên" → SELECT ten only. NOT ho, ten.
+   - "tên đầy đủ" → SELECT ho, ten (two columns). ⛔ NEVER ho || ' ' || ten or CONCAT.
+   - EXTREME_VALUE → Do NOT add COUNT(*)/SUM() to SELECT. Use only in ORDER BY.
+2) FROM: table AS T1. Always "AS" keyword. ⛔ NEVER INNER JOIN, LEFT JOIN. Only plain "JOIN".
+3) WHERE: String values EXACTLY as in schema (English original). Single quotes.
+   - 2-3 values: Use OR (col='a' OR col='b'), NOT IN(...)
+   - Ranges: Use BETWEEN, NOT col>=a AND col<=b
+4) GROUP BY: Match plan alias EXACTLY. If plan says GROUP BY T2.col → T2.col, not T1.col.
+   - When aggregating over joined table, GROUP BY the FK/joined column.
+5) HAVING: Use if in plan, else skip.
+6) ORDER BY: Use expression directly (COUNT(*)). ⛔ NEVER use alias names.
+7) LIMIT: Use if in plan.
+8) SET OPS: EXCEPT/UNION/INTERSECT → full SELECT...FROM... OPERATOR SELECT...FROM...
+   - UNION: Each side is a complete query. "A hoặc B nhưng C" → SELECT...WHERE A UNION SELECT...WHERE B AND C
+9) EXCLUSION: NOT IN (subquery) or EXCEPT. ⛔ NEVER LEFT JOIN...IS NULL or NOT EXISTS.
+10) COUNT: Always COUNT(*). ⛔ NEVER COUNT(column_name).
+11) No dbo., no backticks, no semicolons, no newlines. Single line output.
+12) DISTINCT: Use if plan says DISTINCT. ⛔ Do NOT replace DISTINCT with GROUP BY HAVING.
+13) SINGLE TABLE: If plan has no JOINs, do NOT add unnecessary JOINs.
 
 ==================================================
 EXAMPLES:
@@ -210,7 +226,7 @@ EXAMPLES:
 Plan: ENTITY_AGGREGATION, cong_ty→tai_san, GROUP BY T1.id
 SQL: select count ( * ) , t1.id_cong_ty from cong_ty_ben_thu_ba as t1 join tai_san as t2 on t1.id_cong_ty = t2.id_cong_ty_cung_cap group by t1.id_cong_ty
 
-Plan: EXTREME_VALUE, ky_su→visits, ORDER BY COUNT(*) DESC, LIMIT 1
+Plan: EXTREME_VALUE, ky_su→visits, SELECT T1.id, T1.ten, T1.ho (NO COUNT in SELECT)
 SQL: select t1.id_ky_su , t1.ten , t1.ho from ky_su_bao_tri as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_ky_su = t2.id_ky_su group by t1.id_ky_su order by count ( * ) desc limit 1
 
 Plan: EXCEPT, nhan_vien (fault log vs visits)
@@ -222,10 +238,22 @@ SQL: select count ( * ) from khach_hang where id_khach_hang not in ( select id_k
 Plan: FILTERED, 2 values with OR
 SQL: select gia_ban from an_pham where nha_xuat_ban = 'Person' or nha_xuat_ban = 'Wiley'
 
-==================================================
-BEFORE OUTPUT: Verify tables/columns exist in schema, no dbo., single quotes, AS for aliases, no semicolons
+Plan: SIMPLE_SELECT with DISTINCT
+SQL: select distinct dia_diem from rap_chieu_phim
 
-OUTPUT: Raw SQL only. No markdown, no explanation.
+Plan: INTERSECT
+SQL: select dia_diem from rap_chieu_phim where nam_mo_cua = 2010 intersect select dia_diem from rap_chieu_phim where nam_mo_cua = 2011
+
+Plan: UNION, "3 tín chỉ hoặc 1 tín chỉ nhưng 4 giờ"
+SQL: select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 3 union select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 1 and gio = 4
+
+Plan: GLOBAL_AGGREGATION, single table, no JOIN needed
+SQL: select count ( distinct id_khach_hang ) from tai_khoan
+
+==================================================
+FINAL CHECK: Count SELECT columns. If more than plan → REMOVE extras. Verify JOIN is plain (no INNER/LEFT). No semicolons.
+
+OUTPUT: Raw SQL on single line. No markdown, no explanation.
 `;
 
 // ============================================================================
@@ -242,24 +270,28 @@ SQL: {{generated_sql}}
 ==================================================
 CHECK (mark ✓ or ✗):
 
-1) SELECT: Plan columns only? No extra columns? No column aliases (AS name)?
-2) FROM+JOIN: Uses "table AS T1" (with AS keyword)? Plain JOIN only (no INNER/LEFT/RIGHT)?
-3) WHERE: Literals exact (not translated to Vietnamese)? Uses OR not IN for 2-3 values? Uses BETWEEN for ranges?
-4) GROUP BY: PK only (not names)?
-5) HAVING: Matches plan?
-6) ORDER BY: Uses expression (COUNT(*)) not alias name? Direction correct?
-7) LIMIT: Matches plan?
-8) SET OPS: Uses EXCEPT/NOT IN subquery (never LEFT JOIN IS NULL)?
-9) COUNT: Uses COUNT(*) (never COUNT(col))?
-10) SYNTAX: No dbo.? No semicolons? No backticks? Single quotes for strings?
+1) SELECT: EXACTLY plan columns? No extra cols? No column aliases (AS name)?
+2) JOIN: Plain "JOIN" only? (INNER/LEFT → rewrite)
+3) WHERE: Schema-original values (not Vietnamese-translated)?
+4) GROUP BY: Correct table alias per plan? FK/joined column?
+5) ORDER BY: Expression not alias? Direction correct? LIMIT correct?
+6) SET OPS: Full EXCEPT/UNION/INTERSECT syntax? (not IN/OR shortcut)
+7) COUNT(*) only? No || or CONCAT? No newlines? Single line?
 
 ==================================================
+COMMON FIXES:
+- INNER JOIN → JOIN | LEFT JOIN IS NULL → NOT IN subquery
+- SELECT col AS name → remove AS name
+- ho || ' ' || ten → ho, ten (separate columns)
+- Extra COUNT(*) in SELECT → remove if not in plan
+- GROUP BY T1.col → T2.col (match plan)
+- Unnecessary JOIN → remove if single table query
+
 DECISION:
-
 All ✓ → Output: VALID
-Any ✗ → Rewrite SQL from plan (follow plan step by step, don't patch)
+Any ✗ → Rewrite complete SQL. Single line.
 
-OUTPUT: "VALID" or complete rewritten SQL. Nothing else.
+OUTPUT: "VALID" or corrected SQL. Nothing else.
 `;
 
 // ============================================================================

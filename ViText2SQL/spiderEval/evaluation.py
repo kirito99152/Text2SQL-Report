@@ -502,7 +502,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
         p_str = p[0]
         g_str, db = g
         db_name = db
-        db = os.path.join(db_dir, db, db + ".sqlite")
+        db = os.path.join(db_dir, db + ".sqlite")
         schema = Schema(get_schema(db))
         g_sql = get_sql(schema, g_str)
         hardness = evaluator.eval_hardness(g_sql)

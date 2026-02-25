@@ -70,11 +70,11 @@ class SelfCheckService {
         const match = cleaned.match(/SELECT[\s\S]*?;/i);
 
         if (match) {
-            return match[0];
+            return match[0].replace(/\s+/g, ' ').trim();
         }
 
         // Fallback: return the cleaned text if no SELECT...; pattern found
-        return cleaned;
+        return cleaned.replace(/\s+/g, ' ').trim();
     }
 }
 

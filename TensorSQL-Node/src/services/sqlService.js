@@ -23,7 +23,7 @@ class SqlService {
         prompt = prompt.replace('{{current_datetime}}', currentDateTime);
 
         const messages = [
-            { role: 'system', content: 'You are an expert SQL developer for Microsoft SQL Server. Generate ONLY the raw SQL query. No markdown, no explanation.' },
+            { role: 'system', content: 'You are an expert SQL developer for SQLite. Generate ONLY the raw SQL query. No markdown, no explanation.' },
             { role: 'user', content: prompt }
         ];
 
@@ -48,11 +48,14 @@ class SqlService {
 
     cleanSql(text) {
         // Remove markdown code blocks
-        let cleaned = text.replace(/```sql/g, '').replace(/```/g, '').trim();
+        let cleaned = text.replace(/```sql/gi, '').replace(/```/g, '').trim();
 
         // Remove <think> blocks if present (DeepSeek/Qwen thinking output)
         // Regex: <think> ... </think> (dotall)
         cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+
+        // Replace all newlines and multiple spaces with a single space
+        cleaned = cleaned.replace(/\s+/g, ' ').trim();
 
         return cleaned;
     }
