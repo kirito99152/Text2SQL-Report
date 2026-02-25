@@ -149,18 +149,25 @@ Ex3: "Nhân viên ghi lỗi nhưng chưa liên hệ kỹ sư"
 INTENT_TYPE: SET_OPERATION
 MAIN_ENTITY: nhan_vien
 SET_OPERATION: EXCEPT
-LEFT_QUERY: Employees in fault log
-RIGHT_QUERY: Employees in engineer visits
-(LEFT: JOIN nhat_ky_loi T2 ON T1.id_nhan_vien=T2.duoc_ghi_lai_boi_nhan_vien_co_id)
-(RIGHT: JOIN chuyen_tham_cua_ky_su T2 ON T1.id_nhan_vien=T2.id_nhan_vien_lien_lac)
+LEFT_QUERY: Employees in fault log (JOIN nhat_ky_loi AS T2 ON T1.id_nhan_vien=T2.duoc_ghi_lai_boi_nhan_vien_co_id)
+RIGHT_QUERY: Employees in engineer visits (JOIN chuyen_tham_cua_ky_su AS T2 ON T1.id_nhan_vien=T2.id_nhan_vien_lien_lac)
+
+Ex4: "Khách hàng nào chưa có tài khoản?"
+INTENT_TYPE: FILTERED_SELECT
+MAIN_ENTITY: khach_hang
+FILTER_CONDITIONS: id_khach_hang NOT IN (SELECT id_khach_hang FROM tai_khoan)
+→ Use NOT IN subquery, NEVER LEFT JOIN IS NULL
 
 ==================================================
 RULES:
 - "mỗi"/"từng" → ENTITY_AGGREGATION
 - "nhất" → EXTREME_VALUE (ORDER BY+LIMIT, not MIN/MAX in WHERE)
-- "nhưng không" → EXCEPT
-- Literals: copy EXACTLY (no translation)
+- "nhưng không"/"chưa" → EXCEPT or NOT IN (subquery). NEVER LEFT JOIN IS NULL.
+- "hoặc ... hoặc" with 2-3 values → Use OR, not IN
+- Range comparison → Use BETWEEN, not >= AND <=
+- Literals: copy EXACTLY from schema/data (no Vietnamese translation of values)
 - GROUP BY: PK only (not name columns)
+- COUNT: Always COUNT(*), never COUNT(column)
 
 OUTPUT PLAN ONLY. NO EXPLANATION.
 `;
@@ -181,33 +188,42 @@ PLAN
 CURRENT DATETIME: {{current_datetime}}
 
 ==================================================
-RULES:
+STRICT SQL STYLE RULES:
 
-1) SELECT: Use plan's SELECT_COLUMNS exactly (T1.col, T2.col format)
-2) FROM: MAIN_ENTITY as T1, then JOIN per JOINED_TABLES
-3) WHERE: Use FILTER_CONDITIONS (NONE→no WHERE). Literals: keep exact, strings='single quotes', numbers=no quotes
-4) GROUP BY: If TYPE=ENTITY→GROUP BY PK only (NOT name cols). Ex: T1.id_cong_ty (not T1.id_cong_ty,T1.ten_cong_ty)
+1) SELECT: Plan columns ONLY (T1.col, T2.col). NO extra columns. NO column aliases (AS name). NO semicolons at end.
+2) FROM: MAIN_ENTITY AS T1. Always use "AS" keyword for aliases. Plain JOIN only. NEVER INNER JOIN, LEFT JOIN, RIGHT JOIN.
+3) WHERE: Literals: keep EXACT from schema (no Vietnamese translation). Strings='single quotes', numbers=no quotes.
+   - 2-3 values: Use OR (col='a' OR col='b'), NOT IN('a','b')
+   - Range: Use BETWEEN (col BETWEEN a AND b), NOT col>=a AND col<=b
+4) GROUP BY: PK only (NOT name cols). Ex: GROUP BY T1.id_cong_ty
 5) HAVING: Use if in plan, else skip
-6) ORDER BY: Use expression not alias. Match direction (ASC/DESC)
+6) ORDER BY: Use expression directly (COUNT(*), T1.col). NEVER use alias names.
 7) LIMIT: Use if in plan
-8) SET OPS: If EXCEPT/UNION→(SELECT...)OPERATOR(SELECT...)
-9) EXTREME_VALUE: Must have ORDER BY+LIMIT 1 (never WHERE col=(SELECT MIN...))
-10) SQLite only: No dbo. prefix, single quotes, no backticks
+8) SET OPS: EXCEPT/UNION/INTERSECT → SELECT...FROM...OPERATOR SELECT...FROM...
+9) EXCLUSION ("không có"/"chưa"): Use NOT IN (subquery) or EXCEPT. NEVER LEFT JOIN...IS NULL or NOT EXISTS.
+10) COUNT: Always COUNT(*). NEVER COUNT(column_name) or COUNT(T1.id).
+11) SQLite only: No dbo. prefix, no backticks, no semicolons
 
 ==================================================
 EXAMPLES:
 
-Plan: ENTITY_AGGREGATION, cong_ty→tai_san, T1.id=T2.id_cty_cung_cap, GROUP BY T1.id
-SQL: SELECT T1.id_cong_ty, COUNT(*) FROM cong_ty_ben_thu_ba T1 JOIN tai_san T2 ON T1.id_cong_ty=T2.id_cong_ty_cung_cap GROUP BY T1.id_cong_ty
+Plan: ENTITY_AGGREGATION, cong_ty→tai_san, GROUP BY T1.id
+SQL: select count ( * ) , t1.id_cong_ty from cong_ty_ben_thu_ba as t1 join tai_san as t2 on t1.id_cong_ty = t2.id_cong_ty_cung_cap group by t1.id_cong_ty
 
 Plan: EXTREME_VALUE, ky_su→visits, ORDER BY COUNT(*) DESC, LIMIT 1
-SQL: SELECT T1.id_ky_su, T1.ten, T1.ho FROM ky_su_bao_tri T1 JOIN chuyen_tham_cua_ky_su T2 ON T1.id_ky_su=T2.id_ky_su GROUP BY T1.id_ky_su ORDER BY COUNT(*) DESC LIMIT 1
+SQL: select t1.id_ky_su , t1.ten , t1.ho from ky_su_bao_tri as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_ky_su = t2.id_ky_su group by t1.id_ky_su order by count ( * ) desc limit 1
 
 Plan: EXCEPT, nhan_vien (fault log vs visits)
-SQL: SELECT T1.ten_nhan_vien, T1.id_nhan_vien FROM nhan_vien T1 JOIN nhat_ky_loi T2 ON T1.id_nhan_vien=T2.duoc_ghi_lai_boi_nhan_vien_co_id EXCEPT SELECT T1.ten_nhan_vien, T1.id_nhan_vien FROM nhan_vien T1 JOIN chuyen_tham_cua_ky_su T2 ON T1.id_nhan_vien=T2.id_nhan_vien_lien_lac
+SQL: select t1.ten_nhan_vien , t1.id_nhan_vien from nhan_vien as t1 join nhat_ky_loi as t2 on t1.id_nhan_vien = t2.duoc_ghi_lai_boi_nhan_vien_co_id except select t1.ten_nhan_vien , t1.id_nhan_vien from nhan_vien as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_nhan_vien = t2.id_nhan_vien_lien_lac
+
+Plan: FILTERED, khach_hang not in tai_khoan
+SQL: select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from tai_khoan )
+
+Plan: FILTERED, 2 values with OR
+SQL: select gia_ban from an_pham where nha_xuat_ban = 'Person' or nha_xuat_ban = 'Wiley'
 
 ==================================================
-BEFORE OUTPUT: Verify tables/columns exist in schema, no dbo., single quotes for strings
+BEFORE OUTPUT: Verify tables/columns exist in schema, no dbo., single quotes, AS for aliases, no semicolons
 
 OUTPUT: Raw SQL only. No markdown, no explanation.
 `;
@@ -226,16 +242,16 @@ SQL: {{generated_sql}}
 ==================================================
 CHECK (mark ✓ or ✗):
 
-1) SELECT: Matches plan columns? Correct aliases?
-2) FROM+JOIN: MAIN_ENTITY as T1? All joins present? Conditions correct?
-3) WHERE: If plan=NONE→no WHERE? All conditions present? Literals exact?
-4) GROUP BY: If TYPE=ENTITY→has GROUP BY? PK only (not names)?
+1) SELECT: Plan columns only? No extra columns? No column aliases (AS name)?
+2) FROM+JOIN: Uses "table AS T1" (with AS keyword)? Plain JOIN only (no INNER/LEFT/RIGHT)?
+3) WHERE: Literals exact (not translated to Vietnamese)? Uses OR not IN for 2-3 values? Uses BETWEEN for ranges?
+4) GROUP BY: PK only (not names)?
 5) HAVING: Matches plan?
-6) ORDER BY: If plan=NONE→no ORDER? Expression+direction correct?
+6) ORDER BY: Uses expression (COUNT(*)) not alias name? Direction correct?
 7) LIMIT: Matches plan?
-8) SET OPS: Operator correct? Both parts same columns?
-9) EXTREME_VALUE: Has ORDER BY+LIMIT 1? (not WHERE col=SELECT MIN)
-10) SYNTAX: No dbo.? Single quotes? Valid SQLite?
+8) SET OPS: Uses EXCEPT/NOT IN subquery (never LEFT JOIN IS NULL)?
+9) COUNT: Uses COUNT(*) (never COUNT(col))?
+10) SYNTAX: No dbo.? No semicolons? No backticks? Single quotes for strings?
 
 ==================================================
 DECISION:
