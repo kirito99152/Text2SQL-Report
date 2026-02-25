@@ -1,0 +1,83 @@
+=== Applying remaining fixes ===
+
+  #168 (customers_campaigns_ecommerce)
+  BEFORE: select mau_cua_khu_nha , chi tiết khu_nha from khu_nha order by mau_cua_khu_nha
+  AFTER:  select mau_cua_khu_nha , chi tiet khu_nha from khu_nha order by mau_cua_khu_nha
+
+  #315 (e_learning)
+  BEFORE: select ngày ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien
+  AFTER:  select ngay ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien
+
+  #316 (e_learning)
+  BEFORE: select ngày ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien
+  AFTER:  select ngay ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien
+
+  #355 (e_learning)
+  BEFORE: select t2.ngày ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_kh
+  AFTER:  select t2.ngay ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_kh
+
+  #356 (e_learning)
+  BEFORE: select t2.ngày ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_kh
+  AFTER:  select t2.ngay ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_kh
+
+  #365 (e_learning)
+  BEFORE: select t1.ngày ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky
+  AFTER:  select t1.ngay ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky
+
+  #366 (e_learning)
+  BEFORE: select t1.ngày ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky
+  AFTER:  select t1.ngay ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky
+
+  #369 (e_learning)
+  BEFORE: select t1.ngày ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_s
+  AFTER:  select t1.ngay ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_s
+
+  #370 (e_learning)
+  BEFORE: select t1.ngày ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_s
+  AFTER:  select t1.ngay ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_s
+
+  #371 (e_learning)
+  BEFORE: select t1.ngày ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_s
+  AFTER:  select t1.ngay ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_s
+
+  #372 (e_learning)
+  BEFORE: select t1.ngày ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_s
+  AFTER:  select t1.ngay ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_s
+
+  #796 (swimming)
+  BEFORE: select ten from van_dong_vien_boi order by 100_met
+  AFTER:  select ten from van_dong_vien_boi order by "100_met"
+
+  #799 (swimming)
+  BEFORE: select 200_met , 300_met from van_dong_vien_boi where quoc_tich = "Australia"
+  AFTER:  select "200_met" , "300_met" from van_dong_vien_boi where quoc_tich = "Australia"
+
+=== Execution test after fixes ===
+
+Total: 954
+Success: 941 (98.6%)
+Errors: 13 (1.4%)
+
+=== Error summary (5 unique types) ===
+
+[6x] no such column: t1.ngay
+  #365 (e_learning): select t1.ngay ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky
+  #366 (e_learning): select t1.ngay ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky
+  #369 (e_learning): select t1.ngay ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_s
+
+[2x] ORDER BY clause should come after INTERSECT not before
+  #275 (document_management): select ten_tai_lieu from tai_lieu group by ma_loai_tai_lieu order by count ( * ) desc limit 3 intersect select ten_tai_lieu from tai_lieu group by ma_
+  #276 (document_management): select ten_tai_lieu from tai_lieu group by ma_loai_tai_lieu order by count ( * ) desc limit 3 intersect select ten_tai_lieu from tai_lieu group by ma_
+
+[2x] no such column: ngay
+  #315 (e_learning): select ngay ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien
+  #316 (e_learning): select ngay ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien
+
+[2x] no such column: t2.ngay
+  #355 (e_learning): select t2.ngay ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_kh
+  #356 (e_learning): select t2.ngay ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_kh
+
+[1x] near "khu_nha": syntax error
+  #168 (customers_campaigns_ecommerce): select mau_cua_khu_nha , chi tiet khu_nha from khu_nha order by mau_cua_khu_nha
+
+Saved to D:\Repo\Text2SQL-Report\ViText2SQL\data\syllable-level\dev.json

@@ -1,0 +1,25 @@
+  #168: select mau_cua_khu_nha , chi tiet khu_nha from khu_nha order by mau_cua_khu_nha -> select mau_cua_khu_nha , chi_tiet_khu_nha from khu_nha order by mau_cua_khu_nha
+  #315: select ngay ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien -> select ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien
+  #316: select ngay ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien -> select ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien
+  #355: select t2.ngay ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2  -> select t2.ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1
+  #356: select t2.ngay ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2  -> select t2.ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1
+  #365: select t1.ngay ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cu -> select t1.ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sin
+  #366: select t1.ngay ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cu -> select t1.ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sin
+  #369: select t1.ngay ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 -> select t1.ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join
+  #370: select t1.ngay ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 -> select t1.ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join
+  #371: select t1.ngay ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 -> select t1.ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join
+  #372: select t1.ngay ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 -> select t1.ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join
+
+Changed 11 queries
+
+Total: 954
+Success: 952 (99.8%)
+Errors: 2 (0.2%)
+
+Remaining errors:
+  #275 (document_management): ORDER BY clause should come after INTERSECT not before
+    select ten_tai_lieu from tai_lieu group by ma_loai_tai_lieu order by count ( * ) desc limit 3 intersect select ten_tai_lieu from tai_lieu group by ma_cau_truc_tai_lieu order by cou
+  #276 (document_management): ORDER BY clause should come after INTERSECT not before
+    select ten_tai_lieu from tai_lieu group by ma_loai_tai_lieu order by count ( * ) desc limit 3 intersect select ten_tai_lieu from tai_lieu group by ma_cau_truc_tai_lieu order by cou
+
+Saved to D:\Repo\Text2SQL-Report\ViText2SQL\data\syllable-level\dev.json

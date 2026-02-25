@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Request Hub Monitor</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface: #161b22;
+            --text: #c9d1d9;
+            --border: #30363d;
+            --primary: #2f81f7;
+            --success: #238636;
+            --danger: #da3633;
+            --busy: #d29922;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            padding: 2rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 0.875rem;
+            color: #8b949e;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+
+        .endpoints-section {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.5rem;
+        }
+
+        .add-endpoint {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="url"] {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        input[type="url"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(47, 129, 247, 0.3);
+        }
+
+        button {
+            background-color: var(--success);
+            color: white;
+            border: 1px solid rgba(240, 246, 252, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #2ea043;
+        }
+
+        button.btn-danger {
+            background-color: var(--surface);
+            color: var(--danger);
+            border-color: var(--border);
+        }
+
+        button.btn-danger:hover {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: rgba(255,255,255,0.02);
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-idle {
+            background-color: rgba(35, 134, 54, 0.15);
+            color: #3fb950;
+            border: 1px solid rgba(46, 160, 67, 0.4);
+        }
+
+        .status-busy {
+            background-color: rgba(210, 153, 34, 0.15);
+            color: #d29922;
+            border: 1px solid rgba(210, 153, 34, 0.4);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #8b949e;
+        }
+
+        .time-counter {
+            font-family: monospace;
+            color: #8b949e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Request Hub Monitor</h1>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--success); box-shadow: 0 0 8px var(--success);"></div>
+                <span style="font-size: 0.875rem; color: #8b949e;">Live</span>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Requests in Queue</h3>
+                <div class="value" id="queue-length">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Endpoints</h3>
+                <div class="value" id="active-endpoints">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Processed</h3>
+                <div class="value" id="total-processed">0</div>
+            </div>
+        </div>
+
+        <div class="endpoints-section">
+            <h2>Worker Endpoints</h2>
+            <br>
+            <form id="add-endpoint-form" class="add-endpoint">
+                <input type="url" id="endpoint-url" placeholder="http://192.168.1.100:8000/generate_output" required>
+                <button type="submit">Add Worker</button>
+            </form>
+
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Endpoint URL</th>
+                            <th>Status</th>
+                            <th>Tasks Completed</th>
+                            <th>Current Run Time</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="endpoints-table">
+                        <tr>
+                            <td colspan="5" class="empty-state">No workers added yet. Add an endpoint to start processing the queue.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function formatTime(ms) {
+            if (ms === 0) return "-";
+            const seconds = Math.floor(ms / 1000);
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${m}m ${s}s`;
+        }
+
+        async function fetchStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                
+                document.getElementById('queue-length').textContent = data.queueLength;
+                document.getElementById('active-endpoints').textContent = data.endpoints.length;
+                
+                const totalProcessed = data.endpoints.reduce((sum, e) => sum + e.completed, 0);
+                document.getElementById('total-processed').textContent = totalProcessed;
+
+                const tbody = document.getElementById('endpoints-table');
+                
+                if (data.endpoints.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No workers added yet. Add an endpoint to start processing the queue.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.endpoints.map(e => `
+                    <tr>
+                        <td style="font-family: monospace;">${e.url}</td>
+                        <td>
+                            <span class="status-badge status-${e.status}">${e.status}</span>
+                        </td>
+                        <td>${e.completed}</td>
+                        <td class="time-counter">${formatTime(e.busyTime)}</td>
+                        <td>
+                            <button class="btn-danger" onclick="removeWorker('${e.url}')">Remove</button>
+                        </td>
+                    </tr>
+                `).join('');
+
+            } catch (error) {
+                console.error("Failed to fetch status", error);
+            }
+        }
+
+        document.getElementById('add-endpoint-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const urlInput = document.getElementById('endpoint-url');
+            const url = urlInput.value.trim();
+            if (!url) return;
+
+            try {
+                await fetch('/api/endpoints', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                urlInput.value = '';
+                fetchStatus();
+            } catch (error) {
+                alert("Failed to add endpoint.");
+            }
+        });
+
+        async function removeWorker(url) {
+            if (!confirm(`Are you sure you want to remove worker: ${url}?`)) return;
+            try {
+                await fetch('/api/endpoints', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                fetchStatus();
+            } catch (error) {
+                alert("Failed to remove endpoint.");
+            }
+        }
+
+        // Initialize and poll
+        fetchStatus();
+        setInterval(fetchStatus, 1000);
+    </script>
+</body>
+</html>

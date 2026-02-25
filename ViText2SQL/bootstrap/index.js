@@ -21,8 +21,8 @@ const TENSOR_SQL_ENDPOINT = process.env.TENSOR_SQL_ENDPOINT || 'http://localhost
 const DATA_DIR = path.resolve(__dirname, '../data/syllable-level');
 const SQLITE_DB_DIR = path.resolve(__dirname, '../data/syllable-level/databases');
 const TABLES_FILE = path.join(DATA_DIR, 'tables.json');
-const TEST_FILE = path.join(DATA_DIR, 'test.json');
-const TEST_GOLD_FILE = path.join(DATA_DIR, 'test_gold.sql');
+const TEST_FILE = path.join(DATA_DIR, 'dev.json');
+
 const LOG_FILE = path.join(__dirname, 'logs', 'benchmark_results.json');
 const TEXT_LOG_FILE = path.join(__dirname, 'logs', 'benchmark.log');
 
@@ -275,7 +275,7 @@ app.post('/api/execute-sql', (req, res) => {
 console.log(`[Bootstrap] Loading data from ${DATA_DIR}...`);
 const tablesData = JSON.parse(fs.readFileSync(TABLES_FILE, 'utf8'));
 const testData = JSON.parse(fs.readFileSync(TEST_FILE, 'utf8'));
-const goldData = fs.readFileSync(TEST_GOLD_FILE, 'utf8').split('\n').filter(line => line.trim());
+// const goldData = fs.readFileSync(TEST_GOLD_FILE, 'utf8').split('\n').filter(line => line.trim());
 
 // Index schemas by db_id for quick lookup
 const schemasMap = {};
@@ -328,7 +328,8 @@ async function processTests(customStartIndex, customEndIndex, enableAI = true, c
     fs.writeFileSync(TEXT_LOG_FILE, `--- Benchmark Started at ${new Date().toISOString()} (Mode: ${evalMode}) ---\n`);
 
     console.log(`[Bootstrap] Found ${testData.length} test cases.`);
-    console.log(`[Bootstrap] Found ${goldData.length} gold records.`);
+    // console.log(`[Bootstrap] Found ${goldData.length} gold records.`);
+
 
     const effectiveEnd = Math.min(testData.length, endIdx);
 
@@ -459,9 +460,8 @@ async function processTests(customStartIndex, customEndIndex, enableAI = true, c
 
         const schemaPayload = normalizeSchema(rawSchema);
 
-        // Get Gold SQL (format: SQL \t db_id)
-        const goldLine = goldData[i] || "";
-        const goldSQL = goldLine.split('\t')[0];
+        // Get Gold SQL directly from testCase.query (extracted from dev.json)
+        const goldSQL = testCase.query;
 
         const payload = {
             question: testCase.question, // Keep original question (with accents)

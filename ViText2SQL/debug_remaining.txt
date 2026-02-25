@@ -1,0 +1,172 @@
+
+=== e_learning ===
+  tac_gia_khoa_hoc_va_nguoi_huong_dan: ['id_tac_gia', 'atb_cua_tac_gia_/_nguoi_huong_dan', 'ten_dang_nhap', 'mat_khau', 'ten_ca_nhan', 'ten_dem', 'ho', 'gioi_tinh', 'dong_1_cua_dia_chi']
+  sinh_vien: ['id_sinh_vien', 'ngay_dang_ky', 'ngay_dang_nhap_moi_nhat', 'ten_dang_nhap', 'mat_khau', 'ten_ca_nhan', 'ten_dem', 'ho']
+  mon_hoc: ['id_mon_hoc', 'ten_mon_hoc']
+  khoa_hoc: ['id_khoa_hoc', 'id_tac_gia', 'id_mon_hoc', 'ten_khoa_hoc', 'mo_ta_ve_khoa_hoc']
+  luot_dang_ky_khoa_hoc_cua_sinh_vien: ['id_dang_ky', 'id_sinh_vien', 'id_khoa_hoc', 'ngay_ngay_dang_ky', 'ngay_hoan_thanh']
+  bai_kiem_tra_cua_sinh_vien: ['id_dang_ky', 'ngay_lam_bai_kiem_tra', 'ket_qua_kiem_tra']
+
+=== swimming ===
+  van_dong_vien_boi: ['id', 'ten', 'quoc_tich', '100_met', '200_met', '300_met', '400_met', '500_met', '600_met', '700_met', 'thoi_gian']
+  san_van_dong: ['id', 'ten', 'suc_chua', 'thanh_pho', 'quoc_gia', 'nam_mo_cua']
+  su_kien: ['id', 'ten', 'id_san_van_dong', 'nam']
+  ho_so: ['id', 'ket_qua', 'id_van_dong_vien_boi', 'id_su_kien']
+
+=== customers_campaigns_ecommerce ===
+  khu_nha: ['id_khu_nha', 'mau_cua_khu_nha', 'chi_tiet_khu_nha']
+  cac_san_pham: ['id_san_pham', 'danh_muc_san_pham', 'ten_san_pham']
+  khach_hang: ['id_khach_hang', 'phuong_thuc_thanh_toan', 'ten_khach_hang', 'so_dien_thoai_khach_hang', 'email_cua_khach_hang', 'dia_chi_cua_khach_hang', 'ten_dang_nhap_cua_khach_hang', 'mat_khau_cua_khach_hang']
+  chien_dich_gui_thu_quang_cao: ['id_thu_quang_cao', 'danh_muc_san_pham', 'ten_thu_quang_cao', 'ngay_bat_dau_gui_thu', 'ngay_ket_thuc_gui_thu']
+  dia_chi_khach_hang: ['id_khach_hang', 'id_khu_nha', 'ngay_den_dia_chi', 'ma_loai_dia_chi', 'ngay_roi_dia_chi']
+  luot_dat_hang_cua_khach_hang: ['id_don_hang', 'id_khach_hang', 'ma_trang_thai_don_hang', 'ma_phuong_thuc_van_chuyen', 'thoi_gian_dat_hang', 'thoi_gian_giao_hang_cua_don_hang', 'phi_van_chuyen_don_hang']
+  thu_quang_cao_gui_khach_hang: ['id_thu_quang_cao', 'id_khach_hang', 'ma_ket_qua', 'ngay_gui_thu_cho_khach_hang']
+  mat_hang_duoc_dat: ['id_mat_hang', 'ma_trang_thai_dat_hang_cua_mat_hang', 'id_don_hang', 'id_san_pham', 'ma_trang_thai_mat_hang', 'thoi_gian_van_chuyen_mat_hang', 'so_luong_mat_hang_duoc_dat']
+
+=== tables.json swimming ===
+  [0] 'tên' -> 'ten'
+  [0] 'quốc tịch' -> 'quoc_tich'
+  [0] '100 mét' -> '100_met'
+  [0] '200 mét' -> '200_met'
+  [0] '300 mét' -> '300_met'
+  [0] '400 mét' -> '400_met'
+  [0] '500 mét' -> '500_met'
+  [0] '600 mét' -> '600_met'
+  [0] '700 mét' -> '700_met'
+  [0] 'thời gian' -> 'thoi_gian'
+  [1] 'tên' -> 'ten'
+  [1] 'sức chứa' -> 'suc_chua'
+  [1] 'thành phố' -> 'thanh_pho'
+  [1] 'quốc gia' -> 'quoc_gia'
+  [1] 'năm mở cửa' -> 'nam_mo_cua'
+  [2] 'tên' -> 'ten'
+  [2] 'id sân vận động' -> 'id_san_van_dong'
+  [2] 'năm' -> 'nam'
+  [3] 'kết quả' -> 'ket_qua'
+  [3] 'id vận động viên bơi' -> 'id_van_dong_vien_boi'
+  [3] 'id sự kiện' -> 'id_su_kien'
+
+=== tables.json e_learning ===
+  [0] 'id tác giả' -> 'id_tac_gia'
+  [0] 'atb của tác giả / người hướng dẫn' -> 'atb_cua_tac_gia_/_nguoi_huong_dan'
+  [0] 'tên đăng nhập' -> 'ten_dang_nhap'
+  [0] 'mật khẩu' -> 'mat_khau'
+  [0] 'tên cá nhân' -> 'ten_ca_nhan'
+  [0] 'tên đệm' -> 'ten_dem'
+  [0] 'họ' -> 'ho'
+  [0] 'giới tính' -> 'gioi_tinh'
+  [0] 'dòng 1 của địa chỉ' -> 'dong_1_cua_dia_chi'
+  [1] 'id sinh viên' -> 'id_sinh_vien'
+  [1] 'ngày đăng ký' -> 'ngay_dang_ky'
+  [1] 'ngày đăng nhập mới nhất' -> 'ngay_dang_nhap_moi_nhat'
+  [1] 'tên đăng nhập' -> 'ten_dang_nhap'
+  [1] 'mật khẩu' -> 'mat_khau'
+  [1] 'tên cá nhân' -> 'ten_ca_nhan'
+  [1] 'tên đệm' -> 'ten_dem'
+  [1] 'họ' -> 'ho'
+  [2] 'id môn học' -> 'id_mon_hoc'
+  [2] 'tên môn học' -> 'ten_mon_hoc'
+  [3] 'id khoá học' -> 'id_khoa_hoc'
+  [3] 'id tác giả' -> 'id_tac_gia'
+  [3] 'id môn học' -> 'id_mon_hoc'
+  [3] 'tên khoá học' -> 'ten_khoa_hoc'
+  [3] 'mô tả về khoá học' -> 'mo_ta_ve_khoa_hoc'
+  [4] 'id đăng ký' -> 'id_dang_ky'
+  [4] 'id sinh viên' -> 'id_sinh_vien'
+  [4] 'id khoá học' -> 'id_khoa_hoc'
+  [4] 'ngày đăng ký' -> 'ngay_ngay_dang_ky'
+  [4] 'ngày hoàn thành' -> 'ngay_hoan_thanh'
+  [5] 'id đăng ký' -> 'id_dang_ky'
+  [5] 'ngày làm bài kiểm tra' -> 'ngay_lam_bai_kiem_tra'
+  [5] 'kết quả kiểm tra' -> 'ket_qua_kiem_tra'
+
+=== tables.json customers_campaigns_ecommerce ===
+  [0] 'id khu nhà' -> 'id_khu_nha'
+  [0] 'mẫu của khu nhà' -> 'mau_cua_khu_nha'
+  [0] 'chi tiết về khu nhà' -> 'chi_tiet_khu_nha'
+  [1] 'id sản phẩm' -> 'id_san_pham'
+  [1] 'danh mục sản phẩm' -> 'danh_muc_san_pham'
+  [1] 'tên sản phẩm' -> 'ten_san_pham'
+  [2] 'id khách hàng' -> 'id_khach_hang'
+  [2] 'phương thức thanh toán' -> 'phuong_thuc_thanh_toan'
+  [2] 'tên khách hàng' -> 'ten_khach_hang'
+  [2] 'số điện thoại khách hàng' -> 'so_dien_thoai_khach_hang'
+  [2] 'email của khách hàng' -> 'email_cua_khach_hang'
+  [2] 'địa chỉ của khách hàng' -> 'dia_chi_cua_khach_hang'
+  [2] 'tên đăng nhập của khách hàng' -> 'ten_dang_nhap_cua_khach_hang'
+  [2] 'mật khẩu của khách hàng' -> 'mat_khau_cua_khach_hang'
+  [3] 'id thư quảng cáo' -> 'id_thu_quang_cao'
+  [3] 'danh mục sản phẩm' -> 'danh_muc_san_pham'
+  [3] 'tên thư quảng cáo' -> 'ten_thu_quang_cao'
+  [3] 'ngày bắt đầu gửi thư' -> 'ngay_bat_dau_gui_thu'
+  [3] 'ngày kết thúc gửi thư' -> 'ngay_ket_thuc_gui_thu'
+  [4] 'id khách hàng' -> 'id_khach_hang'
+  [4] 'id khu nhà' -> 'id_khu_nha'
+  [4] 'ngày đến địa chỉ' -> 'ngay_den_dia_chi'
+  [4] 'mã loại địa chỉ' -> 'ma_loai_dia_chi'
+  [4] 'ngày rời địa chỉ' -> 'ngay_roi_dia_chi'
+  [5] 'id đơn hàng' -> 'id_don_hang'
+  [5] 'id khách hàng' -> 'id_khach_hang'
+  [5] 'mã trạng thái đơn hàng' -> 'ma_trang_thai_don_hang'
+  [5] 'mã phương thức vận chuyển' -> 'ma_phuong_thuc_van_chuyen'
+  [5] 'thời gian đặt hàng' -> 'thoi_gian_dat_hang'
+  [5] 'thời gian giao hàng của đơn hàng' -> 'thoi_gian_giao_hang_cua_don_hang'
+  [5] 'phí vận chuyển đơn hàng' -> 'phi_van_chuyen_don_hang'
+  [6] 'id thư quảng cáo' -> 'id_thu_quang_cao'
+  [6] 'id khách hàng' -> 'id_khach_hang'
+  [6] 'mã kết quả' -> 'ma_ket_qua'
+  [6] 'ngày gửi thư cho khách hàng' -> 'ngay_gui_thu_cho_khach_hang'
+  [7] 'id mặt hàng' -> 'id_mat_hang'
+  [7] 'mã trạng thái đặt hàng của mặt hàng' -> 'ma_trang_thai_dat_hang_cua_mat_hang'
+  [7] 'id đơn hàng' -> 'id_don_hang'
+  [7] 'id sản phẩm' -> 'id_san_pham'
+  [7] 'mã trạng thái mặt hàng' -> 'ma_trang_thai_mat_hang'
+  [7] 'thời gian vận chuyển mặt hàng' -> 'thoi_gian_van_chuyen_mat_hang'
+  [7] 'số lượng mặt hàng được đặt' -> 'so_luong_mat_hang_duoc_dat'
+
+=== Problematic queries (current state) ===
+
+  #168 (customers_campaigns_ecommerce)
+  query: select mau_cua_khu_nha , chi tiết khu_nha from khu_nha order by mau_cua_khu_nha
+
+  #275 (document_management)
+  query: select ten_tai_lieu from tai_lieu group by ma_loai_tai_lieu order by count ( * ) desc limit 3 intersect select ten_tai_lieu from tai_lieu group by ma_cau_truc_tai_lieu order by count ( * ) desc limit 3
+
+  #276 (document_management)
+  query: select ten_tai_lieu from tai_lieu group by ma_loai_tai_lieu order by count ( * ) desc limit 3 intersect select ten_tai_lieu from tai_lieu group by ma_cau_truc_tai_lieu order by count ( * ) desc limit 3
+
+  #315 (e_learning)
+  query: select ngày ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien
+
+  #316 (e_learning)
+  query: select ngày ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien
+
+  #355 (e_learning)
+  query: select t2.ngày ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_khoa_hoc = "Spanish"
+
+  #356 (e_learning)
+  query: select t2.ngày ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_khoa_hoc = "Spanish"
+
+  #365 (e_learning)
+  query: select t1.ngày ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky where t2.ket_qua_kiem_tra = "Pass"
+
+  #366 (e_learning)
+  query: select t1.ngày ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky where t2.ket_qua_kiem_tra = "Pass"
+
+  #369 (e_learning)
+  query: select t1.ngày ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien where t2.ten_ca_nhan = "Karson"
+
+  #370 (e_learning)
+  query: select t1.ngày ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien where t2.ten_ca_nhan = "Karson"
+
+  #371 (e_learning)
+  query: select t1.ngày ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien where t2.ho = "Zieme" and t2.ten_ca_nhan = "Bernie"
+
+  #372 (e_learning)
+  query: select t1.ngày ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien where t2.ho = "Zieme" and t2.ten_ca_nhan = "Bernie"
+
+  #796 (swimming)
+  query: select ten from van_dong_vien_boi order by 100_met
+
+  #799 (swimming)
+  query: select 200_met , 300_met from van_dong_vien_boi where quoc_tich = "Australia"
