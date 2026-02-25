@@ -23,7 +23,7 @@ TEST_FILE = os.path.join(DATA_DIR, 'test.json')
 DB_DIR = os.path.join(DATA_DIR, 'databases')
 DB_DIR = os.path.join(DATA_DIR, 'databases')
 
-TENSOR_API = "http://localhost:3000/api/text2sql/generate"
+TENSOR_API = "http://localhost:5002/api/text2sql/generate"
 
 OUTPUT_DIR = os.path.join(BASE_DIR, 'benchmark_tensor_logs')
 RESULTS_FILE = os.path.join(OUTPUT_DIR, 'benchmark_results.json')
@@ -32,7 +32,7 @@ GOLD_FILE = os.path.join(OUTPUT_DIR, 'gold.sql')
 
 
 def build_schema_context(raw_schema):
-    """Build schema context text from tables.json entry."""
+    """Build schema context text from tables.json entry including foreign keys."""
     context = ""
     for tIdx, table_name in enumerate(raw_schema['table_names']):
         context += f"Table {table_name}:\n"
@@ -41,26 +41,142 @@ def build_schema_context(raw_schema):
                 col_name = col[1]
                 col_type = raw_schema['column_types'][cIdx]
                 context += f"  - {col_name} ({col_type})\n"
+    
+    if raw_schema.get('foreign_keys'):
+        context += "\nForeign Keys:\n"
+        for src_idx, tgt_idx in raw_schema['foreign_keys']:
+            src_table_idx, src_col_name = raw_schema['column_names'][src_idx]
+            tgt_table_idx, tgt_col_name = raw_schema['column_names'][tgt_idx]
+            src_table = raw_schema['table_names'][src_table_idx]
+            tgt_table = raw_schema['table_names'][tgt_table_idx]
+            context += f"  - {src_table}.{src_col_name} = {tgt_table}.{tgt_col_name}\n"
     return context
 
 
-def call_tensor_api(question, schema_context, api_url, db_id=None, timeout=600):
-    """Call TensorSQL-Node API to generate SQL."""
-    payload = {
-        "question": question,
-        "schemaContext": schema_context,
-    }
+def convert_to_tensor_schema(raw_schema):
+    """Convert Spider tables.json entry to TensorSQL-Node structured schema format."""
+    tables = []
+    primary_keys = set(raw_schema.get('primary_keys', []))
+    
+    # Build FK lookup: col_index -> True
+    fk_cols = set()
+    for src_idx, tgt_idx in raw_schema.get('foreign_keys', []):
+        fk_cols.add(src_idx)
+    
+    for tIdx, table_name in enumerate(raw_schema['table_names']):
+        columns = []
+        for cIdx, col in enumerate(raw_schema['column_names']):
+            if col[0] == tIdx:
+                columns.append({
+                    "name": col[1],
+                    "dataType": raw_schema['column_types'][cIdx],
+                    "isPrimaryKey": cIdx in primary_keys,
+                    "isForeignKey": cIdx in fk_cols,
+                })
+        tables.append({
+            "name": table_name,
+            "schema": "dbo",
+            "columns": columns,
+        })
+    
+    # Build relationships
+    relationships = []
+    for src_idx, tgt_idx in raw_schema.get('foreign_keys', []):
+        src_table_idx, src_col_name = raw_schema['column_names'][src_idx]
+        tgt_table_idx, tgt_col_name = raw_schema['column_names'][tgt_idx]
+        relationships.append({
+            "fkTable": raw_schema['table_names'][src_table_idx],
+            "fkColumn": src_col_name,
+            "pkTable": raw_schema['table_names'][tgt_table_idx],
+            "pkColumn": tgt_col_name,
+        })
+    
+    return {"tables": tables, "relationships": relationships}
+
+
+def pre_enrich_schemas(schemas_map, api_url, num_workers=1):
+    """Pre-enrich all unique schemas by calling the API with onlyEnrich=true.
+    This generates and caches descriptions for all tables before the benchmark."""
+    enriched_schemas = {}
+    lock = threading.Lock()
+    unique_db_ids = list(schemas_map.keys())
+    total = len(unique_db_ids)
+    print(f"[Benchmark] Pre-enriching {total} schemas with {num_workers} workers...")
+    
+    def enrich_one(idx_dbid):
+        idx, db_id = idx_dbid
+        raw_schema = schemas_map[db_id]
+        tensor_schema = convert_to_tensor_schema(raw_schema)
+        
+        try:
+            payload = {
+                "question": "test",
+                "schema": tensor_schema,
+                "onlyEnrich": True,
+            }
+            resp = requests.post(api_url, json=payload, timeout=300)
+            resp.raise_for_status()
+            data = resp.json()
+            
+            result = data.get('enrichedSchema', tensor_schema)
+            status = "✓" if data.get('enrichedSchema') else "⚠"
+            print(f"  [{idx+1}/{total}] {status} Enriched: {db_id}")
+            
+        except Exception as e:
+            print(f"  [{idx+1}/{total}] ✗ Failed to enrich {db_id}: {e}")
+            result = tensor_schema
+        
+        with lock:
+            enriched_schemas[db_id] = result
+    
+    with ThreadPoolExecutor(max_workers=num_workers) as executor:
+        executor.map(enrich_one, enumerate(unique_db_ids))
+    
+    print(f"[Benchmark] Pre-enrichment complete. {len(enriched_schemas)} schemas ready.")
+    return enriched_schemas
+
+
+def call_tensor_api(question, schema_context, api_url, db_id=None, timeout=1000, schema_obj=None, raw_schema=None):
+    """Call TensorSQL-Node API to generate SQL with retries on 500 errors."""
+    payload = {"question": question}
+    
+    if schema_obj:
+        payload["schema"] = schema_obj
+    elif schema_context:
+        payload["schemaContext"] = schema_context
+    elif raw_schema:
+        payload["schemaContext"] = build_schema_context(raw_schema)
+    
     if db_id:
         payload["dbId"] = db_id
     
-    resp = requests.post(api_url, json=payload, timeout=timeout)
-    resp.raise_for_status()
-    data = resp.json()
+    max_retries = 3
+    retry_delay = 2 # seconds
     
-    if data.get('status') == 'success':
-        return data.get('sql', ''), data.get('plan', '')
-    else:
-        raise Exception(data.get('error', 'Unknown API error'))
+    for attempt in range(max_retries + 1):
+        try:
+            resp = requests.post(api_url, json=payload, timeout=timeout)
+            resp.raise_for_status()
+            data = resp.json()
+            
+            if data.get('status') == 'success':
+                return data.get('sql', ''), data.get('plan', '')
+            else:
+                raise Exception(data.get('error', 'Unknown API error'))
+        except requests.exceptions.HTTPError as e:
+            if resp.status_code == 500 and attempt < max_retries:
+                print(f"  [Retry {attempt+1}/{max_retries}] 500 Error encountered, retrying in {retry_delay}s...")
+                time.sleep(retry_delay)
+                retry_delay *= 2 # Exponential backoff
+                continue
+            raise e
+        except Exception as e:
+            if attempt < max_retries:
+                print(f"  [Retry {attempt+1}/{max_retries}] Error encountered: {e}, retrying in {retry_delay}s...")
+                time.sleep(retry_delay)
+                retry_delay *= 2
+                continue
+            raise e
 
 
 def run_spider_exact_match(gold_sql_str, gen_sql_str, db_id, kmaps):
@@ -107,12 +223,26 @@ class Stats:
         self.errors = 0
         self.exact_matches = 0
         self.eval_errors = 0
-        self.results = []
+        self.results_map = {} # map id -> result
         self.processed_ids = set()
     
     def add_result(self, result, is_match=False, is_error=False, is_eval_error=False):
         with self.lock:
-            self.results.append(result)
+            res_id = result['id']
+            # If we are replacing an existing result, update counters accordingly
+            old_res = self.results_map.get(res_id)
+            if old_res:
+                if old_res.get('error'):
+                    # We don't decrement self.errors here because we are about to add the new outcome
+                    pass
+                else:
+                    self.success -= 1
+                    if old_res.get('exact_match'):
+                        self.exact_matches -= 1
+                    # Note: eval_errors decrement is tricky without more state, 
+                    # but usually failures don't have eval results anyway.
+
+            self.results_map[res_id] = result
             if is_error:
                 self.errors += 1
             else:
@@ -126,8 +256,12 @@ class Stats:
         with self.lock:
             return self.success, self.errors, self.exact_matches, self.eval_errors
 
+    def get_sorted_results(self):
+        with self.lock:
+            return sorted(self.results_map.values(), key=lambda x: x['id'])
 
-def process_single(i, dev_data, schemas_map, api_url, kmaps, stats, effective_end):
+
+def process_single(i, dev_data, schemas_map, enriched_schemas, api_url, kmaps, stats, effective_end):
     """Process a single benchmark entry (thread-safe)."""
     test_case = dev_data[i]
     db_id = test_case['db_id']
@@ -140,11 +274,12 @@ def process_single(i, dev_data, schemas_map, api_url, kmaps, stats, effective_en
         stats.add_result({'id': i, 'db_id': db_id, 'question': question, 'gold_sql': gold_sql, 'error': 'Schema not found'}, is_error=True)
         return
     
-    schema_context = build_schema_context(raw_schema)
+    # Use enriched schema if available, otherwise fallback to text context
+    enriched = enriched_schemas.get(db_id) if enriched_schemas else None
     
     try:
         start_time = time.time()
-        gen_sql, plan = call_tensor_api(question, schema_context, api_url, db_id)
+        gen_sql, plan = call_tensor_api(question, None, api_url, db_id, schema_obj=enriched, raw_schema=raw_schema)
         duration = int((time.time() - start_time) * 1000)
         
         gen_sql = gen_sql.strip().rstrip(';').strip()
@@ -173,7 +308,7 @@ def process_single(i, dev_data, schemas_map, api_url, kmaps, stats, effective_en
         }, is_match=exact_match, is_eval_error=is_eval_error)
         
     except Exception as e:
-        print(f"[{i+1}/{effective_end}] ✗ API Error: {e}")
+        print(f"[{i+1}/{effective_end}] ✗ Error for index {i}: {e}")
         stats.add_result({
             'id': i, 'db_id': db_id, 'question': question,
             'gold_sql': gold_sql, 'error': str(e)
@@ -212,27 +347,40 @@ def main():
     stats = Stats()
     if os.path.exists(RESULTS_FILE):
         try:
-            old_results = json.load(open(RESULTS_FILE, encoding='utf-8'))
-            good_results = [r for r in old_results if r.get('generated_sql') is not None and not r.get('error')]
-            stats.results = good_results
-            stats.processed_ids = {r['id'] for r in good_results}
-            stats.success = len(good_results)
-            stats.exact_matches = sum(1 for r in good_results if r.get('exact_match'))
-            print(f"[Benchmark] Loaded {len(good_results)} existing successful results (resume mode)")
-        except:
+            all_results = json.load(open(RESULTS_FILE, encoding='utf-8'))
+            stats.results_map = {r['id']: r for r in all_results}
+            
+            # processed_ids are only those that were successful
+            # We explicitly want to re-run anything that has an 'error' field
+            stats.processed_ids = {r['id'] for r in all_results if not r.get('error') and r.get('generated_sql')}
+            
+            stats.success = sum(1 for r in all_results if not r.get('error') and r.get('generated_sql'))
+            stats.errors = sum(1 for r in all_results if r.get('error'))
+            stats.exact_matches = sum(1 for r in all_results if not r.get('error') and r.get('exact_match'))
+            
+            re_run_count = len(stats.results_map) - len(stats.processed_ids)
+            print(f"[Benchmark] Loaded {len(all_results)} previous results.")
+            print(f"[Benchmark] Successfully processed: {len(stats.processed_ids)}")
+            if re_run_count > 0:
+                print(f"[Benchmark] Found {re_run_count} failed results that will be re-run.")
+        except Exception as e:
+            print(f"[Benchmark] Warning: Could not load previous results: {e}")
             pass
     
     effective_end = min(len(dev_data), args.end)
     total = effective_end - args.start
     
-    # Build work queue (skip already processed)
+    # Build work queue (skip already processed successful ones)
     work_items = [i for i in range(args.start, effective_end) if i not in stats.processed_ids]
     
-    print(f"[Benchmark] Processing {args.start} to {effective_end - 1} ({total} entries, {len(work_items)} remaining)")
+    print(f"[Benchmark] Processing range {args.start} to {effective_end - 1} ({total} total)")
+    print(f"[Benchmark] Queue size (including re-runs): {len(work_items)}")
     print(f"[Benchmark] API: {api_url}")
     print(f"[Benchmark] Workers: {args.workers}")
-    print(f"[Benchmark] Pipeline: Planning → SQL Gen → Self-Check")
     print()
+    
+    # Pre-enrich schemas (generate descriptions)
+    enriched_schemas = pre_enrich_schemas(schemas_map, api_url, num_workers=args.workers)
     
     # Progress reporter thread
     stop_progress = threading.Event()
@@ -243,25 +391,24 @@ def main():
             if stop_progress.is_set():
                 break
             s, e, em, ee = stats.get_progress()
-            total_done = s + e
+            total_processed = s + e
             rate = em / max(s, 1) * 100
             print(f"\n{'='*60}")
-            print(f"  PROGRESS: {total_done}/{len(work_items) + stats.success} | EM: {em}/{s} ({rate:.1f}%) | Errors: {e}")
+            print(f"  PROGRESS: {total_processed} items | Success: {s} | EM: {em} ({rate:.1f}%) | Errors: {e}")
             print(f"{'='*60}\n")
             # Save intermediate results
-            with stats.lock:
-                sorted_results = sorted(stats.results, key=lambda x: x['id'])
-                json.dump(sorted_results, open(RESULTS_FILE, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+            sorted_results = stats.get_sorted_results()
+            json.dump(sorted_results, open(RESULTS_FILE, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
     
     progress_thread = threading.Thread(target=progress_reporter, daemon=True)
     progress_thread.start()
     
     # Run with ThreadPoolExecutor
-    start_time = time.time()
+    start_time_exec = time.time()
     
     with ThreadPoolExecutor(max_workers=args.workers) as executor:
         futures = {
-            executor.submit(process_single, i, dev_data, schemas_map, api_url, kmaps, stats, effective_end): i
+            executor.submit(process_single, i, dev_data, schemas_map, enriched_schemas, api_url, kmaps, stats, effective_end): i
             for i in work_items
         }
         
@@ -270,20 +417,21 @@ def main():
             try:
                 future.result()
             except Exception as e:
-                print(f"[Worker] Unexpected error for index {idx}: {e}")
+                print(f"[Worker] Unexpected crash for index {idx}: {e}")
     
     stop_progress.set()
-    elapsed = time.time() - start_time
+    elapsed = time.time() - start_time_exec
     
     # Final save
-    with stats.lock:
-        results = sorted(stats.results, key=lambda x: x['id'])
+    results = stats.get_sorted_results()
     
     pred_lines = []
     gold_lines = []
     for r in results:
-        pred_lines.append(r.get('generated_sql', 'SELECT 1'))
-        gold_lines.append(f"{r['gold_sql']}\t{r['db_id']}")
+        # We only generate files for successful results in the current run or previous runs
+        if r.get('generated_sql'):
+            pred_lines.append(r.get('generated_sql', 'SELECT 1'))
+            gold_lines.append(f"{r['gold_sql']}\t{r['db_id']}")
     
     with open(PRED_FILE, 'w', encoding='utf-8') as f:
         f.write('\n'.join(pred_lines) + '\n')
@@ -298,18 +446,15 @@ def main():
     print(f"\n{'='*50}")
     print(f"  BENCHMARK RESULTS (Spider Exact Match)")
     print(f"{'='*50}")
-    print(f"Total processed:     {s + e}")
-    print(f"API success:         {s}")
-    print(f"API errors:          {e}")
-    print(f"Eval parse errors:   {ee}")
+    print(f"Total entries in map: {len(results)}")
+    print(f"Current success:     {s}")
+    print(f"Current errors:      {e}")
     print(f"Exact Match:         {em}/{s} ({rate:.1f}%)")
-    print(f"Elapsed:             {elapsed:.0f}s ({elapsed/60:.1f}m)")
+    print(f"Execution time:      {elapsed:.0f}s ({elapsed/60:.1f}m)")
     print(f"\nFiles saved:")
     print(f"  {RESULTS_FILE}")
     print(f"  {PRED_FILE}")
     print(f"  {GOLD_FILE}")
-    print(f"\nFor official Spider eval:")
-    print(f"  python spiderEval/evaluation.py --gold {GOLD_FILE} --pred {PRED_FILE} --db {DB_DIR} --table {TABLES_FILE} --etype match")
 
 
 if __name__ == '__main__':

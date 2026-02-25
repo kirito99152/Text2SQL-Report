@@ -1,7 +1,7 @@
 
 #!/bin/bash
 
-curl -X POST http://localhost:3005/api/text2sql/generate \
+curl -X POST http://localhost:5002/api/text2sql/generate \
      -H "Content-Type: application/json" \
      -d '{
            "question": "Cho tôi biết danh sách sinh viên học lớp CNTT1",

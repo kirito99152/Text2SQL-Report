@@ -4,29 +4,32 @@ services:
   request-hub:
     build: ./Request-Hub
     ports:
-      - "4000:4000"
+      - "5001:5001"
     volumes:
       - ./Request-Hub/endpoints.json:/app/endpoints.json
     environment:
-      - PORT=4000
+      - PORT=5001
 
   tensorsql-node:
     build: ./TensorSQL-Node
     ports:
-      - "3000:3000"
+      - "5002:5002"
+    volumes:
+      - ./TensorSQL-Node/data:/app/data
     environment:
-      - PORT=3000
+      - PORT=5002
+      - LLM_ENDPOINT_URL=http://request-hub:5001/generate_output
     depends_on:
       - request-hub
 
   track:
     build: ./Track
     ports:
-      - "3005:3005"
+      - "5003:5003"
     volumes:
       - ./ViText2SQL/benchmark_tensor_logs:/data/logs:ro
     environment:
-      - PORT=3005
+      - PORT=5003
       - RESULTS_PATH=/data/logs/benchmark_results.json
     depends_on:
       - tensorsql-node
@@ -36,11 +39,11 @@ services:
       context: ./ViText2SQL
       dockerfile: Dockerfile
     ports:
-      - "3001:3001"
+      - "5004:5004"
     volumes:
       - ./ViText2SQL/data:/app/data
       - ./ViText2SQL/benchmark_tensor_logs:/root/repo/Text2SQL-Report/ViText2SQL/benchmark_tensor_logs
     environment:
-      - TENSOR_SQL_ENDPOINT=http://tensorsql-node:3000/api/text2sql/generate
+      - TENSOR_SQL_ENDPOINT=http://tensorsql-node:5002/api/text2sql/generate
     depends_on:
       - tensorsql-node

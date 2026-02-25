@@ -22,7 +22,8 @@ class AiService {
             const config = {
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                timeout: 1000000 // 1000 seconds
             };
 
             if (this.apiKey) {

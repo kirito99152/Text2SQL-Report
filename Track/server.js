@@ -21,7 +21,29 @@ app.get('/api/stats', (req, res) => {
             });
         }
 
-        const data = JSON.parse(fs.readFileSync(RESULTS_PATH, 'utf8'));
+        const rawData = fs.readFileSync(RESULTS_PATH, 'utf8').trim();
+        if (!rawData) {
+            return res.json({
+                total: 0,
+                correct: 0,
+                percentage: "0.00",
+                results: []
+            });
+        }
+
+        let data;
+        try {
+            data = JSON.parse(rawData);
+        } catch (e) {
+            console.error('JSON Parse error, returning empty stats:', e);
+            return res.json({
+                total: 0,
+                correct: 0,
+                percentage: "0.00",
+                results: []
+            });
+        }
+
         const total = data.length;
         const correct = data.filter(item => item.exact_match === true).length;
         const percentage = total > 0 ? ((correct / total) * 100).toFixed(2) : "0.00";

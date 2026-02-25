@@ -639,7 +639,6 @@ select so_dien_thoai_khach_hang , dia_chi_email_khach_hang from khach_hang_1 whe
 select ten_cua_hang from nhom_hoi_thao_kich	cre_Drama_Workshop_Groups
 select ten_cua_hang from nhom_hoi_thao_kich	cre_Drama_Workshop_Groups
 select min ( so_luong_dat_hang ) , avg ( so_luong_dat_hang ) , max ( so_luong_dat_hang ) from hoa_don	cre_Drama_Workshop_Groups
-select min ( so_luong_dat_hang ) , avg ( so_luong_dat_hang ) , max ( so_luong_dat_hang ) from hoa_don	cre_Drama_Workshop_Groups
 select distinct ma_phuong_thuc_thanh_toan from hoa_don	cre_Drama_Workshop_Groups
 select distinct ma_phuong_thuc_thanh_toan from hoa_don	cre_Drama_Workshop_Groups
 select mo_ta_ve_khu_vuc_tiep_thi from khu_vuc_tiep_thi where ten_khu_vuc_tiep_thi = "china"	cre_Drama_Workshop_Groups
@@ -926,8 +925,6 @@ select count ( * ) , dia_diem from cua_hang group by dia_diem	employee_hire_eval
 select count ( * ) , dia_diem from cua_hang group by dia_diem	employee_hire_evaluation
 select ten_nguoi_quan_ly , quan from cua_hang order by so_luong_san_pham desc limit 1	employee_hire_evaluation
 select ten_nguoi_quan_ly , quan from cua_hang order by so_luong_san_pham desc limit 1	employee_hire_evaluation
-select min ( so_luong_san_pham ) , max ( so_luong_san_pham ) from cua_hang	employee_hire_evaluation
-select min ( so_luong_san_pham ) , max ( so_luong_san_pham ) from cua_hang	employee_hire_evaluation
 select ten , dia_diem , quan from cua_hang order by so_luong_san_pham desc	employee_hire_evaluation
 select ten , dia_diem , quan from cua_hang order by so_luong_san_pham desc	employee_hire_evaluation
 select ten from cua_hang where so_luong_san_pham > ( select avg ( so_luong_san_pham ) from cua_hang )	employee_hire_evaluation
