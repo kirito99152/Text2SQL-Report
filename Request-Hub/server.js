@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -14,6 +15,46 @@ app.use(express.static(path.join(__dirname, 'public')));
 const queue = []; // Array of pending requests: { req, res, id, timestamp }
 const endpoints = []; // Array of { url: string, status: 'idle' | 'busy', completed: number, currentTaskTime: number | null }
 let requestIdCounter = 1;
+
+const ENDPOINTS_FILE = path.join(__dirname, 'endpoints.json');
+
+function saveEndpoints() {
+    try {
+        const data = endpoints.map(e => ({
+            url: e.url,
+            status: 'idle', // Always save as idle
+            completed: e.completed || 0,
+            currentTaskTime: null
+        }));
+        fs.writeFileSync(ENDPOINTS_FILE, JSON.stringify(data, null, 2));
+        console.log(`[System] Endpoints saved to ${ENDPOINTS_FILE}`);
+    } catch (error) {
+        console.error(`[System] Failed to save endpoints: ${error.message}`);
+    }
+}
+
+function loadEndpoints() {
+    try {
+        if (fs.existsSync(ENDPOINTS_FILE)) {
+            const data = JSON.parse(fs.readFileSync(ENDPOINTS_FILE, 'utf8'));
+            endpoints.length = 0; // Clear existing
+            data.forEach(e => {
+                endpoints.push({
+                    url: e.url,
+                    status: 'idle',
+                    completed: e.completed || 0,
+                    currentTaskTime: null
+                });
+            });
+            console.log(`[System] Loaded ${endpoints.length} endpoints from ${ENDPOINTS_FILE}`);
+        }
+    } catch (error) {
+        console.error(`[System] Failed to load endpoints: ${error.message}`);
+    }
+}
+
+// Initial load
+loadEndpoints();
 
 function processQueue() {
     if (queue.length === 0) return;
@@ -101,6 +142,7 @@ app.post('/api/endpoints', (req, res) => {
             currentTaskTime: null
         });
         console.log(`[System] Added new endpoint: ${url}`);
+        saveEndpoints();
         // If there's a queue, it will immediately process because it's idle
         processQueue();
         return res.json({ success: true, message: "Added successfully" });
@@ -114,6 +156,7 @@ app.delete('/api/endpoints', (req, res) => {
     if (index !== -1) {
         endpoints.splice(index, 1);
         console.log(`[System] Removed endpoint: ${url}`);
+        saveEndpoints();
         return res.json({ success: true, message: "Removed successfully" });
     }
     res.status(404).json({ error: "Not found" });

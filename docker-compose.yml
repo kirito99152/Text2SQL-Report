@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  request-hub:
+    build: ./Request-Hub
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./Request-Hub/endpoints.json:/app/endpoints.json
+    environment:
+      - PORT=4000
+
+  tensorsql-node:
+    build: ./TensorSQL-Node
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+    depends_on:
+      - request-hub
+
+  track:
+    build: ./Track
+    ports:
+      - "3005:3005"
+    volumes:
+      - ./ViText2SQL/benchmark_tensor_logs:/data/logs:ro
+    environment:
+      - PORT=3005
+      - RESULTS_PATH=/data/logs/benchmark_results.json
+    depends_on:
+      - tensorsql-node
+
+  bootstrap:
+    build:
+      context: ./ViText2SQL
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./ViText2SQL/data:/app/data
+      - ./ViText2SQL/benchmark_tensor_logs:/root/repo/Text2SQL-Report/ViText2SQL/benchmark_tensor_logs
+    environment:
+      - TENSOR_SQL_ENDPOINT=http://tensorsql-node:3000/api/text2sql/generate
+    depends_on:
+      - tensorsql-node

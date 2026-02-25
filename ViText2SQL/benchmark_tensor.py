@@ -19,6 +19,8 @@ BASE_DIR = os.path.dirname(__file__)
 DATA_DIR = os.path.join(BASE_DIR, 'data', 'syllable-level')
 TABLES_FILE = os.path.join(DATA_DIR, 'tables.json')
 DEV_FILE = os.path.join(DATA_DIR, 'dev.json')
+TEST_FILE = os.path.join(DATA_DIR, 'test.json')
+DB_DIR = os.path.join(DATA_DIR, 'databases')
 DB_DIR = os.path.join(DATA_DIR, 'databases')
 
 TENSOR_API = "http://localhost:3000/api/text2sql/generate"
@@ -184,13 +186,19 @@ def main():
     parser.add_argument('--end', type=int, default=2000, help='End index')
     parser.add_argument('--workers', type=int, default=1, help='Number of concurrent workers')
     parser.add_argument('--api', type=str, default=TENSOR_API, help='TensorSQL-Node API URL')
+    parser.add_argument('--dataset', type=str, default='dev', choices=['dev', 'test'], help='Dataset to evaluate on (dev or test)')
     args = parser.parse_args()
     
     api_url = args.api
     
     print(f"[Benchmark] Loading data...")
     tables_data = json.load(open(TABLES_FILE, encoding='utf-8'))
-    dev_data = json.load(open(DEV_FILE, encoding='utf-8'))
+    dataset_file = DEV_FILE if args.dataset == 'dev' else TEST_FILE
+    if not os.path.exists(dataset_file):
+        print(f"[Benchmark] Error: Dataset file not found at {dataset_file}")
+        sys.exit(1)
+        
+    dev_data = json.load(open(dataset_file, encoding='utf-8'))
     
     schemas_map = {}
     for schema in tables_data:

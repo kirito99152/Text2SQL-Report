@@ -1,954 +1,1908 @@
-SELECT COUNT(*) FROM kien_truc_su WHERE gioi_tinh = 'nữ'
-SELECT ten, quoc_tich, id FROM kien_truc_su WHERE gioi_tinh = 'nam' ORDER BY ten ASC
-SELECT T2.ten, T1.chieu_dai_theo_met FROM cau AS T1 JOIN kien_truc_su AS T2 ON T1.id_kien_truc_su = CAST(T2.id AS NUMBER) ORDER BY T1.chieu_dai_theo_met DESC LIMIT 1
-SELECT AVG(chieu_dai_theo_feet) FROM cau
-SELECT ten, nam_xay_dung FROM nha_may WHERE loai = 'Grondzeiler'
-SELECT DISTINCT kien_truc_su.ten, kien_truc_su.quoc_tich FROM kien_truc_su JOIN nha_may ON kien_truc_su.id = nha_may.id_kien_truc_su
-SELECT ten FROM nha_may WHERE dia_diem != 'Donceel'
-SELECT DISTINCT T1.loai FROM nha_may AS T1 JOIN kien_truc_su AS T2 ON T1.id_kien_truc_su = CAST(T2.id AS NUMBER) WHERE T2.quoc_tich = 'Mỹ' OR T2.quoc_tich = 'Canada'
-SELECT kien_truc_su.id, kien_truc_su.ten FROM kien_truc_su JOIN cau ON kien_truc_su.id = cau.id_kien_truc_su GROUP BY kien_truc_su.id HAVING COUNT(*) >= 3
-SELECT kien_truc_su.id, kien_truc_su.ten, kien_truc_su.quoc_tich FROM kien_truc_su JOIN nha_may ON kien_truc_su.id = nha_may.id_kien_truc_su GROUP BY kien_truc_su.id ORDER BY COUNT(*) DESC LIMIT 1
-SELECT id, ten, gioi_tinh FROM kien_truc_su WHERE (SELECT COUNT(*) FROM cau WHERE id_kien_truc_su = kien_truc_su.id) >= 2 OR (SELECT COUNT(*) FROM nha_may WHERE id_kien_truc_su = kien_truc_su.id) >= 1
-SELECT dia_diem FROM cau WHERE ten = 'Cổng vòm Kolob' OR ten = 'Cầu cầu vồng'
-SELECT ten FROM nha_may WHERE ten LIKE '%Moulin%'
-SELECT DISTINCT nha_may.ten FROM nha_may JOIN kien_truc_su ON CAST(nha_may.id_kien_truc_su AS TEXT) = kien_truc_su.id JOIN cau ON kien_truc_su.id = cau.id_kien_truc_su WHERE cau.chieu_dai_theo_met > 80
-SELECT loai , COUNT(*) FROM nha_may GROUP BY loai ORDER BY COUNT(*) DESC LIMIT 1
-SELECT COUNT(*) FROM kien_truc_su WHERE id_kien_truc_su NOT IN (SELECT id_kien_truc_su FROM nha_may WHERE nam_xay_dung < 1850)
-SELECT cau.ten FROM cau JOIN kien_truc_su ON cau.id_kien_truc_su = kien_truc_su.id WHERE kien_truc_su.quoc_tich = 'Mỹ' ORDER BY cau.chieu_dai_theo_met ASC
-SELECT dia_diem FROM rap_chieu_phim WHERE NOT EXISTS (SELECT 1 FROM rap_chieu_phim r2 WHERE r2.dia_diem = rap_chieu_phim.dia_diem AND r2.suc_chua > 800)
-SELECT dia_diem FROM rap_chieu_phim WHERE nam_mo_cua = 2010 INTERSECT SELECT dia_diem FROM rap_chieu_phim WHERE nam_mo_cua = 2011
-SELECT COUNT(*) FROM rap_chieu_phim
-SELECT COUNT(*) FROM rap_chieu_phim
-SELECT ten, nam_mo_cua, suc_chua FROM rap_chieu_phim
-SELECT ten, dia_diem FROM rap_chieu_phim WHERE suc_chua > (SELECT AVG(suc_chua) FROM rap_chieu_phim)
-SELECT DISTINCT dia_diem FROM rap_chieu_phim
-SELECT DISTINCT dia_diem FROM rap_chieu_phim
-SELECT ten, nam_mo_cua FROM rap_chieu_phim ORDER BY nam_mo_cua DESC
-SELECT ten, dia_diem FROM rap_chieu_phim ORDER BY suc_chua DESC LIMIT 1
-SELECT AVG(suc_chua), MIN(suc_chua), MAX(suc_chua) FROM rap_chieu_phim WHERE nam_mo_cua > 2011
-SELECT dia_diem, COUNT(*) FROM rap_chieu_phim GROUP BY dia_diem
-SELECT dia_diem FROM rap_chieu_phim WHERE nam_mo_cua >= 2010 GROUP BY dia_diem ORDER BY COUNT(*) DESC LIMIT 1
-SELECT dia_diem FROM rap_chieu_phim WHERE suc_chua > 300 GROUP BY dia_diem HAVING COUNT(*) >= 2
-SELECT dia_diem FROM rap_chieu_phim WHERE suc_chua > 300 GROUP BY dia_diem HAVING COUNT(*) >= 2
-SELECT tieu_de, duoc_dao_dien_boi FROM phim
-SELECT tieu_de, duoc_dao_dien_boi FROM phim
-SELECT duoc_dao_dien_boi FROM phim
-SELECT duoc_dao_dien_boi FROM phim
-SELECT duoc_dao_dien_boi , COUNT ( * ) FROM phim GROUP BY duoc_dao_dien_boi
-SELECT T1.id_rap_chieu_phim , SUM(T2.so_luong_suat_chieu_moi_ngay) FROM rap_chieu_phim AS T1 JOIN lich_chieu_phim AS T2 ON T1.id_rap_chieu_phim = T2.id_rap_chieu_phim GROUP BY T1.id_rap_chieu_phim
-SELECT phim.tieu_de, MAX(lich_chieu_phim.gia) FROM phim JOIN lich_chieu_phim ON phim.id_phim = lich_chieu_phim.id_phim GROUP BY phim.id_phim
-SELECT phim.tieu_de, MAX(lich_chieu_phim.gia) FROM phim JOIN lich_chieu_phim ON phim.id_phim = lich_chieu_phim.id_phim GROUP BY phim.id_phim
-SELECT T3.ten, T2.tieu_de, T1.ngay, T1.gia FROM lich_chieu_phim AS T1 JOIN phim AS T2 ON T1.id_phim = T2.id_phim JOIN rap_chieu_phim AS T3 ON T1.id_rap_chieu_phim = T3.id_rap_chieu_phim
-SELECT phim.tieu_de, phim.duoc_dao_dien_boi FROM phim LEFT JOIN lich_chieu_phim ON phim.id_phim = lich_chieu_phim.id_phim WHERE lich_chieu_phim.id_phim IS NULL
-SELECT phim.duoc_dao_dien_boi , COUNT ( * ) FROM phim JOIN lich_chieu_phim ON phim.id_phim = lich_chieu_phim.id_phim GROUP BY phim.duoc_dao_dien_boi ORDER BY COUNT ( * ) DESC LIMIT 1
-SELECT dia_diem FROM rap_chieu_phim WHERE suc_chua > 300 GROUP BY dia_diem HAVING COUNT(*) > 1
-SELECT dia_diem FROM rap_chieu_phim WHERE suc_chua > 300 GROUP BY dia_diem HAVING COUNT(*) > 1
-SELECT COUNT(*) FROM phim WHERE tieu_de LIKE '%Dummy%'
-SELECT COUNT(*) FROM phim WHERE tieu_de LIKE '%Dummy%'
-SELECT COUNT(*) FROM khoa_hoc
-SELECT COUNT(*) FROM khoa_hoc
-SELECT COUNT(*) FROM khoa_hoc WHERE so_luong_tin_chi > 2
-SELECT COUNT(*) FROM khoa_hoc WHERE so_luong_tin_chi > 2
-SELECT ten_khoa_hoc FROM khoa_hoc WHERE so_luong_tin_chi = 1
-SELECT ten_khoa_hoc FROM khoa_hoc WHERE so_luong_tin_chi = 1
-SELECT id_khoa_hoc, ten_khoa_hoc FROM khoa_hoc WHERE ngay = 'MTW'
-SELECT ten_khoa_hoc FROM khoa_hoc WHERE ngay = 'MTW'
-SELECT COUNT(*) FROM khoa WHERE bo_phan = 'AS'
-SELECT COUNT(*) FROM khoa WHERE bo_phan = 'AS'
-SELECT so_dien_thoai_khoa FROM khoa WHERE phong = '268'
-SELECT so_dien_thoai_khoa FROM khoa WHERE phong = '268'
-SELECT COUNT(DISTINCT sinh_vien.id_sinh_vien) FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.id_sinh_vien = dang_ky_khoa_hoc.id_sinh_vien WHERE dang_ky_khoa_hoc.diem = 'B'
-SELECT COUNT(DISTINCT sinh_vien.id_sinh_vien) FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.id_sinh_vien = dang_ky_khoa_hoc.id_sinh_vien WHERE dang_ky_khoa_hoc.diem = 'B'
-SELECT MAX(diem_so) AS diem_cao_nhat, MIN(diem_so) AS diem_thap_nhat FROM chuyen_doi_diem
-SELECT MAX(diem_so) AS diem_cao_nhat, MIN(diem_so) AS diem_thap_nhat FROM chuyen_doi_diem
-SELECT ten FROM sinh_vien WHERE ten LIKE '%a%'
-SELECT ten FROM sinh_vien WHERE ho LIKE '%a%'
-SELECT ho , ten FROM giang_vien WHERE gioi_tinh = 'nam' AND toa_nha = 'NEB'
-SELECT ho , ten FROM giang_vien WHERE gioi_tinh = 'nam' AND toa_nha = 'NEB'
-SELECT phong FROM giang_vien WHERE ngach = 'Giáo sư' AND toa_nha = 'NEB'
-SELECT phong FROM giang_vien WHERE ngach = 'Giáo sư' AND toa_nha = 'NEB'
-SELECT ten_khoa FROM khoa WHERE toa_nha = 'Mergenthaler'
-SELECT ma_so_khoa, ten_khoa FROM khoa WHERE toa_nha = 'Mergenthaler'
-SELECT id_khoa_hoc, ten_khoa_hoc, so_luong_tin_chi, nguoi_huong_dan, ngay, gio, ma_so_khoa FROM khoa_hoc ORDER BY so_luong_tin_chi ASC
-SELECT * FROM khoa_hoc ORDER BY so_luong_tin_chi ASC
-SELECT ten_khoa_hoc FROM khoa_hoc ORDER BY so_luong_tin_chi ASC
-SELECT ten_khoa_hoc FROM khoa_hoc ORDER BY so_luong_tin_chi ASC
-SELECT ten FROM sinh_vien ORDER BY tuoi DESC
-SELECT ten FROM sinh_vien ORDER BY tuoi DESC
-SELECT ho FROM sinh_vien WHERE gioi_tinh = 'F' ORDER BY tuoi DESC
-SELECT ho FROM sinh_vien WHERE gioi_tinh = 'nữ' ORDER BY tuoi DESC
-SELECT ho FROM giang_vien WHERE toa_nha = 'Barton' ORDER BY ho ASC
-SELECT ho FROM giang_vien WHERE toa_nha = 'Barton' ORDER BY ho ASC
-SELECT ten FROM giang_vien ORDER BY ten ASC
-SELECT ten FROM giang_vien WHERE ngach = 'Giáo sư' ORDER BY ten ASC
-SELECT T1.ten_khoa FROM khoa AS T1 JOIN chuyen_nganh_phu AS T2 ON T1.ma_so_khoa = T2.ma_so_khoa GROUP BY T1.ma_so_khoa ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.ten_khoa FROM khoa AS T1 JOIN chuyen_nganh_phu AS T2 ON T1.ma_so_khoa = T2.ma_so_khoa GROUP BY T1.ma_so_khoa ORDER BY COUNT(*) DESC LIMIT 1
-SELECT ten_khoa FROM khoa WHERE ma_so_khoa NOT IN (SELECT ma_so_khoa FROM chuyen_nganh_phu)
-SELECT ten_khoa FROM khoa WHERE ma_so_khoa NOT IN (SELECT ma_so_khoa FROM chuyen_nganh_phu)
-SELECT khoa.ten_khoa FROM khoa JOIN la_thanh_vien_cua ON khoa.ma_so_khoa = la_thanh_vien_cua.ma_so_khoa GROUP BY khoa.ma_so_khoa ORDER BY COUNT(*) ASC LIMIT 1
-SELECT ten_khoa FROM khoa LEFT JOIN la_thanh_vien_cua ON khoa.ma_so_khoa = la_thanh_vien_cua.ma_so_khoa LEFT JOIN chuyen_nganh_phu ON khoa.ma_so_khoa = chuyen_nganh_phu.ma_so_khoa GROUP BY khoa.ma_so_khoa ORDER BY COUNT(*) ASC LIMIT 1
-SELECT ngach FROM giang_vien GROUP BY ngach ORDER BY COUNT(*) ASC LIMIT 1
-SELECT ngach FROM giang_vien GROUP BY ngach ORDER BY COUNT(*) ASC LIMIT 1
-SELECT T1.ho, T1.ten FROM giang_vien AS T1 JOIN khoa_hoc AS T2 ON T1.id_giang_vien = T2.nguoi_huong_dan GROUP BY T1.id_giang_vien ORDER BY COUNT(*) DESC LIMIT 3
-SELECT T1.ho, T1.ten FROM giang_vien AS T1 JOIN khoa_hoc AS T2 ON T1.id_giang_vien = T2.nguoi_huong_dan GROUP BY T1.id_giang_vien ORDER BY COUNT(*) DESC LIMIT 3
-SELECT T1.toa_nha FROM giang_vien AS T1 JOIN khoa_hoc AS T2 ON T1.id_giang_vien = T2.nguoi_huong_dan GROUP BY T1.id_giang_vien ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.toa_nha FROM giang_vien AS T1 JOIN khoa_hoc AS T2 ON T1.id_giang_vien = T2.nguoi_huong_dan GROUP BY T1.id_giang_vien ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.ten_khoa_hoc FROM khoa_hoc AS T1 JOIN dang_ky_khoa_hoc AS T2 ON T1.id_khoa_hoc = T2.ma_khoa_hoc GROUP BY T1.id_khoa_hoc HAVING COUNT(*) >= 5
-SELECT T1.ten_khoa_hoc FROM khoa_hoc AS T1 JOIN dang_ky_khoa_hoc AS T2 ON T1.id_khoa_hoc = T2.ma_khoa_hoc GROUP BY T1.id_khoa_hoc HAVING COUNT(*) >= 5
-SELECT giang_vien.ho, giang_vien.ten FROM khoa_hoc JOIN giang_vien ON khoa_hoc.nguoi_huong_dan = giang_vien.id_giang_vien WHERE khoa_hoc.ten_khoa_hoc = ' Kỹ năng máy tính '
-SELECT giang_vien.ho , giang_vien.ten FROM khoa_hoc JOIN giang_vien ON khoa_hoc.nguoi_huong_dan = giang_vien.id_giang_vien WHERE khoa_hoc.ten_khoa_hoc = 'Kỹ năng máy tính'
-SELECT khoa.ten_khoa, khoa.phong FROM khoa_hoc JOIN khoa ON khoa_hoc.ma_so_khoa = khoa.ma_so_khoa WHERE khoa_hoc.ten_khoa_hoc = 'Giới thiệu về khoa học máy tính'
-SELECT khoa.ten_khoa, khoa.phong FROM khoa_hoc JOIN khoa ON khoa_hoc.ma_so_khoa = khoa.ma_so_khoa WHERE khoa_hoc.ten_khoa_hoc = 'Giới thiệu về khoa học máy tính'
-SELECT sinh_vien.ho, sinh_vien.ten, dang_ky_khoa_hoc.diem FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.id_sinh_vien = dang_ky_khoa_hoc.id_sinh_vien
-SELECT sinh_vien.ho, sinh_vien.ten, dang_ky_khoa_hoc.diem FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.id_sinh_vien = dang_ky_khoa_hoc.id_sinh_vien
-SELECT DISTINCT sinh_vien.ten FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.id_sinh_vien = dang_ky_khoa_hoc.id_sinh_vien JOIN chuyen_doi_diem ON dang_ky_khoa_hoc.diem = chuyen_doi_diem.bang_diem WHERE chuyen_doi_diem.diem_so > 3.8
-SELECT DISTINCT ten FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.id_sinh_vien = dang_ky_khoa_hoc.id_sinh_vien JOIN chuyen_doi_diem ON dang_ky_khoa_hoc.bang_diem = chuyen_doi_diem.bang_diem WHERE chuyen_doi_diem.diem_so > 3.8
-SELECT giang_vien.ho, giang_vien.ten FROM giang_vien JOIN la_thanh_vien_cua ON giang_vien.id_giang_vien = la_thanh_vien_cua.id_giang_vien WHERE la_thanh_vien_cua.ma_so_khoa = 520
-SELECT giang_vien.ho, giang_vien.ten FROM giang_vien JOIN la_thanh_vien_cua ON giang_vien.id_giang_vien = la_thanh_vien_cua.id_giang_vien WHERE la_thanh_vien_cua.ma_so_khoa = 520
-SELECT T1.ho, T1.ten FROM sinh_vien AS T1 JOIN chuyen_nganh_phu AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien WHERE T2.ma_so_khoa = 140
-SELECT sinh_vien.ho || ' ' || sinh_vien.ten FROM sinh_vien JOIN chuyen_nganh_phu ON sinh_vien.id_sinh_vien = chuyen_nganh_phu.id_sinh_vien WHERE chuyen_nganh_phu.ma_so_khoa = 140
-SELECT T1.ho FROM giang_vien AS T1 JOIN la_thanh_vien_cua AS T2 ON T1.id_giang_vien = T2.id_giang_vien JOIN khoa AS T3 ON T2.ma_so_khoa = T3.ma_so_khoa WHERE T3.ten_khoa = 'Khoa học máy tính'
-SELECT T1.ho FROM giang_vien AS T1 JOIN la_thanh_vien_cua AS T2 ON T1.id_giang_vien = T2.id_giang_vien JOIN khoa AS T3 ON T2.ma_so_khoa = T3.ma_so_khoa WHERE T3.ten_khoa = 'Khoa học máy tính'
-SELECT T1.id_sinh_vien , AVG(T3.diem_so) FROM sinh_vien AS T1 JOIN dang_ky_khoa_hoc AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien JOIN chuyen_doi_diem AS T3 ON T2.bang_diem = T3.bang_diem WHERE T1.ho = 'Smith' GROUP BY T1.id_sinh_vien
-SELECT AVG(diem) FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.id_sinh_vien = dang_ky_khoa_hoc.id_sinh_vien WHERE sinh_vien.ho = 'Smith'
-SELECT MAX(T3.diem_so), MIN(T3.diem_so) FROM sinh_vien AS T1 JOIN dang_ky_khoa_hoc AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien JOIN chuyen_doi_diem AS T3 ON T2.ma_khoa_hoc = T3.bang_diem WHERE T1.ma_thanh_pho = 'NYC'
-SELECT MAX(T3.diem_so), MIN(T3.diem_so) FROM sinh_vien AS T2 JOIN dang_ky_khoa_hoc AS T1 ON T2.id_sinh_vien = T1.id_sinh_vien JOIN chuyen_doi_diem AS T3 ON T1.ma_khoa_hoc = T3.bang_diem WHERE T2.ma_thanh_pho = 'NYC'
-SELECT ten_khoa_hoc FROM khoa_hoc WHERE so_luong_tin_chi IN (1,3) AND gio = '4 giờ'
-SELECT ten_khoa_hoc FROM khoa_hoc WHERE so_luong_tin_chi IN (1, 3) AND gio = '4 giờ'
-SELECT ten_khoa FROM khoa WHERE bo_phan IN ('AS', 'EN') AND toa_nha = 'NEB'
-SELECT ten_khoa FROM khoa WHERE bo_phan IN ('AS', 'EN') AND toa_nha = 'NEB'
-SELECT ten FROM sinh_vien WHERE id_sinh_vien NOT IN (SELECT id_sinh_vien FROM dang_ky_khoa_hoc)
-SELECT ten FROM sinh_vien WHERE id_sinh_vien NOT IN (SELECT id_sinh_vien FROM dang_ky_khoa_hoc)
-SELECT COUNT(*) FROM ca_si
-SELECT COUNT(*) FROM ca_si
-SELECT ten, quoc_gia, tuoi FROM ca_si ORDER BY tuoi DESC
-SELECT ten, quoc_gia, tuoi FROM ca_si ORDER BY tuoi DESC
-SELECT AVG(tuoi), MAX(tuoi), MIN(tuoi) FROM ca_si WHERE quoc_gia = 'Pháp'
-SELECT AVG(tuoi), MAX(tuoi), MIN(tuoi) FROM ca_si WHERE quoc_gia = 'Pháp'
-SELECT ten_bai_hat, nam_phat_hanh_bai_hat FROM ca_si ORDER BY tuoi ASC LIMIT 1
-SELECT ten_bai_hat, nam_phat_hanh_bai_hat FROM ca_si ORDER BY tuoi ASC LIMIT 1
-SELECT DISTINCT quoc_gia FROM ca_si WHERE tuoi > 20
-SELECT quoc_gia FROM ca_si WHERE tuoi > 20
-SELECT quoc_gia , COUNT ( * ) FROM ca_si GROUP BY quoc_gia
-SELECT quoc_gia , COUNT ( * ) FROM ca_si GROUP BY quoc_gia
-SELECT ten_bai_hat FROM ca_si WHERE tuoi > (SELECT AVG(tuoi) FROM ca_si)
-SELECT ten_bai_hat FROM ca_si WHERE tuoi > (SELECT AVG(tuoi) FROM ca_si)
-SELECT dia_diem, ten FROM san_van_dong WHERE suc_chua >= 5000 AND suc_chua <= 10000
-SELECT ten, dia_diem FROM san_van_dong WHERE suc_chua >= 5000 AND suc_chua <= 10000
-SELECT AVG(suc_chua), MAX(cao_nhat) FROM san_van_dong
-SELECT AVG(suc_chua), MAX(suc_chua) FROM san_van_dong
-SELECT ten, suc_chua FROM san_van_dong ORDER BY so_luong_tham_gia_trung_binh DESC LIMIT 1
-SELECT ten, suc_chua FROM san_van_dong ORDER BY so_luong_tham_gia_trung_binh DESC LIMIT 1
-SELECT COUNT(*) FROM buoi_hoa_nhac WHERE nam = '2014' OR nam = '2015'
-SELECT COUNT(*) FROM buoi_hoa_nhac WHERE nam = '2014' OR nam = '2015'
-SELECT T1.ten , COUNT ( * ) FROM san_van_dong AS T1 JOIN buoi_hoa_nhac AS T2 ON T1.id_san_van_dong = T2.id_san_van_dong GROUP BY T1.id_san_van_dong
-SELECT T1.id_san_van_dong , T1.ten , COUNT ( * ) FROM san_van_dong AS T1 JOIN buoi_hoa_nhac AS T2 ON T1.id_san_van_dong = T2.id_san_van_dong GROUP BY T1.id_san_van_dong
-SELECT san_van_dong.ten , san_van_dong.suc_chua FROM san_van_dong JOIN buoi_hoa_nhac ON san_van_dong.id_san_van_dong = buoi_hoa_nhac.id_san_van_dong WHERE buoi_hoa_nhac.nam >= '2014' GROUP BY san_van_dong.id_san_van_dong ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.ten , T1.suc_chua FROM san_van_dong AS T1 JOIN buoi_hoa_nhac AS T2 ON T1.id_san_van_dong = T2.id_san_van_dong WHERE T2.nam > '2013' GROUP BY T1.id_san_van_dong ORDER BY COUNT(*) DESC LIMIT 1
-SELECT nam FROM buoi_hoa_nhac GROUP BY nam ORDER BY COUNT(*) DESC LIMIT 1
-SELECT nam FROM buoi_hoa_nhac GROUP BY nam ORDER BY COUNT(*) DESC LIMIT 1
-SELECT ten FROM san_van_dong WHERE id_san_van_dong NOT IN (SELECT id_san_van_dong FROM buoi_hoa_nhac)
-SELECT ten FROM san_van_dong WHERE id_san_van_dong NOT IN (SELECT id_san_van_dong FROM buoi_hoa_nhac)
-SELECT quoc_gia FROM ca_si WHERE tuoi > 40 INTERSECT SELECT quoc_gia FROM ca_si WHERE tuoi < 30
-SELECT ten FROM san_van_dong WHERE id_san_van_dong NOT IN (SELECT id_san_van_dong FROM buoi_hoa_nhac WHERE nam = '2014')
-SELECT ten FROM san_van_dong WHERE id_san_van_dong NOT IN (SELECT id_san_van_dong FROM buoi_hoa_nhac WHERE nam = '2014')
-SELECT T1.ten_buoi_hoa_nhac, T1.chu_de, COUNT(*) FROM buoi_hoa_nhac AS T1 JOIN ca_si_trong_buoi_hoa_nhac AS T2 ON T1.id_buoi_hoa_nhac = T2.id_buoi_hoa_nhac GROUP BY T1.id_buoi_hoa_nhac
-SELECT buoi_hoa_nhac.ten_buoi_hoa_nhac, buoi_hoa_nhac.chu_de, COUNT(*) AS so_luong_ca_si FROM buoi_hoa_nhac JOIN ca_si_trong_buoi_hoa_nhac ON buoi_hoa_nhac.id_buoi_hoa_nhac = ca_si_trong_buoi_hoa_nhac.id_buoi_hoa_nhac GROUP BY buoi_hoa_nhac.id_buoi_hoa_nhac
-SELECT T1.ten, COUNT(*) FROM ca_si AS T1 JOIN ca_si_trong_buoi_hoa_nhac AS T2 ON T1.id_ca_si = T2.id_ca_si GROUP BY T1.id_ca_si
-SELECT ten , COUNT ( * ) FROM ca_si JOIN ca_si_trong_buoi_hoa_nhac ON ca_si.id_ca_si = CAST(ca_si_trong_buoi_hoa_nhac.id_ca_si AS NUMBER) GROUP BY ca_si.id_ca_si
-SELECT T1.ten FROM ca_si AS T1 JOIN ca_si_trong_buoi_hoa_nhac AS T2 ON T1.id_ca_si = T2.id_ca_si JOIN buoi_hoa_nhac AS T3 ON T2.id_buoi_hoa_nhac = T3.id_buoi_hoa_nhac WHERE T3.nam = '2014'
-SELECT T1.ten FROM ca_si AS T1 JOIN ca_si_trong_buoi_hoa_nhac AS T2 ON T1.id_ca_si = T2.id_ca_si JOIN buoi_hoa_nhac AS T3 ON T2.id_buoi_hoa_nhac = T3.id_buoi_hoa_nhac WHERE T3.nam = '2014'
-SELECT ten, quoc_gia FROM ca_si WHERE ten_bai_hat LIKE '%Hey%'
-SELECT ten, quoc_gia FROM ca_si WHERE ten_bai_hat LIKE '%Hey%'
-SELECT T1.ten, T1.dia_diem FROM san_van_dong AS T1 JOIN buoi_hoa_nhac AS T2 ON T1.id_san_van_dong = T2.id_san_van_dong WHERE T2.nam = '2014' INTERSECT SELECT T1.ten, T1.dia_diem FROM san_van_dong AS T1 JOIN buoi_hoa_nhac AS T2 ON T1.id_san_van_dong = T2.id_san_van_dong WHERE T2.nam = '2015'
-SELECT ten, dia_diem FROM san_van_dong WHERE id_san_van_dong IN ( SELECT CAST(id_san_van_dong AS NUMBER) FROM buoi_hoa_nhac WHERE nam = '2014' INTERSECT SELECT CAST(id_san_van_dong AS NUMBER) FROM buoi_hoa_nhac WHERE nam = '2015' )
-SELECT COUNT(*) FROM buoi_hoa_nhac JOIN san_van_dong ON CAST(buoi_hoa_nhac.id_san_van_dong AS NUMBER) = san_van_dong.id_san_van_dong WHERE san_van_dong.suc_chua = (SELECT MAX(suc_chua) FROM san_van_dong)
-SELECT COUNT(*) FROM buoi_hoa_nhac JOIN san_van_dong ON buoi_hoa_nhac.id_san_van_dong = san_van_dong.id_san_van_dong WHERE san_van_dong.suc_chua = (SELECT MAX(suc_chua) FROM san_van_dong)
-SELECT COUNT(*) FROM khu_nha
-SELECT DISTINCT mau_cua_khu_nha FROM khu_nha
-SELECT chi_tiet_khu_nha, mau_cua_khu_nha FROM khu_nha ORDER BY mau_cua_khu_nha ASC
-SELECT mau_cua_khu_nha, COUNT(*) FROM khu_nha GROUP BY mau_cua_khu_nha
-SELECT danh_muc_san_pham , COUNT ( * ) FROM chien_dich_gui_thu_quang_cao GROUP BY danh_muc_san_pham
-SELECT ten_khach_hang, so_dien_thoai_khach_hang FROM khach_hang WHERE id_khach_hang NOT IN (SELECT id_khach_hang FROM thu_quang_cao_gui_khach_hang)
-SELECT khach_hang.ten_khach_hang, khach_hang.so_dien_thoai_khach_hang FROM khach_hang JOIN thu_quang_cao_gui_khach_hang ON khach_hang.id_khach_hang = thu_quang_cao_gui_khach_hang.id_khach_hang WHERE thu_quang_cao_gui_khach_hang.ma_ket_qua = 'Không phản hồi'
-SELECT ma_ket_qua, COUNT(*) FROM thu_quang_cao_gui_khach_hang GROUP BY ma_ket_qua
-SELECT ten_khach_hang FROM khach_hang JOIN thu_quang_cao_gui_khach_hang ON khach_hang.id_khach_hang = thu_quang_cao_gui_khach_hang.id_khach_hang WHERE thu_quang_cao_gui_khach_hang.ma_ket_qua = 'Đặt hàng' GROUP BY khach_hang.id_khach_hang HAVING COUNT(*) >= 2
-SELECT T1.ten_khach_hang FROM khach_hang AS T1 JOIN thu_quang_cao_gui_khach_hang AS T2 ON T1.id_khach_hang = T2.id_khach_hang GROUP BY T1.id_khach_hang ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.ten_khach_hang , T1.phuong_thuc_thanh_toan FROM khach_hang AS T1 JOIN thu_quang_cao_gui_khach_hang AS T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T2.ma_ket_qua = 'Đặt hàng' INTERSECT SELECT T1.ten_khach_hang , T1.phuong_thuc_thanh_toan FROM khach_hang AS T1 JOIN thu_quang_cao_gui_khach_hang AS T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T2.ma_ket_qua != 'Đặt hàng'
-SELECT khu_nha.mau_cua_khu_nha , dia_chi_khach_hang.ma_loai_dia_chi FROM khach_hang JOIN dia_chi_khach_hang ON khach_hang.id_khach_hang = dia_chi_khach_hang.id_khach_hang JOIN khu_nha ON dia_chi_khach_hang.id_khu_nha = khu_nha.id_khu_nha
-SELECT DISTINCT ma_loai_dia_chi FROM dia_chi_khach_hang
-SELECT phi_van_chuyen_don_hang, id_khach_hang FROM luot_dat_hang_cua_khach_hang WHERE ma_trang_thai_don_hang = 'Bị huỷ' OR ma_trang_thai_don_hang = 'Đã thanh toán tiền'
-SELECT khach_hang.ten_khach_hang FROM khach_hang JOIN luot_dat_hang_cua_khach_hang ON khach_hang.id_khach_hang = luot_dat_hang_cua_khach_hang.id_khach_hang WHERE luot_dat_hang_cua_khach_hang.ma_phuong_thuc_van_chuyen = 'FedEx' AND luot_dat_hang_cua_khach_hang.ma_trang_thai_don_hang = 'Đã được thanh toán'
-SELECT COUNT(*) FROM tai_khoan
-SELECT COUNT(*) FROM tai_khoan
-SELECT id_tai_khoan, id_khach_hang, ten_tai_khoan FROM tai_khoan
-SELECT id_tai_khoan, id_khach_hang, ten_tai_khoan FROM tai_khoan
-SELECT chi_tiet_khac_ve_tai_khoan FROM tai_khoan WHERE ten_tai_khoan = '338'
-SELECT chi_tiet_khac_ve_tai_khoan FROM tai_khoan WHERE ten_tai_khoan = '338'
-SELECT T1.ten_cua_khach_hang, T1.ho_cua_khach_hang, T1.so_dien_thoai_khach_hang FROM khach_hang AS T1 JOIN tai_khoan AS T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T2.ten_tai_khoan = '162'
-SELECT T1.ho_cua_khach_hang, T1.ten_cua_khach_hang, T1.so_dien_thoai_khach_hang FROM khach_hang AS T1 JOIN tai_khoan AS T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T2.ten_tai_khoan = '162'
-SELECT COUNT(*) FROM khach_hang JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang WHERE khach_hang.ten_cua_khach_hang = 'Art' AND khach_hang.ho_cua_khach_hang = 'Turcotte'
-SELECT COUNT(*) FROM khach_hang JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang WHERE khach_hang.ten_cua_khach_hang = 'Art' AND khach_hang.ho_cua_khach_hang = 'Turcotte'
-SELECT T1.id_khach_hang, COUNT(*) FROM khach_hang AS T1 JOIN tai_khoan AS T2 ON T1.id_khach_hang = T2.id_khach_hang GROUP BY T1.id_khach_hang
-SELECT id_khach_hang , COUNT ( * ) FROM tai_khoan GROUP BY id_khach_hang
-SELECT T1.id_khach_hang, COUNT(*) FROM khach_hang AS T1 JOIN tai_khoan AS T2 ON T1.id_khach_hang = T2.id_khach_hang GROUP BY T1.id_khach_hang ORDER BY COUNT(*) DESC LIMIT 1
-SELECT khach_hang.id_khach_hang, COUNT(*) FROM khach_hang JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang GROUP BY khach_hang.id_khach_hang ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.id_khach_hang, T1.ho_cua_khach_hang, T1.ten_cua_khach_hang FROM khach_hang AS T1 JOIN tai_khoan AS T2 ON T1.id_khach_hang = T2.id_khach_hang GROUP BY T1.id_khach_hang ORDER BY COUNT(*) ASC LIMIT 1
-SELECT T1.id_khach_hang, T1.ho_cua_khach_hang, T1.ten_cua_khach_hang FROM khach_hang AS T1 JOIN tai_khoan AS T2 ON T1.id_khach_hang = T2.id_khach_hang GROUP BY T1.id_khach_hang ORDER BY COUNT(*) ASC LIMIT 1
-SELECT COUNT(*) FROM khach_hang WHERE id_khach_hang NOT IN (SELECT id_khach_hang FROM tai_khoan)
-SELECT COUNT(*) FROM khach_hang WHERE id_khach_hang NOT IN (SELECT id_khach_hang FROM tai_khoan)
-SELECT ho_cua_khach_hang, ten_cua_khach_hang FROM khach_hang WHERE id_khach_hang NOT IN (SELECT id_khach_hang FROM tai_khoan)
-SELECT ho_cua_khach_hang, ten_cua_khach_hang FROM khach_hang WHERE id_khach_hang NOT IN (SELECT id_khach_hang FROM tai_khoan)
-SELECT khach_hang.ho_cua_khach_hang, khach_hang.ten_cua_khach_hang FROM khach_hang JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang WHERE khach_hang.id_khach_hang IN (SELECT id_khach_hang FROM tai_khoan)
-SELECT khach_hang.ho_cua_khach_hang, khach_hang.ten_cua_khach_hang FROM khach_hang INNER JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang
-SELECT COUNT(DISTINCT id_khach_hang) FROM tai_khoan
-SELECT COUNT(DISTINCT khach_hang.id_khach_hang) FROM khach_hang JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang
-SELECT COUNT(*) FROM khach_hang
-SELECT COUNT(*) FROM khach_hang
-SELECT id_khach_hang, ten_cua_khach_hang, ho_cua_khach_hang, so_dien_thoai_khach_hang FROM khach_hang
-SELECT id_khach_hang, ho_cua_khach_hang, ten_cua_khach_hang, so_dien_thoai_khach_hang FROM khach_hang
-SELECT so_dien_thoai_khach_hang, email_cua_khach_hang FROM khach_hang WHERE ten_cua_khach_hang = 'Aniyah' AND ho_cua_khach_hang = 'Feest'
-SELECT so_dien_thoai_khach_hang, email_cua_khach_hang FROM khach_hang WHERE ten_cua_khach_hang = 'Aniyah' AND ho_cua_khach_hang = 'Feest'
-SELECT COUNT(*) FROM the_khach_hang
-SELECT COUNT(*) FROM the_khach_hang
-SELECT id_the, id_khach_hang, ma_loai_the, so_the FROM the_khach_hang
-SELECT id_the, id_khach_hang, ma_loai_the, so_the FROM the_khach_hang
-SELECT hop_le_tu_ngay, hop_le_den_ngay FROM the_khach_hang WHERE so_the = '4560596484842'
-SELECT hop_le_tu_ngay, hop_le_den_ngay FROM the_khach_hang WHERE so_the = '4560596484842'
-SELECT T2.ten_cua_khach_hang, T2.ho_cua_khach_hang, T2.so_dien_thoai_khach_hang FROM the_khach_hang AS T1 JOIN khach_hang AS T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T1.so_the = '4560596484842'
-SELECT T2.ho_cua_khach_hang, T2.ten_cua_khach_hang, T2.so_dien_thoai_khach_hang FROM the_khach_hang AS T1 JOIN khach_hang AS T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T1.so_the = '4560596484842'
-SELECT COUNT(*) FROM khach_hang AS T1 JOIN the_khach_hang AS T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T1.ten_cua_khach_hang = 'Art' AND T1.ho_cua_khach_hang = 'Turcotte' GROUP BY T1.id_khach_hang
-SELECT COUNT(*) FROM khach_hang JOIN the_khach_hang ON khach_hang.id_khach_hang = the_khach_hang.id_khach_hang WHERE khach_hang.ten_cua_khach_hang = 'Art' AND khach_hang.ho_cua_khach_hang = 'Turcotte'
-SELECT COUNT(*) FROM the_khach_hang WHERE ma_loai_the = 'Ghi nợ'
-SELECT COUNT(*) FROM the_khach_hang WHERE ma_loai_the = ' Ghi nợ '
-SELECT khach_hang.id_khach_hang, COUNT(*) FROM khach_hang JOIN the_khach_hang ON khach_hang.id_khach_hang = the_khach_hang.id_khach_hang WHERE khach_hang.ho_cua_khach_hang = 'Huels' AND khach_hang.ten_cua_khach_hang = 'Blanche' GROUP BY khach_hang.id_khach_hang
-SELECT COUNT(*) FROM khach_hang JOIN the_khach_hang ON khach_hang.id_khach_hang = the_khach_hang.id_khach_hang WHERE khach_hang.ten_cua_khach_hang = 'Blanche' AND khach_hang.ho_cua_khach_hang = 'Huels'
-SELECT T1.id_khach_hang , COUNT ( * ) FROM khach_hang AS T1 JOIN the_khach_hang AS T2 ON T1.id_khach_hang = T2.id_khach_hang GROUP BY T1.id_khach_hang
-SELECT T1.id_khach_hang , COUNT ( * ) FROM khach_hang AS T1 JOIN the_khach_hang AS T2 ON T1.id_khach_hang = T2.id_khach_hang GROUP BY T1.id_khach_hang
-SELECT T1.id_khach_hang, COUNT(*) AS so_the FROM khach_hang AS T1 JOIN the_khach_hang AS T2 ON T1.id_khach_hang = T2.id_khach_hang GROUP BY T1.id_khach_hang ORDER BY COUNT(*) DESC LIMIT 1
-SELECT COUNT(*) AS so_luong_the FROM khach_hang JOIN the_khach_hang ON khach_hang.id_khach_hang = the_khach_hang.id_khach_hang GROUP BY khach_hang.id_khach_hang ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.id_khach_hang, T1.ten_cua_khach_hang, T1.ho_cua_khach_hang FROM khach_hang AS T1 JOIN the_khach_hang AS T2 ON T1.id_khach_hang = T2.id_khach_hang GROUP BY T1.id_khach_hang HAVING COUNT(*) >= 2
-SELECT T1.id_khach_hang, T1.ho_cua_khach_hang, T1.ten_cua_khach_hang FROM khach_hang AS T1 JOIN the_khach_hang AS T2 ON T1.id_khach_hang = T2.id_khach_hang GROUP BY T1.id_khach_hang HAVING COUNT(*) >= 2
-SELECT T1.id_khach_hang , T1.ho_cua_khach_hang , T1.ten_cua_khach_hang FROM khach_hang AS T1 JOIN tai_khoan AS T2 ON T1.id_khach_hang = T2.id_khach_hang GROUP BY T1.id_khach_hang ORDER BY COUNT(*) ASC LIMIT 1
-SELECT khach_hang.id_khach_hang, khach_hang.ho_cua_khach_hang, khach_hang.ten_cua_khach_hang FROM khach_hang JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang GROUP BY khach_hang.id_khach_hang ORDER BY COUNT(*) ASC LIMIT 1
-SELECT ma_loai_the, COUNT(*) FROM the_khach_hang GROUP BY ma_loai_the
-SELECT ma_loai_the, COUNT(*) FROM the_khach_hang GROUP BY ma_loai_the
-SELECT ma_loai_the FROM the_khach_hang GROUP BY ma_loai_the ORDER BY COUNT(*) DESC LIMIT 1
-SELECT ma_loai_the FROM the_khach_hang GROUP BY ma_loai_the ORDER BY COUNT(*) DESC LIMIT 1
-SELECT ma_loai_the FROM the_khach_hang GROUP BY ma_loai_the HAVING COUNT(*) >= 5
-SELECT ma_loai_the FROM the_khach_hang GROUP BY ma_loai_the HAVING COUNT(*) >= 5
-SELECT ma_loai_the, COUNT(DISTINCT id_khach_hang) FROM the_khach_hang GROUP BY ma_loai_the
-SELECT the_khach_hang.ma_loai_the , COUNT(DISTINCT khach_hang.id_khach_hang) FROM the_khach_hang JOIN khach_hang ON the_khach_hang.id_khach_hang = khach_hang.id_khach_hang GROUP BY the_khach_hang.ma_loai_the
-SELECT id_khach_hang, ten_cua_khach_hang FROM khach_hang WHERE id_khach_hang NOT IN (SELECT id_khach_hang FROM the_khach_hang)
-SELECT id_khach_hang, ten_cua_khach_hang FROM khach_hang WHERE id_khach_hang NOT IN (SELECT id_khach_hang FROM the_khach_hang)
-SELECT ma_loai_the FROM the_khach_hang
-SELECT DISTINCT ma_loai_the FROM the_khach_hang
-SELECT COUNT(DISTINCT ma_loai_the) FROM the_khach_hang
-SELECT COUNT(DISTINCT ma_loai_the) FROM the_khach_hang
-SELECT DISTINCT loai_giao_dich FROM giao_dich_tai_chinh
-SELECT DISTINCT loai_giao_dich FROM giao_dich_tai_chinh
-SELECT loai_giao_dich, COUNT(*) FROM giao_dich_tai_chinh GROUP BY loai_giao_dich
-SELECT COUNT(DISTINCT loai_giao_dich) FROM giao_dich_tai_chinh
-SELECT SUM(so_tien_giao_dich) AS tong_so_tien, AVG(so_tien_giao_dich) AS trung_binh_so_tien FROM giao_dich_tai_chinh
-SELECT AVG(so_tien_giao_dich), SUM(so_tien_giao_dich) FROM giao_dich_tai_chinh
-SELECT T1.ma_loai_the , COUNT ( * ) FROM the_khach_hang AS T1 JOIN giao_dich_tai_chinh AS T2 ON T1.id_the = T2.id_the GROUP BY T1.ma_loai_the
-SELECT T1.ma_loai_the , COUNT ( * ) FROM the_khach_hang AS T1 JOIN giao_dich_tai_chinh AS T2 ON T1.id_the = T2.id_the GROUP BY T1.ma_loai_the
-SELECT loai_giao_dich, COUNT(*) FROM giao_dich_tai_chinh GROUP BY loai_giao_dich
-SELECT loai_giao_dich , COUNT ( * ) FROM giao_dich_tai_chinh GROUP BY loai_giao_dich
-SELECT loai_giao_dich FROM giao_dich_tai_chinh GROUP BY loai_giao_dich ORDER BY SUM(so_tien_giao_dich) DESC LIMIT 1
-SELECT loai_giao_dich, SUM(so_tien_giao_dich) FROM giao_dich_tai_chinh GROUP BY loai_giao_dich ORDER BY SUM(so_tien_giao_dich) DESC LIMIT 1
-SELECT T1.id_tai_khoan , COUNT ( * ) FROM tai_khoan AS T1 JOIN giao_dich_tai_chinh AS T2 ON T1.id_tai_khoan = T2.id_tai_khoan GROUP BY T1.id_tai_khoan
-SELECT T1.id_tai_khoan , COUNT ( * ) FROM tai_khoan AS T1 JOIN giao_dich_tai_chinh AS T2 ON T1.id_tai_khoan = T2.id_tai_khoan GROUP BY T1.id_tai_khoan
-SELECT ten_tai_lieu, so_luong_truy_cap FROM tai_lieu ORDER BY ten_tai_lieu ASC
-SELECT ten_tai_lieu, so_luong_truy_cap FROM tai_lieu ORDER BY ten_tai_lieu ASC
-SELECT ten_tai_lieu, so_luong_truy_cap FROM tai_lieu ORDER BY so_luong_truy_cap DESC LIMIT 1
-SELECT ten_tai_lieu, so_luong_truy_cap FROM tai_lieu ORDER BY so_luong_truy_cap DESC LIMIT 1
-SELECT ma_loai_tai_lieu , COUNT ( * ) FROM tai_lieu GROUP BY ma_loai_tai_lieu HAVING COUNT ( * ) > 4
-SELECT ma_loai_tai_lieu FROM tai_lieu GROUP BY ma_loai_tai_lieu HAVING COUNT(*) > 4
-SELECT SUM(so_luong_truy_cap) FROM tai_lieu GROUP BY ma_loai_tai_lieu ORDER BY SUM(so_luong_truy_cap) DESC LIMIT 1
-SELECT SUM(so_luong_truy_cap) FROM tai_lieu WHERE ma_loai_tai_lieu = (SELECT ma_loai_tai_lieu FROM tai_lieu GROUP BY ma_loai_tai_lieu ORDER BY COUNT(*) DESC LIMIT 1)
-SELECT AVG(so_luong_truy_cap) FROM tai_lieu
-SELECT AVG(so_luong_truy_cap) FROM tai_lieu
-SELECT cau_truc_tai_lieu.ma_cau_truc_tai_lieu , cau_truc_tai_lieu.mo_ta_ve_cau_truc_tai_lieu FROM tai_lieu JOIN cau_truc_tai_lieu ON tai_lieu.ma_cau_truc_tai_lieu = cau_truc_tai_lieu.ma_cau_truc_tai_lieu ORDER BY tai_lieu.so_luong_truy_cap ASC LIMIT 1
-SELECT T2.mo_ta_ve_cau_truc_tai_lieu FROM tai_lieu AS T1 JOIN cau_truc_tai_lieu AS T2 ON T1.ma_cau_truc_tai_lieu = T2.ma_cau_truc_tai_lieu ORDER BY T1.so_luong_truy_cap ASC LIMIT 1
-SELECT ma_loai_tai_lieu FROM tai_lieu WHERE ten_tai_lieu = 'David CV'
-SELECT ma_loai_tai_lieu FROM tai_lieu WHERE ten_tai_lieu = 'David CV'
-SELECT ma_tai_lieu, ten_tai_lieu, ma_loai_tai_lieu, ma_cau_truc_tai_lieu FROM tai_lieu WHERE ma_loai_tai_lieu IN (SELECT ma_loai_tai_lieu FROM tai_lieu GROUP BY ma_loai_tai_lieu ORDER BY COUNT(*) DESC LIMIT 3) AND ma_cau_truc_tai_lieu IN (SELECT ma_cau_truc_tai_lieu FROM tai_lieu GROUP BY ma_cau_truc_tai_lieu ORDER BY COUNT(*) DESC LIMIT 3)
-SELECT ten_tai_lieu FROM tai_lieu JOIN cau_truc_tai_lieu ON tai_lieu.ma_cau_truc_tai_lieu = cau_truc_tai_lieu.ma_cau_truc_tai_lieu WHERE ma_loai_tai_lieu IN (SELECT ma_loai_tai_lieu FROM tai_lieu GROUP BY ma_loai_tai_lieu ORDER BY COUNT(*) DESC LIMIT 3) AND ma_cau_truc_tai_lieu IN (SELECT ma_cau_truc_tai_lieu FROM tai_lieu GROUP BY ma_cau_truc_tai_lieu ORDER BY COUNT(*) DESC LIMIT 3)
-SELECT ma_loai_tai_lieu , SUM ( so_luong_truy_cap ) FROM tai_lieu GROUP BY ma_loai_tai_lieu HAVING SUM ( so_luong_truy_cap ) > 10000
-SELECT ma_loai_tai_lieu FROM tai_lieu GROUP BY ma_loai_tai_lieu HAVING SUM(so_luong_truy_cap) > 10000
-SELECT T2.tieu_de_muc FROM tai_lieu AS T1 JOIN cac_muc_cua_tai_lieu AS T2 ON T1.ma_tai_lieu = T2.ma_tai_lieu WHERE T1.ten_tai_lieu = 'David CV'
-SELECT T2.tieu_de_muc FROM tai_lieu AS T1 JOIN cac_muc_cua_tai_lieu AS T2 ON T1.ma_tai_lieu = T2.ma_tai_lieu WHERE T1.ten_tai_lieu = 'David CV'
-SELECT ten_tai_lieu FROM tai_lieu WHERE ma_tai_lieu NOT IN (SELECT ma_tai_lieu FROM cac_muc_cua_tai_lieu)
-SELECT ten_tai_lieu FROM tai_lieu LEFT JOIN cac_muc_cua_tai_lieu ON tai_lieu.ma_tai_lieu = cac_muc_cua_tai_lieu.ma_tai_lieu WHERE cac_muc_cua_tai_lieu.id_muc IS NULL
-SELECT ten_nguoi_dung, mat_khau FROM nguoi_dung JOIN vai_tro ON nguoi_dung.ma_vai_tro = vai_tro.ma_vai_tro GROUP BY vai_tro.ma_vai_tro ORDER BY COUNT(*) DESC LIMIT 1
-SELECT id_nguoi_dung, ten_nguoi_dung, mat_khau FROM nguoi_dung WHERE ma_vai_tro = (SELECT ma_vai_tro FROM nguoi_dung GROUP BY ma_vai_tro ORDER BY COUNT(*) DESC LIMIT 1)
-SELECT AVG(tai_lieu.so_luong_truy_cap) FROM tai_lieu JOIN cac_muc_cua_tai_lieu ON tai_lieu.ma_tai_lieu = cac_muc_cua_tai_lieu.ma_tai_lieu WHERE cac_muc_cua_tai_lieu.tieu_de_muc = 'Lời cảm ơn' GROUP BY tai_lieu.ma_tai_lieu
-SELECT AVG(T1.so_luong_truy_cap) FROM tai_lieu AS T1 JOIN cac_muc_cua_tai_lieu AS T2 ON T1.ma_tai_lieu = T2.ma_tai_lieu WHERE T2.tieu_de_muc = 'Lời cảm ơn'
-SELECT ten_tai_lieu FROM tai_lieu LEFT JOIN cac_muc_cua_tai_lieu ON tai_lieu.ma_tai_lieu = cac_muc_cua_tai_lieu.ma_tai_lieu LEFT JOIN hinh_anh_trong_cac_muc_cua_tai_lieu ON cac_muc_cua_tai_lieu.id_muc = hinh_anh_trong_cac_muc_cua_tai_lieu.id_muc WHERE hinh_anh_trong_cac_muc_cua_tai_lieu.id_hinh_anh IS NULL
-SELECT ten_tai_lieu FROM tai_lieu WHERE ma_tai_lieu NOT IN (SELECT cac_muc_cua_tai_lieu.ma_tai_lieu FROM cac_muc_cua_tai_lieu JOIN hinh_anh_trong_cac_muc_cua_tai_lieu ON cac_muc_cua_tai_lieu.id_muc = hinh_anh_trong_cac_muc_cua_tai_lieu.id_muc)
-SELECT T1.ten_tai_lieu FROM tai_lieu AS T1 JOIN cac_muc_cua_tai_lieu AS T2 ON T1.ma_tai_lieu = T2.ma_tai_lieu GROUP BY T1.ma_tai_lieu ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.ten_tai_lieu FROM tai_lieu AS T1 JOIN cac_muc_cua_tai_lieu AS T2 ON T1.ma_tai_lieu = T2.ma_tai_lieu GROUP BY T2.ma_tai_lieu ORDER BY COUNT(*) DESC LIMIT 1
-SELECT ten_tai_lieu FROM tai_lieu WHERE ten_tai_lieu LIKE '%CV%'
-SELECT ten_tai_lieu FROM tai_lieu WHERE ten_tai_lieu LIKE '%CV%'
-SELECT COUNT(*) FROM nguoi_dung WHERE lan_dang_nhap_cua_nguoi_dung IS NOT NULL
-SELECT COUNT(*) FROM nguoi_dung WHERE lan_dang_nhap_cua_nguoi_dung IS NOT NULL
-SELECT T2.mo_ta_ve_vai_tro FROM nguoi_dung AS T1 JOIN vai_tro AS T2 ON T1.ma_vai_tro = T2.ma_vai_tro WHERE T1.lan_dang_nhap_cua_nguoi_dung IS NOT NULL GROUP BY T2.ma_vai_tro ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T2.mo_ta_ve_vai_tro , COUNT ( * ) FROM nguoi_dung AS T1 JOIN vai_tro AS T2 ON T1.ma_vai_tro = T2.ma_vai_tro WHERE T1.lan_dang_nhap_cua_nguoi_dung IS NOT NULL GROUP BY T2.ma_vai_tro ORDER BY COUNT ( * ) DESC LIMIT 1
-SELECT T1.ma_tai_lieu , T1.so_luong_truy_cap FROM tai_lieu AS T1 JOIN cau_truc_tai_lieu AS T2 ON T1.ma_cau_truc_tai_lieu = T2.ma_cau_truc_tai_lieu GROUP BY T1.ma_tai_lieu ORDER BY T1.so_luong_truy_cap ASC LIMIT 1
-SELECT AVG(tai_lieu.so_luong_truy_cap) FROM tai_lieu JOIN cau_truc_tai_lieu ON tai_lieu.ma_cau_truc_tai_lieu = cau_truc_tai_lieu.ma_cau_truc_tai_lieu WHERE cau_truc_tai_lieu.ma_cau_truc_tai_lieu IN (SELECT ma_cau_truc_tai_lieu FROM tai_lieu GROUP BY ma_cau_truc_tai_lieu ORDER BY COUNT(*) ASC LIMIT 1)
-SELECT ten_hinh_anh, duong_dan_cua_hinh_anh FROM hinh_anh ORDER BY ten_hinh_anh ASC
-SELECT ten_hinh_anh, duong_dan_cua_hinh_anh FROM hinh_anh ORDER BY ten_hinh_anh ASC
-SELECT T1.ma_vai_tro, COUNT(*) FROM vai_tro AS T1 JOIN nguoi_dung AS T2 ON T1.ma_vai_tro = T2.ma_vai_tro GROUP BY T1.ma_vai_tro
-SELECT vai_tro.mo_ta_ve_vai_tro, COUNT(*) FROM nguoi_dung JOIN vai_tro ON nguoi_dung.ma_vai_tro = vai_tro.ma_vai_tro GROUP BY vai_tro.ma_vai_tro
-SELECT ma_loai_tai_lieu FROM tai_lieu GROUP BY ma_loai_tai_lieu HAVING COUNT(*) > 2
-SELECT ma_loai_tai_lieu FROM tai_lieu GROUP BY ma_loai_tai_lieu HAVING COUNT(*) >= 2
-SELECT COUNT(*) FROM khoa_hoc
-SELECT COUNT(*) FROM khoa_hoc
-SELECT mo_ta_ve_khoa_hoc FROM khoa_hoc WHERE ten_khoa_hoc = ' cơ sở dữ liệu '
-SELECT mo_ta_ve_khoa_hoc FROM khoa_hoc WHERE ten_khoa_hoc = 'cơ sở dữ liệu'
-SELECT tac_gia_khoa_hoc_va_nguoi_huong_dan.dong_1_cua_dia_chi FROM khoa_hoc JOIN tac_gia_khoa_hoc_va_nguoi_huong_dan ON khoa_hoc.id_tac_gia = tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia WHERE khoa_hoc.ten_khoa_hoc = 'Cathrine'
-SELECT dong_1_cua_dia_chi FROM tac_gia_khoa_hoc_va_nguoi_huong_dan WHERE ten_ca_nhan = 'Cathrine'
-SELECT dong_1_cua_dia_chi FROM tac_gia_khoa_hoc_va_nguoi_huong_dan
-SELECT dong_1_cua_dia_chi FROM tac_gia_khoa_hoc_va_nguoi_huong_dan
-SELECT ten_dang_nhap, ho FROM tac_gia_khoa_hoc_va_nguoi_huong_dan
-SELECT ten_dang_nhap, ho FROM tac_gia_khoa_hoc_va_nguoi_huong_dan
-SELECT luot_dang_ky_khoa_hoc_cua_sinh_vien.ngay_ngay_dang_ky, luot_dang_ky_khoa_hoc_cua_sinh_vien.ngay_hoan_thanh FROM sinh_vien JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON sinh_vien.id_sinh_vien = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien
-SELECT ngay_ngay_dang_ky, ngay_hoan_thanh FROM luot_dang_ky_khoa_hoc_cua_sinh_vien
-SELECT COUNT(DISTINCT luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien) FROM luot_dang_ky_khoa_hoc_cua_sinh_vien JOIN sinh_vien ON luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien = sinh_vien.id_sinh_vien
-SELECT COUNT(DISTINCT T1.id_sinh_vien) FROM sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien
-SELECT COUNT(DISTINCT id_khoa_hoc) FROM luot_dang_ky_khoa_hoc_cua_sinh_vien
-SELECT COUNT(DISTINCT id_khoa_hoc) FROM luot_dang_ky_khoa_hoc_cua_sinh_vien
-SELECT ngay_lam_bai_kiem_tra FROM bai_kiem_tra_cua_sinh_vien WHERE ket_qua_kiem_tra = 'Đạt'
-SELECT ngay_lam_bai_kiem_tra FROM bai_kiem_tra_cua_sinh_vien WHERE ket_qua_kiem_tra = 'Đạt'
-SELECT COUNT(*) FROM bai_kiem_tra_cua_sinh_vien WHERE ket_qua_kiem_tra = ' Trượt '
-SELECT COUNT(*) FROM bai_kiem_tra_cua_sinh_vien WHERE ket_qua_kiem_tra = ' Trượt '
-SELECT ten_dang_nhap FROM sinh_vien WHERE ho = 'Ward'
-SELECT ten_dang_nhap FROM sinh_vien WHERE ho = 'Ward'
-SELECT ngay_dang_nhap_moi_nhat FROM sinh_vien WHERE ho = 'Jaskolski' OR ho = 'Langosh'
-SELECT ngay_dang_nhap_moi_nhat FROM sinh_vien WHERE ho IN ('Jaskolski', 'Langosh')
-SELECT COUNT(*) FROM sinh_vien WHERE ten_ca_nhan LIKE '%son%'
-SELECT COUNT(*) FROM sinh_vien WHERE ten_ca_nhan LIKE '%son%'
-SELECT ten_mon_hoc FROM mon_hoc
-SELECT ten_mon_hoc FROM mon_hoc
-SELECT id_tac_gia, atb_cua_tac_gia_/_nguoi_huong_dan, ten_dang_nhap, mat_khau, ten_ca_nhan, ten_dem, ho, gioi_tinh, dong_1_cua_dia_chi FROM tac_gia_khoa_hoc_va_nguoi_huong_dan ORDER BY ten_ca_nhan ASC
-SELECT id_tac_gia, atb_cua_tac_gia_/_nguoi_huong_dan, ten_ca_nhan, ten_dem, ho, gioi_tinh, dong_1_cua_dia_chi FROM tac_gia_khoa_hoc_va_nguoi_huong_dan ORDER BY ten_ca_nhan ASC
-SELECT ten_ca_nhan , ho FROM sinh_vien ORDER BY ho ASC
-SELECT ten_ca_nhan, ho FROM sinh_vien ORDER BY ho ASC
-SELECT ket_qua_kiem_tra, COUNT(*) FROM bai_kiem_tra_cua_sinh_vien GROUP BY ket_qua_kiem_tra ORDER BY COUNT(*) DESC
-SELECT T1.ket_qua_kiem_tra, COUNT(DISTINCT T2.id_sinh_vien) FROM bai_kiem_tra_cua_sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_dang_ky = T2.id_dang_ky GROUP BY T1.ket_qua_kiem_tra ORDER BY COUNT(*) DESC
-SELECT T2.ten_dang_nhap FROM khoa_hoc AS T1 JOIN tac_gia_khoa_hoc_va_nguoi_huong_dan AS T2 ON T1.id_tac_gia = T2.id_tac_gia WHERE T1.ten_khoa_hoc = ' cơ sở dữ liệu nâng cao '
-SELECT T2.ten_dang_nhap FROM khoa_hoc AS T1 JOIN tac_gia_khoa_hoc_va_nguoi_huong_dan AS T2 ON T1.id_tac_gia = T2.id_tac_gia WHERE T1.ten_khoa_hoc = ' cơ sở dữ liệu nâng cao '
-SELECT T1.dong_1_cua_dia_chi FROM tac_gia_khoa_hoc_va_nguoi_huong_dan AS T1 JOIN khoa_hoc AS T2 ON T1.id_tac_gia = T2.id_tac_gia WHERE T2.ten_khoa_hoc = 'hệ điều hành' OR T2.ten_khoa_hoc = 'cấu trúc dữ liệu'
-SELECT T1.dong_1_cua_dia_chi FROM tac_gia_khoa_hoc_va_nguoi_huong_dan AS T1 JOIN khoa_hoc AS T2 ON T1.id_tac_gia = T2.id_tac_gia JOIN mon_hoc AS T3 ON T2.id_mon_hoc = T3.id_mon_hoc WHERE T3.ten_mon_hoc IN ('hệ điều hành', 'cấu trúc dữ liệu')
-SELECT T1.id_tac_gia, T1.ten_ca_nhan, T1.ho FROM tac_gia_khoa_hoc_va_nguoi_huong_dan AS T1 JOIN khoa_hoc AS T2 ON T1.id_tac_gia = T2.id_tac_gia GROUP BY T1.id_tac_gia ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.ten_ca_nhan, T1.ho, T1.id_tac_gia FROM tac_gia_khoa_hoc_va_nguoi_huong_dan AS T1 JOIN khoa_hoc AS T2 ON T1.id_tac_gia = T2.id_tac_gia GROUP BY T1.id_tac_gia ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.id_tac_gia, T1.dong_1_cua_dia_chi FROM tac_gia_khoa_hoc_va_nguoi_huong_dan AS T1 JOIN khoa_hoc AS T2 ON T1.id_tac_gia = T2.id_tac_gia GROUP BY T1.id_tac_gia HAVING COUNT(*) >= 2
-SELECT T1.id_tac_gia , T1.dong_1_cua_dia_chi FROM tac_gia_khoa_hoc_va_nguoi_huong_dan AS T1 JOIN khoa_hoc AS T2 ON T1.id_tac_gia = T2.id_tac_gia GROUP BY T1.id_tac_gia HAVING COUNT ( * ) > 2
-SELECT ten_khoa_hoc FROM khoa_hoc JOIN tac_gia_khoa_hoc_va_nguoi_huong_dan ON khoa_hoc.id_tac_gia = tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia WHERE tac_gia_khoa_hoc_va_nguoi_huong_dan.ten_ca_nhan = 'Julio'
-SELECT ten_khoa_hoc FROM khoa_hoc JOIN tac_gia_khoa_hoc_va_nguoi_huong_dan ON khoa_hoc.id_tac_gia = tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia WHERE tac_gia_khoa_hoc_va_nguoi_huong_dan.ten_ca_nhan = 'Julio'
-SELECT T1.ten_khoa_hoc , T1.mo_ta_ve_khoa_hoc FROM khoa_hoc AS T1 JOIN mon_hoc AS T2 ON T1.id_mon_hoc = T2.id_mon_hoc WHERE T2.ten_mon_hoc = 'Khoa học máy tính'
-SELECT ten_khoa_hoc, mo_ta_ve_khoa_hoc FROM khoa_hoc JOIN mon_hoc ON khoa_hoc.id_mon_hoc = mon_hoc.id_mon_hoc WHERE mon_hoc.ten_mon_hoc = 'Khoa học máy tính'
-SELECT T1.id_mon_hoc, T1.ten_mon_hoc, COUNT(*) FROM mon_hoc AS T1 JOIN khoa_hoc AS T2 ON T1.id_mon_hoc = T2.id_mon_hoc GROUP BY T1.id_mon_hoc, T1.ten_mon_hoc
-SELECT T1.id_mon_hoc, T1.ten_mon_hoc, COUNT(*) FROM mon_hoc AS T1 JOIN khoa_hoc AS T2 ON T1.id_mon_hoc = T2.id_mon_hoc GROUP BY T1.id_mon_hoc
-SELECT T1.id_mon_hoc, T1.ten_mon_hoc, COUNT(*) FROM mon_hoc AS T1 JOIN khoa_hoc AS T2 ON T1.id_mon_hoc = T2.id_mon_hoc GROUP BY T1.id_mon_hoc ORDER BY COUNT(*) ASC
-SELECT T1.id_mon_hoc, T1.ten_mon_hoc, COUNT(*) FROM mon_hoc AS T1 JOIN khoa_hoc AS T2 ON T1.id_mon_hoc = T2.id_mon_hoc GROUP BY T1.id_mon_hoc, T1.ten_mon_hoc ORDER BY COUNT(*) ASC
-SELECT T2.ngay_ngay_dang_ky FROM khoa_hoc AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_khoa_hoc = T2.id_khoa_hoc WHERE T1.ten_khoa_hoc = 'tiếng Tây Ban Nha'
-SELECT T2.ngay_ngay_dang_ky FROM khoa_hoc AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_khoa_hoc = T2.id_khoa_hoc WHERE T1.ten_khoa_hoc = 'tiếng Tây Ban Nha'
-SELECT ten_khoa_hoc FROM khoa_hoc JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON khoa_hoc.id_khoa_hoc = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc GROUP BY khoa_hoc.id_khoa_hoc ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.ten_khoa_hoc FROM khoa_hoc AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_khoa_hoc = T2.id_khoa_hoc GROUP BY T2.id_khoa_hoc ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.ten_khoa_hoc FROM khoa_hoc AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_khoa_hoc = T2.id_khoa_hoc GROUP BY T1.id_khoa_hoc HAVING COUNT(*) = 1
-SELECT T1.ten_khoa_hoc FROM khoa_hoc AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_khoa_hoc = T2.id_khoa_hoc GROUP BY T1.id_khoa_hoc HAVING COUNT(*) = 1
-SELECT T1.ten_khoa_hoc, T1.mo_ta_ve_khoa_hoc FROM khoa_hoc AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_khoa_hoc = T2.id_khoa_hoc GROUP BY T1.id_khoa_hoc HAVING COUNT(*) > 2
-SELECT T1.ten_khoa_hoc, T1.mo_ta_ve_khoa_hoc FROM khoa_hoc AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_khoa_hoc = T2.id_khoa_hoc GROUP BY T1.id_khoa_hoc HAVING COUNT(*) > 2
-SELECT T1.ten_khoa_hoc , COUNT ( * ) FROM khoa_hoc AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_khoa_hoc = T2.id_khoa_hoc GROUP BY T1.id_khoa_hoc
-SELECT T1.ten_khoa_hoc , COUNT ( * ) FROM khoa_hoc AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_khoa_hoc = T2.id_khoa_hoc GROUP BY T1.id_khoa_hoc
-SELECT T2.ngay_ngay_dang_ky FROM bai_kiem_tra_cua_sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_dang_ky = T2.id_dang_ky WHERE T1.ket_qua_kiem_tra = 'Đạt'
-SELECT T2.ngay_ngay_dang_ky FROM bai_kiem_tra_cua_sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_dang_ky = T2.id_dang_ky WHERE T1.ket_qua_kiem_tra = 'Đạt'
-SELECT T2.ngay_hoan_thanh FROM bai_kiem_tra_cua_sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_dang_ky = T2.id_dang_ky WHERE T1.ket_qua_kiem_tra = ' Trượt '
-SELECT T1.ngay_hoan_thanh FROM luot_dang_ky_khoa_hoc_cua_sinh_vien AS T1 JOIN bai_kiem_tra_cua_sinh_vien AS T2 ON T1.id_dang_ky = T2.id_dang_ky WHERE T2.ket_qua_kiem_tra = 'Trượt'
-SELECT T2.ngay_dang_ky, T2.ngay_hoan_thanh FROM sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien WHERE T1.ten_ca_nhap = 'Karson'
-SELECT luot_dang_ky_khoa_hoc_cua_sinh_vien.ngay_dang_ky, luot_dang_ky_khoa_hoc_cua_sinh_vien.ngay_hoan_thanh FROM sinh_vien JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON sinh_vien.id_sinh_vien = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien WHERE sinh_vien.ten_ca_nhan = 'Karson'
-SELECT T2.ngay_ngay_dang_ky, T2.ngay_hoan_thanh FROM sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien WHERE T1.ho = 'Zieme' AND T1.ten_ca_nhan = 'Bernie'
-SELECT T2.ngay_dang_ky, T2.ngay_hoan_thanh FROM sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien WHERE T1.ho = 'Zieme' AND T1.ten_ca_nhan = 'Bernie'
-SELECT T1.id_sinh_vien , T1.ten_dang_nhap FROM sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien GROUP BY T1.id_sinh_vien ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.id_sinh_vien , T1.ten_ca_nhan FROM sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien GROUP BY T1.id_sinh_vien ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.id_sinh_vien , T1.ten_ca_nhan FROM sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien GROUP BY T1.id_sinh_vien HAVING COUNT ( * ) >= 2
-SELECT T1.id_sinh_vien , T1.ten_ca_nhan FROM sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien GROUP BY T1.id_sinh_vien HAVING COUNT ( * ) >= 2
-SELECT sinh_vien.id_sinh_vien, sinh_vien.ten_dem FROM sinh_vien JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON sinh_vien.id_sinh_vien = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien GROUP BY sinh_vien.id_sinh_vien HAVING COUNT(*) <= 2
-SELECT T1.id_sinh_vien , T1.ten_dem FROM sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien GROUP BY T1.id_sinh_vien ORDER BY COUNT(*) DESC LIMIT 1
-SELECT ten_ca_nhan FROM sinh_vien WHERE id_sinh_vien NOT IN (SELECT id_sinh_vien FROM luot_dang_ky_khoa_hoc_cua_sinh_vien)
-SELECT ten_ca_nhan FROM sinh_vien WHERE id_sinh_vien NOT IN (SELECT id_sinh_vien FROM luot_dang_ky_khoa_hoc_cua_sinh_vien)
-SELECT COUNT(*) FROM sinh_vien WHERE id_sinh_vien NOT IN (SELECT id_sinh_vien FROM luot_dang_ky_khoa_hoc_cua_sinh_vien)
-SELECT COUNT(*) FROM sinh_vien WHERE id_sinh_vien NOT IN (SELECT id_sinh_vien FROM luot_dang_ky_khoa_hoc_cua_sinh_vien)
-SELECT ten_dang_nhap FROM sinh_vien INTERSECT SELECT ten_dang_nhap FROM tac_gia_khoa_hoc_va_nguoi_huong_dan
-SELECT ten_dang_nhap FROM sinh_vien INTERSECT SELECT ten_dang_nhap FROM tac_gia_khoa_hoc_va_nguoi_huong_dan
-SELECT ten_ca_nhan FROM sinh_vien INTERSECT SELECT ten_ca_nhan FROM tac_gia_khoa_hoc_va_nguoi_huong_dan
-SELECT ho FROM sinh_vien INTERSECT SELECT ho FROM tac_gia_khoa_hoc_va_nguoi_huong_dan
-SELECT COUNT(*) FROM trang_trai
-SELECT COUNT(*) FROM trang_trai
-SELECT id_trang_trai, tong_so_ngua FROM trang_trai ORDER BY tong_so_ngua ASC
-SELECT id_trang_trai, tong_so_ngua FROM trang_trai ORDER BY tong_so_ngua ASC
-SELECT trang_trai.id_trang_trai , trang_trai.ten_chinh_thuc FROM trang_trai JOIN ho_so_cuoc_thi ON trang_trai.id_trang_trai = ho_so_cuoc_thi.id_trang_trai JOIN cuoc_thi_trang_trai ON ho_so_cuoc_thi.id_cuoc_thi = cuoc_thi_trang_trai.id_cuoc_thi WHERE cuoc_thi_trang_trai.chu_de != 'Người ngoài hành tinh'
-SELECT chu_nha FROM cuoc_thi_trang_trai WHERE chu_de != 'Người ngoài hành tinh'
-SELECT chu_de, nam FROM cuoc_thi_trang_trai ORDER BY nam ASC
-SELECT chu_de FROM cuoc_thi_trang_trai ORDER BY nam ASC
-SELECT AVG(ngua_lam_viec) FROM trang_trai WHERE tong_so_ngua > 5000
-SELECT AVG(ngua_lam_viec) FROM trang_trai WHERE tong_so_ngua > 5000
-SELECT MAX(bo) AS max_bo, MIN(bo) AS min_bo FROM trang_trai
-SELECT MAX(bo), MIN(bo) FROM trang_trai
-SELECT COUNT(DISTINCT cap_bac) FROM thanh_pho
-SELECT COUNT(DISTINCT cap_bac) FROM thanh_pho
-SELECT ten_chinh_thuc FROM thanh_pho ORDER BY dan_so DESC
-SELECT ten_chinh_thuc FROM thanh_pho ORDER BY dan_so DESC
-SELECT ten_chinh_thuc , cap_bac FROM thanh_pho ORDER BY dan_so DESC LIMIT 1
-SELECT ten_chinh_thuc , cap_bac FROM thanh_pho ORDER BY dan_so DESC LIMIT 1
-SELECT T1.nam, T2.ten_chinh_thuc FROM cuoc_thi_trang_trai AS T1 JOIN thanh_pho AS T2 ON T1.id_thanh_pho_chu_nha = T2.id_thanh_pho
-SELECT T1.nam, T2.ten_chinh_thuc FROM cuoc_thi_trang_trai AS T1 JOIN thanh_pho AS T2 ON T1.id_thanh_pho_chu_nha = T2.id_thanh_pho
-SELECT T1.ten_chinh_thuc FROM thanh_pho AS T1 JOIN cuoc_thi_trang_trai AS T2 ON T1.id_thanh_pho = T2.id_thanh_pho_chu_nha GROUP BY T2.id_thanh_pho_chu_nha HAVING COUNT(*) > 1
-SELECT T1.ten_chinh_thuc FROM thanh_pho AS T1 JOIN cuoc_thi_trang_trai AS T2 ON T1.id_thanh_pho = T2.id_thanh_pho_chu_nha GROUP BY T1.id_thanh_pho HAVING COUNT(*) > 1
-SELECT T1.cap_bac FROM thanh_pho AS T1 JOIN cuoc_thi_trang_trai AS T2 ON T1.id_thanh_pho = T2.id_thanh_pho_chu_nha GROUP BY T1.id_thanh_pho ORDER BY COUNT(*) DESC LIMIT 1
-SELECT thanh_pho.cap_bac FROM thanh_pho JOIN cuoc_thi_trang_trai ON thanh_pho.id_thanh_pho = cuoc_thi_trang_trai.id_thanh_pho_chu_nha GROUP BY thanh_pho.id_thanh_pho ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.chu_de FROM cuoc_thi_trang_trai AS T1 JOIN thanh_pho AS T2 ON T1.id_thanh_pho_chu_nha = T2.id_thanh_pho WHERE T2.dan_so > 1000
-SELECT T1.chu_de FROM cuoc_thi_trang_trai AS T1 JOIN thanh_pho AS T2 ON T1.id_thanh_pho_chu_nha = T2.id_thanh_pho WHERE T2.dan_so > 1000
-SELECT cap_bac, AVG(dan_so) FROM thanh_pho GROUP BY cap_bac
-SELECT cap_bac , AVG ( dan_so ) FROM thanh_pho GROUP BY cap_bac
-SELECT cap_bac, COUNT(*) FROM thanh_pho GROUP BY cap_bac ORDER BY cap_bac ASC
-SELECT cap_bac, COUNT(*) FROM thanh_pho GROUP BY cap_bac ORDER BY COUNT(*) ASC
-SELECT cap_bac FROM thanh_pho GROUP BY cap_bac ORDER BY COUNT(*) DESC LIMIT 1
-SELECT cap_bac FROM thanh_pho GROUP BY cap_bac ORDER BY COUNT(*) DESC LIMIT 1
-SELECT ten_chinh_thuc FROM thanh_pho EXCEPT SELECT thanh_pho.ten_chinh_thuc FROM thanh_pho JOIN cuoc_thi_trang_trai ON thanh_pho.id_thanh_pho = cuoc_thi_trang_trai.id_thanh_pho_chu_nha
-SELECT ten_chinh_thuc FROM thanh_pho EXCEPT SELECT ten_chinh_thuc FROM thanh_pho JOIN cuoc_thi_trang_trai ON thanh_pho.id_thanh_pho = cuoc_thi_trang_trai.id_thanh_pho_chu_nha
-SELECT cap_bac FROM thanh_pho WHERE dan_so > 1500 AND dan_so < 500
-SELECT cap_bac FROM thanh_pho WHERE dan_so > 1500 INTERSECT SELECT cap_bac FROM thanh_pho WHERE dan_so < 500
-SELECT ten_chinh_thuc FROM thanh_pho WHERE dan_so > 1500 OR dan_so < 500
-SELECT ten_chinh_thuc FROM thanh_pho WHERE dan_so > 1500 OR dan_so < 500
-SELECT ten_chinh_thuc, xep_hang_dieu_tra_dan_so FROM thanh_pho WHERE cap_bac != 'Làng'
-SELECT xep_hang_dieu_tra_dan_so FROM thanh_pho WHERE cap_bac != 'Làng'
-SELECT COUNT(*) FROM chuyen_bay WHERE van_toc > 200
-SELECT so_hieu , ngay , phi_cong FROM chuyen_bay ORDER BY do_cao ASC
-SELECT id, quoc_gia, thanh_pho, ten FROM san_bay ORDER BY ten ASC
-SELECT MAX(co_phan_nhom) FROM cong_ty_dieu_hanh
-SELECT AVG(van_toc) FROM chuyen_bay WHERE phi_cong = 'Thompson'
-SELECT DISTINCT cong_ty_dieu_hanh.ten, cong_ty_dieu_hanh.loai FROM cong_ty_dieu_hanh INNER JOIN chuyen_bay ON cong_ty_dieu_hanh.id = chuyen_bay.id_cong_ty
-SELECT ten FROM san_bay WHERE quoc_gia != 'Iceland'
-SELECT DISTINCT T1.loai FROM cong_ty_dieu_hanh AS T1 JOIN chuyen_bay AS T2 ON T1.id_cong_ty = T2.id_cong_ty WHERE T2.van_toc < 200
-SELECT T1.id, T1.ten FROM cong_ty_dieu_hanh AS T1 JOIN chuyen_bay AS T2 ON T1.id = T2.id_cong_ty GROUP BY T1.id HAVING COUNT(*) > 1
-SELECT san_bay.id, san_bay.ten, san_bay.iata FROM san_bay JOIN chuyen_bay ON san_bay.id = chuyen_bay.id_san_bay GROUP BY san_bay.id ORDER BY COUNT(*) DESC LIMIT 1
-SELECT DISTINCT T1.phi_cong FROM chuyen_bay AS T1 JOIN san_bay AS T2 ON T1.id_san_bay = T2.id WHERE T2.quoc_gia = 'Hoa Kỳ' OR T2.ten = 'Sân bay Billund'
-SELECT loai , COUNT ( * ) FROM cong_ty_dieu_hanh GROUP BY loai ORDER BY COUNT ( * ) DESC LIMIT 1
-SELECT COUNT(*) FROM san_bay WHERE id NOT IN (SELECT id_san_bay FROM chuyen_bay WHERE phi_cong = 'Thompson')
-SELECT phi_cong FROM chuyen_bay JOIN cong_ty_dieu_hanh ON chuyen_bay.id_cong_ty = cong_ty_dieu_hanh.id WHERE cong_ty_dieu_hanh.hoat_dong_chinh = 'Vận chuyển hàng hoá' INTERSECT SELECT phi_cong FROM chuyen_bay JOIN cong_ty_dieu_hanh ON chuyen_bay.id_cong_ty = cong_ty_dieu_hanh.id WHERE cong_ty_dieu_hanh.loai = 'Dịch vụ ăn uống'
-SELECT ten FROM san_bay WHERE ten LIKE '%quốc tế%'
-SELECT san_bay.id, COUNT(DISTINCT chuyen_bay.id_cong_ty) FROM san_bay JOIN chuyen_bay ON san_bay.id = chuyen_bay.id_san_bay GROUP BY san_bay.id
-SELECT quoc_gia , COUNT ( * ) FROM san_bay GROUP BY quoc_gia
-SELECT quoc_gia FROM san_bay GROUP BY quoc_gia HAVING COUNT(*) > 2
-SELECT phi_cong, COUNT(*) AS num_flights FROM chuyen_bay GROUP BY phi_cong ORDER BY num_flights DESC LIMIT 1
-SELECT SUM(so_luong_bo_phan) FROM do_noi_that
-SELECT id_do_noi_that, ten FROM do_noi_that ORDER BY lai_suat_thi_truong DESC LIMIT 1
-SELECT SUM(lai_suat_thi_truong) FROM (SELECT lai_suat_thi_truong FROM do_noi_that ORDER BY lai_suat_thi_truong DESC LIMIT 2) AS top_two
-SELECT ten, so_luong_bo_phan FROM do_noi_that WHERE so_luong_bo_phan > 10
-SELECT ten, so_luong_bo_phan FROM do_noi_that ORDER BY lai_suat_thi_truong ASC LIMIT 1
-SELECT ten FROM do_noi_that JOIN xuong_san_xuat_do_noi_that ON do_noi_that.id_do_noi_that = xuong_san_xuat_do_noi_that.id_do_noi_that WHERE gia_tinh_theo_do_la < (SELECT MAX(gia_tinh_theo_do_la) FROM xuong_san_xuat_do_noi_that)
-SELECT ten, nam_mo_cua FROM nha_san_xuat ORDER BY so_luong_cua_hang DESC LIMIT 1
-SELECT AVG(so_luong_nha_may) FROM nha_san_xuat WHERE so_luong_cua_hang > 20
-SELECT id_nha_san_xuat, ten FROM nha_san_xuat ORDER BY nam_mo_cua
-SELECT ten, nam_mo_cua FROM nha_san_xuat WHERE so_luong_nha_may < 10 OR so_luong_cua_hang > 10
+SELECT T1.id_tai_san , T1.chi_tiet_tai_san FROM tai_san AS T1 JOIN bo_phan_cua_tai_san AS T2 ON T1.id_tai_san = T2.id_tai_san JOIN nhat_ky_loi AS T3 ON T1.id_tai_san = T3.id_tai_san GROUP BY T1.id_tai_san HAVING COUNT(T2.id_bo_phan) = 2 AND COUNT(T3.id_muc_nhap_cua_nhat_ky_loi) < 2
+SELECT T1.id_hop_dong_bao_tri , COUNT ( * ) FROM hop_dong_bao_tri AS T1 JOIN tai_san AS T2 ON T1.id_hop_dong_bao_tri = T2.id_hop_dong_bao_tri GROUP BY T1.id_hop_dong_bao_tri
+select count ( * ) , t1.id_cong_ty from cong_ty_ben_thu_ba as t1 join tai_san as t2 on t1.id_cong_ty = t2.id_cong_ty_cung_cap group by t1.id_cong_ty
+SELECT T1.id_cong_ty, T1.ten_cong_ty FROM cong_ty_ben_thu_ba AS T1 JOIN ky_su_bao_tri AS T2 ON T1.id_cong_ty = T2.id_cong_ty GROUP BY T1.id_cong_ty, T1.ten_cong_ty HAVING COUNT(*) >= 2 UNION SELECT T1.id_cong_ty, T1.ten_cong_ty FROM cong_ty_ben_thu_ba AS T1 JOIN hop_dong_bao_tri AS T2 ON T1.id_cong_ty = T2.id_hop_dong_bao_tri_cua_cong_ty GROUP BY T1.id_cong_ty, T1.ten_cong_ty HAVING COUNT(*) >= 2
+SELECT T1.id_nhan_vien , T1.ten_nhan_vien FROM nhan_vien AS T1 JOIN nhat_ky_loi AS T2 ON T1.id_nhan_vien = T2.duoc_ghi_lai_boi_nhan_vien_co_id EXCEPT SELECT T1.id_nhan_vien , T1.ten_nhan_vien FROM nhan_vien AS T1 JOIN chuyen_tham_cua_ky_su AS T3 ON T1.id_nhan_vien = T3.id_nhan_vien_lien_lac
+SELECT t1.id_ky_su , t1.ten , t1.ho FROM ky_su_bao_tri AS t1 JOIN chuyen_tham_cua_ky_su AS t2 ON t1.id_ky_su = t2.id_ky_su GROUP BY t1.id_ky_su ORDER BY COUNT ( * ) DESC LIMIT 1
+SELECT T1.id_bo_phan , T1.ten_bo_phan FROM bo_phan AS T1 JOIN loi_bo_phan AS T2 ON T1.id_bo_phan = T2.id_bo_phan_bi_loi GROUP BY T1.id_bo_phan HAVING COUNT ( * ) > 2
+SELECT T1.ten , T1.ho , T1.nhung_chi_tiet_khac , T3.mo_ta_ve_ky_nang FROM ky_su_bao_tri AS T1 JOIN ky_nang_cua_ky_su AS T2 ON T1.id_ky_su = T2.id_ky_su JOIN ky_nang AS T3 ON T2.id_ky_nang = T3.id_ky_nang
+SELECT T1.ten_viet_tat_cua_loi , T1.mo_ta_loi , T3.mo_ta_ve_ky_nang FROM loi_bo_phan AS T1 JOIN ky_nang_can_de_sua_chua AS T2 ON T1.id_bo_phan_bi_loi = T2.id_bo_phan_bi_loi JOIN ky_nang AS T3 ON T2.id_ky_nang = T3.id_ky_nang
+SELECT T1.ten_bo_phan , COUNT ( * ) FROM bo_phan AS T1 JOIN bo_phan_cua_tai_san AS T2 ON T1.id_bo_phan = T2.id_bo_phan GROUP BY T1.id_bo_phan
+SELECT mo_ta_ve_loi, tinh_trang_loi FROM nhat_ky_loi
+SELECT T1.id_muc_nhap_cua_nhat_ky_loi , COUNT ( * ) FROM nhat_ky_loi AS T1 JOIN chuyen_tham_cua_ky_su AS T2 ON T1.id_muc_nhap_cua_nhat_ky_loi = T2.id_muc_nhap_cua_nhat_ky_loi GROUP BY T1.id_muc_nhap_cua_nhat_ky_loi ORDER BY COUNT ( * ) DESC LIMIT 1
+SELECT DISTINCT T1.ho FROM ky_su_bao_tri AS T1
+SELECT DISTINCT tinh_trang_loi FROM nhat_ky_loi
+SELECT T1.ten , T1.ho FROM ky_su_bao_tri AS T1 EXCEPT SELECT T1.ten , T1.ho FROM chuyen_tham_cua_ky_su AS T2 JOIN ky_su_bao_tri AS T1 ON T2.id_ky_su_ghe_tham = T1.id_ky_su
+SELECT id_tai_san , chi_tiet_tai_san , thuong_hieu_tai_san , mau_ma_tai_san FROM tai_san
+SELECT ngay_mua_tai_san FROM tai_san ORDER BY ngay_mua_tai_san ASC LIMIT 1
+SELECT T3.id_bo_phan, T3.ten_bo_phan FROM loi_bo_phan AS T1 JOIN ky_nang_can_de_sua_chua AS T2 ON T1.id_bo_phan_bi_loi = T2.id_bo_phan_bi_loi JOIN bo_phan AS T3 ON T1.id_bo_phan = T3.id_bo_phan GROUP BY T1.id_bo_phan ORDER BY COUNT(*) DESC LIMIT 1
+SELECT T1.ten_bo_phan FROM bo_phan AS T1 JOIN loi_bo_phan AS T2 ON T1.id_bo_phan = T2.id_bo_phan JOIN nhat_ky_cua_loi_bo_phan AS T3 ON T2.id_muc_nhap_cua_nhat_ky_loi = T3.id_muc_nhap_cua_nhat_ky_loi GROUP BY T1.id_bo_phan ORDER BY COUNT(*) ASC LIMIT 1
+SELECT T1.id_ky_su , T1.ten , T1.ho FROM ky_su_bao_tri AS T1 JOIN chuyen_tham_cua_ky_su AS T2 ON T1.id_ky_su = T2.id_ky_su GROUP BY T1.id_ky_su ORDER BY COUNT ( * ) ASC LIMIT 1
+SELECT T1.ten_nhan_vien , T3.ten , T3.ho FROM nhan_vien AS T1 JOIN chuyen_tham_cua_ky_su AS T2 ON T1.id_nhan_vien = T2.id_nhan_vien_lien_lac JOIN ky_su_bao_tri AS T3 ON T2.id_ky_su = T3.id_ky_su
+SELECT T1.id_muc_nhap_cua_nhat_ky_loi , T1.mo_ta_ve_loi , T1.thoi_gian_muc_nhap_cua_nhat_ky_loi FROM nhat_ky_loi AS T1 JOIN nhat_ky_cua_loi_bo_phan AS T2 ON T1.id_muc_nhap_cua_nhat_ky_loi = T2.id_muc_nhap_cua_nhat_ky_loi GROUP BY T1.id_muc_nhap_cua_nhat_ky_loi ORDER BY COUNT ( * ) DESC LIMIT 1
+SELECT T1.id_ky_nang , T1.mo_ta_ve_ky_nang FROM ky_nang AS T1 JOIN ky_nang_can_de_sua_chua AS T2 ON T1.id_ky_nang = T2.id_ky_nang GROUP BY T1.id_ky_nang ORDER BY COUNT ( * ) DESC LIMIT 1
+SELECT mau_ma_tai_san FROM tai_san
+SELECT thuong_hieu_tai_san , mau_ma_tai_san , chi_tiet_tai_san FROM tai_san ORDER BY ngay_thanh_ly_tai_san ASC
+SELECT id_bo_phan, so_tien_phai_tra FROM bo_phan ORDER BY so_tien_phai_tra ASC LIMIT 1
+SELECT T2.ten_cong_ty FROM hop_dong_bao_tri AS T1 JOIN cong_ty_ben_thu_ba AS T2 ON T1.id_cong_ty_cua_cong_ty = T2.id_cong_ty ORDER BY T1.ngay_bat_dau_hop_dong ASC LIMIT 1
+SELECT T1.ten_cong_ty FROM cong_ty_ben_thu_ba AS T1 JOIN hop_dong_bao_tri AS T2 ON T1.id_cong_ty = T2.id_hop_dong_bao_tri_cua_cong_ty ORDER BY T2.ngay_ket_thuc_hop_dong DESC LIMIT 1
+SELECT gioi_tinh FROM nhan_vien GROUP BY gioi_tinh ORDER BY COUNT(*) DESC LIMIT 1
+SELECT T1.ten_nhan_vien , COUNT ( * ) FROM nhan_vien AS T1 JOIN chuyen_tham_cua_ky_su AS T2 ON T1.id_nhan_vien = T2.id_nhan_vien_lien_lac GROUP BY T1.id_nhan_vien
+SELECT T1.mau_ma_tai_san FROM tai_san AS T1 LEFT JOIN nhat_ky_loi AS T2 ON T1.id_tai_san = T2.id_tai_san WHERE T2.id_tai_san IS NULL
+SELECT COUNT(*) FROM sach
+SELECT tac_gia FROM sach ORDER BY tac_gia ASC
+SELECT tieu_de FROM sach ORDER BY so_luong_phat_hanh ASC
+SELECT tieu_de FROM sach WHERE tac_gia != 'Elaine Lee'
+SELECT tieu_de, so_luong_phat_hanh FROM sach
+SELECT ngay_xuat_ban FROM an_pham ORDER BY gia_ban DESC
+SELECT DISTINCT nha_xuat_ban FROM an_pham WHERE gia_ban > 5000000
+SELECT nha_xuat_ban FROM an_pham ORDER BY gia_ban DESC LIMIT 1
+SELECT ngay_xuat_ban FROM an_pham ORDER BY gia_ban ASC LIMIT 3
+SELECT T1.tieu_de, T2.ngay_xuat_ban FROM sach AS T1 JOIN an_pham AS T2 ON T1.id_sach = T2.id_sach
+SELECT T1.tac_gia FROM sach AS T1 JOIN an_pham AS T2 ON T1.id_sach = T2.id_sach WHERE T2.gia_ban > 4000000
+SELECT sach.tieu_de FROM sach JOIN an_pham ON sach.id_sach = an_pham.id_sach ORDER BY an_pham.gia_ban DESC
+SELECT nha_xuat_ban FROM an_pham GROUP BY nha_xuat_ban HAVING COUNT(*) > 1
+SELECT nha_xuat_ban , COUNT ( * ) FROM an_pham GROUP BY nha_xuat_ban
+SELECT ngay_xuat_ban FROM an_pham GROUP BY ngay_xuat_ban ORDER BY COUNT(*) DESC LIMIT 1
+SELECT tac_gia FROM sach GROUP BY tac_gia HAVING COUNT(*) > 1
+SELECT sach.tieu_de FROM sach LEFT JOIN an_pham ON sach.id_sach = an_pham.id_sach WHERE an_pham.id_an_pham IS NULL
+SELECT nha_xuat_ban FROM an_pham WHERE gia_ban > 10000000 INTERSECT SELECT nha_xuat_ban FROM an_pham WHERE gia_ban < 5000000
+SELECT COUNT(DISTINCT ngay_xuat_ban) FROM an_pham
+SELECT COUNT(DISTINCT ngay_xuat_ban) FROM an_pham
+SELECT gia_ban FROM an_pham WHERE nha_xuat_ban = 'Person' OR nha_xuat_ban = 'Wiley'
+SELECT ten_bo_phan FROM bo_phan ORDER BY ngay_bat_dau_quan_ly ASC
+SELECT ten_nguoi_phu_thuoc FROM nguoi_phu_thuoc WHERE moi_quan_he IN ('vợ', 'chồng')
+SELECT COUNT(*) FROM nguoi_phu_thuoc WHERE gioi_tinh = 'Nữ'
+SELECT T1.ten_bo_phan FROM bo_phan AS T1 JOIN dia_diem_cua_bo_phan AS T2 ON T1.ma_so_bo_phan = T2.ma_so_bo_phan WHERE T2.dia_diem_bo_phan = 'Houston'
+SELECT ho , ten FROM nhan_vien WHERE luong > 30000
+SELECT COUNT(*) FROM nhan_vien WHERE luong < 50000 GROUP BY gioi_tinh
+SELECT ho , ten , dia_chi FROM nhan_vien ORDER BY ngay_sinh ASC
+SELECT COUNT(*) FROM giao_vien
+SELECT COUNT(*) FROM giao_vien
+SELECT ten FROM giao_vien ORDER BY tuoi ASC
+SELECT ten FROM giao_vien ORDER BY tuoi ASC
+SELECT tuoi, que_quan FROM giao_vien
+SELECT tuoi, que_quan FROM giao_vien
+SELECT ten FROM giao_vien WHERE que_quan != 'Khu đô thị Little Lever'
+SELECT ten FROM giao_vien WHERE que_quan != 'Khu đô thị Little Lever'
+SELECT ten FROM giao_vien WHERE tuoi = '32' OR tuoi = '33'
+SELECT ten FROM giao_vien WHERE tuoi = '32' OR tuoi = '33'
+SELECT que_quan FROM giao_vien ORDER BY tuoi ASC LIMIT 1
+SELECT que_quan FROM giao_vien ORDER BY tuoi ASC LIMIT 1
+SELECT que_quan , COUNT ( * ) FROM giao_vien GROUP BY que_quan
+SELECT que_quan , COUNT ( * ) FROM giao_vien GROUP BY que_quan
+SELECT que_quan FROM giao_vien GROUP BY que_quan ORDER BY COUNT(*) DESC LIMIT 1
+SELECT que_quan FROM giao_vien GROUP BY que_quan ORDER BY COUNT(*) DESC LIMIT 1
+SELECT que_quan FROM giao_vien GROUP BY que_quan HAVING COUNT(*) >= 2
+SELECT que_quan FROM giao_vien GROUP BY que_quan HAVING COUNT(*) >= 2
+SELECT T1.ten , T3.khoa_hoc FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien JOIN khoa_hoc AS T3 ON T2.id_khoa_hoc = T3.id_khoa_hoc
+SELECT giao_vien.ten, khoa_hoc.khoa_hoc FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien JOIN khoa_hoc ON sap_xep_khoa_hoc.id_khoa_hoc = khoa_hoc.id_khoa_hoc
+SELECT T1.ten , T3.khoa_hoc FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien JOIN khoa_hoc AS T3 ON T2.id_khoa_hoc = T3.id_khoa_hoc ORDER BY T1.ten ASC
+SELECT T1.ten , T3.khoa_hoc FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien JOIN khoa_hoc AS T3 ON T2.id_khoa_hoc = T3.id_khoa_hoc ORDER BY T1.ten ASC
+SELECT giao_vien.ten FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien JOIN khoa_hoc ON sap_xep_khoa_hoc.id_khoa_hoc = khoa_hoc.id_khoa_hoc WHERE khoa_hoc.khoa_hoc = 'Toán'
+SELECT T1.ten FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien JOIN khoa_hoc AS T3 ON T2.id_khoa_hoc = T3.id_khoa_hoc WHERE T3.khoa_hoc = 'Toán'
+SELECT T1.ten , COUNT ( * ) FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien GROUP BY T2.id_giao_vien
+SELECT T1.ten, COUNT(*) AS num_courses FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien GROUP BY T2.id_giao_vien
+SELECT T1.ten FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien GROUP BY T2.id_giao_vien HAVING COUNT(*) >= 2
+SELECT T1.ten FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien GROUP BY T1.id_giao_vien HAVING COUNT(*) >= 2
+SELECT ten FROM giao_vien EXCEPT SELECT T2.ten FROM sap_xep_khoa_hoc AS T1 JOIN giao_vien AS T2 ON T1.id_giao_vien = T2.id_giao_vien
+SELECT ten FROM giao_vien EXCEPT SELECT T1.ten FROM sap_xep_khoa_hoc AS T2 JOIN giao_vien AS T1 ON T2.id_giao_vien = T1.id_giao_vien
+SELECT COUNT(*) FROM thanh_vien
+SELECT ten FROM thanh_vien ORDER BY ten ASC
+SELECT ten, quoc_gia FROM thanh_vien
+SELECT ten FROM thanh_vien WHERE quoc_gia = 'USA' OR quoc_gia = 'Canada'
+SELECT quoc_gia , COUNT ( * ) FROM thanh_vien GROUP BY quoc_gia
+SELECT quoc_gia FROM thanh_vien GROUP BY quoc_gia ORDER BY COUNT(*) DESC LIMIT 1
+SELECT quoc_gia FROM thanh_vien GROUP BY quoc_gia HAVING COUNT(*) > 2
+SELECT ten_lanh_dao, dia_diem_truong_dai_hoc FROM truong_dai_hoc
+SELECT thanh_vien.ten, truong_dai_hoc.ten FROM thanh_vien JOIN truong_dai_hoc ON thanh_vien.id_dai_hoc = truong_dai_hoc.id_dai_hoc
+SELECT thanh_vien.ten , truong_dai_hoc.dia_diem_truong_dai_hoc FROM thanh_vien JOIN truong_dai_hoc ON thanh_vien.id_dai_hoc = truong_dai_hoc.id_dai_hoc ORDER BY thanh_vien.ten ASC
+SELECT truong_dai_hoc.ten_lanh_dao FROM truong_dai_hoc JOIN thanh_vien ON truong_dai_hoc.id_dai_hoc = thanh_vien.id_dai_hoc WHERE thanh_vien.quoc_gia = 'Canada'
+SELECT thanh_vien.ten, vong.chu_de_trang_tri FROM thanh_vien JOIN vong ON thanh_vien.id_thanh_vien = vong.id_thanh_vien
+SELECT T1.ten FROM thanh_vien AS T1 JOIN vong AS T2 ON T1.id_thanh_vien = T2.id_thanh_vien WHERE T2.xep_hang_tung_vong > 3
+SELECT thanh_vien.ten FROM thanh_vien JOIN vong ON thanh_vien.id_thanh_vien = vong.id_thanh_vien ORDER BY vong.xep_hang_tung_vong ASC
+SELECT ten FROM thanh_vien WHERE id_thanh_vien NOT IN (SELECT id_thanh_vien FROM vong)
+SELECT COUNT(*) FROM cuoc_bau_cu
+SELECT so_luong_phieu_bau FROM cuoc_bau_cu ORDER BY so_luong_phieu_bau DESC
+SELECT ngay, ti_le_phieu_bau FROM cuoc_bau_cu
+SELECT MIN(ti_le_phieu_bau) AS min_tyle, MAX(ti_le_phieu_bau) AS max_tyle FROM cuoc_bau_cu
+SELECT ten, dang FROM dai_dien
+SELECT ten FROM dai_dien WHERE dang != 'Đảng Cộng hoà'
+SELECT tuoi_tho FROM dai_dien WHERE tieu_bang = 'New York' OR tieu_bang = 'Indiana'
+SELECT T1.ten , T2.ngay FROM dai_dien AS T1 JOIN cuoc_bau_cu AS T2 ON T1.id_dai_dien = T2.id_dai_dien
+SELECT T1.ten FROM dai_dien AS T1 JOIN cuoc_bau_cu AS T2 ON T1.id_dai_dien = T2.id_dai_dien WHERE T2.so_luong_phieu_bau > 10000
+SELECT T1.ten FROM dai_dien AS T1 JOIN cuoc_bau_cu AS T2 ON T1.id_dai_dien = T2.id_dai_dien GROUP BY T1.id_dai_dien, T1.ten ORDER BY COUNT(*) DESC
+SELECT T1.dang FROM dai_dien AS T1 JOIN cuoc_bau_cu AS T2 ON T1.id_dai_dien = T2.id_dai_dien ORDER BY T2.so_luong_phieu_bau ASC LIMIT 1
+SELECT T1.tuoi_tho FROM dai_dien AS T1 JOIN cuoc_bau_cu AS T2 ON T1.id_dai_dien = T2.id_dai_dien ORDER BY T2.ti_le_phieu_bau DESC
+SELECT T1.id_dai_dien , AVG(T2.so_luong_phieu_bau) FROM dai_dien AS T1 JOIN cuoc_bau_cu AS T2 ON T1.id_dai_dien = T2.id_dai_dien WHERE T1.dang = 'Cộng hoà' GROUP BY T1.id_dai_dien
+SELECT dang , COUNT ( * ) FROM dai_dien GROUP BY dang
+SELECT dang FROM dai_dien GROUP BY dang ORDER BY COUNT(*) DESC LIMIT 1
+SELECT dang FROM dai_dien GROUP BY dang HAVING COUNT(*) >= 3
+SELECT tieu_bang FROM dai_dien GROUP BY tieu_bang HAVING COUNT(*) >= 2
+SELECT ten FROM dai_dien EXCEPT SELECT dai_dien.ten FROM cuoc_bau_cu JOIN dai_dien ON cuoc_bau_cu.id_dai_dien = dai_dien.id_dai_dien
+SELECT dang FROM dai_dien WHERE tieu_bang = 'New York' INTERSECT SELECT dang FROM dai_dien WHERE tieu_bang = 'Pennsylvania'
+SELECT COUNT(DISTINCT ten) FROM dai_dien
+SELECT COUNT(*) FROM quoc_gia
+SELECT COUNT(*) FROM quoc_gia
+SELECT ten_quoc_gia, thu_do FROM quoc_gia
+SELECT ten_quoc_gia, thu_do FROM quoc_gia
+SELECT ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia WHERE ngon_ngu_ban_dia_chinh_thuc LIKE '%tiếng Anh%'
+SELECT ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia WHERE ngon_ngu_ban_dia_chinh_thuc LIKE '%tiếng Anh%'
+SELECT DISTINCT vi_tri FROM tran_dau_trong_mua_giai
+SELECT vi_tri FROM tran_dau_trong_mua_giai
+SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.id_cau_thu = tran_dau_trong_mua_giai.cau_thu WHERE tran_dau_trong_mua_giai.truong_dai_hoc = 'UCLA'
+SELECT cau_thu.cau_thu FROM cau_thu JOIN doi ON cau_thu.doi = doi.id_doi WHERE doi.ten = 'UCLA'
+SELECT DISTINCT tran_dau_trong_mua_giai.vi_tri FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.doi = tran_dau_trong_mua_giai.doi WHERE tran_dau_trong_mua_giai.truong_dai_hoc IN ('UCLA', 'Duke')
+SELECT DISTINCT tran_dau_trong_mua_giai.vi_tri FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.id_cau_thu = tran_dau_trong_mua_giai.cau_thu WHERE tran_dau_trong_mua_giai.truong_dai_hoc IN ('UCLA', 'Duke')
+SELECT ma_so_tuyen_chon_tan_binh, mua_tuyen_chon FROM tran_dau_trong_mua_giai JOIN cau_thu ON cau_thu.id_cau_thu = tran_dau_trong_mua_giai.cau_thu WHERE vi_tri = 'hậu vệ'
+SELECT ma_so_tuyen_chon_tan_binh , mua_tuyen_chon FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu WHERE tran_dau_trong_mua_giai.vi_tri = 'hậu vệ'
+SELECT COUNT(DISTINCT doi) FROM tran_dau_trong_mua_giai
+SELECT COUNT(DISTINCT doi) FROM tran_dau_trong_mua_giai
+SELECT cau_thu , so_nam_da_choi FROM cau_thu
+SELECT cau_thu, so_nam_da_choi FROM cau_thu
+SELECT ten FROM doi
+SELECT ten FROM doi
+SELECT T1.mua_giai, T1.cau_thu, T2.ten_quoc_gia FROM tran_dau_trong_mua_giai AS T1 JOIN quoc_gia AS T2 ON T1.quoc_gia = T2.id_quoc_gia
+SELECT cau_thu.cau_thu , tran_dau_trong_mua_giai.mua_giai , quoc_gia.ten_quoc_gia FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia
+SELECT cau_thu.cau_thu FROM cau_thu JOIN quoc_gia ON cau_thu.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.ten_quoc_gia = 'Indonesia'
+SELECT cau_thu.id_cau_thu , cau_thu.cau_thu , cau_thu.so_nam_da_choi , cau_thu.tong_so_thang_thua , cau_thu.so_luong_thang_thua_don , cau_thu.so_luong_thang_thua_doi FROM cau_thu JOIN quoc_gia ON cau_thu.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.ten_quoc_gia = 'Indonesia'
+SELECT DISTINCT tran_dau_trong_mua_giai.vi_tri FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.id_cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.thu_do = 'Dublin'
+SELECT vi_tri FROM tran_dau_trong_mua_giai JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.thu_do = 'Dublin'
+SELECT ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.truong_dai_hoc IN ('Maryland', 'Duke')
+SELECT quoc_gia.ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.truong_dai_hoc IN ('Maryland', 'Duke')
+SELECT COUNT(DISTINCT quoc_gia.ngon_ngu_ban_dia_chinh_thuc) FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.vi_tri = 'defender'
+SELECT COUNT(DISTINCT quoc_gia.ngon_ngu_ban_dia_chinh_thuc) FROM quoc_gia JOIN cau_thu ON quoc_gia.id_quoc_gia = cau_thu.quoc_gia WHERE cau_thu.vi_tri = 'hậu vệ'
+SELECT tran_dau_trong_mua_giai.mua_giai, cau_thu.cau_thu, doi.ten FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.id_cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi
+SELECT cau_thu.cau_thu , tran_dau_trong_mua_giai.mua_giai , doi.ten FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi
+SELECT T2.vi_tri FROM doi AS T1 JOIN tran_dau_trong_mua_giai AS T2 ON T1.id_doi = T2.doi WHERE T1.ten = 'Ryley Goldner'
+SELECT tran_dau_trong_mua_giai.vi_tri FROM cau_thu JOIN doi ON cau_thu.doi = doi.id_doi JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu WHERE doi.ten = 'Ryley Goldner'
+SELECT COUNT(DISTINCT truong_dai_hoc) FROM tran_dau_trong_mua_giai JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi WHERE doi.ten = 'Columbus Crew'
+SELECT COUNT(DISTINCT tran_dau_trong_mua_giai.truong_dai_hoc) FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.id_cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi WHERE doi.ten = 'Columbus Crew'
+SELECT cau_thu.cau_thu , cau_thu.so_nam_da_choi FROM cau_thu JOIN doi ON cau_thu.doi = doi.id_doi WHERE doi.ten = 'Columbus Crew'
 SELECT 1
-SELECT T1.id_nha_san_xuat, T1.so_luong_cua_hang FROM nha_san_xuat AS T1 JOIN xuong_san_xuat_do_noi_that AS T2 ON T1.id_nha_san_xuat = T2.id_nha_san_xuat ORDER BY T2.gia_tinh_theo_do_la DESC LIMIT 1
-SELECT T1.ten , COUNT(DISTINCT T2.id_do_noi_that) FROM nha_san_xuat AS T1 JOIN xuong_san_xuat_do_noi_that AS T2 ON T1.id_nha_san_xuat = T2.id_nha_san_xuat GROUP BY T1.id_nha_san_xuat
-SELECT T1.ten, T2.gia_tinh_theo_do_la FROM do_noi_that AS T1 JOIN xuong_san_xuat_do_noi_that AS T2 ON T1.id_do_noi_that = T2.id_do_noi_that
-SELECT ten, lai_suat_thi_truong FROM do_noi_that WHERE id_do_noi_that NOT IN (SELECT id_do_noi_that FROM xuong_san_xuat_do_noi_that)
-SELECT ten FROM nha_san_xuat JOIN xuong_san_xuat_do_noi_that ON nha_san_xuat.id_nha_san_xuat = xuong_san_xuat_do_noi_that.id_nha_san_xuat JOIN do_noi_that ON xuong_san_xuat_do_noi_that.id_do_noi_that = do_noi_that.id_do_noi_that WHERE do_noi_that.so_luong_bo_phan < 6 INTERSECT SELECT ten FROM nha_san_xuat JOIN xuong_san_xuat_do_noi_that ON nha_san_xuat.id_nha_san_xuat = xuong_san_xuat_do_noi_that.id_nha_san_xuat JOIN do_noi_that ON xuong_san_xuat_do_noi_that.id_do_noi_that = do_noi_that.id_do_noi_that WHERE do_noi_that.so_luong_bo_phan > 10
-SELECT COUNT(*) FROM khach_tham_quan WHERE tuoi < 30
-SELECT ten FROM khach_tham_quan WHERE cap_do_thanh_vien > 4 ORDER BY cap_do_thanh_vien DESC
-SELECT AVG(tuoi) FROM khach_tham_quan WHERE cap_do_thanh_vien <= 4
-SELECT ten , cap_do_thanh_vien FROM khach_tham_quan WHERE cap_do_thanh_vien > 4 ORDER BY tuoi DESC
-SELECT id_bao_tang , ten FROM bao_tang ORDER BY so_luong_nhan_vien DESC LIMIT 1
-SELECT AVG(so_luong_nhan_vien) FROM bao_tang WHERE nam_mo_cua < '2009'
-SELECT nam_mo_cua, so_luong_nhan_vien FROM bao_tang WHERE ten = 'Bảo tàng Plaza'
-SELECT ten FROM bao_tang WHERE so_luong_nhan_vien > (SELECT so_luong_nhan_vien FROM bao_tang WHERE nam_mo_cua > '2010')
-SELECT T1.id_khach_tham_quan, T1.ten, T1.tuoi FROM khach_tham_quan AS T1 JOIN chuyen_tham AS T2 ON T1.id_khach_tham_quan = CAST(T2.id_khach_tham_quan AS NUMBER) GROUP BY T1.id_khach_tham_quan HAVING COUNT(*) > 1
-SELECT T1.id_khach_tham_quan , T1.ten , T1.cap_do_thanh_vien FROM khach_tham_quan AS T1 JOIN chuyen_tham AS T2 ON T1.id_khach_tham_quan = T2.id_khach_tham_quan ORDER BY T2.tong_so_tien_da_chi DESC LIMIT 1
-SELECT T1.id_bao_tang, T1.ten FROM bao_tang AS T1 JOIN chuyen_tham AS T2 ON T1.id_bao_tang = T2.id_bao_tang GROUP BY T1.id_bao_tang ORDER BY COUNT(*) DESC LIMIT 1
-SELECT ten FROM bao_tang WHERE id_bao_tang NOT IN (SELECT id_bao_tang FROM chuyen_tham)
-SELECT T1.ten, T1.tuoi FROM khach_tham_quan AS T1 JOIN chuyen_tham AS T2 ON T1.id_khach_tham_quan = T2.id_khach_tham_quan GROUP BY T1.id_khach_tham_quan ORDER BY SUM(T2.so_luong_ve) DESC LIMIT 1
-SELECT AVG(so_luong_ve), MAX(so_luong_ve) FROM chuyen_tham
-SELECT SUM(chuyen_tham.tong_so_tien_da_chi) FROM khach_tham_quan JOIN chuyen_tham ON khach_tham_quan.id_khach_tham_quan = chuyen_tham.id_khach_tham_quan WHERE khach_tham_quan.cap_do_thanh_vien = 1
-SELECT ten FROM khach_tham_quan JOIN chuyen_tham ON khach_tham_quan.id_khach_tham_quan = chuyen_tham.id_khach_tham_quan JOIN bao_tang ON chuyen_tham.id_bao_tang = bao_tang.id_bao_tang WHERE EXISTS (SELECT 1 FROM chuyen_tham JOIN bao_tang ON chuyen_tham.id_bao_tang = bao_tang.id_bao_tang WHERE chuyen_tham.id_khach_tham_quan = khach_tham_quan.id_khach_tham_quan AND bao_tang.nam_mo_cua < '2009') AND EXISTS (SELECT 1 FROM chuyen_tham JOIN bao_tang ON chuyen_tham.id_bao_tang = bao_tang.id_bao_tang WHERE chuyen_tham.id_khach_tham_quan = khach_tham_quan.id_khach_tham_quan AND bao_tang.nam_mo_cua > '2011')
-SELECT COUNT(*) FROM khach_tham_quan WHERE id_khach_tham_quan NOT IN (SELECT ct.id_khach_tham_quan FROM chuyen_tham ct JOIN bao_tang bt ON ct.id_bao_tang = bt.id_bao_tang WHERE bt.nam_mo_cua > '2010')
-SELECT COUNT(*) FROM bao_tang WHERE nam_mo_cua > '2013' OR nam_mo_cua < '2008'
-SELECT COUNT(*) FROM hoc_sinh_trung_hoc
-SELECT COUNT(*) FROM hoc_sinh_trung_hoc
-SELECT ten, khoi_lop FROM hoc_sinh_trung_hoc
-SELECT ten, khoi_lop FROM hoc_sinh_trung_hoc
-SELECT khoi_lop FROM hoc_sinh_trung_hoc
-SELECT khoi_lop FROM hoc_sinh_trung_hoc
-SELECT khoi_lop FROM hoc_sinh_trung_hoc WHERE ten = 'Kyle'
-SELECT khoi_lop FROM hoc_sinh_trung_hoc WHERE ten = 'Kyle'
-SELECT ten FROM hoc_sinh_trung_hoc WHERE khoi_lop = 10
-SELECT ten FROM hoc_sinh_trung_hoc WHERE khoi_lop = 10
-SELECT id FROM hoc_sinh_trung_hoc WHERE ten = 'Kyle'
-SELECT id FROM hoc_sinh_trung_hoc WHERE ten = 'Kyle'
-SELECT COUNT(*) FROM hoc_sinh_trung_hoc WHERE khoi_lop = 9 OR khoi_lop = 10
-SELECT COUNT(*) FROM hoc_sinh_trung_hoc WHERE khoi_lop = 9 OR khoi_lop = 10
-SELECT khoi_lop, COUNT(*) FROM hoc_sinh_trung_hoc GROUP BY khoi_lop
-SELECT khoi_lop, COUNT(*) FROM hoc_sinh_trung_hoc GROUP BY khoi_lop
-SELECT khoi_lop FROM hoc_sinh_trung_hoc GROUP BY khoi_lop ORDER BY COUNT(*) DESC LIMIT 1
-SELECT khoi_lop FROM hoc_sinh_trung_hoc GROUP BY khoi_lop ORDER BY COUNT(*) DESC LIMIT 1
-SELECT khoi_lop FROM hoc_sinh_trung_hoc GROUP BY khoi_lop HAVING COUNT(*) >= 4
-SELECT khoi_lop FROM hoc_sinh_trung_hoc GROUP BY khoi_lop HAVING COUNT(*) >= 4
-SELECT T1.id, COUNT(*) FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh GROUP BY T1.id
-SELECT T1.id, COUNT(*) FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh GROUP BY T1.id
-SELECT T1.ten , COUNT(*) FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh GROUP BY T1.id
-SELECT hoc_sinh_trung_hoc.ten, COUNT(*) FROM hoc_sinh_trung_hoc JOIN ban_be ON hoc_sinh_trung_hoc.id = ban_be.id_hoc_sinh OR hoc_sinh_trung_hoc.id = ban_be.id_ban_be GROUP BY hoc_sinh_trung_hoc.id
-SELECT T1.ten FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh GROUP BY T2.id_hoc_sinh ORDER BY COUNT(*) DESC LIMIT 1
-SELECT hoc_sinh_trung_hoc.ten FROM hoc_sinh_trung_hoc JOIN ban_be ON hoc_sinh_trung_hoc.id = ban_be.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id ORDER BY COUNT(*) DESC LIMIT 1
-SELECT hoc_sinh_trung_hoc.ten FROM hoc_sinh_trung_hoc JOIN ban_be ON hoc_sinh_trung_hoc.id = ban_be.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id HAVING COUNT(*) >= 3
-SELECT hoc_sinh_trung_hoc.ten FROM hoc_sinh_trung_hoc JOIN ban_be ON hoc_sinh_trung_hoc.id = ban_be.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id HAVING COUNT(*) >= 3
-SELECT T3.ten FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh JOIN hoc_sinh_trung_hoc AS T3 ON T2.id_ban_be = T3.id WHERE T1.ten = 'Kyle'
+SELECT T2.vi_tri , COUNT ( * ) FROM cau_thu AS T1 JOIN tran_dau_trong_mua_giai AS T2 ON T1.cau_thu = T2.cau_thu GROUP BY T2.vi_tri
 SELECT 1
-SELECT COUNT(DISTINCT CASE WHEN ban_be.id_hoc_sinh = (SELECT id FROM hoc_sinh_trung_hoc WHERE ten = 'Kyle') THEN ban_be.id_ban_be ELSE ban_be.id_hoc_sinh END) FROM ban_be JOIN hoc_sinh_trung_hoc ON ban_be.id_hoc_sinh = hoc_sinh_trung_hoc.id WHERE hoc_sinh_trung_hoc.ten = 'Kyle' OR ban_be.id_ban_be = (SELECT id FROM hoc_sinh_trung_hoc WHERE ten = 'Kyle')
-SELECT COUNT(*) FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh WHERE T1.ten = 'Kyle'
-SELECT id FROM hoc_sinh_trung_hoc WHERE id NOT IN (SELECT id_hoc_sinh FROM ban_be UNION SELECT id_ban_be FROM ban_be)
-SELECT id FROM hoc_sinh_trung_hoc WHERE id NOT IN (SELECT id_hoc_sinh FROM ban_be UNION SELECT id_ban_be FROM ban_be)
-SELECT ten FROM hoc_sinh_trung_hoc WHERE id NOT IN (SELECT id_hoc_sinh FROM ban_be UNION SELECT id_ban_be FROM ban_be)
-SELECT ten FROM hoc_sinh_trung_hoc WHERE id NOT IN (SELECT id_hoc_sinh FROM ban_be UNION SELECT id_ban_be FROM ban_be)
-SELECT id FROM hoc_sinh_trung_hoc WHERE id IN (SELECT id_hoc_sinh FROM ban_be UNION SELECT id_ban_be FROM ban_be) AND id IN (SELECT id_hoc_sinh FROM luot_thich)
-SELECT id FROM hoc_sinh_trung_hoc WHERE id IN (SELECT id_hoc_sinh FROM ban_be UNION SELECT id_ban_be FROM ban_be) INTERSECT SELECT id FROM hoc_sinh_trung_hoc WHERE id IN (SELECT id_hoc_sinh FROM luot_thich)
-SELECT ten FROM hoc_sinh_trung_hoc WHERE id IN (SELECT DISTINCT id_hoc_sinh FROM ban_be UNION SELECT DISTINCT id_ban_be FROM ban_be) AND id IN (SELECT id_hoc_sinh FROM luot_thich)
-SELECT ten FROM hoc_sinh_trung_hoc WHERE id IN (SELECT id_hoc_sinh FROM ban_be) AND id IN (SELECT id_hoc_sinh FROM luot_thich)
-SELECT id_hoc_sinh , COUNT ( * ) FROM luot_thich GROUP BY id_hoc_sinh
-SELECT hoc_sinh_trung_hoc.id, COUNT(*) FROM hoc_sinh_trung_hoc JOIN luot_thich ON hoc_sinh_trung_hoc.id = luot_thich.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id
-SELECT hoc_sinh_trung_hoc.ten, COUNT(*) AS so_luot_thich FROM hoc_sinh_trung_hoc JOIN luot_thich ON hoc_sinh_trung_hoc.id = luot_thich.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id
-SELECT hoc_sinh_trung_hoc.ten, COUNT(*) AS so_luot_thich FROM hoc_sinh_trung_hoc JOIN luot_thich ON hoc_sinh_trung_hoc.id = luot_thich.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id
-SELECT T1.ten FROM hoc_sinh_trung_hoc AS T1 JOIN luot_thich AS T2 ON T1.id = T2.id_hoc_sinh GROUP BY T1.id ORDER BY COUNT(*) DESC LIMIT 1
-SELECT hoc_sinh_trung_hoc.ten FROM hoc_sinh_trung_hoc JOIN luot_thich ON hoc_sinh_trung_hoc.id = luot_thich.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id ORDER BY COUNT(*) DESC LIMIT 1
-SELECT hoc_sinh_trung_hoc.ten FROM hoc_sinh_trung_hoc JOIN luot_thich ON hoc_sinh_trung_hoc.id = luot_thich.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id HAVING COUNT(*) >= 2
-SELECT T1.ten FROM hoc_sinh_trung_hoc AS T1 JOIN luot_thich AS T2 ON T1.id = T2.id_hoc_sinh GROUP BY T1.id HAVING COUNT(*) >= 2
-SELECT ten FROM hoc_sinh_trung_hoc JOIN ban_be ON hoc_sinh_trung_hoc.id = ban_be.id_hoc_sinh WHERE hoc_sinh_trung_hoc.khoi_lop > 5 GROUP BY hoc_sinh_trung_hoc.id HAVING COUNT(*) >= 2
-SELECT T1.ten FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh WHERE T1.khoi_lop = 5 GROUP BY T1.id HAVING COUNT(*) >= 2
-SELECT COUNT(*) FROM hoc_sinh_trung_hoc JOIN luot_thich ON hoc_sinh_trung_hoc.id = luot_thich.id_hoc_sinh WHERE hoc_sinh_trung_hoc.ten = 'Kyle'
 SELECT 1
-SELECT AVG(khoi_lop) FROM hoc_sinh_trung_hoc WHERE id IN (SELECT id_hoc_sinh FROM ban_be UNION SELECT id_ban_be FROM ban_be)
-SELECT AVG(hoc_sinh_trung_hoc.khoi_lop) FROM hoc_sinh_trung_hoc JOIN ban_be ON hoc_sinh_trung_hoc.id = ban_be.id_hoc_sinh WHERE ban_be.id_hoc_sinh IS NOT NULL
-SELECT MIN(khoi_lop) FROM hoc_sinh_trung_hoc WHERE id NOT IN (SELECT id_hoc_sinh FROM ban_be UNION SELECT id_ban_be FROM ban_be)
-SELECT MIN(khoi_lop) FROM hoc_sinh_trung_hoc WHERE id NOT IN (SELECT id_hoc_sinh FROM ban_be UNION SELECT id_ban_be FROM ban_be)
-SELECT COUNT(*) FROM bua_tiec
-SELECT COUNT(*) FROM bua_tiec
-SELECT chu_de_bua_tiec, COUNT(*) AS so_luong_nguoi_to_chuc FROM bua_tiec JOIN chu_tiec ON bua_tiec.id_bua_tiec = chu_tiec.id_bua_tiec GROUP BY bua_tiec.id_bua_tiec ORDER BY COUNT(*) ASC
-SELECT chu_de_bua_tiec FROM bua_tiec ORDER BY so_luong_nguoi_to_chuc ASC
-SELECT chu_de_bua_tiec, dia_diem FROM bua_tiec
-SELECT chu_de_bua_tiec, dia_diem FROM bua_tiec
-SELECT nam_dau_tien, nam_cuoi_cung FROM bua_tiec WHERE chu_de_bua_tiec IN ('Mùa xuân', 'Teqnology')
-SELECT nam_dau_tien, nam_cuoi_cung FROM bua_tiec WHERE chu_de_bua_tiec IN ('Mùa Xuân', 'Technology')
-SELECT AVG(so_luong_nguoi_to_chuc) FROM bua_tiec
-SELECT COUNT(*) FROM bua_tiec JOIN chu_tiec ON bua_tiec.id_bua_tiec = chu_tiec.id_bua_tiec GROUP BY bua_tiec.id_bua_tiec
-SELECT T1.dia_diem FROM bua_tiec AS T1 JOIN chu_tiec AS T2 ON T1.id_bua_tiec = T2.id_bua_tiec GROUP BY T1.id_bua_tiec ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.chu_de_bua_tiec , T1.dia_diem FROM bua_tiec AS T1 JOIN chu_tiec AS T2 ON T1.id_bua_tiec = T2.id_bua_tiec JOIN nguoi_to_chuc AS T3 ON T2.id_nguoi_to_chuc = T3.id_nguoi_to_chuc GROUP BY T1.id_bua_tiec ORDER BY COUNT(*) DESC LIMIT 1
-SELECT quoc_tich , COUNT ( * ) FROM nguoi_to_chuc GROUP BY quoc_tich
-SELECT quoc_tich, COUNT(*) FROM nguoi_to_chuc GROUP BY quoc_tich
-SELECT quoc_tich FROM nguoi_to_chuc GROUP BY quoc_tich ORDER BY COUNT(*) DESC LIMIT 1
-SELECT quoc_tich, COUNT(*) FROM nguoi_to_chuc GROUP BY quoc_tich ORDER BY COUNT(*) DESC LIMIT 1
-SELECT quoc_tich FROM nguoi_to_chuc WHERE tuoi > '45' GROUP BY quoc_tich INTERSECT SELECT quoc_tich FROM nguoi_to_chuc WHERE tuoi < '35' GROUP BY quoc_tich
-SELECT quoc_tich FROM nguoi_to_chuc WHERE tuoi > '45' INTERSECT SELECT quoc_tich FROM nguoi_to_chuc WHERE tuoi < '35'
-SELECT T1.chu_de_bua_tiec, T3.ten FROM bua_tiec AS T1 JOIN chu_tiec AS T2 ON T1.id_bua_tiec = T2.id_bua_tiec JOIN nguoi_to_chuc AS T3 ON T2.id_nguoi_to_chuc = T3.id_nguoi_to_chuc
-SELECT T1.chu_de_bua_tiec, T3.ten FROM bua_tiec AS T1 JOIN chu_tiec AS T2 ON T1.id_bua_tiec = T2.id_bua_tiec JOIN nguoi_to_chuc AS T3 ON T2.id_nguoi_to_chuc = T3.id_nguoi_to_chuc
-SELECT T1.dia_diem, T3.ten FROM bua_tiec AS T1 JOIN chu_tiec AS T2 ON T1.id_bua_tiec = T2.id_bua_tiec JOIN nguoi_to_chuc AS T3 ON T2.id_nguoi_to_chuc = T3.id_nguoi_to_chuc ORDER BY T3.tuoi ASC
-SELECT T1.dia_diem, T3.ten FROM bua_tiec AS T1 JOIN chu_tiec AS T2 ON T1.id_bua_tiec = T2.id_bua_tiec JOIN nguoi_to_chuc AS T3 ON T2.id_nguoi_to_chuc = T3.id_nguoi_to_chuc ORDER BY T3.tuoi ASC
-SELECT T1.dia_diem FROM bua_tiec AS T1 JOIN chu_tiec AS T2 ON T1.id_bua_tiec = T2.id_bua_tiec JOIN nguoi_to_chuc AS T3 ON T2.id_nguoi_to_chuc = T3.id_nguoi_to_chuc WHERE T3.tuoi > '50'
-SELECT bua_tiec.dia_diem FROM bua_tiec JOIN chu_tiec ON bua_tiec.id_bua_tiec = chu_tiec.id_bua_tiec JOIN nguoi_to_chuc ON chu_tiec.id_nguoi_to_chuc = nguoi_to_chuc.id_nguoi_to_chuc WHERE nguoi_to_chuc.tuoi > '50'
-SELECT nguoi_to_chuc.ten FROM bua_tiec JOIN chu_tiec ON bua_tiec.id_bua_tiec = chu_tiec.id_bua_tiec JOIN nguoi_to_chuc ON chu_tiec.id_nguoi_to_chuc = nguoi_to_chuc.id_nguoi_to_chuc WHERE bua_tiec.so_luong_nguoi_to_chuc > 20
-SELECT T3.ten FROM bua_tiec AS T1 JOIN chu_tiec AS T2 ON T1.id_bua_tiec = T2.id_bua_tiec JOIN nguoi_to_chuc AS T3 ON T2.id_nguoi_to_chuc = T3.id_nguoi_to_chuc WHERE T1.so_luong_nguoi_to_chuc > 20
-SELECT ten, quoc_tich FROM nguoi_to_chuc JOIN chu_tiec ON nguoi_to_chuc.id_nguoi_to_chuc = chu_tiec.id_nguoi_to_chuc ORDER BY tuoi DESC LIMIT 1
-SELECT ten, quoc_tich FROM nguoi_to_chuc ORDER BY tuoi DESC LIMIT 1
-SELECT ten FROM nguoi_to_chuc WHERE id_nguoi_to_chuc NOT IN (SELECT id_nguoi_to_chuc FROM chu_tiec)
-SELECT ten FROM nguoi_to_chuc WHERE id_nguoi_to_chuc NOT IN (SELECT id_nguoi_to_chuc FROM chu_tiec)
-SELECT COUNT(*) FROM dien_thoai
-SELECT ten FROM dien_thoai ORDER BY gia_ban ASC
-SELECT bo_nho_theo_g, nha_mang FROM dien_thoai
-SELECT DISTINCT nha_mang FROM dien_thoai WHERE bo_nho_theo_g > 32
-SELECT ten FROM dien_thoai WHERE nha_mang = 'Sprint' OR nha_mang = 'Tmobile'
-SELECT nha_mang FROM dien_thoai ORDER BY gia_ban DESC LIMIT 1
-SELECT T1.nha_mang , COUNT ( * ) FROM dien_thoai AS T1 JOIN thi_truong_dien_thoai AS T2 ON T1.id_dien_thoai = T2.id_dien_thoai GROUP BY T1.nha_mang
-SELECT nha_mang FROM dien_thoai GROUP BY nha_mang ORDER BY COUNT(*) DESC LIMIT 1
-SELECT nha_mang FROM dien_thoai WHERE bo_nho_theo_g < 32 GROUP BY nha_mang INTERSECT SELECT nha_mang FROM dien_thoai WHERE bo_nho_theo_g > 64 GROUP BY nha_mang
-SELECT T1.ten , T3.khu_vuc FROM dien_thoai AS T1 JOIN thi_truong_dien_thoai AS T2 ON T1.id_dien_thoai = T2.id_dien_thoai JOIN thi_truong AS T3 ON T2.id_thi_truong = T3.id_thi_truong
-SELECT dien_thoai.ten , thi_truong.khu_vuc FROM dien_thoai JOIN thi_truong_dien_thoai ON dien_thoai.id_dien_thoai = thi_truong_dien_thoai.id_dien_thoai JOIN thi_truong ON thi_truong_dien_thoai.id_thi_truong = thi_truong.id_thi_truong ORDER BY thi_truong.danh_gia ASC
-SELECT T1.ten FROM dien_thoai AS T1 JOIN thi_truong_dien_thoai AS T2 ON T1.id_dien_thoai = T2.id_dien_thoai JOIN thi_truong AS T3 ON T2.id_thi_truong = T3.id_thi_truong WHERE T3.so_luong_cua_hang > 50
-SELECT T1.ten, SUM(T2.so_luong_co_phieu) FROM dien_thoai AS T1 JOIN thi_truong_dien_thoai AS T2 ON T1.id_dien_thoai = T2.id_dien_thoai GROUP BY T1.id_dien_thoai, T1.ten
-SELECT ten FROM dien_thoai JOIN thi_truong_dien_thoai ON dien_thoai.id_dien_thoai = thi_truong_dien_thoai.id_dien_thoai GROUP BY dien_thoai.id_dien_thoai HAVING SUM(thi_truong_dien_thoai.so_luong_co_phieu) > 2000 ORDER BY SUM(thi_truong_dien_thoai.so_luong_co_phieu) DESC
-SELECT ten FROM dien_thoai WHERE id_dien_thoai NOT IN (SELECT id_dien_thoai FROM thi_truong_dien_thoai)
-SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc
-SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc
-SELECT kieu_du_lieu_thuoc_tinh FROM dinh_nghia_thuoc_tinh GROUP BY kieu_du_lieu_thuoc_tinh HAVING COUNT(*) > 3
-SELECT kieu_du_lieu_thuoc_tinh FROM dinh_nghia_thuoc_tinh GROUP BY kieu_du_lieu_thuoc_tinh HAVING COUNT(*) > 3
-SELECT kieu_du_lieu_thuoc_tinh FROM dinh_nghia_thuoc_tinh WHERE ten_thuoc_tinh = 'Xanh'
-SELECT kieu_du_lieu_thuoc_tinh FROM dinh_nghia_thuoc_tinh WHERE ten_thuoc_tinh = 'Xanh'
-SELECT ten_cap_do_cua_danh_muc, cap_do_cua_danh_muc FROM cau_truc_danh_muc WHERE cap_do_cua_danh_muc BETWEEN 5 AND 10
-SELECT ten_cap_do_cua_danh_muc, cap_do_cua_danh_muc FROM cau_truc_danh_muc WHERE cap_do_cua_danh_muc >= 5 AND cap_do_cua_danh_muc <= 10
-SELECT nha_xuat_ban_danh_muc FROM danh_muc WHERE ten_danh_muc LIKE '%Murray%'
-SELECT nha_xuat_ban_danh_muc FROM danh_muc WHERE nha_xuat_ban_danh_muc LIKE '%Murray%'
-SELECT nha_xuat_ban_danh_muc , COUNT(*) AS so_luong FROM danh_muc GROUP BY nha_xuat_ban_danh_muc ORDER BY so_luong DESC LIMIT 1
-SELECT nha_xuat_ban_danh_muc FROM danh_muc GROUP BY nha_xuat_ban_danh_muc ORDER BY COUNT(*) DESC LIMIT 1
-SELECT ten_danh_muc, ngay_xuat_ban FROM danh_muc JOIN cau_truc_danh_muc ON danh_muc.id_danh_muc = cau_truc_danh_muc.id_danh_muc WHERE cau_truc_danh_muc.cap_do_cua_danh_muc > 5
-SELECT ten_danh_muc, ngay_xuat_ban FROM danh_muc JOIN cau_truc_danh_muc ON danh_muc.id_danh_muc = cau_truc_danh_muc.id_danh_muc WHERE cau_truc_danh_muc.cap_do_cua_danh_muc > 5
-SELECT T1.ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc AS T1 JOIN thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc AS T2 ON T1.id_muc_nhap_cua_danh_muc = T2.id_muc_nhap_cua_danh_muc GROUP BY T2.id_thuoc_tinh ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T3.ten_muc_nhap_cua_danh_muc FROM thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc AS T1 JOIN dinh_nghia_thuoc_tinh AS T2 ON T1.id_thuoc_tinh = T2.id_thuoc_tinh JOIN noi_dung_danh_muc AS T3 ON T1.id_muc_nhap_cua_danh_muc = T3.id_muc_nhap_cua_danh_muc GROUP BY T2.ten_thuoc_tinh HAVING COUNT(*) = (SELECT MAX(cnt) FROM (SELECT COUNT(*) AS cnt FROM thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc GROUP BY id_thuoc_tinh) AS sub)
-SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc ORDER BY gia_tinh_theo_euro DESC LIMIT 1
-SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc ORDER BY gia_tinh_theo_do_la DESC LIMIT 1
-SELECT T2.ten_cap_do_cua_danh_muc FROM noi_dung_danh_muc AS T1 JOIN cau_truc_danh_muc AS T2 ON T1.cap_do_cua_danh_muc = T2.cap_do_cua_danh_muc ORDER BY T1.gia_tinh_theo_do_la ASC LIMIT 1
-SELECT T2.ten_cap_do_cua_danh_muc FROM noi_dung_danh_muc AS T1 JOIN cau_truc_danh_muc AS T2 ON T1.cap_do_cua_danh_muc = T2.cap_do_cua_danh_muc ORDER BY T1.gia_tinh_theo_usd ASC LIMIT 1
-SELECT AVG(T2.gia_tinh_theo_euro), MIN(T2.gia_tinh_theo_euro) FROM danh_muc AS T1 JOIN noi_dung_danh_muc AS T2 ON T1.id_danh_muc = T2.id_danh_muc
-SELECT AVG(gia_tinh_theo_euro), MIN(gia_tinh_theo_euro) FROM noi_dung_danh_muc
-SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc ORDER BY gia_tinh_theo_do_la DESC LIMIT 1
-SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc ORDER BY gia_tinh_theo_do_la DESC LIMIT 1
-SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc ORDER BY dung_tich ASC LIMIT 1
-SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc ORDER BY dung_tich ASC LIMIT 1
-SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc WHERE so_luong_co_phieu_cua_san_pham LIKE '2%'
-SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc WHERE so_luong_co_phieu_cua_san_pham LIKE '2%'
-SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc JOIN cau_truc_danh_muc ON noi_dung_danh_muc.cap_do_cua_danh_muc = cau_truc_danh_muc.cap_do_cua_danh_muc WHERE cau_truc_danh_muc.cap_do_cua_danh_muc = 8
-SELECT T1.ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc AS T1 JOIN cau_truc_danh_muc AS T2 ON T1.id_danh_muc = T2.id_danh_muc WHERE T2.cap_do_cua_danh_muc = 8
-SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc WHERE chieu_dai < '3' OR chieu_rong > '5'
-SELECT T2.ten_danh_muc FROM noi_dung_danh_muc AS T1 JOIN danh_muc AS T2 ON T1.id_danh_muc = T2.id_danh_muc WHERE T1.chieu_dai < 3 OR T1.chieu_rong > 5
-SELECT T1.id_thuoc_tinh , T1.ten_thuoc_tinh FROM dinh_nghia_thuoc_tinh AS T1 JOIN thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc AS T2 ON T1.id_thuoc_tinh = T2.id_thuoc_tinh WHERE T2.gia_tri_thuoc_tinh = '0'
-SELECT T1.id_thuoc_tinh , T1.ten_thuoc_tinh FROM dinh_nghia_thuoc_tinh AS T1 JOIN thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc AS T2 ON T1.id_thuoc_tinh = T2.id_thuoc_tinh WHERE T2.gia_tri_thuoc_tinh = '0'
-SELECT ten_muc_nhap_cua_danh_muc, dung_tich FROM noi_dung_danh_muc WHERE gia_tinh_theo_do_la > 700
-SELECT danh_muc.ten_danh_muc, noi_dung_danh_muc.dung_tich FROM noi_dung_danh_muc JOIN danh_muc ON noi_dung_danh_muc.id_danh_muc = danh_muc.id_danh_muc WHERE noi_dung_danh_muc.gia_tinh_theo_do_la > 700
-SELECT DATE(ngay_thay_doi_moi_nhat_duoc_thuc_hien) FROM danh_muc GROUP BY DATE(ngay_thay_doi_moi_nhat_duoc_thuc_hien) HAVING COUNT(*) > 1
-SELECT ngay_thay_doi_moi_nhat_duoc_thuc_hien FROM danh_muc GROUP BY ngay_thay_doi_moi_nhat_duoc_thuc_hien HAVING COUNT(*) > 1
-SELECT COUNT(*) FROM noi_dung_danh_muc
-SELECT COUNT(*) FROM noi_dung_danh_muc
-SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc WHERE id_muc_nhap_tiep_theo > 8
-SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc WHERE id_muc_nhap_tiep_theo > 8
-SELECT COUNT(*) FROM nha_khoa_hoc
-SELECT COUNT(*) FROM nha_khoa_hoc
-SELECT SUM(so_gio) FROM du_an
-SELECT SUM(so_gio) FROM du_an
-SELECT COUNT(DISTINCT phan_cong_du_an.nha_khoa_hoc) FROM phan_cong_du_an JOIN nha_khoa_hoc ON phan_cong_du_an.nha_khoa_hoc = nha_khoa_hoc.ssn
-SELECT COUNT(DISTINCT nha_khoa_hoc) FROM phan_cong_du_an
-SELECT COUNT(*) FROM du_an
-SELECT COUNT(*) FROM du_an
-SELECT AVG(so_gio) FROM du_an
-SELECT AVG(so_gio) FROM du_an
-SELECT ten FROM du_an ORDER BY so_gio DESC LIMIT 1
-SELECT ten FROM du_an ORDER BY so_gio DESC LIMIT 1
-SELECT ten FROM du_an WHERE so_gio > (SELECT AVG(so_gio) FROM du_an)
-SELECT ten FROM du_an WHERE so_gio > (SELECT AVG(so_gio) FROM du_an)
-SELECT du_an.ten, du_an.so_gio FROM du_an JOIN phan_cong_du_an ON du_an.ma = phan_cong_du_an.du_an GROUP BY du_an.ma ORDER BY COUNT(*) DESC LIMIT 1
-SELECT du_an.ten, du_an.so_gio FROM phan_cong_du_an JOIN du_an ON phan_cong_du_an.du_an = du_an.ma GROUP BY du_an.ma ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.ten FROM du_an AS T1 JOIN phan_cong_du_an AS T2 ON T1.ma = T2.du_an JOIN nha_khoa_hoc AS T3 ON T2.nha_khoa_hoc = T3.ssn WHERE T3.ten LIKE '%Smith%'
-SELECT T3.ten FROM nha_khoa_hoc AS T1 JOIN phan_cong_du_an AS T2 ON T1.ssn = T2.nha_khoa_hoc JOIN du_an AS T3 ON T2.du_an = T3.ma WHERE T1.ten LIKE '%Smith%'
-SELECT SUM(du_an.so_gio) FROM du_an JOIN phan_cong_du_an ON du_an.ma = phan_cong_du_an.du_an JOIN nha_khoa_hoc ON phan_cong_du_an.nha_khoa_hoc = nha_khoa_hoc.ssn WHERE nha_khoa_hoc.ten IN ('Michael Rogers', 'Carol Smith')
-SELECT SUM(T3.so_gio) FROM nha_khoa_hoc AS T1 JOIN phan_cong_du_an AS T2 ON T1.ssn = T2.nha_khoa_hoc JOIN du_an AS T3 ON T2.du_an = T3.ma WHERE T1.ten IN ('Michael Rogers', 'Carol Smith')
-SELECT ten FROM du_an WHERE so_gio >= 100 AND so_gio <= 300
-SELECT ten FROM du_an WHERE so_gio BETWEEN 100 AND 300
-SELECT ten FROM nha_khoa_hoc JOIN phan_cong_du_an ON nha_khoa_hoc.ssn = phan_cong_du_an.nha_khoa_hoc JOIN du_an ON phan_cong_du_an.du_an = du_an.ma WHERE du_an.ten = 'Vật chất của thời gian' INTERSECT SELECT ten FROM nha_khoa_hoc JOIN phan_cong_du_an ON nha_khoa_hoc.ssn = phan_cong_du_an.nha_khoa_hoc JOIN du_an ON phan_cong_du_an.du_an = du_an.ma WHERE du_an.ten = 'Hiện tượng thị sai kỳ bí'
-SELECT ten FROM nha_khoa_hoc WHERE ssn IN (SELECT nha_khoa_hoc FROM phan_cong_du_an JOIN du_an ON phan_cong_du_an.du_an = du_an.ma WHERE du_an.ten = 'Vật chất của thời gian' INTERSECT SELECT nha_khoa_hoc FROM phan_cong_du_an JOIN du_an ON phan_cong_du_an.du_an = du_an.ma WHERE du_an.ten = 'Hiện tượng thị sai kỳ bí')
-SELECT ten FROM nha_khoa_hoc ORDER BY ten ASC
-SELECT ten FROM nha_khoa_hoc ORDER BY ten ASC
-SELECT du_an.ma, COUNT(*) AS so_luong_nha_khoa_hoc FROM du_an JOIN phan_cong_du_an ON du_an.ma = phan_cong_du_an.du_an GROUP BY du_an.ma
-SELECT du_an.ten, COUNT(*) FROM du_an JOIN phan_cong_du_an ON du_an.ma = phan_cong_du_an.du_an GROUP BY du_an.ma
-SELECT COUNT(DISTINCT nha_khoa_hoc.ssn) FROM nha_khoa_hoc JOIN phan_cong_du_an ON nha_khoa_hoc.ssn = phan_cong_du_an.nha_khoa_hoc JOIN du_an ON phan_cong_du_an.du_an = du_an.ma WHERE du_an.so_gio > 300
-SELECT T1.ten, COUNT(*) FROM du_an AS T1 JOIN phan_cong_du_an AS T2 ON T1.ma = T2.du_an WHERE T1.so_gio > 300 GROUP BY T1.ma
-SELECT T1.ten, COUNT(*) FROM nha_khoa_hoc AS T1 JOIN phan_cong_du_an AS T2 ON T1.ssn = T2.nha_khoa_hoc JOIN du_an AS T3 ON T3.ma = T2.du_an GROUP BY T1.ssn
-SELECT T1.ten , COUNT(*) AS so_du_an FROM nha_khoa_hoc AS T1 JOIN phan_cong_du_an AS T2 ON T1.ssn = T2.nha_khoa_hoc JOIN du_an AS T3 ON T2.du_an = T3.ma GROUP BY T1.ssn
-SELECT T1.ssn, T1.ten FROM nha_khoa_hoc AS T1 JOIN phan_cong_du_an AS T2 ON T1.ssn = T2.nha_khoa_hoc JOIN du_an AS T3 ON T2.du_an = T3.ma WHERE T3.so_gio = (SELECT MAX(so_gio) FROM du_an)
-SELECT nha_khoa_hoc.ssn, nha_khoa_hoc.ten FROM nha_khoa_hoc JOIN phan_cong_du_an ON nha_khoa_hoc.ssn = phan_cong_du_an.nha_khoa_hoc JOIN du_an ON phan_cong_du_an.du_an = du_an.ma WHERE du_an.so_gio = (SELECT MAX(so_gio) FROM du_an)
-SELECT DISTINCT nha_khoa_hoc.ten FROM nha_khoa_hoc JOIN phan_cong_du_an ON nha_khoa_hoc.ssn = phan_cong_du_an.nha_khoa_hoc
-SELECT ten FROM nha_khoa_hoc JOIN phan_cong_du_an ON nha_khoa_hoc.ssn = phan_cong_du_an.nha_khoa_hoc
-SELECT ten FROM du_an WHERE ma NOT IN (SELECT du_an FROM phan_cong_du_an)
-SELECT ten FROM du_an WHERE ma NOT IN (SELECT du_an FROM phan_cong_du_an)
-SELECT ten FROM nha_khoa_hoc WHERE ssn NOT IN (SELECT nha_khoa_hoc FROM phan_cong_du_an)
-SELECT ten FROM nha_khoa_hoc WHERE ssn NOT IN (SELECT nha_khoa_hoc FROM phan_cong_du_an)
-SELECT COUNT(*) FROM nha_khoa_hoc EXCEPT SELECT nha_khoa_hoc FROM phan_cong_du_an
-SELECT COUNT(*) FROM nha_khoa_hoc LEFT JOIN phan_cong_du_an ON nha_khoa_hoc.ssn = phan_cong_du_an.nha_khoa_hoc WHERE phan_cong_du_an.du_an IS NULL
+SELECT quoc_gia.ten_quoc_gia , COUNT ( * ) FROM cau_thu JOIN quoc_gia ON cau_thu.quoc_gia = quoc_gia.id_quoc_gia GROUP BY quoc_gia.id_quoc_gia
 SELECT 1
-SELECT ten FROM nha_khoa_hoc WHERE ssn NOT IN (SELECT nha_khoa_hoc FROM phan_cong_du_an WHERE du_an = (SELECT ma FROM du_an ORDER BY so_gio DESC LIMIT 1))
-SELECT T1.ten, T3.ten, T3.so_gio FROM nha_khoa_hoc AS T1 JOIN phan_cong_du_an AS T2 ON T1.ssn = T2.nha_khoa_hoc JOIN du_an AS T3 ON T2.du_an = T3.ma ORDER BY T3.ten, T1.ten
-SELECT T1.ten, T3.ten, T3.so_gio FROM nha_khoa_hoc AS T1 JOIN phan_cong_du_an AS T2 ON T1.ssn = T2.nha_khoa_hoc JOIN du_an AS T3 ON T2.du_an = T3.ma ORDER BY T3.ten, T1.ten
-SELECT du_an.ten, nha_khoa_hoc.ten FROM du_an JOIN phan_cong_du_an ON du_an.ma = phan_cong_du_an.du_an JOIN nha_khoa_hoc ON phan_cong_du_an.nha_khoa_hoc = nha_khoa_hoc.ssn ORDER BY du_an.so_gio ASC LIMIT 1
-SELECT du_an.ten, nha_khoa_hoc.ten FROM du_an JOIN phan_cong_du_an ON du_an.ma = phan_cong_du_an.du_an JOIN nha_khoa_hoc ON phan_cong_du_an.nha_khoa_hoc = nha_khoa_hoc.ssn ORDER BY du_an.so_gio ASC LIMIT 1
-SELECT COUNT(*) FROM tau
-SELECT COUNT(*) FROM tau
-SELECT ten FROM tau ORDER BY trong_tai ASC
-SELECT ten FROM tau ORDER BY trong_tai ASC
-SELECT loai, quoc_tich FROM tau
-SELECT quoc_tich, loai FROM tau
-SELECT ten FROM tau WHERE quoc_tich != 'Hoa Kỳ'
-SELECT ten FROM tau WHERE quoc_tich != 'Hoa Kỳ'
-SELECT ten FROM tau WHERE quoc_tich = 'Hoa Kỳ' OR quoc_tich = 'Vương quốc Anh'
-SELECT ten FROM tau WHERE quoc_tich = 'Mỹ' OR quoc_tich = 'Anh'
-SELECT ten FROM tau ORDER BY trong_tai DESC LIMIT 1
-SELECT ten FROM tau ORDER BY trong_tai DESC LIMIT 1
-SELECT loai , COUNT ( * ) FROM tau GROUP BY loai
-SELECT loai , COUNT ( * ) FROM tau GROUP BY loai
-SELECT loai FROM tau GROUP BY loai ORDER BY COUNT(*) DESC LIMIT 1
-SELECT loai FROM tau GROUP BY loai ORDER BY COUNT(*) DESC LIMIT 1
-SELECT quoc_tich FROM tau GROUP BY quoc_tich HAVING COUNT(*) > 2
-SELECT quoc_tich FROM tau GROUP BY quoc_tich HAVING COUNT(*) > 2
-SELECT loai , AVG(trong_tai) FROM tau GROUP BY loai
-SELECT loai, AVG(trong_tai) FROM tau GROUP BY loai
-SELECT tau.ten, nhiem_vu.ma, nhiem_vu.so_phan FROM tau JOIN nhiem_vu ON tau.id_tau = nhiem_vu.id_tau
-SELECT nhiem_vu.ma, nhiem_vu.so_phan, tau.ten FROM nhiem_vu JOIN tau ON nhiem_vu.id_tau = tau.id_tau
-SELECT ten FROM tau JOIN nhiem_vu ON tau.id_tau = nhiem_vu.id_tau WHERE nhiem_vu.duoc_dua_ra_nam_nao > 1928
-SELECT ten FROM tau JOIN nhiem_vu ON tau.id_tau = nhiem_vu.id_tau WHERE nhiem_vu.duoc_dua_ra_nam_nao > 1928
-SELECT nhiem_vu.id_nhiem_vu, nhiem_vu.id_tau, nhiem_vu.ma, nhiem_vu.duoc_dua_ra_nam_nao, nhiem_vu.dia_diem, nhiem_vu.toc_do_tinh_theo_nut, nhiem_vu.so_phan FROM nhiem_vu JOIN tau ON nhiem_vu.id_tau = tau.id_tau WHERE tau.quoc_tich = 'Hoa Kỳ'
-SELECT nhiem_vu.ma FROM nhiem_vu JOIN tau ON nhiem_vu.id_tau = tau.id_tau WHERE tau.quoc_tich = 'Hoa Kỳ'
-SELECT ten FROM tau WHERE id_tau NOT IN (SELECT id_tau FROM nhiem_vu)
-SELECT ten FROM tau WHERE id_tau NOT IN (SELECT id_tau FROM nhiem_vu)
-SELECT loai FROM tau GROUP BY loai HAVING SUM(CASE WHEN trong_tai > 6000 THEN 1 ELSE 0 END) > 0 AND SUM(CASE WHEN trong_tai < 4000 THEN 1 ELSE 0 END) > 0
-SELECT loai FROM tau WHERE trong_tai > 6000 INTERSECT SELECT loai FROM tau WHERE trong_tai < 4000
-SELECT COUNT(*) FROM ca_si
-SELECT COUNT(*) FROM ca_si
-SELECT ten FROM ca_si ORDER BY gia_tri_tai_san_rong ASC
-SELECT ten FROM ca_si ORDER BY gia_tri_tai_san_rong ASC
-SELECT nam_sinh, quoc_tich FROM ca_si
-SELECT nam_sinh, quoc_tich FROM ca_si
-SELECT ten FROM ca_si WHERE quoc_tich != 'Pháp'
-SELECT ten FROM ca_si WHERE quoc_tich != 'Pháp'
-SELECT ten FROM ca_si WHERE nam_sinh = 1948 OR nam_sinh = 1949
-SELECT ten FROM ca_si WHERE nam_sinh = 1948 OR nam_sinh = 1949
-SELECT ten FROM ca_si ORDER BY gia_tri_tai_san_rong DESC LIMIT 1
-SELECT ten FROM ca_si ORDER BY gia_tri_tai_san_rong DESC LIMIT 1
-SELECT quoc_tich, COUNT(*) FROM ca_si GROUP BY quoc_tich
-SELECT quoc_tich , COUNT ( * ) FROM ca_si GROUP BY quoc_tich
-SELECT quoc_tich FROM ca_si GROUP BY quoc_tich ORDER BY COUNT(*) DESC LIMIT 1
-SELECT quoc_tich FROM ca_si GROUP BY quoc_tich ORDER BY COUNT(*) DESC LIMIT 1
-SELECT quoc_tich, MAX(gia_tri_tai_san_rong) FROM ca_si GROUP BY quoc_tich
-SELECT quoc_tich, MAX(gia_tri_tai_san_rong) FROM ca_si GROUP BY quoc_tich
-SELECT bai_hat.tieu_de, ca_si.ten FROM bai_hat JOIN ca_si ON bai_hat.id_ca_si = ca_si.id_ca_si
-SELECT bai_hat.tieu_de, ca_si.ten FROM bai_hat JOIN ca_si ON bai_hat.id_ca_si = ca_si.id_ca_si
-SELECT DISTINCT ca_si.ten FROM ca_si JOIN bai_hat ON ca_si.id_ca_si = bai_hat.id_ca_si WHERE bai_hat.doanh_so > 300000
-SELECT DISTINCT ca_si.ten FROM ca_si JOIN bai_hat ON ca_si.id_ca_si = bai_hat.id_ca_si WHERE bai_hat.doanh_so > 300000
-SELECT T1.ten FROM ca_si AS T1 JOIN bai_hat AS T2 ON T1.id_ca_si = T2.id_ca_si GROUP BY T1.id_ca_si HAVING COUNT(*) > 1
-SELECT T1.ten FROM ca_si AS T1 JOIN bai_hat AS T2 ON T1.id_ca_si = T2.id_ca_si GROUP BY T1.id_ca_si HAVING COUNT(*) > 1
-SELECT T1.ten , SUM ( T2.doanh_so ) FROM ca_si AS T1 JOIN bai_hat AS T2 ON T1.id_ca_si = T2.id_ca_si GROUP BY T1.id_ca_si
-SELECT T1.id_ca_si, T1.ten, SUM(T2.doanh_so) FROM ca_si AS T1 JOIN bai_hat AS T2 ON T1.id_ca_si = T2.id_ca_si GROUP BY T1.id_ca_si
-SELECT ten FROM ca_si WHERE id_ca_si NOT IN (SELECT id_ca_si FROM bai_hat)
-SELECT ten FROM ca_si WHERE id_ca_si NOT IN (SELECT id_ca_si FROM bai_hat)
-SELECT quoc_tich FROM ca_si WHERE nam_sinh < 1945 OR nam_sinh > 1955
-SELECT quoc_tich FROM ca_si WHERE nam_sinh < 1945 AND nam_sinh > 1955
-SELECT COUNT(*) FROM cau_lac_bo
-SELECT COUNT(*) FROM cau_lac_bo
-SELECT khu_vuc FROM cau_lac_bo ORDER BY khu_vuc ASC
-SELECT DISTINCT khu_vuc FROM cau_lac_bo ORDER BY khu_vuc ASC
-SELECT AVG(thu_hang_cua_cau_lac_bo.vang) FROM cau_lac_bo JOIN thu_hang_cua_cau_lac_bo ON cau_lac_bo.id_cau_lac_bo = thu_hang_cua_cau_lac_bo.id_cau_lac_bo
-SELECT AVG(thu_hang_cua_cau_lac_bo.vang) FROM thu_hang_cua_cau_lac_bo
-SELECT loai_cuoc_thi, quoc_gia FROM cuoc_thi
-SELECT loai_cuoc_thi, quoc_gia FROM cuoc_thi
-SELECT nam FROM cuoc_thi WHERE loai_cuoc_thi != 'Giải đấu'
-SELECT nam FROM cuoc_thi WHERE loai_cuoc_thi != 'Giải đấu'
-SELECT thu_hang_cua_cau_lac_bo.id_cau_lac_bo , SUM ( thu_hang_cua_cau_lac_bo.vang ) FROM thu_hang_cua_cau_lac_bo JOIN cau_lac_bo ON thu_hang_cua_cau_lac_bo.id_cau_lac_bo = cau_lac_bo.id_cau_lac_bo GROUP BY thu_hang_cua_cau_lac_bo.id_cau_lac_bo ORDER BY SUM ( thu_hang_cua_cau_lac_bo.vang ) DESC LIMIT 1 UNION SELECT thu_hang_cua_cau_lac_bo.id_cau_lac_bo , SUM ( thu_hang_cua_cau_lac_bo.vang ) FROM thu_hang_cua_cau_lac_bo JOIN cau_lac_bo ON thu_hang_cua_cau_lac_bo.id_cau_lac_bo = cau_lac_bo.id_cau_lac_bo GROUP BY thu_hang_cua_cau_lac_bo.id_cau_lac_bo ORDER BY SUM ( thu_hang_cua_cau_lac_bo.vang ) ASC LIMIT 1
 SELECT 1
-SELECT COUNT(*) FROM cau_lac_bo JOIN thu_hang_cua_cau_lac_bo ON cau_lac_bo.id_cau_lac_bo = thu_hang_cua_cau_lac_bo.id_cau_lac_bo WHERE thu_hang_cua_cau_lac_bo.tong < 10
-SELECT COUNT(*) FROM cau_lac_bo JOIN thu_hang_cua_cau_lac_bo ON cau_lac_bo.id_cau_lac_bo = thu_hang_cua_cau_lac_bo.id_cau_lac_bo WHERE thu_hang_cua_cau_lac_bo.tong < 10
-SELECT ten FROM cau_lac_bo ORDER BY nam_thanh_lap ASC
-SELECT ten FROM cau_lac_bo ORDER BY nam_thanh_lap ASC
-SELECT ten FROM cau_lac_bo ORDER BY ten DESC
-SELECT ten FROM cau_lac_bo ORDER BY ten DESC
-SELECT cau_lac_bo.ten, cau_thu.id_cau_thu FROM cau_thu JOIN cau_lac_bo ON cau_thu.id_cau_lac_bo = cau_lac_bo.id_cau_lac_bo
-SELECT cau_thu.id_cau_thu , cau_lac_bo.ten FROM cau_thu JOIN cau_lac_bo ON cau_thu.id_cau_lac_bo = cau_lac_bo.id_cau_lac_bo
-SELECT DISTINCT T2.ten FROM cau_thu AS T1 JOIN cau_lac_bo AS T2 ON T1.id_cau_lac_bo = T2.id_cau_lac_bo WHERE T1.vi_tri = 'Cánh phải'
-SELECT cau_lac_bo.ten FROM cau_thu JOIN cau_lac_bo ON cau_thu.id_cau_lac_bo = cau_lac_bo.id_cau_lac_bo WHERE cau_thu.vi_tri = 'Cánh phải'
-SELECT AVG(cau_thu.diem_so) FROM cau_thu JOIN cau_lac_bo ON cau_thu.id_cau_lac_bo = cau_lac_bo.id_cau_lac_bo WHERE cau_lac_bo.ten = 'AIB'
-SELECT AVG(cau_thu.diem_so) FROM cau_thu JOIN cau_lac_bo ON cau_thu.id_cau_lac_bo = cau_lac_bo.id_cau_lac_bo WHERE cau_lac_bo.ten = 'AIB'
-SELECT vi_tri, AVG(diem_so) FROM cau_thu GROUP BY vi_tri
-SELECT vi_tri, AVG(diem_so) FROM cau_thu GROUP BY vi_tri
-SELECT vi_tri FROM cau_thu GROUP BY vi_tri HAVING AVG(diem_so) > 20
-SELECT vi_tri FROM cau_thu GROUP BY vi_tri HAVING AVG(diem_so) > 20
-SELECT loai_cuoc_thi , COUNT ( * ) FROM cuoc_thi AS T1 GROUP BY loai_cuoc_thi
-SELECT loai_cuoc_thi, COUNT(*) FROM cuoc_thi GROUP BY loai_cuoc_thi
-SELECT loai_cuoc_thi, COUNT(*) AS so_lan FROM cuoc_thi GROUP BY loai_cuoc_thi ORDER BY so_lan DESC LIMIT 1
-SELECT loai_cuoc_thi FROM cuoc_thi GROUP BY loai_cuoc_thi ORDER BY COUNT(*) DESC LIMIT 1
-SELECT loai_cuoc_thi FROM cuoc_thi GROUP BY loai_cuoc_thi HAVING COUNT(*) <= 5
-SELECT loai_cuoc_thi FROM cuoc_thi GROUP BY loai_cuoc_thi ORDER BY COUNT(*) DESC LIMIT 5
-SELECT ten FROM cau_lac_bo WHERE id_cau_lac_bo NOT IN (SELECT id_cau_lac_bo FROM cau_thu)
-SELECT ten FROM cau_lac_bo WHERE id_cau_lac_bo NOT IN (SELECT DISTINCT id_cau_lac_bo FROM cau_thu)
-SELECT vi_tri FROM cau_thu GROUP BY vi_tri HAVING COUNT(CASE WHEN diem_so > 20 THEN 1 END) > 0 AND COUNT(CASE WHEN diem_so < 10 THEN 1 END) > 0
-SELECT vi_tri FROM cau_thu WHERE diem_so > 20 INTERSECT SELECT vi_tri FROM cau_thu WHERE diem_so < 10
-SELECT SUM(diem_so) FROM cau_thu
-SELECT SUM(diem_so) FROM cau_thu
-SELECT COUNT(DISTINCT vi_tri) FROM cau_thu
-SELECT COUNT(DISTINCT vi_tri) FROM cau_thu
-SELECT ten FROM cau_thu WHERE diem_so > (SELECT AVG(diem_so) FROM cau_thu)
-SELECT ten FROM cau_thu WHERE diem_so > (SELECT AVG(diem_so) FROM cau_thu)
-SELECT vi_tri, COUNT(*) FROM cau_thu WHERE diem_so < 30 GROUP BY vi_tri
-SELECT vi_tri, COUNT(*) FROM cau_thu WHERE diem_so < 30 GROUP BY vi_tri
-SELECT quoc_gia FROM cuoc_thi GROUP BY quoc_gia ORDER BY COUNT(*) DESC LIMIT 1
-SELECT quoc_gia FROM cuoc_thi GROUP BY quoc_gia ORDER BY COUNT(*) DESC LIMIT 1
-SELECT quoc_gia FROM cuoc_thi WHERE loai_cuoc_thi = 'Giao hữu' INTERSECT SELECT quoc_gia FROM cuoc_thi WHERE loai_cuoc_thi = 'Giải đấu'
-SELECT quoc_gia FROM cuoc_thi WHERE loai_cuoc_thi = 'Giao hữu' INTERSECT SELECT quoc_gia FROM cuoc_thi WHERE loai_cuoc_thi = 'Giải đấu'
-SELECT quoc_gia FROM cuoc_thi WHERE quoc_gia NOT IN (SELECT quoc_gia FROM cuoc_thi WHERE loai_cuoc_thi = 'Giao hung') GROUP BY quoc_gia
-SELECT quoc_gia FROM cuoc_thi EXCEPT SELECT quoc_gia FROM cuoc_thi WHERE loai_cuoc_thi = 'Giao hữu'
-SELECT COUNT(*) FROM su_kien
-SELECT ten FROM su_kien ORDER BY CAST(nam AS INTEGER) DESC
-SELECT ten FROM su_kien ORDER BY CAST(nam AS INTEGER) DESC LIMIT 1
-SELECT COUNT(*) FROM san_van_dong
-SELECT ten FROM san_van_dong ORDER BY suc_chua DESC LIMIT 1
-SELECT ten FROM san_van_dong WHERE suc_chua < (SELECT AVG(suc_chua) FROM san_van_dong)
-SELECT quoc_gia, COUNT(*) FROM san_van_dong GROUP BY quoc_gia ORDER BY COUNT(*) DESC LIMIT 1
-SELECT quoc_gia FROM san_van_dong GROUP BY quoc_gia HAVING COUNT(*) <= 3
-SELECT quoc_gia FROM san_van_dong WHERE suc_chua > 60000 INTERSECT SELECT quoc_gia FROM san_van_dong WHERE suc_chua < 5000
-SELECT COUNT(DISTINCT thanh_pho) FROM san_van_dong WHERE nam_mo_cua < 2006
-SELECT quoc_gia , COUNT ( * ) FROM san_van_dong GROUP BY quoc_gia
-SELECT quoc_gia FROM san_van_dong WHERE quoc_gia NOT IN (SELECT quoc_gia FROM san_van_dong WHERE nam_mo_cua > 2006)
-SELECT COUNT(*) FROM san_van_dong WHERE quoc_gia != 'Nga'
-SELECT ten FROM van_dong_vien_boi ORDER BY 100_met ASC
-SELECT COUNT(DISTINCT quoc_tich) FROM van_dong_vien_boi
-SELECT quoc_tich FROM van_dong_vien_boi GROUP BY quoc_tich HAVING COUNT(*) > 1
-SELECT 200_met, 300_met FROM van_dong_vien_boi WHERE quoc_tich = 'Úc'
-SELECT van_dong_vien_boi.ten FROM van_dong_vien_boi JOIN ho_so ON van_dong_vien_boi.id = ho_so.id_van_dong_vien_boi WHERE ho_so.ket_qua = 'thắng lợi'
-SELECT ten FROM san_van_dong JOIN su_kien ON san_van_dong.id = su_kien.id_san_van_dong GROUP BY san_van_dong.id ORDER BY COUNT(*) DESC LIMIT 1
-SELECT san_van_dong.ten, san_van_dong.suc_chua FROM san_van_dong JOIN su_kien ON san_van_dong.id = su_kien.id_san_van_dong WHERE su_kien.ten = 'giải trẻ thế giới'
-SELECT ten FROM san_van_dong WHERE id_san_van_dong NOT IN (SELECT id_san_van_dong FROM su_kien)
-SELECT van_dong_vien_boi.ten FROM van_dong_vien_boi JOIN ho_so ON van_dong_vien_boi.id = ho_so.id_van_dong_vien_boi GROUP BY van_dong_vien_boi.id ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.ten FROM van_dong_vien_boi AS T1 JOIN ho_so AS T2 ON T1.id_van_dong_vien_boi = T2.id_van_dong_vien_boi GROUP BY T1.id_van_dong_vien_boi HAVING COUNT(*) >= 2
-SELECT T1.ten, T1.quoc_tich FROM van_dong_vien_boi AS T1 JOIN ho_so AS T2 ON T1.id = T2.id_van_dong_vien_boi WHERE T2.ket_qua = 'đã GHI LẠI' GROUP BY T1.id HAVING COUNT(*) > 1
-SELECT ten FROM van_dong_vien_boi WHERE id NOT IN (SELECT id_van_dong_vien_boi FROM ho_so)
-SELECT T1.ten FROM van_dong_vien_boi AS T1 JOIN ho_so AS T2 ON T1.id_van_dong_vien_boi = T2.id_van_dong_vien_boi WHERE T2.ket_qua IN ('thắng', 'thua') GROUP BY T1.id_van_dong_vien_boi HAVING COUNT(DISTINCT T2.ket_qua) = 2
-SELECT DISTINCT T1.ten FROM san_van_dong AS T1 JOIN su_kien AS T2 ON T1.id = T2.id_san_van_dong JOIN ho_so AS T3 ON T2.id = T3.id_su_kien JOIN van_dong_vien_boi AS T4 ON T3.id_van_dong_vien_boi = T4.id WHERE T4.quoc_tich = 'Úc'
-SELECT T3.ten FROM san_van_dong AS T3 JOIN su_kien AS T2 ON T2.id_san_van_dong = T3.id JOIN ho_so AS T1 ON T1.id_su_kien = T2.id GROUP BY T3.id ORDER BY COUNT(*) DESC LIMIT 1
-SELECT van_dong_vien_boi.id, van_dong_vien_boi.ten, van_dong_vien_boi.quoc_tich, van_dong_vien_boi.100_met, van_dong_vien_boi.200_met, van_dong_vien_boi.300_met, van_dong_vien_boi.400_met, van_dong_vien_boi.500_met, van_dong_vien_boi.600_met, van_dong_vien_boi.700_met, van_dong_vien_boi.thoi_gian, ho_so.ket_qua, su_kien.ten, su_kien.nam, san_van_dong.ten, san_van_dong.suc_chua, san_van_dong.thanh_pho, san_van_dong.quoc_gia, san_van_dong.nam_mo_cua FROM van_dong_vien_boi JOIN ho_so ON van_dong_vien_boi.id = ho_so.id_van_dong_vien_boi JOIN su_kien ON ho_so.id_su_kien = su_kien.id JOIN san_van_dong ON su_kien.id_san_van_dong = san_van_dong.id
-SELECT AVG(suc_chua) FROM san_van_dong WHERE nam_mo_cua = 2005
-SELECT COUNT(*) FROM nha_dau_tu
-SELECT id_nha_dau_tu, chi_tiet_ve_nha_dau_tu FROM nha_dau_tu
-SELECT id_lot, id_nha_dau_tu, chi_tiet_ve_cac_lot FROM lot
-SELECT so_tien_giao_dich FROM giao_dich ORDER BY so_tien_giao_dich DESC LIMIT 1
-SELECT ngay_giao_dich, so_luong_co_phieu FROM giao_dich
-SELECT SUM(so_luong_co_phieu) FROM giao_dich
-SELECT id_giao_dich FROM giao_dich WHERE ma_loai_giao_dich = 'mua'
-SELECT ngay_giao_dich FROM giao_dich WHERE ma_loai_giao_dich = 'bán'
-SELECT AVG(so_tien_giao_dich) FROM giao_dich WHERE ma_loai_giao_dich = 'bán'
-SELECT loai_giao_dich.mo_ta_ve_loai_giao_dich FROM giao_dich JOIN loai_giao_dich ON giao_dich.ma_loai_giao_dich = loai_giao_dich.ma_loai_giao_dich WHERE giao_dich.ma_loai_giao_dich = 'mua'
-SELECT so_tien_giao_dich FROM giao_dich WHERE ma_loai_giao_dich = 'mua' AND so_luong_co_phieu > 50 ORDER BY so_tien_giao_dich ASC LIMIT 1
-SELECT so_luong_co_phieu FROM giao_dich WHERE so_tien_giao_dich < 1000 ORDER BY so_luong_co_phieu DESC LIMIT 1
-SELECT ngay_giao_dich FROM giao_dich WHERE so_luong_co_phieu > 100 OR so_tien_giao_dich < 1000
-SELECT giao_dich.ngay_giao_dich, loai_giao_dich.mo_ta_ve_loai_giao_dich FROM giao_dich JOIN loai_giao_dich ON giao_dich.ma_loai_giao_dich = loai_giao_dich.ma_loai_giao_dich WHERE giao_dich.so_luong_co_phieu < '10'
-SELECT nha_dau_tu.id_nha_dau_tu, nha_dau_tu.chi_tiet_ve_nha_dau_tu FROM nha_dau_tu JOIN giao_dich ON nha_dau_tu.id_nha_dau_tu = giao_dich.id_nha_dau_tu WHERE giao_dich.so_luong_co_phieu > '150'
-SELECT COUNT(DISTINCT ma_loai_giao_dich) FROM giao_dich
-SELECT lot.chi_tiet_ve_cac_lot, nha_dau_tu.id_nha_dau_tu FROM lot JOIN nha_dau_tu ON lot.id_nha_dau_tu = nha_dau_tu.id_nha_dau_tu
-SELECT T1.chi_tiet_ve_cac_lot FROM lot AS T1 JOIN nha_dau_tu AS T2 ON T1.id_nha_dau_tu = T2.id_nha_dau_tu WHERE T2.chi_tiet_ve_nha_dau_tu = 'l'
-SELECT mua_hang.chi_tiet_mua_hang FROM giao_dich JOIN mua_hang ON giao_dich.id_giao_dich = mua_hang.id_giao_dich_mua_hang WHERE giao_dich.so_tien_giao_dich > 10000
-SELECT ban_hang.chi_tiet_ban_hang, giao_dich.ngay_giao_dich FROM giao_dich JOIN ban_hang ON giao_dich.id_giao_dich = ban_hang.id_giao_dich_ban_hang WHERE giao_dich.so_tien_giao_dich < 3000
-SELECT lot.chi_tiet_ve_cac_lot FROM giao_dich JOIN giao_dich_lot ON giao_dich.id_giao_dich = giao_dich_lot.id_giao_dich JOIN lot ON giao_dich_lot.id_lot = lot.id_lot WHERE giao_dich.so_luong_co_phieu < 50
-SELECT T3.chi_tiet_ve_cac_lot FROM giao_dich AS T1 JOIN giao_dich_lot AS T2 ON T1.id_giao_dich = T2.id_giao_dich JOIN lot AS T3 ON T2.id_lot = T3.id_lot WHERE T1.ma_loai_giao_dich = 'mua' AND T1.so_luong_co_phieu > 100
-SELECT T2.ma_loai_giao_dich, AVG(T1.so_tien_giao_dich) FROM giao_dich AS T1 JOIN loai_giao_dich AS T2 ON T1.ma_loai_giao_dich = T2.ma_loai_giao_dich GROUP BY T2.ma_loai_giao_dich
-SELECT loai_giao_dich.ma_loai_giao_dich, MAX(giao_dich.so_luong_co_phieu), MIN(giao_dich.so_luong_co_phieu) FROM giao_dich JOIN loai_giao_dich ON giao_dich.ma_loai_giao_dich = loai_giao_dich.ma_loai_giao_dich GROUP BY loai_giao_dich.ma_loai_giao_dich
-SELECT T1.id_nha_dau_tu , AVG(CAST(T2.so_luong_co_phieu AS NUMBER)) FROM nha_dau_tu AS T1 JOIN giao_dich AS T2 ON T1.id_nha_dau_tu = T2.id_nha_dau_tu GROUP BY T1.id_nha_dau_tu
-SELECT T1.id_nha_dau_tu , AVG(CAST(T2.so_luong_co_phieu AS NUMBER)) FROM nha_dau_tu AS T1 JOIN giao_dich AS T2 ON T1.id_nha_dau_tu = T2.id_nha_dau_tu GROUP BY T1.id_nha_dau_tu ORDER BY AVG(CAST(T2.so_luong_co_phieu AS NUMBER)) DESC
-SELECT AVG(transaction_count) AS average_transactions_per_investor FROM ( SELECT COUNT(*) AS transaction_count FROM giao_dich JOIN nha_dau_tu ON giao_dich.id_nha_dau_tu = nha_dau_tu.id_nha_dau_tu GROUP BY nha_dau_tu.id_nha_dau_tu ) AS sub
 SELECT 1
-SELECT lot.id_lot, COUNT(*) AS so_luong_giao_dich FROM lot JOIN giao_dich_lot ON lot.id_lot = giao_dich_lot.id_lot GROUP BY lot.id_lot ORDER BY COUNT(*) DESC
-SELECT T1.id_nha_dau_tu , COUNT ( * ) FROM nha_dau_tu AS T1 JOIN giao_dich AS T2 ON T1.id_nha_dau_tu = T2.id_nha_dau_tu WHERE T2.ma_loai_giao_dich = 'bán' GROUP BY T1.id_nha_dau_tu
-SELECT nha_dau_tu.id_nha_dau_tu , COUNT(*) FROM nha_dau_tu JOIN giao_dich ON nha_dau_tu.id_nha_dau_tu = giao_dich.id_nha_dau_tu GROUP BY nha_dau_tu.id_nha_dau_tu
-SELECT loai_giao_dich.ma_loai_giao_dich FROM giao_dich JOIN loai_giao_dich ON giao_dich.ma_loai_giao_dich = loai_giao_dich.ma_loai_giao_dich GROUP BY loai_giao_dich.ma_loai_giao_dich ORDER BY COUNT(*) ASC LIMIT 1
-SELECT ma_loai_giao_dich FROM giao_dich GROUP BY ma_loai_giao_dich ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T2.mo_ta_ve_loai_giao_dich FROM giao_dich AS T1 JOIN loai_giao_dich AS T2 ON T1.ma_loai_giao_dich = T2.ma_loai_giao_dich GROUP BY T2.ma_loai_giao_dich ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.id_nha_dau_tu, T1.chi_tiet_ve_nha_dau_tu FROM nha_dau_tu AS T1 JOIN giao_dich AS T2 ON T1.id_nha_dau_tu = T2.id_nha_dau_tu GROUP BY T1.id_nha_dau_tu ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.id_nha_dau_tu, T1.chi_tiet_ve_nha_dau_tu FROM nha_dau_tu AS T1 JOIN giao_dich AS T2 ON T1.id_nha_dau_tu = T2.id_nha_dau_tu GROUP BY T1.id_nha_dau_tu ORDER BY COUNT(*) DESC LIMIT 3
-SELECT T1.id_nha_dau_tu FROM nha_dau_tu AS T1 JOIN giao_dich AS T2 ON T1.id_nha_dau_tu = T2.id_nha_dau_tu GROUP BY T1.id_nha_dau_tu HAVING COUNT(*) >= 2
-SELECT T1.id_nha_dau_tu , T1.chi_tiet_ve_nha_dau_tu FROM nha_dau_tu AS T1 JOIN giao_dich AS T2 ON T1.id_nha_dau_tu = T2.id_nha_dau_tu WHERE T2.ma_loai_giao_dich = 'bán' GROUP BY T1.id_nha_dau_tu HAVING COUNT ( * ) >= 2
-SELECT ngay_giao_dich FROM giao_dich WHERE so_luong_co_phieu >= 100 OR so_tien_giao_dich > 100
-SELECT T1.id_giao_dich, T1.ma_loai_giao_dich, T1.ngay_giao_dich, T1.so_tien_giao_dich, T1.so_luong_co_phieu, T1.nhung_chi_tiet_khac, T2.mo_ta_ve_loai_giao_dich FROM giao_dich AS T1 JOIN loai_giao_dich AS T2 ON T1.ma_loai_giao_dich = T2.ma_loai_giao_dich
-SELECT * FROM lot WHERE id_lot NOT IN (SELECT id_lot FROM giao_dich_lot)
-SELECT COUNT(*) FROM nha_ga
-SELECT ten, dia_diem, so_luong_san_ga FROM nha_ga
-SELECT dia_diem FROM nha_ga
-SELECT ten, tong_so_hanh_khach FROM nha_ga WHERE dia_diem != 'Luân Đôn'
-SELECT ten, dich_vu_chinh FROM nha_ga ORDER BY tong_so_hanh_khach DESC LIMIT 3
-SELECT AVG(tong_so_hanh_khach), MAX(tong_so_hanh_khach) FROM nha_ga WHERE dia_diem IN ('Luân Đôn', 'Glasgow')
-SELECT dia_diem, SUM(so_luong_san_ga), SUM(tong_so_hanh_khach) FROM nha_ga GROUP BY dia_diem
-SELECT dia_diem FROM nha_ga WHERE so_luong_san_ga >= 15 AND tong_so_hanh_khach > 25
-SELECT DISTINCT dia_diem FROM nha_ga WHERE NOT EXISTS (SELECT 1 FROM nha_ga AS T2 WHERE T2.dia_diem = nha_ga.dia_diem AND T2.so_luong_san_ga >= 15)
-SELECT dia_diem FROM nha_ga ORDER BY so_luong_san_ga DESC LIMIT 1
-SELECT ten, thoi_gian, dich_vu FROM toa_hoa
-SELECT COUNT(*) FROM toa_hoa
-SELECT ten, dich_vu FROM toa_hoa ORDER BY thoi_gian ASC
-SELECT nha_ga.ten, COUNT(*) FROM nha_ga JOIN nha_ga_tau_hoa ON nha_ga.id_nha_ga = nha_ga_tau_hoa.id_nha_ga GROUP BY nha_ga.id_nha_ga
-SELECT toa_hoa.ten, nha_ga.ten FROM toa_hoa JOIN nha_ga_tau_hoa ON toa_hoa.id_tau = nha_ga_tau_hoa.id_tau JOIN nha_ga ON nha_ga_tau_hoa.id_nha_ga = nha_ga.id_ga_tau
-SELECT T1.ten , T1.thoi_gian FROM toa_hoa AS T1 JOIN nha_ga_tau_hoa AS T2 ON T1.id_tau = T2.id_tau JOIN nha_ga AS T3 ON T2.id_nha_ga = T3.id_nha_ga WHERE T3.dia_diem = 'Luân Đôn' ORDER BY T1.thoi_gian DESC
-SELECT T1.ten FROM nha_ga T1 JOIN nha_ga_tau_hoa T2 ON T1.id_nha_ga = T2.id_nha_ga JOIN toa_hoa T3 ON T2.id_tau = T3.id_tau GROUP BY T1.id_nha_ga ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T1.ten FROM nha_ga AS T1 JOIN nha_ga_tau_hoa AS T2 ON T1.id_nha_ga = T2.id_nha_ga GROUP BY T1.id_nha_ga HAVING COUNT(*) >= 2
-SELECT dia_diem FROM nha_ga GROUP BY dia_diem HAVING COUNT(*) = 1
-SELECT ten FROM nha_ga WHERE id_nha_ga NOT IN (SELECT id_nha_ga FROM nha_ga_tau_hoa)
-SELECT ten FROM nha_ga WHERE id_nha_ga IN (SELECT id_nha_ga FROM nha_ga_tau_hoa JOIN toa_hoa ON nha_ga_tau_hoa.id_tau = toa_hoa.id_tau WHERE toa_hoa.ten = 'Ananthapuri Express' INTERSECT SELECT id_nha_ga FROM nha_ga_tau_hoa JOIN toa_hoa ON nha_ga_tau_hoa.id_tau = toa_hoa.id_tau WHERE toa_hoa.ten = 'Guruvayur Express')
-SELECT ten FROM toa_hoa WHERE id_tau NOT IN (SELECT T2.id_tau FROM nha_ga_tau_hoa T2 JOIN nha_ga T3 ON T2.id_nha_ga = T3.id_ga_tau WHERE T3.dia_diem = 'Luân Đôn')
-SELECT ten, dia_diem FROM nha_ga ORDER BY so_luong_xuat_canh_hang_nam DESC, so_luong_trao_doi_hang_nam DESC
-SELECT COUNT(*) FROM ma_vung_cua_tieu_bang
-SELECT ma_so_thi_sinh , ten_thi_sinh FROM thi_sinh ORDER BY ten_thi_sinh DESC
-SELECT id_phieu_bau, so_dien_thoai, tieu_bang FROM phieu_bau
-SELECT ma_vung FROM ma_vung_cua_tieu_bang ORDER BY ma_vung DESC LIMIT 1 UNION SELECT ma_vung FROM ma_vung_cua_tieu_bang ORDER BY ma_vung ASC LIMIT 1
-SELECT MAX(ngay_duoc_tao) FROM phieu_bau WHERE tieu_bang = 'CA' ORDER BY ngay_duoc_tao DESC LIMIT 1
-SELECT ten_thi_sinh FROM thi_sinh WHERE ten_thi_sinh != 'Jessie Alloway'
-SELECT tieu_bang, ngay_duoc_tao FROM phieu_bau
-SELECT T1.ma_so_thi_sinh , T1.ten_thi_sinh FROM thi_sinh AS T1 JOIN phieu_bau AS T2 ON T1.ma_so_thi_sinh = T2.ma_so_thi_sinh GROUP BY T1.ma_so_thi_sinh HAVING COUNT(*) >= 2
-SELECT thi_sinh.ma_so_thi_sinh, thi_sinh.ten_thi_sinh FROM thi_sinh JOIN phieu_bau ON thi_sinh.ma_so_thi_sinh = phieu_bau.ma_so_thi_sinh GROUP BY thi_sinh.ma_so_thi_sinh ORDER BY COUNT(*) ASC LIMIT 1
-SELECT COUNT(*) FROM phieu_bau WHERE tieu_bang IN ('NY', 'CA')
-SELECT COUNT(*) FROM thi_sinh LEFT JOIN phieu_bau ON thi_sinh.ma_so_thi_sinh = phieu_bau.ma_so_thi_sinh WHERE phieu_bau.id_phieu_bau IS NULL
-SELECT T2.ma_vung FROM phieu_bau AS T1 JOIN ma_vung_cua_tieu_bang AS T2 ON T1.tieu_bang = T2.tieu_bang GROUP BY T2.ma_vung ORDER BY COUNT(*) DESC LIMIT 1
-SELECT phieu_bau.ngay_duoc_tao, phieu_bau.tieu_bang, phieu_bau.so_dien_thoai FROM phieu_bau JOIN thi_sinh ON phieu_bau.ma_so_thi_sinh = thi_sinh.ma_so_thi_sinh WHERE thi_sinh.ten_thi_sinh = 'Tabatha Gehling'
-SELECT T3.ma_vung FROM phieu_bau AS T1 JOIN thi_sinh AS T2 ON T1.ma_so_thi_sinh = T2.ma_so_thi_sinh JOIN ma_vung_cua_tieu_bang AS T3 ON T1.tieu_bang = T3.tieu_bang WHERE T2.ten_thi_sinh IN ('Tabatha Gehling', 'Kelly Clauss') GROUP BY T1.tieu_bang HAVING COUNT(DISTINCT T1.ma_so_thi_sinh) = 2
-SELECT ten_thi_sinh FROM thi_sinh WHERE ten_thi_sinh LIKE '%Al%'
-SELECT COUNT(*) FROM nguoi_choi
-SELECT COUNT(*) FROM nguoi_choi
-SELECT COUNT(*) FROM tran_dau
-SELECT COUNT(*) FROM tran_dau
-SELECT ten, ngay_sinh FROM nguoi_choi WHERE ma_quoc_gia = 'USA'
-SELECT ten, ngay_sinh FROM nguoi_choi WHERE ma_quoc_gia = 'Hoa Kỳ'
-SELECT AVG(tuoi_cua_nguoi_thua_cuoc), AVG(tuoi_cua_nguoi_chien_thang) FROM tran_dau
-SELECT AVG(tuoi_cua_nguoi_thua_cuoc), AVG(tuoi_cua_nguoi_chien_thang) FROM tran_dau
-SELECT AVG(xep_hang.xep_hang) FROM tran_dau JOIN xep_hang ON tran_dau.id_cua_nguoi_chien_thang = xep_hang.id_nguoi_choi
-SELECT AVG(diem_xep_hang_cua_nguoi_chien_thang) FROM tran_dau
-SELECT MIN(xep_hang.xep_hang) FROM tran_dau JOIN xep_hang ON tran_dau.id_nguoi_thua_cuoc = xep_hang.id_nguoi_choi
-SELECT diem_xep_hang_cua_nguoi_thua_cuoc FROM tran_dau ORDER BY diem_xep_hang_cua_nguoi_thua_cuoc ASC LIMIT 1
-SELECT COUNT(DISTINCT ma_quoc_gia) FROM nguoi_choi
-SELECT COUNT(DISTINCT ma_quoc_gia) FROM nguoi_choi
-SELECT COUNT(DISTINCT ten_nguoi_thua_cuoc) FROM tran_dau
-SELECT COUNT(DISTINCT ten_nguoi_thua_cuoc) FROM tran_dau
-SELECT ten_giai_dau FROM tran_dau GROUP BY ten_giai_dau HAVING COUNT(*) > 10
-SELECT ten_giai_dau FROM tran_dau WHERE so_tran > 10
-SELECT nguoi_choi.ten FROM tran_dau JOIN nguoi_choi ON tran_dau.id_cua_nguoi_chien_thang = nguoi_choi.id_nguoi_choi WHERE tran_dau.nam IN (2013, 2016) GROUP BY tran_dau.id_cua_nguoi_chien_thang HAVING COUNT(DISTINCT tran_dau.nam) = 2
-SELECT nguoi_choi.ten FROM tran_dau JOIN nguoi_choi ON tran_dau.id_cua_nguoi_chien_thang = nguoi_choi.id_nguoi_choi WHERE tran_dau.nam = 2013 INTERSECT SELECT nguoi_choi.ten FROM tran_dau JOIN nguoi_choi ON tran_dau.id_cua_nguoi_chien_thang = nguoi_choi.id_nguoi_choi WHERE tran_dau.nam = 2016
-SELECT COUNT(*) FROM tran_dau WHERE EXTRACT(YEAR FROM ngay_tham_du_giai_dau) IN (2013, 2016)
-SELECT COUNT(*) FROM tran_dau WHERE nam IN (2013, 2016)
-SELECT ma_quoc_gia , ten FROM nguoi_choi WHERE id_nguoi_choi IN ( SELECT id_cua_nguoi_chien_thang FROM tran_dau WHERE ten_giai_dau = 'vô địch WTA' INTERSECT SELECT id_cua_nguoi_chien_thang FROM tran_dau WHERE ten_giai_dau = 'Úc mở rộng' )
-SELECT T2.ten, T2.ma_quoc_gia FROM tran_dau AS T1 JOIN nguoi_choi AS T2 ON T1.id_cua_nguoi_chien_thang = T2.id_nguoi_choi WHERE T1.ten_giai_dau IN ('vô địch WTA', 'Úc mở rộng') GROUP BY T2.id_nguoi_choi HAVING COUNT(DISTINCT T1.ten_giai_dau) = 2
-SELECT ten, ma_quoc_gia FROM nguoi_choi ORDER BY (strftime('%Y', 'now') - strftime('%Y', ngay_sinh)) DESC LIMIT 1
-SELECT ten, ma_quoc_gia FROM nguoi_choi ORDER BY ngay_sinh ASC LIMIT 1
-SELECT ten, ho FROM nguoi_choi ORDER BY ngay_sinh ASC
-SELECT ho , ten FROM nguoi_choi ORDER BY ngay_sinh ASC
-SELECT ten, ho FROM nguoi_choi WHERE tay_thuan = 'tay trái' ORDER BY ngay_sinh ASC
-SELECT ho , ten FROM nguoi_choi WHERE tay_thuan = 'tay trái' ORDER BY ngay_sinh ASC
-SELECT nguoi_choi.ten, nguoi_choi.ma_quoc_gia FROM nguoi_choi JOIN tran_dau ON nguoi_choi.id_nguoi_choi = tran_dau.id_cua_nguoi_chien_thang OR nguoi_choi.id_nguoi_choi = tran_dau.id_nguoi_thua_cuoc GROUP BY nguoi_choi.id_nguoi_choi ORDER BY COUNT(DISTINCT tran_dau.tour_du_dau) DESC LIMIT 1
-SELECT T1.ten, T1.ma_quoc_gia FROM nguoi_choi AS T1 JOIN tran_dau AS T2 ON T1.id_nguoi_choi = T2.id_nguoi_thua_cuoc OR T1.id_nguoi_choi = T2.id_cua_nguoi_chien_thang GROUP BY T1.id_nguoi_choi ORDER BY COUNT(DISTINCT T2.tour_du_dau) DESC LIMIT 1
-SELECT nam FROM tran_dau GROUP BY nam ORDER BY COUNT(*) DESC LIMIT 1
-SELECT nam FROM tran_dau GROUP BY nam ORDER BY COUNT(*) DESC LIMIT 1
-SELECT nguoi_choi.ten, tran_dau.diem_xep_hang_cua_nguoi_chien_thang FROM nguoi_choi JOIN tran_dau ON nguoi_choi.id_nguoi_choi = tran_dau.id_cua_nguoi_chien_thang GROUP BY nguoi_choi.id_nguoi_choi ORDER BY COUNT(*) DESC LIMIT 1
-SELECT T2.ten, T3.diem_xep_hang FROM tran_dau AS T1 JOIN nguoi_choi AS T2 ON T1.id_cua_nguoi_chien_thang = T2.id_nguoi_choi JOIN xep_hang AS T3 ON T2.id_nguoi_choi = T3.id_nguoi_choi GROUP BY T1.id_cua_nguoi_chien_thang ORDER BY COUNT(*) DESC LIMIT 1
-SELECT nguoi_choi.ten FROM tran_dau JOIN nguoi_choi ON tran_dau.id_cua_nguoi_chien_thang = nguoi_choi.id_nguoi_choi WHERE tran_dau.ten_giai_dau = 'Úc mở rộng' ORDER BY tran_dau.diem_xep_hang_cua_nguoi_chien_thang DESC LIMIT 1
-SELECT ten_nguoi_chien_thang FROM tran_dau WHERE ten_giai_dau = 'Úc mở rộng' ORDER BY diem_xep_hang_cua_nguoi_chien_thang DESC LIMIT 1
-SELECT nguoi_thua_cuoc, nguoi_chien_thang FROM tran_dau ORDER BY phut DESC LIMIT 1
-SELECT T2.ten, T2.ho, T3.ten, T3.ho FROM tran_dau AS T1 JOIN nguoi_choi AS T2 ON T1.id_cua_nguoi_chien_thang = T2.id_nguoi_choi JOIN nguoi_choi AS T3 ON T1.id_nguoi_thua_cuoc = T3.id_nguoi_choi ORDER BY T1.phut DESC LIMIT 1
-SELECT nguoi_choi.ten , AVG(xep_hang.xep_hang) FROM nguoi_choi JOIN xep_hang ON nguoi_choi.id_nguoi_choi = xep_hang.id_nguoi_choi GROUP BY nguoi_choi.id_nguoi_choi
-SELECT T1.ten , AVG(T2.diem_xep_hang) FROM nguoi_choi AS T1 JOIN xep_hang AS T2 ON T1.id_nguoi_choi = T2.id_nguoi_choi GROUP BY T1.id_nguoi_choi
-SELECT nguoi_choi.ten, SUM(xep_hang.diem_xep_hang) FROM nguoi_choi JOIN xep_hang ON nguoi_choi.id_nguoi_choi = xep_hang.id_nguoi_choi GROUP BY xep_hang.id_nguoi_choi
-SELECT nguoi_choi.ten, SUM(xep_hang.diem_xep_hang) FROM nguoi_choi JOIN xep_hang ON nguoi_choi.id_nguoi_choi = xep_hang.id_nguoi_choi GROUP BY nguoi_choi.id_nguoi_choi
-SELECT ma_quoc_gia , COUNT ( * ) FROM nguoi_choi GROUP BY ma_quoc_gia
-SELECT ma_quoc_gia , COUNT(*) FROM nguoi_choi GROUP BY ma_quoc_gia
-SELECT ma_quoc_gia FROM nguoi_choi GROUP BY ma_quoc_gia ORDER BY COUNT(*) DESC LIMIT 1
-SELECT ma_quoc_gia FROM nguoi_choi GROUP BY ma_quoc_gia ORDER BY COUNT(*) DESC LIMIT 1
-SELECT ma_quoc_gia FROM nguoi_choi GROUP BY ma_quoc_gia HAVING COUNT(*) > 50
-SELECT ma_quoc_gia FROM nguoi_choi GROUP BY ma_quoc_gia HAVING COUNT(*) > 50
-SELECT ngay_xep_hang, SUM(tour_du_dau) FROM xep_hang GROUP BY ngay_xep_hang
-SELECT ngay_xep_hang , COUNT ( * ) FROM xep_hang GROUP BY ngay_xep_hang
-SELECT nam , COUNT ( * ) FROM tran_dau GROUP BY nam
-SELECT nam , COUNT(*) FROM tran_dau GROUP BY nam
-SELECT tran_dau.ten_nguoi_chien_thang, xep_hang.xep_hang FROM tran_dau JOIN xep_hang ON tran_dau.id_cua_nguoi_chien_thang = xep_hang.id_nguoi_choi ORDER BY tran_dau.tuoi_cua_nguoi_chien_thang ASC LIMIT 3
-SELECT ten_nguoi_chien_thang, xep_hang FROM tran_dau JOIN xep_hang ON tran_dau.id_cua_nguoi_chien_thang = xep_hang.id_nguoi_choi ORDER BY tuoi_cua_nguoi_chien_thang ASC LIMIT 3
-SELECT COUNT(*) FROM tran_dau WHERE ten_giai_dau = 'giải vô địch WTA' AND tay_thuan_cua_nguoi_chien_thang = 'trái'
-SELECT COUNT(*) FROM tran_dau WHERE tay_thuan_cua_nguoi_chien_thang = 'trái' AND ten_giai_dau = 'giải vô địch WTA'
-SELECT nguoi_choi.ten, nguoi_choi.ma_quoc_gia, nguoi_choi.ngay_sinh FROM tran_dau JOIN nguoi_choi ON tran_dau.id_cua_nguoi_chien_thang = nguoi_choi.id_nguoi_choi ORDER BY diem_xep_hang_cua_nguoi_chien_thang DESC LIMIT 1
-SELECT nguoi_choi.ten, nguoi_choi.ma_quoc_gia, nguoi_choi.ngay_sinh FROM tran_dau JOIN nguoi_choi ON tran_dau.id_cua_nguoi_chien_thang = nguoi_choi.id_nguoi_choi ORDER BY tran_dau.diem_xep_hang_cua_nguoi_chien_thang DESC LIMIT 1
-SELECT t1.tay_thuan , COUNT ( * ) FROM nguoi_choi AS t1 GROUP BY t1.tay_thuan
-SELECT tay_thuan , COUNT ( * ) FROM nguoi_choi GROUP BY tay_thuan
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1
+SELECT 1

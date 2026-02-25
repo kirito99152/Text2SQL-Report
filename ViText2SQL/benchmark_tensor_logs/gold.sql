@@ -1,954 +1,1908 @@
-select count ( * ) from kien_truc_su where gioi_tinh = "female"	architecture
-select ten , quoc_tich , id from kien_truc_su where gioi_tinh = "male" order by ten	architecture
-select max ( t1.chieu_dai_theo_met ) , t2.ten from cau as t1 join kien_truc_su as t2 on t1.id_kien_truc_su = t2.id	architecture
-select avg ( chieu_dai_theo_feet ) from cau	architecture
-select ten , nam_xay_dung from nha_may where loai = "Grondzeiler"	architecture
-select distinct t1.ten , t1.quoc_tich from kien_truc_su as t1 join nha_may as t2 on t1.id = t2.id_kien_truc_su	architecture
-select ten from nha_may where dia_diem != "Donceel"	architecture
-select distinct t1.loai from nha_may as t1 join kien_truc_su as t2 on t1.id_kien_truc_su = t2.id where t2.quoc_tich = "American" or t2.quoc_tich = "Canadian"	architecture
-select t1.id , t1.ten from kien_truc_su as t1 join cau as t2 on t1.id = t2.id_kien_truc_su group by t1.id having count ( * ) >= 3	architecture
-select t1.id , t1.ten , t1.quoc_tich from kien_truc_su as t1 join nha_may as t2 on t1.id = t2.id_kien_truc_su group by t1.id order by count ( * ) desc limit 1	architecture
-select t1.id , t1.ten , t1.gioi_tinh from kien_truc_su as t1 join cau as t2 on t1.id = t2.id_kien_truc_su group by t1.id having count ( * ) = 2 union select t1.id , t1.ten , t1.gioi_tinh from kien_truc_su as t1 join nha_may as t2 on t1.id = t2.id_kien_truc_su group by t1.id having count ( * ) = 1	architecture
-select dia_diem from cau where ten = "Kolob Arch" or ten = "Rainbow Bridge"	architecture
-select ten from nha_may where ten like "%Moulin%"	architecture
-select distinct t1.ten from nha_may as t1 join kien_truc_su as t2 on t1.id_kien_truc_su = t2.id join cau as t3 on t3.id_kien_truc_su = t2.id where t3.chieu_dai_theo_met > 80	architecture
-select loai , count ( * ) from nha_may group by loai order by count ( * ) desc limit 1	architecture
-select count ( * ) from kien_truc_su where id not in ( select id_kien_truc_su from nha_may where nam_xay_dung < 1850 )	architecture
-select t1.ten from cau as t1 join kien_truc_su as t2 on t1.id_kien_truc_su = t2.id where t2.quoc_tich = "American" order by t1.chieu_dai_theo_feet	architecture
-select dia_diem from rap_chieu_phim except select dia_diem from rap_chieu_phim where suc_chua > 800	cinema
-select dia_diem from rap_chieu_phim where nam_mo_cua = 2010 intersect select dia_diem from rap_chieu_phim where nam_mo_cua = 2011	cinema
-select count ( * ) from rap_chieu_phim	cinema
-select count ( * ) from rap_chieu_phim	cinema
-select ten , nam_mo_cua , suc_chua from rap_chieu_phim	cinema
-select ten , dia_diem from rap_chieu_phim where suc_chua > ( select avg ( suc_chua ) from rap_chieu_phim )	cinema
-select distinct dia_diem from rap_chieu_phim	cinema
-select distinct dia_diem from rap_chieu_phim	cinema
-select ten , nam_mo_cua from rap_chieu_phim order by nam_mo_cua desc	cinema
-select ten , dia_diem from rap_chieu_phim order by suc_chua desc limit 1	cinema
-select avg ( suc_chua ) , min ( suc_chua ) , max ( suc_chua ) from rap_chieu_phim where nam_mo_cua >= 2011	cinema
-select dia_diem , count ( * ) from rap_chieu_phim group by dia_diem	cinema
-select dia_diem from rap_chieu_phim where nam_mo_cua >= 2010 group by dia_diem order by count ( * ) desc limit 1	cinema
-select dia_diem from rap_chieu_phim where suc_chua > 300 group by dia_diem having count ( * ) >= 2	cinema
-select dia_diem from rap_chieu_phim where suc_chua > 300 group by dia_diem having count ( * ) >= 2	cinema
-select tieu_de , duoc_dao_dien_boi from phim	cinema
-select tieu_de , duoc_dao_dien_boi from phim	cinema
-select distinct duoc_dao_dien_boi from phim	cinema
-select distinct duoc_dao_dien_boi from phim	cinema
-select duoc_dao_dien_boi , count ( * ) from phim group by duoc_dao_dien_boi	cinema
-select t2.ten , sum ( t1.so_luong_suat_chieu_moi_ngay ) from lich_chieu_phim as t1 join rap_chieu_phim as t2 on t1.id_rap_chieu_phim = t2.id_rap_chieu_phim group by t1.id_rap_chieu_phim	cinema
-select t2.tieu_de , max ( t1.gia ) from lich_chieu_phim as t1 join phim as t2 on t1.id_phim = t2.id_phim group by t1.id_phim	cinema
-select t2.tieu_de , max ( t1.gia ) from lich_chieu_phim as t1 join phim as t2 on t1.id_phim = t2.id_phim group by t1.id_phim	cinema
-select t3.ten , t2.tieu_de , t1.ngay , t1.gia from lich_chieu_phim as t1 join phim as t2 on t1.id_phim = t2.id_phim join rap_chieu_phim as t3 on t1.id_rap_chieu_phim = t3.id_rap_chieu_phim	cinema
-select tieu_de , duoc_dao_dien_boi from phim where id_phim not in ( select id_phim from lich_chieu_phim )	cinema
-select t2.duoc_dao_dien_boi from lich_chieu_phim as t1 join phim as t2 on t1.id_phim = t2.id_phim group by t2.duoc_dao_dien_boi order by sum ( t1.so_luong_suat_chieu_moi_ngay ) desc limit 1	cinema
-select dia_diem from rap_chieu_phim where suc_chua > 300 group by dia_diem having count ( * ) > 1	cinema
-select dia_diem from rap_chieu_phim where suc_chua > 300 group by dia_diem having count ( * ) > 1	cinema
-select count ( * ) from phim where tieu_de like "%Dummy%"	cinema
-select count ( * ) from phim where tieu_de like "%Dummy%"	cinema
-select count ( * ) from khoa_hoc	college_3
-select count ( * ) from khoa_hoc	college_3
-select count ( * ) from khoa_hoc where so_luong_tin_chi > 2	college_3
-select count ( * ) from khoa_hoc where so_luong_tin_chi > 2	college_3
-select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 1	college_3
-select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 1	college_3
-select ten_khoa_hoc from khoa_hoc where ngay = "MTW"	college_3
-select ten_khoa_hoc from khoa_hoc where ngay = "MTW"	college_3
-select count ( * ) from khoa where bo_phan = "AS"	college_3
-select count ( * ) from khoa where bo_phan = "AS"	college_3
-select so_dien_thoai_khoa from khoa where phong = 268	college_3
-select so_dien_thoai_khoa from khoa where phong = 268	college_3
-select count ( distinct id_sinh_vien ) from dang_ky_khoa_hoc where diem = "B"	college_3
-select count ( distinct id_sinh_vien ) from dang_ky_khoa_hoc where diem = "B"	college_3
-select max ( diem_so ) , min ( diem_so ) from chuyen_doi_diem	college_3
-select max ( diem_so ) , min ( diem_so ) from chuyen_doi_diem	college_3
-select distinct ten from sinh_vien where ten like "%a%"	college_3
-select distinct ten from sinh_vien where ten like "%a%"	college_3
-select ten , ho from giang_vien where gioi_tinh = "M" and toa_nha = "NEB"	college_3
-select ten , ho from giang_vien where gioi_tinh = "M" and toa_nha = "NEB"	college_3
-select phong from giang_vien where ngach = "Professor" and toa_nha = "NEB"	college_3
-select phong from giang_vien where ngach = "Professor" and toa_nha = "NEB"	college_3
-select ten_khoa from khoa where toa_nha = "Mergenthaler"	college_3
-select ten_khoa from khoa where toa_nha = "Mergenthaler"	college_3
-select * from khoa_hoc order by so_luong_tin_chi	college_3
-select * from khoa_hoc order by so_luong_tin_chi	college_3
-select ten_khoa_hoc from khoa_hoc order by so_luong_tin_chi	college_3
-select ten_khoa_hoc from khoa_hoc order by so_luong_tin_chi	college_3
-select ten from sinh_vien order by tuoi desc	college_3
-select ten from sinh_vien order by tuoi desc	college_3
-select ho from sinh_vien where gioi_tinh = "F" order by tuoi desc	college_3
-select ho from sinh_vien where gioi_tinh = "F" order by tuoi desc	college_3
-select ho from giang_vien where toa_nha = "Barton" order by ho	college_3
-select ho from giang_vien where toa_nha = "Barton" order by ho	college_3
-select ten from giang_vien where ngach = "Professor" order by ten	college_3
-select ten from giang_vien where ngach = "Professor" order by ten	college_3
-select t1.ten_khoa from khoa as t1 join chuyen_nganh_phu as t2 on t1.ma_so_khoa = t2.ma_so_khoa group by t2.ma_so_khoa order by count ( * ) desc limit 1	college_3
-select t1.ten_khoa from khoa as t1 join chuyen_nganh_phu as t2 on t1.ma_so_khoa = t2.ma_so_khoa group by t2.ma_so_khoa order by count ( * ) desc limit 1	college_3
-select ten_khoa from khoa except select t1.ten_khoa from khoa as t1 join chuyen_nganh_phu as t2 on t1.ma_so_khoa = t2.ma_so_khoa	college_3
-select ten_khoa from khoa except select t1.ten_khoa from khoa as t1 join chuyen_nganh_phu as t2 on t1.ma_so_khoa = t2.ma_so_khoa	college_3
-select t1.ten_khoa from khoa as t1 join la_thanh_vien_cua as t2 on t1.ma_so_khoa = t2.ma_so_khoa group by t2.ma_so_khoa order by count ( * ) asc limit 1	college_3
-select t1.ten_khoa from khoa as t1 join la_thanh_vien_cua as t2 on t1.ma_so_khoa = t2.ma_so_khoa group by t2.ma_so_khoa order by count ( * ) asc limit 1	college_3
-select ngach from giang_vien group by ngach order by count ( * ) asc limit 1	college_3
-select ngach from giang_vien group by ngach order by count ( * ) asc limit 1	college_3
-select t2.ten , t2.ho from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien group by t1.nguoi_huong_dan order by count ( * ) desc limit 3	college_3
-select t2.ten , t2.ho from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien group by t1.nguoi_huong_dan order by count ( * ) desc limit 3	college_3
-select t2.toa_nha from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien group by t1.nguoi_huong_dan order by count ( * ) desc limit 1	college_3
-select t2.toa_nha from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien group by t1.nguoi_huong_dan order by count ( * ) desc limit 1	college_3
-select t1.ten_khoa_hoc from khoa_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.id_khoa_hoc = t2.ma_khoa_hoc group by t2.ma_khoa_hoc having count ( * ) >= 5	college_3
-select t1.ten_khoa_hoc from khoa_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.id_khoa_hoc = t2.ma_khoa_hoc group by t2.ma_khoa_hoc having count ( * ) >= 5	college_3
-select t2.ten , t2.ho from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien where t1.ten_khoa_hoc = "COMPUTER LITERACY"	college_3
-select t2.ten , t2.ho from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien where t1.ten_khoa_hoc = "COMPUTER LITERACY"	college_3
-select t2.ten_khoa , t2.phong from khoa_hoc as t1 join khoa as t2 on t1.ma_so_khoa = t2.ma_so_khoa where t1.ten_khoa_hoc = "INTRODUCTION TO COMPUTER SCIENCE"	college_3
-select t2.ten_khoa , t2.phong from khoa_hoc as t1 join khoa as t2 on t1.ma_so_khoa = t2.ma_so_khoa where t1.ten_khoa_hoc = "INTRODUCTION TO COMPUTER SCIENCE"	college_3
-select t3.ten , t3.ho , t2.diem_so from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien	college_3
-select t3.ten , t3.ho , t2.diem_so from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien	college_3
-select distinct t3.ten from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien where t2.diem_so >= 3.8	college_3
-select distinct t3.ten from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien where t2.diem_so >= 3.8	college_3
-select t1.ten , t1.ho from giang_vien as t1 join la_thanh_vien_cua as t2 on t1.id_giang_vien = t2.id_giang_vien where t2.ma_so_khoa = 520	college_3
-select t1.ten , t1.ho from giang_vien as t1 join la_thanh_vien_cua as t2 on t1.id_giang_vien = t2.id_giang_vien where t2.ma_so_khoa = 520	college_3
-select t2.ten , t2.ho from chuyen_nganh_phu as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien where t1.ma_so_khoa = 140	college_3
-select t2.ten , t2.ho from chuyen_nganh_phu as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien where t1.ma_so_khoa = 140	college_3
-select t2.ho from khoa as t1 join giang_vien as t2 on t1.ma_so_khoa = t3.ma_so_khoa join la_thanh_vien_cua as t3 on t2.id_giang_vien = t3.id_giang_vien where t1.ten_khoa = "Computer Science"	college_3
-select t2.ho from khoa as t1 join giang_vien as t2 on t1.ma_so_khoa = t3.ma_so_khoa join la_thanh_vien_cua as t3 on t2.id_giang_vien = t3.id_giang_vien where t1.ten_khoa = "Computer Science"	college_3
-select avg ( t2.diem_so ) from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien where t3.ho = "Smith"	college_3
-select avg ( t2.diem_so ) from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien where t3.ho = "Smith"	college_3
-select max ( t2.diem_so ) , min ( t2.diem_so ) from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien where t3.ma_thanh_pho = "NYC"	college_3
-select max ( t2.diem_so ) , min ( t2.diem_so ) from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien where t3.ma_thanh_pho = "NYC"	college_3
-select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 3 union select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 1 and gio = 4	college_3
-select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 3 union select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 1 and gio = 4	college_3
-select ten_khoa from khoa where bo_phan = "AS" union select ten_khoa from khoa where bo_phan = "EN" and toa_nha = "NEB"	college_3
-select ten_khoa from khoa where bo_phan = "AS" union select ten_khoa from khoa where bo_phan = "EN" and toa_nha = "NEB"	college_3
-select ten from sinh_vien where id_sinh_vien not in ( select id_sinh_vien from dang_ky_khoa_hoc )	college_3
-select ten from sinh_vien where id_sinh_vien not in ( select id_sinh_vien from dang_ky_khoa_hoc )	college_3
-select count ( * ) from ca_si	concert_singer
-select count ( * ) from ca_si	concert_singer
-select ten , quoc_gia , tuoi from ca_si order by tuoi desc	concert_singer
-select ten , quoc_gia , tuoi from ca_si order by tuoi desc	concert_singer
-select avg ( tuoi ) , min ( tuoi ) , max ( tuoi ) from ca_si where quoc_gia = "France"	concert_singer
-select avg ( tuoi ) , min ( tuoi ) , max ( tuoi ) from ca_si where quoc_gia = "France"	concert_singer
-select ten_bai_hat , nam_phat_hanh_bai_hat from ca_si order by tuoi limit 1	concert_singer
-select ten_bai_hat , nam_phat_hanh_bai_hat from ca_si order by tuoi limit 1	concert_singer
-select distinct quoc_gia from ca_si where tuoi > 20	concert_singer
-select distinct quoc_gia from ca_si where tuoi > 20	concert_singer
-select quoc_gia , count ( * ) from ca_si group by quoc_gia	concert_singer
-select quoc_gia , count ( * ) from ca_si group by quoc_gia	concert_singer
-select ten_bai_hat from ca_si where tuoi > ( select avg ( tuoi ) from ca_si )	concert_singer
-select ten_bai_hat from ca_si where tuoi > ( select avg ( tuoi ) from ca_si )	concert_singer
-select dia_diem , ten from san_van_dong where suc_chua between 5000 and 10000	concert_singer
-select dia_diem , ten from san_van_dong where suc_chua between 5000 and 10000	concert_singer
-select avg ( suc_chua ) , max ( suc_chua ) from san_van_dong	concert_singer
-select avg ( suc_chua ) , max ( suc_chua ) from san_van_dong	concert_singer
-select ten , suc_chua from san_van_dong order by so_luong_tham_gia_trung_binh desc limit 1	concert_singer
-select ten , suc_chua from san_van_dong order by so_luong_tham_gia_trung_binh desc limit 1	concert_singer
-select count ( * ) from buoi_hoa_nhac where nam = 2014 or nam = 2015	concert_singer
-select count ( * ) from buoi_hoa_nhac where nam = 2014 or nam = 2015	concert_singer
-select t2.ten , count ( * ) from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong group by t1.id_san_van_dong	concert_singer
-select t2.ten , count ( * ) from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong group by t1.id_san_van_dong	concert_singer
-select t2.ten , t2.suc_chua from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong where t1.nam >= 2014 group by t2.id_san_van_dong order by count ( * ) desc limit 1	concert_singer
-select t2.ten , t2.suc_chua from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong where t1.nam >= 2014 group by t2.id_san_van_dong order by count ( * ) desc limit 1	concert_singer
-select nam from buoi_hoa_nhac group by nam order by count ( * ) desc limit 1	concert_singer
-select nam from buoi_hoa_nhac group by nam order by count ( * ) desc limit 1	concert_singer
-select ten from san_van_dong where id_san_van_dong not in ( select id_san_van_dong from buoi_hoa_nhac )	concert_singer
-select ten from san_van_dong where id_san_van_dong not in ( select id_san_van_dong from buoi_hoa_nhac )	concert_singer
-select quoc_gia from ca_si where tuoi > 40 intersect select quoc_gia from ca_si where tuoi < 30	concert_singer
-select ten from san_van_dong except select t2.ten from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong where t1.nam = 2014	concert_singer
-select ten from san_van_dong except select t2.ten from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong where t1.nam = 2014	concert_singer
-select t2.ten_buoi_hoa_nhac , t2.chu_de , count ( * ) from ca_si_trong_buoi_hoa_nhac as t1 join buoi_hoa_nhac as t2 on t1.id_buoi_hoa_nhac = t2.id_buoi_hoa_nhac group by t2.id_buoi_hoa_nhac	concert_singer
-select t2.ten_buoi_hoa_nhac , t2.chu_de , count ( * ) from ca_si_trong_buoi_hoa_nhac as t1 join buoi_hoa_nhac as t2 on t1.id_buoi_hoa_nhac = t2.id_buoi_hoa_nhac group by t2.id_buoi_hoa_nhac	concert_singer
-select t2.ten , count ( * ) from ca_si_trong_buoi_hoa_nhac as t1 join ca_si as t2 on t1.id_ca_si = t2.id_ca_si group by t2.id_ca_si	concert_singer
-select t2.ten , count ( * ) from ca_si_trong_buoi_hoa_nhac as t1 join ca_si as t2 on t1.id_ca_si = t2.id_ca_si group by t2.id_ca_si	concert_singer
-select t2.ten from ca_si_trong_buoi_hoa_nhac as t1 join ca_si as t2 on t1.id_ca_si = t2.id_ca_si join buoi_hoa_nhac as t3 on t1.id_buoi_hoa_nhac = t3.id_buoi_hoa_nhac where t3.nam = 2014	concert_singer
-select t2.ten from ca_si_trong_buoi_hoa_nhac as t1 join ca_si as t2 on t1.id_ca_si = t2.id_ca_si join buoi_hoa_nhac as t3 on t1.id_buoi_hoa_nhac = t3.id_buoi_hoa_nhac where t3.nam = 2014	concert_singer
-select ten , quoc_gia from ca_si where ten_bai_hat like "%Hey%"	concert_singer
-select ten , quoc_gia from ca_si where ten_bai_hat like "%Hey%"	concert_singer
-select t2.ten , t2.dia_diem from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong where t1.nam = 2014 intersect select t2.ten , t2.dia_diem from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong where t1.nam = 2015	concert_singer
-select t2.ten , t2.dia_diem from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong where t1.nam = 2014 intersect select t2.ten , t2.dia_diem from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong where t1.nam = 2015	concert_singer
-select count ( * ) from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong order by t2.suc_chua desc limit 1	concert_singer
-select count ( * ) from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong order by t2.suc_chua desc limit 1	concert_singer
-select count ( * ) from khu_nha	customers_campaigns_ecommerce
-select distinct mau_cua_khu_nha from khu_nha	customers_campaigns_ecommerce
-select mau_cua_khu_nha , chi_tiet_khu_nha from khu_nha order by mau_cua_khu_nha	customers_campaigns_ecommerce
-select mau_cua_khu_nha , count ( * ) from khu_nha group by mau_cua_khu_nha	customers_campaigns_ecommerce
-select danh_muc_san_pham , count ( * ) from chien_dich_gui_thu_quang_cao group by danh_muc_san_pham	customers_campaigns_ecommerce
-select ten_khach_hang , so_dien_thoai_khach_hang from khach_hang where id_khach_hang not in ( select id_khach_hang from thu_quang_cao_gui_khach_hang )	customers_campaigns_ecommerce
-select t1.ten_khach_hang , t1.so_dien_thoai_khach_hang from khach_hang as t1 join thu_quang_cao_gui_khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ma_ket_qua = "No Response"	customers_campaigns_ecommerce
-select ma_ket_qua , count ( * ) from thu_quang_cao_gui_khach_hang group by ma_ket_qua	customers_campaigns_ecommerce
-select t2.ten_khach_hang from thu_quang_cao_gui_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where ma_ket_qua = "Order" group by t1.id_khach_hang having count ( * ) >= 2	customers_campaigns_ecommerce
-select t2.ten_khach_hang from thu_quang_cao_gui_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) desc limit 1	customers_campaigns_ecommerce
-select t2.ten_khach_hang , t2.phuong_thuc_thanh_toan from thu_quang_cao_gui_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ma_ket_qua = "Order" intersect select t2.ten_khach_hang , t2.phuong_thuc_thanh_toan from thu_quang_cao_gui_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ma_ket_qua = "No Response"	customers_campaigns_ecommerce
-select t2.mau_cua_khu_nha , t1.ma_loai_dia_chi from dia_chi_khach_hang as t1 join khu_nha as t2 on t1.id_khu_nha = t2.id_khu_nha	customers_campaigns_ecommerce
-select distinct ma_loai_dia_chi from dia_chi_khach_hang	customers_campaigns_ecommerce
-select phi_van_chuyen_don_hang , id_khach_hang from luot_dat_hang_cua_khach_hang where ma_trang_thai_don_hang = "Cancelled" or ma_trang_thai_don_hang = "Paid"	customers_campaigns_ecommerce
-select t1.ten_khach_hang from khach_hang as t1 join luot_dat_hang_cua_khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where ma_phuong_thuc_van_chuyen = "FedEx" and ma_trang_thai_don_hang = "Paid"	customers_campaigns_ecommerce
-select count ( * ) from tai_khoan	customers_card_transactions
-select count ( * ) from tai_khoan	customers_card_transactions
-select id_tai_khoan , id_khach_hang , ten_tai_khoan from tai_khoan	customers_card_transactions
-select id_tai_khoan , id_khach_hang , ten_tai_khoan from tai_khoan	customers_card_transactions
-select chi_tiet_khac_ve_tai_khoan from tai_khoan where ten_tai_khoan = "338"	customers_card_transactions
-select chi_tiet_khac_ve_tai_khoan from tai_khoan where ten_tai_khoan = "338"	customers_card_transactions
-select t2.ten_cua_khach_hang , t2.ho_cua_khach_hang , t2.so_dien_thoai_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ten_tai_khoan = "162"	customers_card_transactions
-select t2.ten_cua_khach_hang , t2.ho_cua_khach_hang , t2.so_dien_thoai_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ten_tai_khoan = "162"	customers_card_transactions
-select count ( * ) from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten_cua_khach_hang = "Art" and t2.ho_cua_khach_hang = "Turcotte"	customers_card_transactions
-select count ( * ) from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten_cua_khach_hang = "Art" and t2.ho_cua_khach_hang = "Turcotte"	customers_card_transactions
-select id_khach_hang , count ( * ) from tai_khoan group by id_khach_hang	customers_card_transactions
-select id_khach_hang , count ( * ) from tai_khoan group by id_khach_hang	customers_card_transactions
-select id_khach_hang , count ( * ) from tai_khoan group by id_khach_hang order by count ( * ) desc limit 1	customers_card_transactions
-select id_khach_hang , count ( * ) from tai_khoan group by id_khach_hang order by count ( * ) desc limit 1	customers_card_transactions
-select t2.ten_cua_khach_hang , t2.ho_cua_khach_hang , t1.id_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) asc limit 1	customers_card_transactions
-select t2.ten_cua_khach_hang , t2.ho_cua_khach_hang , t1.id_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) asc limit 1	customers_card_transactions
-select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from tai_khoan )	customers_card_transactions
-select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from tai_khoan )	customers_card_transactions
-select ten_cua_khach_hang , ho_cua_khach_hang from khach_hang except select t1.ten_cua_khach_hang , t1.ho_cua_khach_hang from khach_hang as t1 join tai_khoan as t2 on t1.id_khach_hang = t2.id_khach_hang	customers_card_transactions
-select ten_cua_khach_hang , ho_cua_khach_hang from khach_hang except select t1.ten_cua_khach_hang , t1.ho_cua_khach_hang from khach_hang as t1 join tai_khoan as t2 on t1.id_khach_hang = t2.id_khach_hang	customers_card_transactions
-select distinct t1.ten_cua_khach_hang , t1.ho_cua_khach_hang from khach_hang as t1 join tai_khoan as t2 on t1.id_khach_hang = t2.id_khach_hang	customers_card_transactions
-select distinct t1.ten_cua_khach_hang , t1.ho_cua_khach_hang from khach_hang as t1 join tai_khoan as t2 on t1.id_khach_hang = t2.id_khach_hang	customers_card_transactions
-select count ( distinct id_khach_hang ) from tai_khoan	customers_card_transactions
-select count ( distinct id_khach_hang ) from tai_khoan	customers_card_transactions
-select count ( * ) from khach_hang	customers_card_transactions
-select count ( * ) from khach_hang	customers_card_transactions
-select id_khach_hang , ten_cua_khach_hang , ho_cua_khach_hang , so_dien_thoai_khach_hang from khach_hang	customers_card_transactions
-select id_khach_hang , ten_cua_khach_hang , ho_cua_khach_hang , so_dien_thoai_khach_hang from khach_hang	customers_card_transactions
-select so_dien_thoai_khach_hang , email_cua_khach_hang from khach_hang where ten_cua_khach_hang = "Aniyah" and ho_cua_khach_hang = "Feest"	customers_card_transactions
-select so_dien_thoai_khach_hang , email_cua_khach_hang from khach_hang where ten_cua_khach_hang = "Aniyah" and ho_cua_khach_hang = "Feest"	customers_card_transactions
-select count ( * ) from the_khach_hang	customers_card_transactions
-select count ( * ) from the_khach_hang	customers_card_transactions
-select id_the , id_khach_hang , ma_loai_the , so_the from the_khach_hang	customers_card_transactions
-select id_the , id_khach_hang , ma_loai_the , so_the from the_khach_hang	customers_card_transactions
-select hop_le_tu_ngay , hop_le_den_ngay from the_khach_hang where so_the = "4560596484842"	customers_card_transactions
-select hop_le_tu_ngay , hop_le_den_ngay from the_khach_hang where so_the = "4560596484842"	customers_card_transactions
-select t2.ten_cua_khach_hang , t2.ho_cua_khach_hang , t2.so_dien_thoai_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.so_the = "4560596484842"	customers_card_transactions
-select t2.ten_cua_khach_hang , t2.ho_cua_khach_hang , t2.so_dien_thoai_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.so_the = "4560596484842"	customers_card_transactions
-select count ( * ) from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten_cua_khach_hang = "Art" and t2.ho_cua_khach_hang = "Turcotte"	customers_card_transactions
-select count ( * ) from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten_cua_khach_hang = "Art" and t2.ho_cua_khach_hang = "Turcotte"	customers_card_transactions
-select count ( * ) from the_khach_hang where ma_loai_the = "Debit"	customers_card_transactions
-select count ( * ) from the_khach_hang where ma_loai_the = "Debit"	customers_card_transactions
-select count ( * ) from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten_cua_khach_hang = "Blanche" and t2.ho_cua_khach_hang = "Huels" and t1.ma_loai_the = "Credit"	customers_card_transactions
-select count ( * ) from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten_cua_khach_hang = "Blanche" and t2.ho_cua_khach_hang = "Huels" and t1.ma_loai_the = "Credit"	customers_card_transactions
-select id_khach_hang , count ( * ) from the_khach_hang group by id_khach_hang	customers_card_transactions
-select id_khach_hang , count ( * ) from the_khach_hang group by id_khach_hang	customers_card_transactions
-select id_khach_hang , count ( * ) from the_khach_hang group by id_khach_hang order by count ( * ) desc limit 1	customers_card_transactions
-select id_khach_hang , count ( * ) from the_khach_hang group by id_khach_hang order by count ( * ) desc limit 1	customers_card_transactions
-select t1.id_khach_hang , t2.ten_cua_khach_hang , t2.ho_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang having count ( * ) >= 2	customers_card_transactions
-select t1.id_khach_hang , t2.ten_cua_khach_hang , t2.ho_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang having count ( * ) >= 2	customers_card_transactions
-select t1.id_khach_hang , t2.ten_cua_khach_hang , t2.ho_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) asc limit 1	customers_card_transactions
-select t1.id_khach_hang , t2.ten_cua_khach_hang , t2.ho_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) asc limit 1	customers_card_transactions
-select ma_loai_the , count ( * ) from the_khach_hang group by ma_loai_the	customers_card_transactions
-select ma_loai_the , count ( * ) from the_khach_hang group by ma_loai_the	customers_card_transactions
-select ma_loai_the from the_khach_hang group by ma_loai_the order by count ( * ) desc limit 1	customers_card_transactions
-select ma_loai_the from the_khach_hang group by ma_loai_the order by count ( * ) desc limit 1	customers_card_transactions
-select ma_loai_the from the_khach_hang group by ma_loai_the having count ( * ) >= 5	customers_card_transactions
-select ma_loai_the from the_khach_hang group by ma_loai_the having count ( * ) >= 5	customers_card_transactions
-select ma_loai_the , count ( distinct id_khach_hang ) from the_khach_hang group by ma_loai_the	customers_card_transactions
-select ma_loai_the , count ( distinct id_khach_hang ) from the_khach_hang group by ma_loai_the	customers_card_transactions
-select id_khach_hang , ten_cua_khach_hang from khach_hang except select t1.id_khach_hang , t2.ten_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where ma_loai_the = "Credit"	customers_card_transactions
-select id_khach_hang , ten_cua_khach_hang from khach_hang except select t1.id_khach_hang , t2.ten_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where ma_loai_the = "Credit"	customers_card_transactions
-select distinct ma_loai_the from the_khach_hang	customers_card_transactions
-select distinct ma_loai_the from the_khach_hang	customers_card_transactions
-select count ( distinct ma_loai_the ) from the_khach_hang	customers_card_transactions
-select count ( distinct ma_loai_the ) from the_khach_hang	customers_card_transactions
-select distinct loai_giao_dich from giao_dich_tai_chinh	customers_card_transactions
-select distinct loai_giao_dich from giao_dich_tai_chinh	customers_card_transactions
-select count ( distinct loai_giao_dich ) from giao_dich_tai_chinh	customers_card_transactions
-select count ( distinct loai_giao_dich ) from giao_dich_tai_chinh	customers_card_transactions
-select avg ( so_tien_giao_dich ) , sum ( so_tien_giao_dich ) from giao_dich_tai_chinh	customers_card_transactions
-select avg ( so_tien_giao_dich ) , sum ( so_tien_giao_dich ) from giao_dich_tai_chinh	customers_card_transactions
-select t2.ma_loai_the , count ( * ) from giao_dich_tai_chinh as t1 join the_khach_hang as t2 on t1.id_the = t2.id_the group by t2.ma_loai_the	customers_card_transactions
-select t2.ma_loai_the , count ( * ) from giao_dich_tai_chinh as t1 join the_khach_hang as t2 on t1.id_the = t2.id_the group by t2.ma_loai_the	customers_card_transactions
-select loai_giao_dich , count ( * ) from giao_dich_tai_chinh group by loai_giao_dich	customers_card_transactions
-select loai_giao_dich , count ( * ) from giao_dich_tai_chinh group by loai_giao_dich	customers_card_transactions
-select loai_giao_dich from giao_dich_tai_chinh group by loai_giao_dich order by sum ( so_tien_giao_dich ) desc limit 1	customers_card_transactions
-select loai_giao_dich from giao_dich_tai_chinh group by loai_giao_dich order by sum ( so_tien_giao_dich ) desc limit 1	customers_card_transactions
-select id_tai_khoan , count ( * ) from giao_dich_tai_chinh group by id_tai_khoan	customers_card_transactions
-select id_tai_khoan , count ( * ) from giao_dich_tai_chinh group by id_tai_khoan	customers_card_transactions
-select ten_tai_lieu , so_luong_truy_cap from tai_lieu order by ten_tai_lieu	document_management
-select ten_tai_lieu , so_luong_truy_cap from tai_lieu order by ten_tai_lieu	document_management
-select ten_tai_lieu , so_luong_truy_cap from tai_lieu order by so_luong_truy_cap desc limit 1	document_management
-select ten_tai_lieu , so_luong_truy_cap from tai_lieu order by so_luong_truy_cap desc limit 1	document_management
-select ma_loai_tai_lieu from tai_lieu group by ma_loai_tai_lieu having count ( * ) > 4	document_management
-select ma_loai_tai_lieu from tai_lieu group by ma_loai_tai_lieu having count ( * ) > 4	document_management
-select sum ( so_luong_truy_cap ) from tai_lieu group by ma_loai_tai_lieu order by count ( * ) desc limit 1	document_management
-select sum ( so_luong_truy_cap ) from tai_lieu group by ma_loai_tai_lieu order by count ( * ) desc limit 1	document_management
-select avg ( so_luong_truy_cap ) from tai_lieu	document_management
-select avg ( so_luong_truy_cap ) from tai_lieu	document_management
-select t2.mo_ta_ve_cau_truc_tai_lieu from tai_lieu as t1 join cau_truc_tai_lieu as t2 on t1.ma_cau_truc_tai_lieu = t2.ma_cau_truc_tai_lieu group by t1.ma_cau_truc_tai_lieu order by count ( * ) desc limit 1	document_management
-select t2.mo_ta_ve_cau_truc_tai_lieu from tai_lieu as t1 join cau_truc_tai_lieu as t2 on t1.ma_cau_truc_tai_lieu = t2.ma_cau_truc_tai_lieu group by t1.ma_cau_truc_tai_lieu order by count ( * ) desc limit 1	document_management
-select ma_loai_tai_lieu from tai_lieu where ten_tai_lieu = "David CV"	document_management
-select ma_loai_tai_lieu from tai_lieu where ten_tai_lieu = "David CV"	document_management
-select ten_tai_lieu from tai_lieu group by ma_loai_tai_lieu order by count ( * ) desc limit 3 intersect select ten_tai_lieu from tai_lieu group by ma_cau_truc_tai_lieu order by count ( * ) desc limit 3	document_management
-select ten_tai_lieu from tai_lieu group by ma_loai_tai_lieu order by count ( * ) desc limit 3 intersect select ten_tai_lieu from tai_lieu group by ma_cau_truc_tai_lieu order by count ( * ) desc limit 3	document_management
-select ma_loai_tai_lieu from tai_lieu group by ma_loai_tai_lieu having sum ( so_luong_truy_cap ) > 10000	document_management
-select ma_loai_tai_lieu from tai_lieu group by ma_loai_tai_lieu having sum ( so_luong_truy_cap ) > 10000	document_management
-select t2.tieu_de_muc from tai_lieu as t1 join cac_muc_cua_tai_lieu as t2 on t1.ma_tai_lieu = t2.ma_tai_lieu where t1.ten_tai_lieu = "David CV"	document_management
-select t2.tieu_de_muc from tai_lieu as t1 join cac_muc_cua_tai_lieu as t2 on t1.ma_tai_lieu = t2.ma_tai_lieu where t1.ten_tai_lieu = "David CV"	document_management
-select ten_tai_lieu from tai_lieu where ma_tai_lieu not in ( select ma_tai_lieu from cac_muc_cua_tai_lieu )	document_management
-select ten_tai_lieu from tai_lieu where ma_tai_lieu not in ( select ma_tai_lieu from cac_muc_cua_tai_lieu )	document_management
-select ten_nguoi_dung , mat_khau from nguoi_dung group by ma_vai_tro order by count ( * ) desc limit 1	document_management
-select ten_nguoi_dung , mat_khau from nguoi_dung group by ma_vai_tro order by count ( * ) desc limit 1	document_management
-select avg ( t1.so_luong_truy_cap ) from tai_lieu as t1 join chuc_nang_phan_cua_tai_lieu as t2 on t1.ma_tai_lieu = t2.ma_tai_lieu join khu_vuc_chuc_nang as t3 on t2.ma_chuc_nang_phan = t3.ma_chuc_nang_phan where t3.mo_ta_ve_chuc_nang_phan = "Acknowledgement"	document_management
-select avg ( t1.so_luong_truy_cap ) from tai_lieu as t1 join chuc_nang_phan_cua_tai_lieu as t2 on t1.ma_tai_lieu = t2.ma_tai_lieu join khu_vuc_chuc_nang as t3 on t2.ma_chuc_nang_phan = t3.ma_chuc_nang_phan where t3.mo_ta_ve_chuc_nang_phan = "Acknowledgement"	document_management
-select ten_tai_lieu from tai_lieu except select t1.ten_tai_lieu from tai_lieu as t1 join cac_muc_cua_tai_lieu as t2 on t1.ma_tai_lieu = t2.ma_tai_lieu join hinh_anh_trong_cac_muc_cua_tai_lieu as t3 on t2.id_muc = t3.id_muc	document_management
-select ten_tai_lieu from tai_lieu except select t1.ten_tai_lieu from tai_lieu as t1 join cac_muc_cua_tai_lieu as t2 on t1.ma_tai_lieu = t2.ma_tai_lieu join hinh_anh_trong_cac_muc_cua_tai_lieu as t3 on t2.id_muc = t3.id_muc	document_management
-select t1.ten_tai_lieu from tai_lieu as t1 join cac_muc_cua_tai_lieu as t2 on t1.ma_tai_lieu = t2.ma_tai_lieu group by t1.ma_tai_lieu order by count ( * ) desc limit 1	document_management
-select t1.ten_tai_lieu from tai_lieu as t1 join cac_muc_cua_tai_lieu as t2 on t1.ma_tai_lieu = t2.ma_tai_lieu group by t1.ma_tai_lieu order by count ( * ) desc limit 1	document_management
-select ten_tai_lieu from tai_lieu where ten_tai_lieu like "%CV%"	document_management
-select ten_tai_lieu from tai_lieu where ten_tai_lieu like "%CV%"	document_management
-select count ( * ) from nguoi_dung where lan_dang_nhap_cua_nguoi_dung = 1	document_management
-select count ( * ) from nguoi_dung where lan_dang_nhap_cua_nguoi_dung = 1	document_management
-select mo_ta_ve_vai_tro from vai_tro where ma_vai_tro = ( select ma_vai_tro from nguoi_dung where lan_dang_nhap_cua_nguoi_dung = 1 group by ma_vai_tro order by count ( * ) desc limit 1 )	document_management
-select mo_ta_ve_vai_tro from vai_tro where ma_vai_tro = ( select ma_vai_tro from nguoi_dung where lan_dang_nhap_cua_nguoi_dung = 1 group by ma_vai_tro order by count ( * ) desc limit 1 )	document_management
-select avg ( so_luong_truy_cap ) from tai_lieu group by ma_cau_truc_tai_lieu order by count ( * ) asc limit 1	document_management
-select avg ( so_luong_truy_cap ) from tai_lieu group by ma_cau_truc_tai_lieu order by count ( * ) asc limit 1	document_management
-select ten_hinh_anh , duong_dan_cua_hinh_anh from hinh_anh order by ten_hinh_anh	document_management
-select ten_hinh_anh , duong_dan_cua_hinh_anh from hinh_anh order by ten_hinh_anh	document_management
-select count ( * ) , ma_vai_tro from nguoi_dung group by ma_vai_tro	document_management
-select count ( * ) , ma_vai_tro from nguoi_dung group by ma_vai_tro	document_management
-select ma_loai_tai_lieu from tai_lieu group by ma_loai_tai_lieu having count ( * ) > 2	document_management
-select ma_loai_tai_lieu from tai_lieu group by ma_loai_tai_lieu having count ( * ) > 2	document_management
-select count ( * ) from khoa_hoc	e_learning
-select count ( * ) from khoa_hoc	e_learning
-select mo_ta_ve_khoa_hoc from khoa_hoc where ten_khoa_hoc = "database"	e_learning
-select mo_ta_ve_khoa_hoc from khoa_hoc where ten_khoa_hoc = "database"	e_learning
-select dong_1_cua_dia_chi from tac_gia_khoa_hoc_va_nguoi_huong_dan where ten_ca_nhan = "Cathrine"	e_learning
-select dong_1_cua_dia_chi from tac_gia_khoa_hoc_va_nguoi_huong_dan where ten_ca_nhan = "Cathrine"	e_learning
-select dong_1_cua_dia_chi from tac_gia_khoa_hoc_va_nguoi_huong_dan	e_learning
-select dong_1_cua_dia_chi from tac_gia_khoa_hoc_va_nguoi_huong_dan	e_learning
-select ten_dang_nhap , ho from tac_gia_khoa_hoc_va_nguoi_huong_dan	e_learning
-select ten_dang_nhap , ho from tac_gia_khoa_hoc_va_nguoi_huong_dan	e_learning
-select ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien	e_learning
-select ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien	e_learning
-select count ( distinct id_sinh_vien ) from luot_dang_ky_khoa_hoc_cua_sinh_vien	e_learning
-select count ( distinct id_sinh_vien ) from luot_dang_ky_khoa_hoc_cua_sinh_vien	e_learning
-select count ( id_khoa_hoc ) from luot_dang_ky_khoa_hoc_cua_sinh_vien	e_learning
-select count ( id_khoa_hoc ) from luot_dang_ky_khoa_hoc_cua_sinh_vien	e_learning
-select ngay_lam_bai_kiem_tra from bai_kiem_tra_cua_sinh_vien where ket_qua_kiem_tra = "Pass"	e_learning
-select ngay_lam_bai_kiem_tra from bai_kiem_tra_cua_sinh_vien where ket_qua_kiem_tra = "Pass"	e_learning
-select count ( * ) from bai_kiem_tra_cua_sinh_vien where ket_qua_kiem_tra = "Fail"	e_learning
-select count ( * ) from bai_kiem_tra_cua_sinh_vien where ket_qua_kiem_tra = "Fail"	e_learning
-select ten_dang_nhap from sinh_vien where ho = "Ward"	e_learning
-select ten_dang_nhap from sinh_vien where ho = "Ward"	e_learning
-select ngay_dang_nhap_moi_nhat from sinh_vien where ho = "Jaskolski" or ho = "Langosh"	e_learning
-select ngay_dang_nhap_moi_nhat from sinh_vien where ho = "Jaskolski" or ho = "Langosh"	e_learning
-select count ( * ) from sinh_vien where ten_ca_nhan like "%son%"	e_learning
-select count ( * ) from sinh_vien where ten_ca_nhan like "%son%"	e_learning
-select ten_mon_hoc from mon_hoc	e_learning
-select ten_mon_hoc from mon_hoc	e_learning
-select * from tac_gia_khoa_hoc_va_nguoi_huong_dan order by ten_ca_nhan	e_learning
-select * from tac_gia_khoa_hoc_va_nguoi_huong_dan order by ten_ca_nhan	e_learning
-select ten_ca_nhan , ho from sinh_vien order by ho	e_learning
-select ten_ca_nhan , ho from sinh_vien order by ho	e_learning
-select ket_qua_kiem_tra , count ( * ) from bai_kiem_tra_cua_sinh_vien group by ket_qua_kiem_tra order by count ( * ) desc	e_learning
-select ket_qua_kiem_tra , count ( * ) from bai_kiem_tra_cua_sinh_vien group by ket_qua_kiem_tra order by count ( * ) desc	e_learning
-select t1.ten_dang_nhap from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia where t2.ten_khoa_hoc = "advanced database"	e_learning
-select t1.ten_dang_nhap from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia where t2.ten_khoa_hoc = "advanced database"	e_learning
-select t1.dong_1_cua_dia_chi from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia where t2.ten_khoa_hoc = "operating system" or t2.ten_khoa_hoc = "data structure"	e_learning
-select t1.dong_1_cua_dia_chi from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia where t2.ten_khoa_hoc = "operating system" or t2.ten_khoa_hoc = "data structure"	e_learning
-select t1.ten_ca_nhan , t1.ho , t2.id_tac_gia from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia group by t2.id_tac_gia order by count ( * ) desc limit 1	e_learning
-select t1.ten_ca_nhan , t1.ho , t2.id_tac_gia from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia group by t2.id_tac_gia order by count ( * ) desc limit 1	e_learning
-select t1.dong_1_cua_dia_chi , t2.id_tac_gia from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia group by t2.id_tac_gia having count ( * ) >= 2	e_learning
-select t1.dong_1_cua_dia_chi , t2.id_tac_gia from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia group by t2.id_tac_gia having count ( * ) >= 2	e_learning
-select t2.ten_khoa_hoc from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia where t1.ten_ca_nhan = "Julio"	e_learning
-select t2.ten_khoa_hoc from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia where t1.ten_ca_nhan = "Julio"	e_learning
-select t1.ten_khoa_hoc , t1.mo_ta_ve_khoa_hoc from khoa_hoc as t1 join mon_hoc as t2 on t1.id_mon_hoc = t2.id_mon_hoc where t2.ten_mon_hoc = "Computer Science"	e_learning
-select t1.ten_khoa_hoc , t1.mo_ta_ve_khoa_hoc from khoa_hoc as t1 join mon_hoc as t2 on t1.id_mon_hoc = t2.id_mon_hoc where t2.ten_mon_hoc = "Computer Science"	e_learning
-select t1.id_mon_hoc , t2.ten_mon_hoc , count ( * ) from khoa_hoc as t1 join mon_hoc as t2 on t1.id_mon_hoc = t2.id_mon_hoc group by t1.id_mon_hoc	e_learning
-select t1.id_mon_hoc , t2.ten_mon_hoc , count ( * ) from khoa_hoc as t1 join mon_hoc as t2 on t1.id_mon_hoc = t2.id_mon_hoc group by t1.id_mon_hoc	e_learning
-select t1.id_mon_hoc , t2.ten_mon_hoc , count ( * ) from khoa_hoc as t1 join mon_hoc as t2 on t1.id_mon_hoc = t2.id_mon_hoc group by t1.id_mon_hoc order by count ( * ) asc	e_learning
-select t1.id_mon_hoc , t2.ten_mon_hoc , count ( * ) from khoa_hoc as t1 join mon_hoc as t2 on t1.id_mon_hoc = t2.id_mon_hoc group by t1.id_mon_hoc order by count ( * ) asc	e_learning
-select t2.ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_khoa_hoc = "Spanish"	e_learning
-select t2.ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_khoa_hoc = "Spanish"	e_learning
-select t1.ten_khoa_hoc from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc order by count ( * ) desc limit 1	e_learning
-select t1.ten_khoa_hoc from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc order by count ( * ) desc limit 1	e_learning
-select t1.ten_khoa_hoc from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc having count ( * ) = 1	e_learning
-select t1.ten_khoa_hoc from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc having count ( * ) = 1	e_learning
-select t1.mo_ta_ve_khoa_hoc , t1.ten_khoa_hoc from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc having count ( * ) > 2	e_learning
-select t1.mo_ta_ve_khoa_hoc , t1.ten_khoa_hoc from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc having count ( * ) > 2	e_learning
-select t1.ten_khoa_hoc , count ( * ) from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc	e_learning
-select t1.ten_khoa_hoc , count ( * ) from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc	e_learning
-select t1.ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky where t2.ket_qua_kiem_tra = "Pass"	e_learning
-select t1.ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky where t2.ket_qua_kiem_tra = "Pass"	e_learning
-select t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky where t2.ket_qua_kiem_tra = "Fail"	e_learning
-select t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky where t2.ket_qua_kiem_tra = "Fail"	e_learning
-select t1.ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien where t2.ten_ca_nhan = "Karson"	e_learning
-select t1.ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien where t2.ten_ca_nhan = "Karson"	e_learning
-select t1.ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien where t2.ho = "Zieme" and t2.ten_ca_nhan = "Bernie"	e_learning
-select t1.ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien where t2.ho = "Zieme" and t2.ten_ca_nhan = "Bernie"	e_learning
-select t1.id_sinh_vien , t2.ten_dang_nhap from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien order by count ( * ) desc limit 1	e_learning
-select t1.id_sinh_vien , t2.ten_dang_nhap from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien order by count ( * ) desc limit 1	e_learning
-select t1.id_sinh_vien , t2.ten_ca_nhan from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien having count ( * ) >= 2	e_learning
-select t1.id_sinh_vien , t2.ten_ca_nhan from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien having count ( * ) >= 2	e_learning
-select t1.id_sinh_vien , t2.ten_dem from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien having count ( * ) <= 2	e_learning
-select t1.id_sinh_vien , t2.ten_dem from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien having count ( * ) <= 2	e_learning
-select ten_ca_nhan from sinh_vien except select t1.ten_ca_nhan from sinh_vien as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien	e_learning
-select ten_ca_nhan from sinh_vien except select t1.ten_ca_nhan from sinh_vien as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien	e_learning
-select count ( * ) from sinh_vien where id_sinh_vien not in ( select id_sinh_vien from luot_dang_ky_khoa_hoc_cua_sinh_vien )	e_learning
-select count ( * ) from sinh_vien where id_sinh_vien not in ( select id_sinh_vien from luot_dang_ky_khoa_hoc_cua_sinh_vien )	e_learning
-select ten_dang_nhap from tac_gia_khoa_hoc_va_nguoi_huong_dan intersect select ten_dang_nhap from sinh_vien	e_learning
-select ten_dang_nhap from tac_gia_khoa_hoc_va_nguoi_huong_dan intersect select ten_dang_nhap from sinh_vien	e_learning
-select ten_ca_nhan from tac_gia_khoa_hoc_va_nguoi_huong_dan intersect select ten_ca_nhan from sinh_vien	e_learning
-select ten_ca_nhan from tac_gia_khoa_hoc_va_nguoi_huong_dan intersect select ten_ca_nhan from sinh_vien	e_learning
-select count ( * ) from trang_trai	farm
-select count ( * ) from trang_trai	farm
-select tong_so_ngua from trang_trai order by tong_so_ngua asc	farm
-select tong_so_ngua from trang_trai order by tong_so_ngua asc	farm
-select chu_nha from cuoc_thi_trang_trai where chu_de != "Aliens"	farm
-select chu_nha from cuoc_thi_trang_trai where chu_de != "Aliens"	farm
-select chu_de from cuoc_thi_trang_trai order by nam asc	farm
-select chu_de from cuoc_thi_trang_trai order by nam asc	farm
-select avg ( ngua_lam_viec ) from trang_trai where tong_so_ngua > 5000	farm
-select avg ( ngua_lam_viec ) from trang_trai where tong_so_ngua > 5000	farm
-select max ( bo_cai ) , min ( bo_cai ) from trang_trai	farm
-select max ( bo_cai ) , min ( bo_cai ) from trang_trai	farm
-select count ( distinct cap_bac ) from thanh_pho	farm
-select count ( distinct cap_bac ) from thanh_pho	farm
-select ten_chinh_thuc from thanh_pho order by dan_so desc	farm
-select ten_chinh_thuc from thanh_pho order by dan_so desc	farm
-select ten_chinh_thuc , cap_bac from thanh_pho order by dan_so desc limit 1	farm
-select ten_chinh_thuc , cap_bac from thanh_pho order by dan_so desc limit 1	farm
-select t2.nam , t1.ten_chinh_thuc from thanh_pho as t1 join cuoc_thi_trang_trai as t2 on t1.id_thanh_pho = t2.id_thanh_pho_chu_nha	farm
-select t2.nam , t1.ten_chinh_thuc from thanh_pho as t1 join cuoc_thi_trang_trai as t2 on t1.id_thanh_pho = t2.id_thanh_pho_chu_nha	farm
-select t1.ten_chinh_thuc from thanh_pho as t1 join cuoc_thi_trang_trai as t2 on t1.id_thanh_pho = t2.id_thanh_pho_chu_nha group by t2.id_thanh_pho_chu_nha having count ( * ) > 1	farm
-select t1.ten_chinh_thuc from thanh_pho as t1 join cuoc_thi_trang_trai as t2 on t1.id_thanh_pho = t2.id_thanh_pho_chu_nha group by t2.id_thanh_pho_chu_nha having count ( * ) > 1	farm
-select t1.cap_bac from thanh_pho as t1 join cuoc_thi_trang_trai as t2 on t1.id_thanh_pho = t2.id_thanh_pho_chu_nha group by t2.id_thanh_pho_chu_nha order by count ( * ) desc limit 1	farm
-select t1.cap_bac from thanh_pho as t1 join cuoc_thi_trang_trai as t2 on t1.id_thanh_pho = t2.id_thanh_pho_chu_nha group by t2.id_thanh_pho_chu_nha order by count ( * ) desc limit 1	farm
-select t2.chu_de from thanh_pho as t1 join cuoc_thi_trang_trai as t2 on t1.id_thanh_pho = t2.id_thanh_pho_chu_nha where t1.dan_so > 1000	farm
-select t2.chu_de from thanh_pho as t1 join cuoc_thi_trang_trai as t2 on t1.id_thanh_pho = t2.id_thanh_pho_chu_nha where t1.dan_so > 1000	farm
-select cap_bac , avg ( dan_so ) from thanh_pho group by cap_bac	farm
-select cap_bac , avg ( dan_so ) from thanh_pho group by cap_bac	farm
-select cap_bac from thanh_pho group by cap_bac order by count ( * ) asc	farm
-select cap_bac from thanh_pho group by cap_bac order by count ( * ) asc	farm
-select cap_bac from thanh_pho group by cap_bac order by count ( * ) desc limit 1	farm
-select cap_bac from thanh_pho group by cap_bac order by count ( * ) desc limit 1	farm
-select ten_chinh_thuc from thanh_pho where id_thanh_pho not in ( select id_thanh_pho_chu_nha from cuoc_thi_trang_trai )	farm
-select ten_chinh_thuc from thanh_pho where id_thanh_pho not in ( select id_thanh_pho_chu_nha from cuoc_thi_trang_trai )	farm
-select cap_bac from thanh_pho where dan_so > 1500 intersect select cap_bac from thanh_pho where dan_so < 500	farm
-select cap_bac from thanh_pho where dan_so > 1500 intersect select cap_bac from thanh_pho where dan_so < 500	farm
-select ten_chinh_thuc from thanh_pho where dan_so > 1500 or dan_so < 500	farm
-select ten_chinh_thuc from thanh_pho where dan_so > 1500 or dan_so < 500	farm
-select xep_hang_dieu_tra_dan_so from thanh_pho where cap_bac != "Village"	farm
-select xep_hang_dieu_tra_dan_so from thanh_pho where cap_bac != "Village"	farm
-select count ( * ) from chuyen_bay where van_toc > 200	flight_company
-select so_hieu , ngay , phi_cong from chuyen_bay order by do_cao asc	flight_company
-select id , quoc_gia , thanh_pho , ten from san_bay order by ten	flight_company
-select max ( co_phan_nhom ) from cong_ty_dieu_hanh	flight_company
-select avg ( van_toc ) from chuyen_bay where phi_cong = "Thompson"	flight_company
-select t1.ten , t1.loai from cong_ty_dieu_hanh as t1 join chuyen_bay as t2 on t1.id = t2.id_cong_ty	flight_company
-select ten from san_bay where quoc_gia != "Iceland"	flight_company
-select distinct t1.loai from cong_ty_dieu_hanh as t1 join chuyen_bay as t2 on t1.id = t2.id_cong_ty where t2.van_toc < 200	flight_company
-select t1.id , t1.ten from cong_ty_dieu_hanh as t1 join chuyen_bay as t2 on t1.id = t2.id_cong_ty group by t1.id having count ( * ) > 1	flight_company
-select t1.id , t1.ten , t1.iata from san_bay as t1 join chuyen_bay as t2 on t1.id = t2.id_san_bay group by t2.id order by count ( * ) desc limit 1	flight_company
-select distinct t2.phi_cong from san_bay as t1 join chuyen_bay as t2 on t1.id = t2.id_san_bay where t1.quoc_gia = "United States" or t1.ten = "Billund Airport"	flight_company
-select loai , count ( * ) from cong_ty_dieu_hanh group by loai order by count ( * ) desc limit 1	flight_company
-select count ( * ) from san_bay where id not in ( select id_san_bay from chuyen_bay where phi_cong = "Thompson" )	flight_company
-select t2.phi_cong from cong_ty_dieu_hanh as t1 join chuyen_bay as t2 on t1.id = t2.id_cong_ty where t1.hoat_dong_chinh = "Cargo" intersect select t2.phi_cong from cong_ty_dieu_hanh as t1 join chuyen_bay as t2 on t1.id = t2.id_cong_ty where t1.hoat_dong_chinh = "Catering services"	flight_company
-select ten from san_bay where ten like "%international%"	flight_company
-select t3.id , count ( * ) from cong_ty_dieu_hanh as t1 join chuyen_bay as t2 on t1.id = t2.id_cong_ty join san_bay as t3 on t2.id_san_bay = t3.id group by t3.id	flight_company
-select count ( * ) , quoc_gia from san_bay group by quoc_gia	flight_company
-select quoc_gia from san_bay group by quoc_gia having count ( * ) > 2	flight_company
-select phi_cong from chuyen_bay group by phi_cong order by count ( * ) desc limit 1	flight_company
-select sum ( so_luong_bo_phan ) from do_noi_that	manufacturer
-select ten , id_do_noi_that from do_noi_that order by lai_suat_thi_truong desc limit 1	manufacturer
-select sum ( lai_suat_thi_truong ) from do_noi_that order by lai_suat_thi_truong desc limit 2	manufacturer
-select so_luong_bo_phan , ten from do_noi_that where so_luong_bo_phan > 10	manufacturer
-select ten , so_luong_bo_phan from do_noi_that order by lai_suat_thi_truong limit 1	manufacturer
-select t1.ten from do_noi_that as t1 join xuong_san_xuat_do_noi_that as t2 on t1.id_do_noi_that = t2.id_do_noi_that where t2.gia_tinh_theo_do_la < ( select max ( gia_tinh_theo_do_la ) from xuong_san_xuat_do_noi_that )	manufacturer
-select nam_mo_cua , ten from nha_san_xuat order by so_luong_cua_hang desc limit 1	manufacturer
-select avg ( so_luong_nha_may ) from nha_san_xuat where so_luong_cua_hang > 20	manufacturer
-select ten , id_nha_san_xuat from nha_san_xuat order by nam_mo_cua	manufacturer
-select ten , nam_mo_cua from nha_san_xuat where so_luong_cua_hang > 10 or so_luong_nha_may < 10	manufacturer
-select max ( so_luong_cua_hang ) , avg ( so_luong_nha_may ) from nha_san_xuat where nam_mo_cua < 1990	manufacturer
-select t1.id_nha_san_xuat , t1.so_luong_cua_hang from nha_san_xuat as t1 join xuong_san_xuat_do_noi_that as t2 on t1.id_nha_san_xuat = t2.id_nha_san_xuat order by t2.gia_tinh_theo_do_la desc limit 1	manufacturer
-select count ( * ) , t1.ten from nha_san_xuat as t1 join xuong_san_xuat_do_noi_that as t2 on t1.id_nha_san_xuat = t2.id_nha_san_xuat group by t1.id_nha_san_xuat	manufacturer
-select t1.ten , t2.gia_tinh_theo_do_la from do_noi_that as t1 join xuong_san_xuat_do_noi_that as t2 on t1.id_do_noi_that = t2.id_do_noi_that	manufacturer
-select lai_suat_thi_truong , ten from do_noi_that where id_do_noi_that not in ( select id_do_noi_that from xuong_san_xuat_do_noi_that )	manufacturer
-select t3.ten from do_noi_that as t1 join xuong_san_xuat_do_noi_that as t2 on t1.id_do_noi_that = t2.id_do_noi_that join nha_san_xuat as t3 on t2.id_nha_san_xuat = t3.id_nha_san_xuat where t1.so_luong_bo_phan < 6 intersect select t3.ten from do_noi_that as t1 join xuong_san_xuat_do_noi_that as t2 on t1.id_do_noi_that = t2.id_do_noi_that join nha_san_xuat as t3 on t2.id_nha_san_xuat = t3.id_nha_san_xuat where t1.so_luong_bo_phan > 10	manufacturer
-select count ( * ) from khach_tham_quan where tuoi < 30	museum_visit
-select ten from khach_tham_quan where cap_do_thanh_vien > 4 order by cap_do_thanh_vien desc	museum_visit
-select avg ( tuoi ) from khach_tham_quan where cap_do_thanh_vien <= 4	museum_visit
-select ten , cap_do_thanh_vien from khach_tham_quan where cap_do_thanh_vien > 4 order by tuoi desc	museum_visit
-select id_bao_tang , ten from bao_tang order by so_luong_nhan_vien desc limit 1	museum_visit
-select avg ( so_luong_nhan_vien ) from bao_tang where nam_mo_cua < 2009	museum_visit
-select so_luong_nhan_vien , nam_mo_cua from bao_tang where ten = "Plaza Museum"	museum_visit
-select ten from bao_tang where so_luong_nhan_vien > ( select min ( so_luong_nhan_vien ) from bao_tang where nam_mo_cua > 2010 )	museum_visit
-select t1.id_khach_tham_quan , t1.ten , t1.tuoi from khach_tham_quan as t1 join chuyen_tham as t2 on t1.id_khach_tham_quan = t2.id_khach_tham_quan group by t1.id_khach_tham_quan having count ( * ) > 1	museum_visit
-select t2.id_khach_tham_quan , t1.ten , t1.cap_do_thanh_vien from khach_tham_quan as t1 join chuyen_tham as t2 on t1.id_khach_tham_quan = t2.id_khach_tham_quan group by t2.id_khach_tham_quan order by sum ( t2.tong_so_tien_da_chi ) desc limit 1	museum_visit
-select t2.id_bao_tang , t1.ten from bao_tang as t1 join chuyen_tham as t2 on t1.id_bao_tang = t2.id_bao_tang group by t2.id_bao_tang order by count ( * ) desc limit 1	museum_visit
-select ten from bao_tang where id_bao_tang not in ( select id_bao_tang from chuyen_tham )	museum_visit
-select t1.ten , t1.tuoi from khach_tham_quan as t1 join chuyen_tham as t2 on t1.id_khach_tham_quan = t2.id_khach_tham_quan order by t2.so_luong_ve desc limit 1	museum_visit
-select avg ( so_luong_ve ) , max ( so_luong_ve ) from chuyen_tham	museum_visit
-select sum ( t2.tong_so_tien_da_chi ) from khach_tham_quan as t1 join chuyen_tham as t2 on t1.id_khach_tham_quan = t2.id_khach_tham_quan where t1.cap_do_thanh_vien = 1	museum_visit
-select t1.ten from khach_tham_quan as t1 join chuyen_tham as t2 on t1.id_khach_tham_quan = t2.id_khach_tham_quan join bao_tang as t3 on t3.id_bao_tang = t2.id_bao_tang where t3.nam_mo_cua < 2009 intersect select t1.ten from khach_tham_quan as t1 join chuyen_tham as t2 on t1.id_khach_tham_quan = t2.id_khach_tham_quan join bao_tang as t3 on t3.id_bao_tang = t2.id_bao_tang where t3.nam_mo_cua > 2011	museum_visit
-select count ( * ) from khach_tham_quan where id_khach_tham_quan not in ( select t2.id_khach_tham_quan from bao_tang as t1 join chuyen_tham as t2 on t1.id_bao_tang = t2.id_bao_tang where t1.nam_mo_cua > 2010 )	museum_visit
-select count ( * ) from bao_tang where nam_mo_cua > 2013 or nam_mo_cua < 2008	museum_visit
-select count ( * ) from hoc_sinh_trung_hoc	network_1
-select count ( * ) from hoc_sinh_trung_hoc	network_1
-select ten , khoi_lop from hoc_sinh_trung_hoc	network_1
-select ten , khoi_lop from hoc_sinh_trung_hoc	network_1
-select khoi_lop from hoc_sinh_trung_hoc	network_1
-select khoi_lop from hoc_sinh_trung_hoc	network_1
-select khoi_lop from hoc_sinh_trung_hoc where ten = "Kyle"	network_1
-select khoi_lop from hoc_sinh_trung_hoc where ten = "Kyle"	network_1
-select ten from hoc_sinh_trung_hoc where khoi_lop = 10	network_1
-select ten from hoc_sinh_trung_hoc where khoi_lop = 10	network_1
-select id from hoc_sinh_trung_hoc where ten = "Kyle"	network_1
-select id from hoc_sinh_trung_hoc where ten = "Kyle"	network_1
-select count ( * ) from hoc_sinh_trung_hoc where khoi_lop = 9 or khoi_lop = 10	network_1
-select count ( * ) from hoc_sinh_trung_hoc where khoi_lop = 9 or khoi_lop = 10	network_1
-select khoi_lop , count ( * ) from hoc_sinh_trung_hoc group by khoi_lop	network_1
-select khoi_lop , count ( * ) from hoc_sinh_trung_hoc group by khoi_lop	network_1
-select khoi_lop from hoc_sinh_trung_hoc group by khoi_lop order by count ( * ) desc limit 1	network_1
-select khoi_lop from hoc_sinh_trung_hoc group by khoi_lop order by count ( * ) desc limit 1	network_1
-select khoi_lop from hoc_sinh_trung_hoc group by khoi_lop having count ( * ) >= 4	network_1
-select khoi_lop from hoc_sinh_trung_hoc group by khoi_lop having count ( * ) >= 4	network_1
-select id_hoc_sinh , count ( * ) from ban_be group by id_hoc_sinh	network_1
-select id_hoc_sinh , count ( * ) from ban_be group by id_hoc_sinh	network_1
-select t2.ten , count ( * ) from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh	network_1
-select t2.ten , count ( * ) from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh	network_1
-select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh order by count ( * ) desc limit 1	network_1
-select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh order by count ( * ) desc limit 1	network_1
-select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh having count ( * ) >= 3	network_1
-select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh having count ( * ) >= 3	network_1
-select t3.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id join hoc_sinh_trung_hoc as t3 on t1.id_ban_be = t3.id where t2.ten = "Kyle"	network_1
-select t3.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id join hoc_sinh_trung_hoc as t3 on t1.id_ban_be = t3.id where t2.ten = "Kyle"	network_1
-select count ( * ) from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id where t2.ten = "Kyle"	network_1
-select count ( * ) from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id where t2.ten = "Kyle"	network_1
-select id from hoc_sinh_trung_hoc except select id_hoc_sinh from ban_be	network_1
-select id from hoc_sinh_trung_hoc except select id_hoc_sinh from ban_be	network_1
-select ten from hoc_sinh_trung_hoc except select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id	network_1
-select ten from hoc_sinh_trung_hoc except select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id	network_1
-select id_hoc_sinh from ban_be intersect select id_luot_thich from luot_thich	network_1
-select id_hoc_sinh from ban_be intersect select id_luot_thich from luot_thich	network_1
-select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id intersect select t2.ten from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_luot_thich = t2.id	network_1
-select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id intersect select t2.ten from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_luot_thich = t2.id	network_1
-select id_hoc_sinh , count ( * ) from luot_thich group by id_hoc_sinh	network_1
-select id_hoc_sinh , count ( * ) from luot_thich group by id_hoc_sinh	network_1
-select t2.ten , count ( * ) from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh	network_1
-select t2.ten , count ( * ) from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh	network_1
-select t2.ten from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh order by count ( * ) desc limit 1	network_1
-select t2.ten from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh order by count ( * ) desc limit 1	network_1
-select t2.ten from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh having count ( * ) >= 2	network_1
-select t2.ten from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh having count ( * ) >= 2	network_1
-select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id where t2.khoi_lop > 5 group by t1.id_hoc_sinh having count ( * ) >= 2	network_1
-select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id where t2.khoi_lop > 5 group by t1.id_hoc_sinh having count ( * ) >= 2	network_1
-select count ( * ) from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id where t2.ten = "Kyle"	network_1
-select count ( * ) from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id where t2.ten = "Kyle"	network_1
-select avg ( khoi_lop ) from hoc_sinh_trung_hoc where id in ( select t1.id_hoc_sinh from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id )	network_1
-select avg ( khoi_lop ) from hoc_sinh_trung_hoc where id in ( select t1.id_hoc_sinh from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id )	network_1
-select min ( khoi_lop ) from hoc_sinh_trung_hoc where id not in ( select t1.id_hoc_sinh from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id )	network_1
-select min ( khoi_lop ) from hoc_sinh_trung_hoc where id not in ( select t1.id_hoc_sinh from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id )	network_1
-select count ( * ) from bua_tiec	party_host
-select count ( * ) from bua_tiec	party_host
-select chu_de_bua_tiec from bua_tiec order by so_luong_nguoi_to_chuc asc	party_host
-select chu_de_bua_tiec from bua_tiec order by so_luong_nguoi_to_chuc asc	party_host
-select chu_de_bua_tiec , dia_diem from bua_tiec	party_host
-select chu_de_bua_tiec , dia_diem from bua_tiec	party_host
-select nam_dau_tien , nam_cuoi_cung from bua_tiec where chu_de_bua_tiec = "Spring" or chu_de_bua_tiec = "Teqnology"	party_host
-select nam_dau_tien , nam_cuoi_cung from bua_tiec where chu_de_bua_tiec = "Spring" or chu_de_bua_tiec = "Teqnology"	party_host
-select avg ( so_luong_nguoi_to_chuc ) from bua_tiec	party_host
-select avg ( so_luong_nguoi_to_chuc ) from bua_tiec	party_host
-select dia_diem from bua_tiec order by so_luong_nguoi_to_chuc desc limit 1	party_host
-select dia_diem from bua_tiec order by so_luong_nguoi_to_chuc desc limit 1	party_host
-select quoc_tich , count ( * ) from nguoi_to_chuc group by quoc_tich	party_host
-select quoc_tich , count ( * ) from nguoi_to_chuc group by quoc_tich	party_host
-select quoc_tich from nguoi_to_chuc group by quoc_tich order by count ( * ) desc limit 1	party_host
-select quoc_tich from nguoi_to_chuc group by quoc_tich order by count ( * ) desc limit 1	party_host
-select quoc_tich from nguoi_to_chuc where tuoi > 45 intersect select quoc_tich from nguoi_to_chuc where tuoi < 35	party_host
-select quoc_tich from nguoi_to_chuc where tuoi > 45 intersect select quoc_tich from nguoi_to_chuc where tuoi < 35	party_host
-select t3.chu_de_bua_tiec , t2.ten from chu_tiec as t1 join nguoi_to_chuc as t2 on t1.id_nguoi_to_chuc = t2.id_nguoi_to_chuc join bua_tiec as t3 on t1.id_bua_tiec = t3.id_bua_tiec	party_host
-select t3.chu_de_bua_tiec , t2.ten from chu_tiec as t1 join nguoi_to_chuc as t2 on t1.id_nguoi_to_chuc = t2.id_nguoi_to_chuc join bua_tiec as t3 on t1.id_bua_tiec = t3.id_bua_tiec	party_host
-select t3.dia_diem , t2.ten from chu_tiec as t1 join nguoi_to_chuc as t2 on t1.id_nguoi_to_chuc = t2.id_nguoi_to_chuc join bua_tiec as t3 on t1.id_bua_tiec = t3.id_bua_tiec order by t2.tuoi	party_host
-select t3.dia_diem , t2.ten from chu_tiec as t1 join nguoi_to_chuc as t2 on t1.id_nguoi_to_chuc = t2.id_nguoi_to_chuc join bua_tiec as t3 on t1.id_bua_tiec = t3.id_bua_tiec order by t2.tuoi	party_host
-select t3.dia_diem from chu_tiec as t1 join nguoi_to_chuc as t2 on t1.id_nguoi_to_chuc = t2.id_nguoi_to_chuc join bua_tiec as t3 on t1.id_bua_tiec = t3.id_bua_tiec where t2.tuoi > 50	party_host
-select t3.dia_diem from chu_tiec as t1 join nguoi_to_chuc as t2 on t1.id_nguoi_to_chuc = t2.id_nguoi_to_chuc join bua_tiec as t3 on t1.id_bua_tiec = t3.id_bua_tiec where t2.tuoi > 50	party_host
-select t2.ten from chu_tiec as t1 join nguoi_to_chuc as t2 on t1.id_nguoi_to_chuc = t2.id_nguoi_to_chuc join bua_tiec as t3 on t1.id_bua_tiec = t3.id_bua_tiec where t3.so_luong_nguoi_to_chuc > 20	party_host
-select t2.ten from chu_tiec as t1 join nguoi_to_chuc as t2 on t1.id_nguoi_to_chuc = t2.id_nguoi_to_chuc join bua_tiec as t3 on t1.id_bua_tiec = t3.id_bua_tiec where t3.so_luong_nguoi_to_chuc > 20	party_host
-select ten , quoc_tich from nguoi_to_chuc order by tuoi desc limit 1	party_host
-select ten , quoc_tich from nguoi_to_chuc order by tuoi desc limit 1	party_host
-select ten from nguoi_to_chuc where id_nguoi_to_chuc not in ( select id_nguoi_to_chuc from chu_tiec )	party_host
-select ten from nguoi_to_chuc where id_nguoi_to_chuc not in ( select id_nguoi_to_chuc from chu_tiec )	party_host
-select count ( * ) from dien_thoai	phone_market
-select ten from dien_thoai order by gia_ban asc	phone_market
-select bo_nho_theo_g , nha_mang from dien_thoai	phone_market
-select distinct nha_mang from dien_thoai where bo_nho_theo_g > 32	phone_market
-select ten from dien_thoai where nha_mang = "Sprint" or nha_mang = "TMobile"	phone_market
-select nha_mang from dien_thoai order by gia_ban desc limit 1	phone_market
-select nha_mang , count ( * ) from dien_thoai group by nha_mang	phone_market
-select nha_mang from dien_thoai group by nha_mang order by count ( * ) desc limit 1	phone_market
-select nha_mang from dien_thoai where bo_nho_theo_g < 32 intersect select nha_mang from dien_thoai where bo_nho_theo_g > 64	phone_market
-select t3.ten , t2.khu_vuc from thi_truong_dien_thoai as t1 join thi_truong as t2 on t1.id_thi_truong = t2.id_thi_truong join dien_thoai as t3 on t1.id_dien_thoai = t3.id_dien_thoai	phone_market
-select t3.ten , t2.khu_vuc from thi_truong_dien_thoai as t1 join thi_truong as t2 on t1.id_thi_truong = t2.id_thi_truong join dien_thoai as t3 on t1.id_dien_thoai = t3.id_dien_thoai order by t2.danh_gia	phone_market
-select t3.ten from thi_truong_dien_thoai as t1 join thi_truong as t2 on t1.id_thi_truong = t2.id_thi_truong join dien_thoai as t3 on t1.id_dien_thoai = t3.id_dien_thoai where t2.so_luong_cua_hang > 50	phone_market
-select t2.ten , sum ( t1.so_luong_co_phieu ) from thi_truong_dien_thoai as t1 join dien_thoai as t2 on t1.id_dien_thoai = t2.id_dien_thoai group by t2.ten	phone_market
-select t2.ten from thi_truong_dien_thoai as t1 join dien_thoai as t2 on t1.id_dien_thoai = t2.id_dien_thoai group by t2.ten having sum ( t1.so_luong_co_phieu ) >= 2000 order by sum ( t1.so_luong_co_phieu ) desc	phone_market
-select ten from dien_thoai where id_dien_thoai not in ( select id_dien_thoai from thi_truong_dien_thoai )	phone_market
-select distinct ( ten_muc_nhap_cua_danh_muc ) from noi_dung_danh_muc	product_catalog
-select distinct ( ten_muc_nhap_cua_danh_muc ) from noi_dung_danh_muc	product_catalog
-select kieu_du_lieu_thuoc_tinh from dinh_nghia_thuoc_tinh group by kieu_du_lieu_thuoc_tinh having count ( * ) > 3	product_catalog
-select kieu_du_lieu_thuoc_tinh from dinh_nghia_thuoc_tinh group by kieu_du_lieu_thuoc_tinh having count ( * ) > 3	product_catalog
-select kieu_du_lieu_thuoc_tinh from dinh_nghia_thuoc_tinh where ten_thuoc_tinh = "Green"	product_catalog
-select kieu_du_lieu_thuoc_tinh from dinh_nghia_thuoc_tinh where ten_thuoc_tinh = "Green"	product_catalog
-select ten_cap_do_cua_danh_muc , cap_do_cua_danh_muc from cau_truc_danh_muc where cap_do_cua_danh_muc between 5 and 10	product_catalog
-select ten_cap_do_cua_danh_muc , cap_do_cua_danh_muc from cau_truc_danh_muc where cap_do_cua_danh_muc between 5 and 10	product_catalog
-select distinct ( nha_xuat_ban_danh_muc ) from danh_muc where nha_xuat_ban_danh_muc like "%Murray%"	product_catalog
-select distinct ( nha_xuat_ban_danh_muc ) from danh_muc where nha_xuat_ban_danh_muc like "%Murray%"	product_catalog
-select nha_xuat_ban_danh_muc from danh_muc group by nha_xuat_ban_danh_muc order by count ( * ) desc limit 1	product_catalog
-select nha_xuat_ban_danh_muc from danh_muc group by nha_xuat_ban_danh_muc order by count ( * ) desc limit 1	product_catalog
-select t1.ten_danh_muc , t1.ngay_xuat_ban from danh_muc as t1 join cau_truc_danh_muc as t2 on t1.id_danh_muc = t2.id_danh_muc where cap_do_cua_danh_muc > 5	product_catalog
-select t1.ten_danh_muc , t1.ngay_xuat_ban from danh_muc as t1 join cau_truc_danh_muc as t2 on t1.id_danh_muc = t2.id_danh_muc where cap_do_cua_danh_muc > 5	product_catalog
-select t1.ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc as t1 join thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc as t2 on t1.id_muc_nhap_cua_danh_muc = t2.id_muc_nhap_cua_danh_muc where t2.gia_tri_thuoc_tinh = ( select gia_tri_thuoc_tinh from thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc group by gia_tri_thuoc_tinh order by count ( * ) desc limit 1 )	product_catalog
-select t1.ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc as t1 join thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc as t2 on t1.id_muc_nhap_cua_danh_muc = t2.id_muc_nhap_cua_danh_muc where t2.gia_tri_thuoc_tinh = ( select gia_tri_thuoc_tinh from thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc group by gia_tri_thuoc_tinh order by count ( * ) desc limit 1 )	product_catalog
-select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc order by gia_tinh_theo_do_la desc limit 1	product_catalog
-select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc order by gia_tinh_theo_do_la desc limit 1	product_catalog
-select t2.ten_cap_do_cua_danh_muc from noi_dung_danh_muc as t1 join cau_truc_danh_muc as t2 on t1.cap_do_cua_danh_muc = t2.cap_do_cua_danh_muc order by t1.gia_tinh_theo_do_la limit 1	product_catalog
-select t2.ten_cap_do_cua_danh_muc from noi_dung_danh_muc as t1 join cau_truc_danh_muc as t2 on t1.cap_do_cua_danh_muc = t2.cap_do_cua_danh_muc order by t1.gia_tinh_theo_do_la limit 1	product_catalog
-select avg ( gia_tinh_theo_euro ) , min ( gia_tinh_theo_euro ) from noi_dung_danh_muc	product_catalog
-select avg ( gia_tinh_theo_euro ) , min ( gia_tinh_theo_euro ) from noi_dung_danh_muc	product_catalog
-select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc order by chieu_cao desc limit 1	product_catalog
-select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc order by chieu_cao desc limit 1	product_catalog
-select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc order by dung_tich asc limit 1	product_catalog
-select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc order by dung_tich asc limit 1	product_catalog
-select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc where so_luong_co_phieu_cua_san_pham like "2%"	product_catalog
-select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc where so_luong_co_phieu_cua_san_pham like "2%"	product_catalog
-select t1.ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc as t1 join thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc as t2 on t1.id_muc_nhap_cua_danh_muc = t2.id_muc_nhap_cua_danh_muc where t2.cap_do_cua_danh_muc = "8"	product_catalog
-select t1.ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc as t1 join thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc as t2 on t1.id_muc_nhap_cua_danh_muc = t2.id_muc_nhap_cua_danh_muc where t2.cap_do_cua_danh_muc = "8"	product_catalog
-select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc where chieu_dai < 3 or chieu_rong > 5	product_catalog
-select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc where chieu_dai < 3 or chieu_rong > 5	product_catalog
-select t1.ten_thuoc_tinh , t1.id_thuoc_tinh from dinh_nghia_thuoc_tinh as t1 join thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc as t2 on t1.id_thuoc_tinh = t2.id_thuoc_tinh where t2.gia_tri_thuoc_tinh = 0	product_catalog
-select t1.ten_thuoc_tinh , t1.id_thuoc_tinh from dinh_nghia_thuoc_tinh as t1 join thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc as t2 on t1.id_thuoc_tinh = t2.id_thuoc_tinh where t2.gia_tri_thuoc_tinh = 0	product_catalog
-select ten_muc_nhap_cua_danh_muc , dung_tich from noi_dung_danh_muc where gia_tinh_theo_do_la > 700	product_catalog
-select ten_muc_nhap_cua_danh_muc , dung_tich from noi_dung_danh_muc where gia_tinh_theo_do_la > 700	product_catalog
-select ngay_thay_doi_moi_nhat_duoc_thuc_hien from danh_muc group by ngay_thay_doi_moi_nhat_duoc_thuc_hien having count ( * ) > 1	product_catalog
-select ngay_thay_doi_moi_nhat_duoc_thuc_hien from danh_muc group by ngay_thay_doi_moi_nhat_duoc_thuc_hien having count ( * ) > 1	product_catalog
-select count ( * ) from noi_dung_danh_muc	product_catalog
-select count ( * ) from noi_dung_danh_muc	product_catalog
-select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc where id_muc_nhap_tiep_theo > 8	product_catalog
-select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc where id_muc_nhap_tiep_theo > 8	product_catalog
-select count ( * ) from nha_khoa_hoc	scientist_1
-select count ( * ) from nha_khoa_hoc	scientist_1
-select sum ( so_gio ) from du_an	scientist_1
-select sum ( so_gio ) from du_an	scientist_1
-select count ( distinct nha_khoa_hoc ) from phan_cong_du_an	scientist_1
-select count ( distinct nha_khoa_hoc ) from phan_cong_du_an	scientist_1
-select count ( distinct ten ) from du_an	scientist_1
-select count ( distinct ten ) from du_an	scientist_1
-select avg ( so_gio ) from du_an	scientist_1
-select avg ( so_gio ) from du_an	scientist_1
-select ten from du_an order by so_gio desc limit 1	scientist_1
-select ten from du_an order by so_gio desc limit 1	scientist_1
-select ten from du_an where so_gio > ( select avg ( so_gio ) from du_an )	scientist_1
-select ten from du_an where so_gio > ( select avg ( so_gio ) from du_an )	scientist_1
-select t1.ten , t1.so_gio from du_an as t1 join phan_cong_du_an as t2 on t1.ma = t2.du_an group by t2.du_an order by count ( * ) desc limit 1	scientist_1
-select t1.ten , t1.so_gio from du_an as t1 join phan_cong_du_an as t2 on t1.ma = t2.du_an group by t2.du_an order by count ( * ) desc limit 1	scientist_1
-select t2.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t3.ten like "%Smith%"	scientist_1
-select t2.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t3.ten like "%Smith%"	scientist_1
-select sum ( t2.so_gio ) from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t3.ten = "Michael Rogers" or t3.ten = "Carol Smith"	scientist_1
-select sum ( t2.so_gio ) from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t3.ten = "Michael Rogers" or t3.ten = "Carol Smith"	scientist_1
-select ten from du_an where so_gio between 100 and 300	scientist_1
-select ten from du_an where so_gio between 100 and 300	scientist_1
-select t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.ten = "Matter of Time" intersect select t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.ten = "A Puzzling Parallax"	scientist_1
-select t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.ten = "Matter of Time" intersect select t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.ten = "A Puzzling Parallax"	scientist_1
-select ten from nha_khoa_hoc order by ten	scientist_1
-select ten from nha_khoa_hoc order by ten	scientist_1
-select count ( * ) , t1.ten from du_an as t1 join phan_cong_du_an as t2 on t1.ma = t2.du_an group by t1.ten	scientist_1
-select count ( * ) , t1.ten from du_an as t1 join phan_cong_du_an as t2 on t1.ma = t2.du_an group by t1.ten	scientist_1
-select count ( * ) , t1.ten from du_an as t1 join phan_cong_du_an as t2 on t1.ma = t2.du_an where t1.so_gio > 300 group by t1.ten	scientist_1
-select count ( * ) , t1.ten from du_an as t1 join phan_cong_du_an as t2 on t1.ma = t2.du_an where t1.so_gio > 300 group by t1.ten	scientist_1
-select count ( * ) , t1.ten from nha_khoa_hoc as t1 join phan_cong_du_an as t2 on t1.ssn = t2.nha_khoa_hoc group by t1.ten	scientist_1
-select count ( * ) , t1.ten from nha_khoa_hoc as t1 join phan_cong_du_an as t2 on t1.ssn = t2.nha_khoa_hoc group by t1.ten	scientist_1
-select t3.ssn , t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.so_gio = ( select max ( so_gio ) from du_an )	scientist_1
-select t3.ssn , t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.so_gio = ( select max ( so_gio ) from du_an )	scientist_1
-select t2.ten from phan_cong_du_an as t1 join nha_khoa_hoc as t2 on t1.nha_khoa_hoc = t2.ssn	scientist_1
-select t2.ten from phan_cong_du_an as t1 join nha_khoa_hoc as t2 on t1.nha_khoa_hoc = t2.ssn	scientist_1
-select ten from du_an where ma not in ( select du_an from phan_cong_du_an )	scientist_1
-select ten from du_an where ma not in ( select du_an from phan_cong_du_an )	scientist_1
-select ten from nha_khoa_hoc where ssn not in ( select nha_khoa_hoc from phan_cong_du_an )	scientist_1
-select ten from nha_khoa_hoc where ssn not in ( select nha_khoa_hoc from phan_cong_du_an )	scientist_1
-select count ( * ) from nha_khoa_hoc where ssn not in ( select nha_khoa_hoc from phan_cong_du_an )	scientist_1
-select count ( * ) from nha_khoa_hoc where ssn not in ( select nha_khoa_hoc from phan_cong_du_an )	scientist_1
-select ten from nha_khoa_hoc except select t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.so_gio = ( select max ( so_gio ) from du_an )	scientist_1
-select ten from nha_khoa_hoc except select t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.so_gio = ( select max ( so_gio ) from du_an )	scientist_1
-select t1.ten , t3.ten , t3.so_gio from nha_khoa_hoc as t1 join phan_cong_du_an as t2 on t1.ssn = t2.nha_khoa_hoc join du_an as t3 on t2.du_an = t3.ma order by t3.ten , t1.ten	scientist_1
-select t1.ten , t3.ten , t3.so_gio from nha_khoa_hoc as t1 join phan_cong_du_an as t2 on t1.ssn = t2.nha_khoa_hoc join du_an as t3 on t2.du_an = t3.ma order by t3.ten , t1.ten	scientist_1
-select t2.ten , t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.so_gio = ( select min ( so_gio ) from du_an )	scientist_1
-select t2.ten , t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.so_gio = ( select min ( so_gio ) from du_an )	scientist_1
-select count ( * ) from tau	ship_mission
-select count ( * ) from tau	ship_mission
-select ten from tau order by trong_tai asc	ship_mission
-select ten from tau order by trong_tai asc	ship_mission
-select loai , quoc_tich from tau	ship_mission
-select loai , quoc_tich from tau	ship_mission
-select ten from tau where quoc_tich != "United States"	ship_mission
-select ten from tau where quoc_tich != "United States"	ship_mission
-select ten from tau where quoc_tich = "United States" or quoc_tich = "United Kingdom"	ship_mission
-select ten from tau where quoc_tich = "United States" or quoc_tich = "United Kingdom"	ship_mission
-select ten from tau order by trong_tai desc limit 1	ship_mission
-select ten from tau order by trong_tai desc limit 1	ship_mission
-select loai , count ( * ) from tau group by loai	ship_mission
-select loai , count ( * ) from tau group by loai	ship_mission
-select loai from tau group by loai order by count ( * ) desc limit 1	ship_mission
-select loai from tau group by loai order by count ( * ) desc limit 1	ship_mission
-select quoc_tich from tau group by quoc_tich having count ( * ) > 2	ship_mission
-select quoc_tich from tau group by quoc_tich having count ( * ) > 2	ship_mission
-select loai , avg ( trong_tai ) from tau group by loai	ship_mission
-select loai , avg ( trong_tai ) from tau group by loai	ship_mission
-select t1.ma , t1.so_phan , t2.ten from nhiem_vu as t1 join tau as t2 on t1.id_tau = t2.id_tau	ship_mission
-select t1.ma , t1.so_phan , t2.ten from nhiem_vu as t1 join tau as t2 on t1.id_tau = t2.id_tau	ship_mission
-select t2.ten from nhiem_vu as t1 join tau as t2 on t1.id_tau = t2.id_tau where t1.duoc_dua_ra_nam_nao > 1928	ship_mission
-select t2.ten from nhiem_vu as t1 join tau as t2 on t1.id_tau = t2.id_tau where t1.duoc_dua_ra_nam_nao > 1928	ship_mission
-select distinct t1.so_phan from nhiem_vu as t1 join tau as t2 on t1.id_tau = t2.id_tau where t2.quoc_tich = "United States"	ship_mission
-select distinct t1.so_phan from nhiem_vu as t1 join tau as t2 on t1.id_tau = t2.id_tau where t2.quoc_tich = "United States"	ship_mission
-select ten from tau where id_tau not in ( select id_tau from nhiem_vu )	ship_mission
-select ten from tau where id_tau not in ( select id_tau from nhiem_vu )	ship_mission
-select loai from tau where trong_tai > 6000 intersect select loai from tau where trong_tai < 4000	ship_mission
-select loai from tau where trong_tai > 6000 intersect select loai from tau where trong_tai < 4000	ship_mission
-select count ( * ) from ca_si	singer
-select count ( * ) from ca_si	singer
-select ten from ca_si order by gia_tri_tai_san_rong asc	singer
-select ten from ca_si order by gia_tri_tai_san_rong asc	singer
-select nam_sinh , quoc_tich from ca_si	singer
-select nam_sinh , quoc_tich from ca_si	singer
-select ten from ca_si where quoc_tich != "France"	singer
-select ten from ca_si where quoc_tich != "France"	singer
-select ten from ca_si where nam_sinh = 1948 or nam_sinh = 1949	singer
-select ten from ca_si where nam_sinh = 1948 or nam_sinh = 1949	singer
-select ten from ca_si order by gia_tri_tai_san_rong desc limit 1	singer
-select ten from ca_si order by gia_tri_tai_san_rong desc limit 1	singer
-select quoc_tich , count ( * ) from ca_si group by quoc_tich	singer
-select quoc_tich , count ( * ) from ca_si group by quoc_tich	singer
-select quoc_tich from ca_si group by quoc_tich order by count ( * ) desc limit 1	singer
-select quoc_tich from ca_si group by quoc_tich order by count ( * ) desc limit 1	singer
-select quoc_tich , max ( gia_tri_tai_san_rong ) from ca_si group by quoc_tich	singer
-select quoc_tich , max ( gia_tri_tai_san_rong ) from ca_si group by quoc_tich	singer
-select t2.tieu_de , t1.ten from ca_si as t1 join bai_hat as t2 on t1.id_ca_si = t2.id_ca_si	singer
-select t2.tieu_de , t1.ten from ca_si as t1 join bai_hat as t2 on t1.id_ca_si = t2.id_ca_si	singer
-select distinct t1.ten from ca_si as t1 join bai_hat as t2 on t1.id_ca_si = t2.id_ca_si where t2.doanh_so > 300000	singer
-select distinct t1.ten from ca_si as t1 join bai_hat as t2 on t1.id_ca_si = t2.id_ca_si where t2.doanh_so > 300000	singer
-select t1.ten from ca_si as t1 join bai_hat as t2 on t1.id_ca_si = t2.id_ca_si group by t1.ten having count ( * ) > 1	singer
-select t1.ten from ca_si as t1 join bai_hat as t2 on t1.id_ca_si = t2.id_ca_si group by t1.ten having count ( * ) > 1	singer
-select t1.ten , sum ( t2.doanh_so ) from ca_si as t1 join bai_hat as t2 on t1.id_ca_si = t2.id_ca_si group by t1.ten	singer
-select t1.ten , sum ( t2.doanh_so ) from ca_si as t1 join bai_hat as t2 on t1.id_ca_si = t2.id_ca_si group by t1.ten	singer
-select ten from ca_si where id_ca_si not in ( select id_ca_si from bai_hat )	singer
-select ten from ca_si where id_ca_si not in ( select id_ca_si from bai_hat )	singer
-select quoc_tich from ca_si where nam_sinh < 1945 intersect select quoc_tich from ca_si where nam_sinh > 1955	singer
-select quoc_tich from ca_si where nam_sinh < 1945 intersect select quoc_tich from ca_si where nam_sinh > 1955	singer
-select count ( * ) from cau_lac_bo	sports_competition
-select count ( * ) from cau_lac_bo	sports_competition
-select distinct khu_vuc from cau_lac_bo order by khu_vuc asc	sports_competition
-select distinct khu_vuc from cau_lac_bo order by khu_vuc asc	sports_competition
-select avg ( vang ) from thu_hang_cua_cau_lac_bo	sports_competition
-select avg ( vang ) from thu_hang_cua_cau_lac_bo	sports_competition
-select loai_cuoc_thi , quoc_gia from cuoc_thi	sports_competition
-select loai_cuoc_thi , quoc_gia from cuoc_thi	sports_competition
-select distinct nam from cuoc_thi where loai_cuoc_thi != "Tournament"	sports_competition
-select distinct nam from cuoc_thi where loai_cuoc_thi != "Tournament"	sports_competition
-select max ( bac ) , min ( bac ) from thu_hang_cua_cau_lac_bo	sports_competition
-select max ( bac ) , min ( bac ) from thu_hang_cua_cau_lac_bo	sports_competition
-select count ( * ) from thu_hang_cua_cau_lac_bo where tong < 10	sports_competition
-select count ( * ) from thu_hang_cua_cau_lac_bo where tong < 10	sports_competition
-select ten from cau_lac_bo order by nam_thanh_lap asc	sports_competition
-select ten from cau_lac_bo order by nam_thanh_lap asc	sports_competition
-select ten from cau_lac_bo order by ten desc	sports_competition
-select ten from cau_lac_bo order by ten desc	sports_competition
-select t1.ten , t2.id_cau_thu from cau_lac_bo as t1 join cau_thu as t2 on t1.id_cau_lac_bo = t2.id_cau_lac_bo	sports_competition
-select t1.ten , t2.id_cau_thu from cau_lac_bo as t1 join cau_thu as t2 on t1.id_cau_lac_bo = t2.id_cau_lac_bo	sports_competition
-select t1.ten from cau_lac_bo as t1 join cau_thu as t2 on t1.id_cau_lac_bo = t2.id_cau_lac_bo where t2.vi_tri = "Right Wing"	sports_competition
-select t1.ten from cau_lac_bo as t1 join cau_thu as t2 on t1.id_cau_lac_bo = t2.id_cau_lac_bo where t2.vi_tri = "Right Wing"	sports_competition
-select avg ( t2.diem_so ) from cau_lac_bo as t1 join cau_thu as t2 on t1.id_cau_lac_bo = t2.id_cau_lac_bo where t1.ten = "AIB"	sports_competition
-select avg ( t2.diem_so ) from cau_lac_bo as t1 join cau_thu as t2 on t1.id_cau_lac_bo = t2.id_cau_lac_bo where t1.ten = "AIB"	sports_competition
-select vi_tri , avg ( diem_so ) from cau_thu group by vi_tri	sports_competition
-select vi_tri , avg ( diem_so ) from cau_thu group by vi_tri	sports_competition
-select vi_tri from cau_thu group by ten having avg ( diem_so ) >= 20	sports_competition
-select vi_tri from cau_thu group by ten having avg ( diem_so ) >= 20	sports_competition
-select loai_cuoc_thi , count ( * ) from cuoc_thi group by loai_cuoc_thi	sports_competition
-select loai_cuoc_thi , count ( * ) from cuoc_thi group by loai_cuoc_thi	sports_competition
-select loai_cuoc_thi from cuoc_thi group by loai_cuoc_thi order by count ( * ) desc limit 1	sports_competition
-select loai_cuoc_thi from cuoc_thi group by loai_cuoc_thi order by count ( * ) desc limit 1	sports_competition
-select loai_cuoc_thi from cuoc_thi group by loai_cuoc_thi having count ( * ) <= 5	sports_competition
-select loai_cuoc_thi from cuoc_thi group by loai_cuoc_thi having count ( * ) <= 5	sports_competition
-select ten from cau_lac_bo where id_cau_lac_bo not in ( select id_cau_lac_bo from cau_thu )	sports_competition
-select ten from cau_lac_bo where id_cau_lac_bo not in ( select id_cau_lac_bo from cau_thu )	sports_competition
-select vi_tri from cau_thu where diem_so > 20 intersect select vi_tri from cau_thu where diem_so < 10	sports_competition
-select vi_tri from cau_thu where diem_so > 20 intersect select vi_tri from cau_thu where diem_so < 10	sports_competition
-select sum ( diem_so ) from cau_thu	sports_competition
-select sum ( diem_so ) from cau_thu	sports_competition
-select count ( distinct vi_tri ) from cau_thu	sports_competition
-select count ( distinct vi_tri ) from cau_thu	sports_competition
-select ten from cau_thu where diem_so > ( select avg ( diem_so ) from cau_thu )	sports_competition
-select ten from cau_thu where diem_so > ( select avg ( diem_so ) from cau_thu )	sports_competition
-select count ( * ) , vi_tri from cau_thu where diem_so < 30 group by vi_tri	sports_competition
-select count ( * ) , vi_tri from cau_thu where diem_so < 30 group by vi_tri	sports_competition
-select quoc_gia from cuoc_thi where loai_cuoc_thi = "Tournament" group by quoc_gia order by count ( * ) desc limit 1	sports_competition
-select quoc_gia from cuoc_thi where loai_cuoc_thi = "Tournament" group by quoc_gia order by count ( * ) desc limit 1	sports_competition
-select quoc_gia from cuoc_thi where loai_cuoc_thi = "Friendly" intersect select quoc_gia from cuoc_thi where loai_cuoc_thi = "Tournament"	sports_competition
-select quoc_gia from cuoc_thi where loai_cuoc_thi = "Friendly" intersect select quoc_gia from cuoc_thi where loai_cuoc_thi = "Tournament"	sports_competition
-select quoc_gia from cuoc_thi except select quoc_gia from cuoc_thi where loai_cuoc_thi = "Friendly"	sports_competition
-select quoc_gia from cuoc_thi except select quoc_gia from cuoc_thi where loai_cuoc_thi = "Friendly"	sports_competition
-select count ( * ) from su_kien	swimming
-select ten from su_kien order by nam desc	swimming
-select ten from su_kien order by nam desc limit 1	swimming
-select count ( * ) from san_van_dong	swimming
-select ten from san_van_dong order by suc_chua desc limit 1	swimming
-select ten from san_van_dong where suc_chua < ( select avg ( suc_chua ) from san_van_dong )	swimming
-select quoc_gia from san_van_dong group by quoc_gia order by count ( * ) desc limit 1	swimming
-select quoc_gia from san_van_dong group by quoc_gia having count ( * ) <= 3	swimming
-select quoc_gia from san_van_dong where suc_chua > 60000 intersect select quoc_gia from san_van_dong where suc_chua < 50000	swimming
-select count ( distinct thanh_pho ) from san_van_dong where nam_mo_cua < 2006	swimming
-select quoc_gia , count ( * ) from san_van_dong group by quoc_gia	swimming
-select quoc_gia from san_van_dong except select quoc_gia from san_van_dong where nam_mo_cua > 2006	swimming
-select count ( * ) from san_van_dong where quoc_gia != "Russia"	swimming
-select ten from van_dong_vien_boi order by "100_met"	swimming
-select count ( distinct quoc_tich ) from van_dong_vien_boi	swimming
-select quoc_tich , count ( * ) from van_dong_vien_boi group by quoc_tich having count ( * ) > 1	swimming
-select "200_met" , "300_met" from van_dong_vien_boi where quoc_tich = "Australia"	swimming
-select t1.ten from van_dong_vien_boi as t1 join ho_so as t2 on t1.id = t2.id_van_dong_vien_boi where ket_qua = "Win"	swimming
-select t1.ten from san_van_dong as t1 join su_kien as t2 on t1.id = t2.id_san_van_dong group by t2.id_san_van_dong order by count ( * ) desc limit 1	swimming
-select t1.ten , t1.suc_chua from san_van_dong as t1 join su_kien as t2 on t1.id = t2.id_san_van_dong where t2.ten = "World Junior"	swimming
-select ten from san_van_dong where id not in ( select id_san_van_dong from su_kien )	swimming
-select t1.ten from van_dong_vien_boi as t1 join ho_so as t2 on t1.id = t2.id_van_dong_vien_boi group by t2.id_van_dong_vien_boi order by count ( * ) desc limit 1	swimming
-select t1.ten from van_dong_vien_boi as t1 join ho_so as t2 on t1.id = t2.id_van_dong_vien_boi group by t2.id_van_dong_vien_boi having count ( * ) >= 2	swimming
-select t1.ten , t1.quoc_tich from van_dong_vien_boi as t1 join ho_so as t2 on t1.id = t2.id_van_dong_vien_boi where ket_qua = "Win" group by t2.id_van_dong_vien_boi having count ( * ) > 1	swimming
-select ten from van_dong_vien_boi where id not in ( select id_van_dong_vien_boi from ho_so )	swimming
-select t1.ten from van_dong_vien_boi as t1 join ho_so as t2 on t1.id = t2.id_van_dong_vien_boi where ket_qua = "Win" intersect select t1.ten from van_dong_vien_boi as t1 join ho_so as t2 on t1.id = t2.id_van_dong_vien_boi where ket_qua = "Loss"	swimming
-select t4.ten from van_dong_vien_boi as t1 join ho_so as t2 on t1.id = t2.id_van_dong_vien_boi join su_kien as t3 on t2.id_su_kien = t3.id join san_van_dong as t4 on t4.id = t3.id_san_van_dong where t1.quoc_tich = "Australia"	swimming
-select t3.ten from ho_so as t1 join su_kien as t2 on t1.id_su_kien = t2.id join san_van_dong as t3 on t3.id = t2.id_san_van_dong group by t2.id_san_van_dong order by count ( * ) desc limit 1	swimming
-select * from van_dong_vien_boi	swimming
-select avg ( suc_chua ) from san_van_dong where nam_mo_cua = 2005	swimming
-select count ( * ) from nha_dau_tu	tracking_share_transactions
-select chi_tiet_ve_nha_dau_tu from nha_dau_tu	tracking_share_transactions
-select distinct chi_tiet_ve_cac_lot from lot	tracking_share_transactions
-select max ( so_tien_giao_dich ) from giao_dich	tracking_share_transactions
-select ngay_giao_dich , so_luong_co_phieu from giao_dich	tracking_share_transactions
-select sum ( so_luong_co_phieu ) from giao_dich	tracking_share_transactions
-select id_giao_dich from giao_dich where ma_loai_giao_dich = "PUR"	tracking_share_transactions
-select ngay_giao_dich from giao_dich where ma_loai_giao_dich = "SALE"	tracking_share_transactions
-select avg ( so_tien_giao_dich ) from giao_dich where ma_loai_giao_dich = "SALE"	tracking_share_transactions
-select mo_ta_ve_loai_giao_dich from loai_giao_dich where ma_loai_giao_dich = "PUR"	tracking_share_transactions
-select min ( so_tien_giao_dich ) from giao_dich where ma_loai_giao_dich = "PUR" and so_luong_co_phieu > 50	tracking_share_transactions
-select max ( so_luong_co_phieu ) from giao_dich where so_tien_giao_dich < 10000	tracking_share_transactions
-select ngay_giao_dich from giao_dich where so_luong_co_phieu > 100 or so_tien_giao_dich > 1000	tracking_share_transactions
-select t1.mo_ta_ve_loai_giao_dich , t2.ngay_giao_dich from loai_giao_dich as t1 join giao_dich as t2 on t1.ma_loai_giao_dich = t2.ma_loai_giao_dich where t2.so_luong_co_phieu < 10	tracking_share_transactions
-select t1.chi_tiet_ve_nha_dau_tu from nha_dau_tu as t1 join giao_dich as t2 on t1.id_nha_dau_tu = t2.id_nha_dau_tu where t2.so_luong_co_phieu > 100	tracking_share_transactions
-select count ( distinct ma_loai_giao_dich ) from giao_dich	tracking_share_transactions
-select chi_tiet_ve_cac_lot , id_nha_dau_tu from lot	tracking_share_transactions
-select t2.chi_tiet_ve_cac_lot from nha_dau_tu as t1 join lot as t2 on t1.id_nha_dau_tu = t2.id_nha_dau_tu where t1.chi_tiet_ve_nha_dau_tu = "l"	tracking_share_transactions
-select t1.chi_tiet_mua_hang from mua_hang as t1 join giao_dich as t2 on t1.id_giao_dich_mua_hang = t2.id_giao_dich where t2.so_tien_giao_dich > 10000	tracking_share_transactions
-select t1.chi_tiet_ban_hang , t2.ngay_giao_dich from ban_hang as t1 join giao_dich as t2 on t1.id_giao_dich_ban_hang = t2.id_giao_dich where t2.so_tien_giao_dich < 3000	tracking_share_transactions
-select t1.chi_tiet_ve_cac_lot from lot as t1 join giao_dich_lot as t2 on t1.id_lot = t2.id_giao_dich join giao_dich as t3 on t2.id_giao_dich = t3.id_giao_dich where t3.so_luong_co_phieu < 50	tracking_share_transactions
-select t1.chi_tiet_ve_cac_lot from lot as t1 join giao_dich_lot as t2 on t1.id_lot = t2.id_giao_dich join giao_dich as t3 on t2.id_giao_dich = t3.id_giao_dich where t3.so_luong_co_phieu > 100 and t3.ma_loai_giao_dich = "PUR"	tracking_share_transactions
-select ma_loai_giao_dich , avg ( so_tien_giao_dich ) from giao_dich group by ma_loai_giao_dich	tracking_share_transactions
-select ma_loai_giao_dich , max ( so_luong_co_phieu ) , min ( so_luong_co_phieu ) from giao_dich group by ma_loai_giao_dich	tracking_share_transactions
-select id_nha_dau_tu , avg ( so_luong_co_phieu ) from giao_dich group by id_nha_dau_tu	tracking_share_transactions
-select id_nha_dau_tu , avg ( so_luong_co_phieu ) from giao_dich group by id_nha_dau_tu order by avg ( so_luong_co_phieu )	tracking_share_transactions
-select id_nha_dau_tu , avg ( so_tien_giao_dich ) from giao_dich group by id_nha_dau_tu	tracking_share_transactions
-select t2.id_lot , avg ( so_tien_giao_dich ) from giao_dich as t1 join giao_dich_lot as t2 on t1.id_giao_dich = t2.id_giao_dich group by t2.id_lot	tracking_share_transactions
-select t2.id_lot , avg ( so_tien_giao_dich ) from giao_dich as t1 join giao_dich_lot as t2 on t1.id_giao_dich = t2.id_giao_dich group by t2.id_lot order by avg ( so_tien_giao_dich )	tracking_share_transactions
-select id_nha_dau_tu , count ( * ) from giao_dich where ma_loai_giao_dich = "SALE" group by id_nha_dau_tu	tracking_share_transactions
-select id_nha_dau_tu , count ( * ) from giao_dich group by id_nha_dau_tu	tracking_share_transactions
-select ma_loai_giao_dich from giao_dich group by ma_loai_giao_dich order by count ( * ) asc limit 1	tracking_share_transactions
-select ma_loai_giao_dich from giao_dich group by ma_loai_giao_dich order by count ( * ) desc limit 1	tracking_share_transactions
-select t1.mo_ta_ve_loai_giao_dich from loai_giao_dich as t1 join giao_dich as t2 on t1.ma_loai_giao_dich = t2.ma_loai_giao_dich group by t1.ma_loai_giao_dich order by count ( * ) desc limit 1	tracking_share_transactions
-select t2.id_nha_dau_tu , t1.chi_tiet_ve_nha_dau_tu from nha_dau_tu as t1 join giao_dich as t2 on t1.id_nha_dau_tu = t2.id_nha_dau_tu group by t2.id_nha_dau_tu order by count ( * ) desc limit 1	tracking_share_transactions
-select t2.id_nha_dau_tu , t1.chi_tiet_ve_nha_dau_tu from nha_dau_tu as t1 join giao_dich as t2 on t1.id_nha_dau_tu = t2.id_nha_dau_tu group by t2.id_nha_dau_tu order by count ( * ) desc limit 3	tracking_share_transactions
-select t2.id_nha_dau_tu from nha_dau_tu as t1 join giao_dich as t2 on t1.id_nha_dau_tu = t2.id_nha_dau_tu group by t2.id_nha_dau_tu having count ( * ) >= 2	tracking_share_transactions
-select t2.id_nha_dau_tu , t1.chi_tiet_ve_nha_dau_tu from nha_dau_tu as t1 join giao_dich as t2 on t1.id_nha_dau_tu = t2.id_nha_dau_tu where t2.ma_loai_giao_dich = "SALE" group by t2.id_nha_dau_tu having count ( * ) >= 2	tracking_share_transactions
-select ngay_giao_dich from giao_dich where so_luong_co_phieu >= 100 or so_tien_giao_dich >= 100	tracking_share_transactions
-select chi_tiet_ban_hang from ban_hang union select chi_tiet_mua_hang from mua_hang	tracking_share_transactions
-select chi_tiet_ve_cac_lot from lot except select t1.chi_tiet_ve_cac_lot from lot as t1 join giao_dich_lot as t2 on t1.id_lot = t2.id_lot	tracking_share_transactions
-select count ( * ) from nha_ga	train_station
-select ten , dia_diem , so_luong_san_ga from nha_ga	train_station
-select distinct dia_diem from nha_ga	train_station
-select ten , tong_so_hanh_khach from nha_ga where dia_diem != "London"	train_station
-select ten , dich_vu_chinh from nha_ga order by tong_so_hanh_khach desc limit 3	train_station
-select avg ( tong_so_hanh_khach ) , max ( tong_so_hanh_khach ) from nha_ga where dia_diem = "London" or dia_diem = "Glasgow"	train_station
-select dia_diem , sum ( so_luong_san_ga ) , sum ( tong_so_hanh_khach ) from nha_ga group by dia_diem	train_station
-select distinct dia_diem from nha_ga where so_luong_san_ga >= 15 and tong_so_hanh_khach > 25	train_station
-select dia_diem from nha_ga except select dia_diem from nha_ga where so_luong_san_ga >= 15	train_station
-select dia_diem from nha_ga group by dia_diem order by count ( * ) desc limit 1	train_station
-select ten , thoi_gian , dich_vu from toa_hoa	train_station
-select count ( * ) from toa_hoa	train_station
-select ten , dich_vu from toa_hoa order by thoi_gian	train_station
-select t2.ten , count ( * ) from nha_ga_tau_hoa as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id_ga_tau group by t1.id_nha_ga	train_station
-select t2.ten , t3.ten from nha_ga_tau_hoa as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id_ga_tau join toa_hoa as t3 on t3.id_tau = t1.id_tau	train_station
-select t3.ten , t3.thoi_gian from nha_ga_tau_hoa as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id_ga_tau join toa_hoa as t3 on t3.id_tau = t1.id_tau where t2.dia_diem = "London" order by t3.thoi_gian desc	train_station
-select t2.ten from nha_ga_tau_hoa as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id_ga_tau group by t1.id_nha_ga order by count ( * ) desc limit 1	train_station
-select t2.ten from nha_ga_tau_hoa as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id_ga_tau group by t1.id_nha_ga having count ( * ) >= 2	train_station
-select dia_diem from nha_ga group by dia_diem having count ( * ) = 1	train_station
-select ten from nha_ga where id_ga_tau not in ( select id_nha_ga from nha_ga_tau_hoa )	train_station
-select t2.ten from nha_ga_tau_hoa as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id_ga_tau join toa_hoa as t3 on t3.id_tau = t1.id_tau where t3.ten = "Ananthapuri Express" intersect select t2.ten from nha_ga_tau_hoa as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id_ga_tau join toa_hoa as t3 on t3.id_tau = t1.id_tau where t3.ten = "Guruvayur Express"	train_station
-select t2.ten from nha_ga_tau_hoa as t1 join toa_hoa as t2 on t1.id_tau = t2.id_tau where t1.id_nha_ga not in ( select t4.id_ga_tau from nha_ga_tau_hoa as t3 join nha_ga as t4 on t3.id_nha_ga = t4.id_ga_tau where t4.dia_diem = "London" )	train_station
-select ten , dia_diem from nha_ga order by so_luong_xuat_canh_hang_nam , so_luong_trao_doi_hang_nam	train_station
-select count ( * ) from ma_vung_cua_tieu_bang	voter_1
-select ma_so_thi_sinh , ten_thi_sinh from thi_sinh order by ten_thi_sinh desc	voter_1
-select id_phieu_bau , so_dien_thoai , tieu_bang from phieu_bau	voter_1
-select max ( ma_vung ) , min ( ma_vung ) from ma_vung_cua_tieu_bang	voter_1
-select max ( ngay_duoc_tao ) from phieu_bau where tieu_bang = "CA"	voter_1
-select ten_thi_sinh from thi_sinh where ten_thi_sinh != "Jessie Alloway"	voter_1
-select distinct tieu_bang , ngay_duoc_tao from phieu_bau	voter_1
-select t1.ma_so_thi_sinh , t1.ten_thi_sinh from thi_sinh as t1 join phieu_bau as t2 on t1.ma_so_thi_sinh = t2.ma_so_thi_sinh group by t1.ma_so_thi_sinh having count ( * ) >= 2	voter_1
-select t1.ma_so_thi_sinh , t1.ten_thi_sinh from thi_sinh as t1 join phieu_bau as t2 on t1.ma_so_thi_sinh = t2.ma_so_thi_sinh group by t1.ma_so_thi_sinh order by count ( * ) asc limit 1	voter_1
-select count ( * ) from phieu_bau where tieu_bang = "NY" or tieu_bang = "CA"	voter_1
-select count ( * ) from thi_sinh where ma_so_thi_sinh not in ( select ma_so_thi_sinh from phieu_bau )	voter_1
-select t1.ma_vung from ma_vung_cua_tieu_bang as t1 join phieu_bau as t2 on t1.tieu_bang = t2.tieu_bang group by t1.ma_vung order by count ( * ) desc limit 1	voter_1
-select t2.ngay_duoc_tao , t2.tieu_bang , t2.so_dien_thoai from thi_sinh as t1 join phieu_bau as t2 on t1.ma_so_thi_sinh = t2.ma_so_thi_sinh where t1.ten_thi_sinh = "Tabatha Gehling"	voter_1
-select t3.ma_vung from thi_sinh as t1 join phieu_bau as t2 on t1.ma_so_thi_sinh = t2.ma_so_thi_sinh join ma_vung_cua_tieu_bang as t3 on t2.tieu_bang = t3.tieu_bang where t1.ten_thi_sinh = "Tabatha Gehling" intersect select t3.ma_vung from thi_sinh as t1 join phieu_bau as t2 on t1.ma_so_thi_sinh = t2.ma_so_thi_sinh join ma_vung_cua_tieu_bang as t3 on t2.tieu_bang = t3.tieu_bang where t1.ten_thi_sinh = "Kelly Clauss"	voter_1
-select ten_thi_sinh from thi_sinh where ten_thi_sinh like "%Al%"	voter_1
-select count ( * ) from nguoi_choi	wta_1
-select count ( * ) from nguoi_choi	wta_1
-select count ( * ) from tran_dau	wta_1
-select count ( * ) from tran_dau	wta_1
-select ten , ngay_sinh from nguoi_choi where ma_quoc_gia = "USA"	wta_1
-select ten , ngay_sinh from nguoi_choi where ma_quoc_gia = "USA"	wta_1
-select avg ( tuoi_cua_nguoi_thua_cuoc ) , avg ( tuoi_cua_nguoi_chien_thang ) from tran_dau	wta_1
-select avg ( tuoi_cua_nguoi_thua_cuoc ) , avg ( tuoi_cua_nguoi_chien_thang ) from tran_dau	wta_1
-select avg ( thu_hang_nguoi_chien_thang ) from tran_dau	wta_1
-select avg ( thu_hang_nguoi_chien_thang ) from tran_dau	wta_1
-select min ( thu_hang_cua_nguoi_thua_cuoc ) from tran_dau	wta_1
-select min ( thu_hang_cua_nguoi_thua_cuoc ) from tran_dau	wta_1
-select count ( distinct ma_quoc_gia ) from nguoi_choi	wta_1
-select count ( distinct ma_quoc_gia ) from nguoi_choi	wta_1
-select count ( distinct ten_nguoi_thua_cuoc ) from tran_dau	wta_1
-select count ( distinct ten_nguoi_thua_cuoc ) from tran_dau	wta_1
-select ten_giai_dau from tran_dau group by ten_giai_dau having count ( * ) > 10	wta_1
-select ten_giai_dau from tran_dau group by ten_giai_dau having count ( * ) > 10	wta_1
-select ten_nguoi_chien_thang from tran_dau where nam = 2013 intersect select ten_nguoi_chien_thang from tran_dau where nam = 2016	wta_1
-select ten_nguoi_chien_thang from tran_dau where nam = 2013 intersect select ten_nguoi_chien_thang from tran_dau where nam = 2016	wta_1
-select count ( * ) from tran_dau where nam = 2013 or nam = 2016	wta_1
-select count ( * ) from tran_dau where nam = 2013 or nam = 2016	wta_1
-select t1.ma_quoc_gia , t1.ten from nguoi_choi as t1 join tran_dau as t2 on t1.id_nguoi_choi = t2.id_cua_nguoi_chien_thang where t2.ten_giai_dau = "WTA Championships" intersect select t1.ma_quoc_gia , t1.ten from nguoi_choi as t1 join tran_dau as t2 on t1.id_nguoi_choi = t2.id_cua_nguoi_chien_thang where t2.ten_giai_dau = "Australian Open"	wta_1
-select t1.ma_quoc_gia , t1.ten from nguoi_choi as t1 join tran_dau as t2 on t1.id_nguoi_choi = t2.id_cua_nguoi_chien_thang where t2.ten_giai_dau = "WTA Championships" intersect select t1.ma_quoc_gia , t1.ten from nguoi_choi as t1 join tran_dau as t2 on t1.id_nguoi_choi = t2.id_cua_nguoi_chien_thang where t2.ten_giai_dau = "Australian Open"	wta_1
-select ten , ma_quoc_gia from nguoi_choi order by ngay_sinh limit 1	wta_1
-select ten , ma_quoc_gia from nguoi_choi order by ngay_sinh limit 1	wta_1
-select ten , ho from nguoi_choi order by ngay_sinh	wta_1
-select ten , ho from nguoi_choi order by ngay_sinh	wta_1
-select ten , ho from nguoi_choi where tay_thuan = "L" order by ngay_sinh	wta_1
-select ten , ho from nguoi_choi where tay_thuan = "L" order by ngay_sinh	wta_1
-select t1.ma_quoc_gia , t1.ten from nguoi_choi as t1 join xep_hang as t2 on t1.id_nguoi_choi = t2.id_nguoi_choi order by t2.tour_du_dau desc limit 1	wta_1
-select t1.ma_quoc_gia , t1.ten from nguoi_choi as t1 join xep_hang as t2 on t1.id_nguoi_choi = t2.id_nguoi_choi order by t2.tour_du_dau desc limit 1	wta_1
-select nam from tran_dau group by nam order by count ( * ) desc limit 1	wta_1
-select nam from tran_dau group by nam order by count ( * ) desc limit 1	wta_1
-select ten_nguoi_chien_thang , diem_xep_hang_cua_nguoi_chien_thang from tran_dau group by ten_nguoi_chien_thang order by count ( * ) desc limit 1	wta_1
-select ten_nguoi_chien_thang , diem_xep_hang_cua_nguoi_chien_thang from tran_dau group by ten_nguoi_chien_thang order by count ( * ) desc limit 1	wta_1
-select ten_nguoi_chien_thang from tran_dau where ten_giai_dau = "Australian Open" order by diem_xep_hang_cua_nguoi_chien_thang desc limit 1	wta_1
-select ten_nguoi_chien_thang from tran_dau where ten_giai_dau = "Australian Open" order by diem_xep_hang_cua_nguoi_chien_thang desc limit 1	wta_1
-select ten_nguoi_chien_thang , ten_nguoi_thua_cuoc from tran_dau order by phut desc limit 1	wta_1
-select ten_nguoi_chien_thang , ten_nguoi_thua_cuoc from tran_dau order by phut desc limit 1	wta_1
-select avg ( xep_hang ) , t1.ten from nguoi_choi as t1 join xep_hang as t2 on t1.id_nguoi_choi = t2.id_nguoi_choi group by t1.ten	wta_1
-select avg ( xep_hang ) , t1.ten from nguoi_choi as t1 join xep_hang as t2 on t1.id_nguoi_choi = t2.id_nguoi_choi group by t1.ten	wta_1
-select sum ( diem_xep_hang ) , t1.ten from nguoi_choi as t1 join xep_hang as t2 on t1.id_nguoi_choi = t2.id_nguoi_choi group by t1.ten	wta_1
-select sum ( diem_xep_hang ) , t1.ten from nguoi_choi as t1 join xep_hang as t2 on t1.id_nguoi_choi = t2.id_nguoi_choi group by t1.ten	wta_1
-select count ( * ) , ma_quoc_gia from nguoi_choi group by ma_quoc_gia	wta_1
-select count ( * ) , ma_quoc_gia from nguoi_choi group by ma_quoc_gia	wta_1
-select ma_quoc_gia from nguoi_choi group by ma_quoc_gia order by count ( * ) desc limit 1	wta_1
-select ma_quoc_gia from nguoi_choi group by ma_quoc_gia order by count ( * ) desc limit 1	wta_1
-select ma_quoc_gia from nguoi_choi group by ma_quoc_gia having count ( * ) > 50	wta_1
-select ma_quoc_gia from nguoi_choi group by ma_quoc_gia having count ( * ) > 50	wta_1
-select sum ( tour_du_dau ) , ngay_xep_hang from xep_hang group by ngay_xep_hang	wta_1
-select sum ( tour_du_dau ) , ngay_xep_hang from xep_hang group by ngay_xep_hang	wta_1
-select count ( * ) , nam from tran_dau group by nam	wta_1
-select count ( * ) , nam from tran_dau group by nam	wta_1
-select distinct ten_nguoi_chien_thang , thu_hang_nguoi_chien_thang from tran_dau order by tuoi_cua_nguoi_chien_thang limit 3	wta_1
-select distinct ten_nguoi_chien_thang , thu_hang_nguoi_chien_thang from tran_dau order by tuoi_cua_nguoi_chien_thang limit 3	wta_1
-select count ( distinct ten_nguoi_chien_thang ) from tran_dau where ten_giai_dau = "WTA Championships" and tay_thuan_cua_nguoi_chien_thang = "L"	wta_1
-select count ( distinct ten_nguoi_chien_thang ) from tran_dau where ten_giai_dau = "WTA Championships" and tay_thuan_cua_nguoi_chien_thang = "L"	wta_1
-select t1.ten , t1.ma_quoc_gia , t1.ngay_sinh from nguoi_choi as t1 join tran_dau as t2 on t1.id_nguoi_choi = t2.id_cua_nguoi_chien_thang order by t2.diem_xep_hang_cua_nguoi_chien_thang desc limit 1	wta_1
-select t1.ten , t1.ma_quoc_gia , t1.ngay_sinh from nguoi_choi as t1 join tran_dau as t2 on t1.id_nguoi_choi = t2.id_cua_nguoi_chien_thang order by t2.diem_xep_hang_cua_nguoi_chien_thang desc limit 1	wta_1
-select count ( * ) , tay_thuan from nguoi_choi group by tay_thuan	wta_1
-select count ( * ) , tay_thuan from nguoi_choi group by tay_thuan	wta_1
+select t1.id_tai_san , t1.chi_tiet_tai_san from tai_san as t1 join bo_phan_cua_tai_san as t2 on t1.id_tai_san = t2.id_tai_san group by t1.id_tai_san having count ( * ) = 2 intersect select t1.id_tai_san , t1.chi_tiet_tai_san from tai_san as t1 join nhat_ky_loi as t2 on t1.id_tai_san = t2.id_tai_san group by t1.id_tai_san having count ( * ) < 2	assets_maintenance
+select count ( * ) , t1.id_hop_dong_bao_tri from hop_dong_bao_tri as t1 join tai_san as t2 on t1.id_hop_dong_bao_tri = t2.id_hop_dong_bao_tri group by t1.id_hop_dong_bao_tri	assets_maintenance
+select count ( * ) , t1.id_cong_ty from cong_ty_ben_thu_ba as t1 join tai_san as t2 on t1.id_cong_ty = t2.id_cong_ty_cung_cap group by t1.id_cong_ty	assets_maintenance
+select t1.id_cong_ty , t1.ten_cong_ty from cong_ty_ben_thu_ba as t1 join ky_su_bao_tri as t2 on t1.id_cong_ty = t2.id_cong_ty group by t1.id_cong_ty having count ( * ) >= 2 union select t3.id_cong_ty , t3.ten_cong_ty from cong_ty_ben_thu_ba as t3 join hop_dong_bao_tri as t4 on t3.id_cong_ty = t4.id_hop_dong_bao_tri_cua_cong_ty group by t3.id_cong_ty having count ( * ) >= 2	assets_maintenance
+select t1.ten_nhan_vien , t1.id_nhan_vien from nhan_vien as t1 join nhat_ky_loi as t2 on t1.id_nhan_vien = t2.duoc_ghi_lai_boi_nhan_vien_co_id except select t3.ten_nhan_vien , t3.id_nhan_vien from nhan_vien as t3 join chuyen_tham_cua_ky_su as t4 on t3.id_nhan_vien = t4.id_nhan_vien_lien_lac	assets_maintenance
+select t1.id_ky_su , t1.ten , t1.ho from ky_su_bao_tri as t1 join chuyen_tham_cua_ky_su as t2 group by t1.id_ky_su order by count ( * ) desc limit 1	assets_maintenance
+select t1.ten_bo_phan , t1.id_bo_phan from bo_phan as t1 join loi_bo_phan as t2 on t1.id_bo_phan = t2.id_bo_phan group by t1.id_bo_phan having count ( * ) > 2	assets_maintenance
+select t1.ten , t1.ho , t1.nhung_chi_tiet_khac , t3.mo_ta_ve_ky_nang from ky_su_bao_tri as t1 join ky_nang_cua_ky_su as t2 on t1.id_ky_su = t2.id_ky_su join ky_nang as t3 on t2.id_ky_nang = t3.id_ky_nang	assets_maintenance
+select t1.ten_viet_tat_cua_loi , t3.mo_ta_ve_ky_nang from loi_bo_phan as t1 join ky_nang_can_de_sua_chua as t2 on t1.id_bo_phan_bi_loi = t2.id_bo_phan_bi_loi join ky_nang as t3 on t2.id_ky_nang = t3.id_ky_nang	assets_maintenance
+select t1.ten_bo_phan , count ( * ) from bo_phan as t1 join bo_phan_cua_tai_san as t2 on t1.id_bo_phan = t2.id_bo_phan group by t1.ten_bo_phan	assets_maintenance
+select t1.mo_ta_ve_loi , t2.tinh_trang_loi from nhat_ky_loi as t1 join nhat_ky_cua_loi_bo_phan as t2 on t1.id_muc_nhap_cua_nhat_ky_loi = t2.id_muc_nhap_cua_nhat_ky_loi	assets_maintenance
+select count ( * ) , t1.id_muc_nhap_cua_nhat_ky_loi from nhat_ky_loi as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_muc_nhap_cua_nhat_ky_loi = t2.id_muc_nhap_cua_nhat_ky_loi group by t1.id_muc_nhap_cua_nhat_ky_loi order by count ( * ) desc limit 1	assets_maintenance
+select distinct ho from ky_su_bao_tri	assets_maintenance
+select distinct tinh_trang_loi from nhat_ky_cua_loi_bo_phan	assets_maintenance
+select ten , ho from ky_su_bao_tri where id_ky_su not in ( select id_ky_su from chuyen_tham_cua_ky_su )	assets_maintenance
+select id_tai_san , chi_tiet_tai_san , thuong_hieu_tai_san , mau_ma_tai_san from tai_san	assets_maintenance
+select ngay_mua_tai_san from tai_san order by ngay_mua_tai_san asc limit 1	assets_maintenance
+select t1.id_bo_phan , t1.ten_bo_phan from bo_phan as t1 join loi_bo_phan as t2 on t1.id_bo_phan = t2.id_bo_phan join ky_nang_can_de_sua_chua as t3 on t2.id_bo_phan_bi_loi = t3.id_bo_phan_bi_loi group by t1.id_bo_phan order by count ( * ) desc limit 1	assets_maintenance
+select t1.ten_bo_phan from bo_phan as t1 join loi_bo_phan as t2 on t1.id_bo_phan = t2.id_bo_phan group by t1.ten_bo_phan order by count ( * ) asc limit 1	assets_maintenance
+select t1.id_ky_su , t1.ten , t1.ho from ky_su_bao_tri as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_ky_su = t2.id_ky_su group by t1.id_ky_su order by count ( * ) asc limit 1	assets_maintenance
+select t1.ten_nhan_vien , t3.ten , t3.ho from nhan_vien as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_nhan_vien = t2.id_nhan_vien_lien_lac join ky_su_bao_tri as t3 on t2.id_ky_su = t3.id_ky_su	assets_maintenance
+select t1.id_muc_nhap_cua_nhat_ky_loi , t1.mo_ta_ve_loi , t1.thoi_gian_muc_nhap_cua_nhat_ky_loi from nhat_ky_loi as t1 join nhat_ky_cua_loi_bo_phan as t2 on t1.id_muc_nhap_cua_nhat_ky_loi = t2.id_muc_nhap_cua_nhat_ky_loi group by t1.id_muc_nhap_cua_nhat_ky_loi order by count ( * ) desc limit 1	assets_maintenance
+select t1.id_ky_nang , t1.mo_ta_ve_ky_nang from ky_nang as t1 join ky_nang_can_de_sua_chua as t2 on t1.id_ky_nang = t2.id_ky_nang group by t1.id_ky_nang order by count ( * ) desc limit 1	assets_maintenance
+select distinct mau_ma_tai_san from tai_san	assets_maintenance
+select thuong_hieu_tai_san , mau_ma_tai_san , chi_tiet_tai_san from tai_san order by ngay_thanh_ly_tai_san asc	assets_maintenance
+select id_bo_phan , so_tien_phai_tra from bo_phan order by so_tien_phai_tra asc limit 1	assets_maintenance
+select t1.ten_cong_ty from cong_ty_ben_thu_ba as t1 join hop_dong_bao_tri as t2 on t1.id_cong_ty = t2.id_hop_dong_bao_tri_cua_cong_ty order by t2.ngay_bat_dau_hop_dong asc limit 1	assets_maintenance
+select t1.ten_cong_ty from cong_ty_ben_thu_ba as t1 join hop_dong_bao_tri as t2 on t1.id_cong_ty = t2.id_hop_dong_bao_tri_cua_cong_ty order by t2.ngay_ket_thuc_hop_dong desc limit 1	assets_maintenance
+select gioi_tinh from nhan_vien group by gioi_tinh order by count ( * ) desc limit 1	assets_maintenance
+select t1.ten_nhan_vien , count ( * ) from nhan_vien as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_nhan_vien = t2.id_nhan_vien_lien_lac group by t1.ten_nhan_vien	assets_maintenance
+select mau_ma_tai_san from tai_san where id_tai_san not in (select id_tai_san from nhat_ky_loi)	assets_maintenance
+select count ( * ) from sach	book_2
+select tac_gia from sach order by tac_gia asc	book_2
+select tieu_de from sach order by so_luong_phat_hanh asc	book_2
+select tieu_de from sach where tac_gia != "elaine lee"	book_2
+select tieu_de , so_luong_phat_hanh from sach	book_2
+select ngay_xuat_ban from an_pham order by gia_ban desc	book_2
+select distinct nha_xuat_ban from an_pham where gia_ban > 5000000	book_2
+select nha_xuat_ban from an_pham order by gia_ban desc limit 1	book_2
+select ngay_xuat_ban from an_pham order by gia_ban asc limit 3	book_2
+select t1.tieu_de , t2.ngay_xuat_ban from sach as t1 join an_pham as t2 on t1.id_sach = t2.id_sach	book_2
+select t1.tac_gia from sach as t1 join an_pham as t2 on t1.id_sach = t2.id_sach where t2.gia_ban > 4000000	book_2
+select t1.tieu_de from sach as t1 join an_pham as t2 on t1.id_sach = t2.id_sach order by t2.gia_ban desc	book_2
+select nha_xuat_ban from an_pham group by nha_xuat_ban having count ( * ) > 1	book_2
+select nha_xuat_ban , count ( * ) from an_pham group by nha_xuat_ban	book_2
+select ngay_xuat_ban from an_pham group by ngay_xuat_ban order by count ( * ) desc limit 1	book_2
+select tac_gia from sach group by tac_gia having count ( * ) > 1	book_2
+select tieu_de from sach where id_sach not in ( select id_sach from an_pham )	book_2
+select nha_xuat_ban from an_pham where gia_ban > 10000000 intersect select nha_xuat_ban from an_pham where gia_ban < 5000000	book_2
+select count ( distinct ngay_xuat_ban ) from an_pham	book_2
+select count ( distinct ngay_xuat_ban ) from an_pham	book_2
+select gia_ban from an_pham where nha_xuat_ban = "person" or nha_xuat_ban = "wiley"	book_2
+select ten_bo_phan from bo_phan order by ngay_bat_dau_quan_ly	company_1
+select ten_nguoi_phu_thuoc from nguoi_phu_thuoc where moi_quan_he = "spouse"	company_1
+select count ( * ) from nguoi_phu_thuoc where gioi_tinh = "f"	company_1
+select t1.ten_bo_phan from bo_phan as t1 join dia_diem_cua_bo_phan as t2 on t1.ma_so_bo_phan = t2.ma_so_bo_phan where t2.dia_diem_bo_phan = "houston"	company_1
+select ten , ho from nhan_vien where luong > 30000	company_1
+select count ( * ) , gioi_tinh from nhan_vien where luong < 50000 group by gioi_tinh	company_1
+select ten , ho , dia_chi from nhan_vien order by ngay_sinh	company_1
+select count ( * ) from giao_vien	course_teach
+select count ( * ) from giao_vien	course_teach
+select ten from giao_vien order by tuoi asc	course_teach
+select ten from giao_vien order by tuoi asc	course_teach
+select tuoi , que_quan from giao_vien	course_teach
+select tuoi , que_quan from giao_vien	course_teach
+select ten from giao_vien where que_quan != "little lever urban distric"	course_teach
+select ten from giao_vien where que_quan != "little lever urban distric"	course_teach
+select ten from giao_vien where tuoi = 32 or tuoi = 33	course_teach
+select ten from giao_vien where tuoi = 32 or tuoi = 33	course_teach
+select que_quan from giao_vien order by tuoi asc limit 1	course_teach
+select que_quan from giao_vien order by tuoi asc limit 1	course_teach
+select que_quan , count ( * ) from giao_vien group by que_quan	course_teach
+select que_quan , count ( * ) from giao_vien group by que_quan	course_teach
+select que_quan from giao_vien group by que_quan order by count ( * ) desc limit 1	course_teach
+select que_quan from giao_vien group by que_quan order by count ( * ) desc limit 1	course_teach
+select que_quan from giao_vien group by que_quan having count ( * ) >= 2	course_teach
+select que_quan from giao_vien group by que_quan having count ( * ) >= 2	course_teach
+select t3.ten , t2.khoa_hoc from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien	course_teach
+select t3.ten , t2.khoa_hoc from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien	course_teach
+select t3.ten , t2.khoa_hoc from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien order by t3.ten	course_teach
+select t3.ten , t2.khoa_hoc from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien order by t3.ten	course_teach
+select t3.ten from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien where t2.khoa_hoc = "math"	course_teach
+select t3.ten from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien where t2.khoa_hoc = "math"	course_teach
+select t2.ten , count ( * ) from sap_xep_khoa_hoc as t1 join giao_vien as t2 on t1.id_giao_vien = t2.id_giao_vien group by t2.ten	course_teach
+select t2.ten , count ( * ) from sap_xep_khoa_hoc as t1 join giao_vien as t2 on t1.id_giao_vien = t2.id_giao_vien group by t2.ten	course_teach
+select t2.ten from sap_xep_khoa_hoc as t1 join giao_vien as t2 on t1.id_giao_vien = t2.id_giao_vien group by t2.ten having count ( * ) >= 2	course_teach
+select t2.ten from sap_xep_khoa_hoc as t1 join giao_vien as t2 on t1.id_giao_vien = t2.id_giao_vien group by t2.ten having count ( * ) >= 2	course_teach
+select ten from giao_vien where id_giao_vien not in ( select id_giao_vien from sap_xep_khoa_hoc )	course_teach
+select ten from giao_vien where id_giao_vien not in ( select id_giao_vien from sap_xep_khoa_hoc )	course_teach
+select count ( * ) from thanh_vien	decoration_competition
+select ten from thanh_vien order by ten asc	decoration_competition
+select ten , quoc_gia from thanh_vien	decoration_competition
+select ten from thanh_vien where quoc_gia = "united states" or quoc_gia = "canada"	decoration_competition
+select quoc_gia , count ( * ) from thanh_vien group by quoc_gia	decoration_competition
+select quoc_gia from thanh_vien group by quoc_gia order by count ( * ) desc limit 1	decoration_competition
+select quoc_gia from thanh_vien group by quoc_gia having count ( * ) > 2	decoration_competition
+select ten_lanh_dao , dia_diem_truong_dai_hoc from truong_dai_hoc	decoration_competition
+select t2.ten , t1.ten from truong_dai_hoc as t1 join thanh_vien as t2 on t1.id_dai_hoc = t2.id_dai_hoc	decoration_competition
+select t2.ten , t1.dia_diem_truong_dai_hoc from truong_dai_hoc as t1 join thanh_vien as t2 on t1.id_dai_hoc = t2.id_dai_hoc order by t2.ten asc	decoration_competition
+select distinct t1.ten_lanh_dao from truong_dai_hoc as t1 join thanh_vien as t2 on t1.id_dai_hoc = t2.id_dai_hoc where t2.quoc_gia = "canada"	decoration_competition
+select t1.ten , t2.chu_de_trang_tri from thanh_vien as t1 join vong as t2 on t1.id_thanh_vien = t2.id_thanh_vien	decoration_competition
+select t1.ten from thanh_vien as t1 join vong as t2 on t1.id_thanh_vien = t2.id_thanh_vien where t2.xep_hang_tung_vong > 3	decoration_competition
+select t1.ten from thanh_vien as t1 join vong as t2 on t1.id_thanh_vien = t2.id_thanh_vien order by xep_hang_tung_vong asc	decoration_competition
+select ten from thanh_vien where id_thanh_vien not in ( select id_thanh_vien from vong )	decoration_competition
+select count ( * ) from cuoc_bau_cu	election_representative
+select so_luong_phieu_bau from cuoc_bau_cu order by so_luong_phieu_bau desc	election_representative
+select ngay , ti_le_phieu_bau from cuoc_bau_cu	election_representative
+select min ( ti_le_phieu_bau ) , max ( ti_le_phieu_bau ) from cuoc_bau_cu	election_representative
+select ten , dang from dai_dien	election_representative
+select ten from dai_dien where dang != "republican"	election_representative
+select tuoi_tho from dai_dien where tieu_bang = "new york" or tieu_bang = "indiana"	election_representative
+select t2.ten , t1.ngay from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien	election_representative
+select t2.ten from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien where so_luong_phieu_bau > 10000	election_representative
+select t2.ten from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien order by so_luong_phieu_bau desc	election_representative
+select t2.dang from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien order by so_luong_phieu_bau asc limit 1	election_representative
+select t2.tuoi_tho from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien order by ti_le_phieu_bau desc	election_representative
+select avg ( t1.so_luong_phieu_bau ) from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien where t2.dang = "republican"	election_representative
+select dang , count ( * ) from dai_dien group by dang	election_representative
+select dang , count ( * ) from dai_dien group by dang order by count ( * ) desc limit 1	election_representative
+select dang from dai_dien group by dang having count ( * ) >= 3	election_representative
+select tieu_bang from dai_dien group by tieu_bang having count ( * ) >= 2	election_representative
+select ten from dai_dien where id_dai_dien not in ( select id_dai_dien from cuoc_bau_cu )	election_representative
+select dang from dai_dien where tieu_bang = "new york" intersect select dang from dai_dien where tieu_bang = "pennsylvania"	election_representative
+select count ( distinct dang ) from dai_dien	election_representative
+select count ( * ) from quoc_gia	match_season
+select count ( * ) from quoc_gia	match_season
+select ten_quoc_gia , thu_do from quoc_gia	match_season
+select ten_quoc_gia , thu_do from quoc_gia	match_season
+select ngon_ngu_ban_dia_chinh_thuc from quoc_gia where ngon_ngu_ban_dia_chinh_thuc like "%english%"	match_season
+select ngon_ngu_ban_dia_chinh_thuc from quoc_gia where ngon_ngu_ban_dia_chinh_thuc like "%english%"	match_season
+select distinct vi_tri from tran_dau_trong_mua_giai	match_season
+select distinct vi_tri from tran_dau_trong_mua_giai	match_season
+select cau_thu from tran_dau_trong_mua_giai where truong_dai_hoc = "ucla"	match_season
+select cau_thu from tran_dau_trong_mua_giai where truong_dai_hoc = "ucla"	match_season
+select distinct vi_tri from tran_dau_trong_mua_giai where truong_dai_hoc = "ucla" or truong_dai_hoc = "duke"	match_season
+select distinct vi_tri from tran_dau_trong_mua_giai where truong_dai_hoc = "ucla" or truong_dai_hoc = "duke"	match_season
+select ma_so_tuyen_chon_tan_binh , mua_tuyen_chon from tran_dau_trong_mua_giai where vi_tri = "defender"	match_season
+select ma_so_tuyen_chon_tan_binh , mua_tuyen_chon from tran_dau_trong_mua_giai where vi_tri = "defender"	match_season
+select count ( distinct doi ) from tran_dau_trong_mua_giai	match_season
+select count ( distinct doi ) from tran_dau_trong_mua_giai	match_season
+select cau_thu , so_nam_da_choi from cau_thu	match_season
+select cau_thu , so_nam_da_choi from cau_thu	match_season
+select ten from doi	match_season
+select ten from doi	match_season
+select t2.mua_giai , t2.cau_thu , t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia	match_season
+select t2.mua_giai , t2.cau_thu , t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia	match_season
+select t2.cau_thu from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t1.ten_quoc_gia = "indonesia"	match_season
+select t2.cau_thu from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t1.ten_quoc_gia = "indonesia"	match_season
+select distinct t2.vi_tri from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t1.thu_do = "dublin"	match_season
+select distinct t2.vi_tri from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t1.thu_do = "dublin"	match_season
+select t1.ngon_ngu_ban_dia_chinh_thuc from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.truong_dai_hoc = "maryland" or t2.truong_dai_hoc = "duke"	match_season
+select t1.ngon_ngu_ban_dia_chinh_thuc from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.truong_dai_hoc = "maryland" or t2.truong_dai_hoc = "duke"	match_season
+select count ( distinct t1.ngon_ngu_ban_dia_chinh_thuc ) from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = "defender"	match_season
+select count ( distinct t1.ngon_ngu_ban_dia_chinh_thuc ) from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = "defender"	match_season
+select t1.mua_giai , t1.cau_thu , t2.ten from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi	match_season
+select t1.mua_giai , t1.cau_thu , t2.ten from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi	match_season
+select t1.vi_tri from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = "ryley goldner"	match_season
+select t1.vi_tri from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = "ryley goldner"	match_season
+select count ( distinct t1.truong_dai_hoc ) from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = "columbus crew"	match_season
+select count ( distinct t1.truong_dai_hoc ) from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = "columbus crew"	match_season
+select t1.cau_thu , t1.so_nam_da_choi from cau_thu as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = "columbus crew"	match_season
+select t1.cau_thu , t1.so_nam_da_choi from cau_thu as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = "columbus crew"	match_season
+select vi_tri , count ( * ) from tran_dau_trong_mua_giai group by vi_tri	match_season
+select vi_tri , count ( * ) from tran_dau_trong_mua_giai group by vi_tri	match_season
+select ten_quoc_gia , count ( * ) from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia group by t1.ten_quoc_gia	match_season
+select ten_quoc_gia , count ( * ) from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia group by t1.ten_quoc_gia	match_season
+select cau_thu from tran_dau_trong_mua_giai order by truong_dai_hoc asc	match_season
+select cau_thu from tran_dau_trong_mua_giai order by truong_dai_hoc asc	match_season
+select vi_tri from tran_dau_trong_mua_giai group by vi_tri order by count ( * ) desc limit 1	match_season
+select vi_tri from tran_dau_trong_mua_giai group by vi_tri order by count ( * ) desc limit 1	match_season
+select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc order by count ( * ) desc limit 3	match_season
+select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc order by count ( * ) desc limit 3	match_season
+select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc having count ( * ) >= 2	match_season
+select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc having count ( * ) >= 2	match_season
+select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc having count ( * ) >= 2 order by truong_dai_hoc desc	match_season
+select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc having count ( * ) >= 2 order by truong_dai_hoc desc	match_season
+select ten from doi where id_doi not in ( select doi from tran_dau_trong_mua_giai )	match_season
+select ten from doi where id_doi not in ( select doi from tran_dau_trong_mua_giai )	match_season
+select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = "forward" intersect select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = "defender"	match_season
+select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = "forward" intersect select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = "defender"	match_season
+select truong_dai_hoc from tran_dau_trong_mua_giai where vi_tri = "midfielder" intersect select truong_dai_hoc from tran_dau_trong_mua_giai where vi_tri = "defender"	match_season
+select truong_dai_hoc from tran_dau_trong_mua_giai where vi_tri = "midfielder" intersect select truong_dai_hoc from tran_dau_trong_mua_giai where vi_tri = "defender"	match_season
+select count ( * ) from toi_pham	perpetrator
+select ngay from toi_pham order by so_nguoi_bi_giet desc	perpetrator
+select so_nguoi_bi_thuong from toi_pham order by so_nguoi_bi_thuong asc	perpetrator
+select avg ( so_nguoi_bi_thuong ) from toi_pham	perpetrator
+select dia_diem from toi_pham order by so_nguoi_bi_giet desc limit 1	perpetrator
+select ten from ca_nhan order by chieu_cao asc	perpetrator
+select t1.ten from ca_nhan as t1 join toi_pham as t2 on t1.id_ca_nhan = t2.id_ca_nhan	perpetrator
+select t1.ten from ca_nhan as t1 join toi_pham as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t2.quoc_gia != "china"	perpetrator
+select t1.ten from ca_nhan as t1 join toi_pham as t2 on t1.id_ca_nhan = t2.id_ca_nhan order by t1.can_nang desc limit 1	perpetrator
+select sum ( t2.so_nguoi_bi_giet ) from ca_nhan as t1 join toi_pham as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t1.chieu_cao > 1.84	perpetrator
+select t1.ten from ca_nhan as t1 join toi_pham as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t2.quoc_gia = "china" or t2.quoc_gia = "japan"	perpetrator
+select t1.chieu_cao from ca_nhan as t1 join toi_pham as t2 on t1.id_ca_nhan = t2.id_ca_nhan order by t2.so_nguoi_bi_thuong desc	perpetrator
+select quoc_gia , count ( * ) from toi_pham group by quoc_gia	perpetrator
+select quoc_gia , count ( * ) from toi_pham group by quoc_gia order by count ( * ) desc limit 1	perpetrator
+select quoc_gia , count ( * ) from toi_pham group by quoc_gia having count ( * ) >= 2	perpetrator
+select t1.ten from ca_nhan as t1 join toi_pham as t2 on t1.id_ca_nhan = t2.id_ca_nhan order by t2.nam desc	perpetrator
+select ten from ca_nhan where id_ca_nhan not in ( select id_ca_nhan from toi_pham )	perpetrator
+select quoc_gia from toi_pham where so_nguoi_bi_thuong > 50 intersect select quoc_gia from toi_pham where so_nguoi_bi_thuong < 20	perpetrator
+select count ( distinct dia_diem ) from toi_pham	perpetrator
+select t2.ngay from ca_nhan as t1 join toi_pham as t2 on t1.id_ca_nhan = t2.id_ca_nhan order by t1.chieu_cao desc limit 1	perpetrator
+select max ( nam ) from toi_pham	perpetrator
+select chinh_quyen_dia_phuong , dich_vu from nha_ga	station_weather
+select so_hieu_tau , ten from tau_hoa order by thoi_gian	station_weather
+select thoi_gian , so_hieu_tau from tau_hoa where diem_den = "chennai" order by thoi_gian	station_weather
+select count ( * ) from tau_hoa where ten like "%express%"	station_weather
+select so_hieu_tau , thoi_gian from tau_hoa where diem_khoi_hanh = "chennai" and diem_den = "guruvayur"	station_weather
+select diem_khoi_hanh , count ( * ) from tau_hoa group by diem_khoi_hanh	station_weather
+select t1.ten from tau_hoa as t1 join lo_trinh as t2 on t1.id = t2.id_tau group by t2.id_tau order by count ( * ) desc limit 1	station_weather
+select count ( * ) , t1.ten_mang_luoi , t1.dich_vu from nha_ga as t1 join lo_trinh as t2 on t1.id = t2.id_nha_ga group by t2.id_nha_ga	station_weather
+select avg ( nhiet_do_cao ) , ngay_trong_tuan from thoi_tiet_hang_tuan group by ngay_trong_tuan	station_weather
+select max ( t1.nhiet_do_thap ) , avg ( t1.luong_mua ) from thoi_tiet_hang_tuan as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id where t2.ten_mang_luoi = "amersham"	station_weather
+select t3.ten , t3.thoi_gian from nha_ga as t1 join lo_trinh as t2 on t1.id = t2.id_nha_ga join tau_hoa as t3 on t2.id_tau = t3.id where t1.chinh_quyen_dia_phuong = "chiltern"	station_weather
+select count ( distinct dich_vu ) from nha_ga	station_weather
+select t2.id , t2.chinh_quyen_dia_phuong from thoi_tiet_hang_tuan as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id group by t1.id_nha_ga order by avg ( nhiet_do_cao ) desc limit 1	station_weather
+select t2.id , t2.chinh_quyen_dia_phuong from thoi_tiet_hang_tuan as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id group by t1.id_nha_ga having max ( t1.luong_mua ) > 50	station_weather
+select min ( nhiet_do_thap ) , max ( toc_do_gio_mph ) from thoi_tiet_hang_tuan	station_weather
+select diem_khoi_hanh from tau_hoa group by diem_khoi_hanh having count ( * ) > 1	station_weather
+select count ( * ) from nha_tho where ngay_mo_cua < 1850	wedding
+select ten , ngay_mo_cua , duoc_to_chuc_boi from nha_tho	wedding
+select ten from nha_tho order by ngay_mo_cua desc	wedding
+select ngay_mo_cua from nha_tho group by ngay_mo_cua having count ( * ) >= 2	wedding
+select duoc_to_chuc_boi , ten from nha_tho where ngay_mo_cua between 1830 and 1840	wedding
+select ngay_mo_cua , count ( * ) from nha_tho group by ngay_mo_cua	wedding
+select ten , ngay_mo_cua from nha_tho order by ngay_mo_cua desc limit 3	wedding
+select count ( * ) from ca_nhan where la_nam_hay_nu = "f" and tuoi > 30	wedding
+select quoc_gia from ca_nhan where tuoi < 25 intersect select quoc_gia from ca_nhan where tuoi > 30	wedding
+select min ( tuoi ) , max ( tuoi ) , avg ( tuoi ) from ca_nhan	wedding
+select ten , quoc_gia from ca_nhan where tuoi < ( select avg ( tuoi ) from ca_nhan )	wedding
+select t2.ten , t3.ten from le_cuoi as t1 join ca_nhan as t2 on t1.id_nam = t2.id_ca_nhan join ca_nhan as t3 on t1.id_nu = t3.id_ca_nhan where t1.nam > 2014	wedding
+select ten , tuoi from ca_nhan where la_nam_hay_nu = "t" and id_ca_nhan not in ( select id_nam from le_cuoi )	wedding
+select ten from nha_tho except select t1.ten from nha_tho as t1 join le_cuoi as t2 on t1.id_nha_tho = t2.id_nha_tho where t2.nam = 2015	wedding
+select t1.ten from nha_tho as t1 join le_cuoi as t2 on t1.id_nha_tho = t2.id_nha_tho group by t1.id_nha_tho having count ( * ) >= 2	wedding
+select t2.ten from le_cuoi as t1 join ca_nhan as t2 on t1.id_nu = t2.id_ca_nhan where t1.nam = 2016 and t2.la_nam_hay_nu = "f" and t2.quoc_gia = "canada"	wedding
+select count ( * ) from le_cuoi where nam = 2016	wedding
+select t4.ten from le_cuoi as t1 join ca_nhan as t2 on t1.id_nam = t2.id_ca_nhan join ca_nhan as t3 on t1.id_nu = t3.id_ca_nhan join nha_tho as t4 on t4.id_nha_tho = t1.id_nha_tho where t2.tuoi > 30 or t3.tuoi > 30	wedding
+select quoc_gia , count ( * ) from ca_nhan group by quoc_gia	wedding
+select count ( distinct id_nha_tho ) from le_cuoi where nam = 2016	wedding
+select count ( * ) from giang_vien	activity_1
+select count ( * ) from giang_vien	activity_1
+select distinct ngach from giang_vien	activity_1
+select distinct ngach from giang_vien	activity_1
+select distinct toa_nha from giang_vien	activity_1
+select distinct toa_nha from giang_vien	activity_1
+select ngach , ten , ho from giang_vien	activity_1
+select ngach , ten , ho from giang_vien	activity_1
+select ten , ho , so_dien_thoai from giang_vien where gioi_tinh = "f"	activity_1
+select ten , ho , so_dien_thoai from giang_vien where gioi_tinh = "f"	activity_1
+select id_giang_vien from giang_vien where gioi_tinh = "m"	activity_1
+select id_giang_vien from giang_vien where gioi_tinh = "m"	activity_1
+select count ( * ) from giang_vien where gioi_tinh = "f" and ngach = "professor"	activity_1
+select count ( * ) from giang_vien where gioi_tinh = "f" and ngach = "professor"	activity_1
+select so_dien_thoai , so_phong , toa_nha from giang_vien where ten = "jerry" and ho = "prince"	activity_1
+select so_dien_thoai , so_phong , toa_nha from giang_vien where ten = "jerry" and ho = "prince"	activity_1
+select count ( * ) from giang_vien where ngach = "professor" and toa_nha = "neb"	activity_1
+select count ( * ) from giang_vien where ngach = "professor" and toa_nha = "neb"	activity_1
+select ten , ho from giang_vien where ngach = "instructor"	activity_1
+select ten , ho from giang_vien where ngach = "instructor"	activity_1
+select toa_nha , count ( * ) from giang_vien group by toa_nha	activity_1
+select toa_nha , count ( * ) from giang_vien group by toa_nha	activity_1
+select toa_nha from giang_vien group by toa_nha order by count ( * ) desc limit 1	activity_1
+select toa_nha from giang_vien group by toa_nha order by count ( * ) desc limit 1	activity_1
+select toa_nha from giang_vien where ngach = "professor" group by toa_nha having count ( * ) >= 10	activity_1
+select toa_nha from giang_vien where ngach = "professor" group by toa_nha having count ( * ) >= 10	activity_1
+select ngach , count ( * ) from giang_vien group by ngach	activity_1
+select ngach , count ( * ) from giang_vien group by ngach	activity_1
+select ngach , gioi_tinh , count ( * ) from giang_vien group by ngach , gioi_tinh	activity_1
+select ngach , gioi_tinh , count ( * ) from giang_vien group by ngach , gioi_tinh	activity_1
+select ngach from giang_vien group by ngach order by count ( * ) asc limit 1	activity_1
+select ngach from giang_vien group by ngach order by count ( * ) asc limit 1	activity_1
+select gioi_tinh , count ( * ) from giang_vien where ngach = "asstprof" group by gioi_tinh	activity_1
+select gioi_tinh , count ( * ) from giang_vien where ngach = "asstprof" group by gioi_tinh	activity_1
+select t1.ten , t1.ho from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van where t2.ten = "linda" and t2.ho = "smith"	activity_1
+select t1.ten , t1.ho from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van where t2.ten = "linda" and t2.ho = "smith"	activity_1
+select t2.id_sinh_vien from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van where t1.ngach = "professor"	activity_1
+select t2.id_sinh_vien from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van where t1.ngach = "professor"	activity_1
+select t2.ten , t2.ho from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van where t1.ten = "michael" and t1.ho = "goodrich"	activity_1
+select t2.ten , t2.ho from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van where t1.ten = "michael" and t1.ho = "goodrich"	activity_1
+select t1.id_giang_vien , count ( * ) from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van group by t1.id_giang_vien	activity_1
+select t1.id_giang_vien , count ( * ) from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van group by t1.id_giang_vien	activity_1
+select t1.ngach , count ( * ) from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van group by t1.ngach	activity_1
+select t1.ngach , count ( * ) from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van group by t1.ngach	activity_1
+select t1.ten , t1.ho from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van group by t1.id_giang_vien order by count ( * ) desc limit 1	activity_1
+select t1.ten , t1.ho from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van group by t1.id_giang_vien order by count ( * ) desc limit 1	activity_1
+select t1.id_giang_vien from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van group by t1.id_giang_vien having count ( * ) >= 2	activity_1
+select t1.id_giang_vien from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van group by t1.id_giang_vien having count ( * ) >= 2	activity_1
+select id_giang_vien from giang_vien except select co_van from sinh_vien	activity_1
+select id_giang_vien from giang_vien except select co_van from sinh_vien	activity_1
+select ten_hoat_dong from hoat_dong	activity_1
+select ten_hoat_dong from hoat_dong	activity_1
+select count ( * ) from hoat_dong	activity_1
+select count ( * ) from hoat_dong	activity_1
+select count ( distinct id_giang_vien ) from giang_vien_tham_gia_vao	activity_1
+select count ( distinct id_giang_vien ) from giang_vien_tham_gia_vao	activity_1
+select id_giang_vien from giang_vien except select id_giang_vien from giang_vien_tham_gia_vao	activity_1
+select id_giang_vien from giang_vien except select id_giang_vien from giang_vien_tham_gia_vao	activity_1
+select id_giang_vien from giang_vien_tham_gia_vao intersect select co_van from sinh_vien	activity_1
+select id_giang_vien from giang_vien_tham_gia_vao intersect select co_van from sinh_vien	activity_1
+select count ( * ) from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien where t1.ten = "mark" and t1.ho = "giuliano"	activity_1
+select count ( * ) from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien where t1.ten = "mark" and t1.ho = "giuliano"	activity_1
+select t3.ten_hoat_dong from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien join hoat_dong as t3 on t3.id_hoat_dong = t2.id_hoat_dong where t1.ten = "mark" and t1.ho = "giuliano"	activity_1
+select t3.ten_hoat_dong from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien join hoat_dong as t3 on t3.id_hoat_dong = t2.id_hoat_dong where t1.ten = "mark" and t1.ho = "giuliano"	activity_1
+select t1.ten , t1.ho , count ( * ) , t1.id_giang_vien from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien group by t1.id_giang_vien	activity_1
+select t1.ten , t1.ho , count ( * ) , t1.id_giang_vien from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien group by t1.id_giang_vien	activity_1
+select t1.ten_hoat_dong , count ( * ) from hoat_dong as t1 join giang_vien_tham_gia_vao as t2 on t1.id_hoat_dong = t2.id_hoat_dong group by t1.id_hoat_dong	activity_1
+select t1.ten_hoat_dong , count ( * ) from hoat_dong as t1 join giang_vien_tham_gia_vao as t2 on t1.id_hoat_dong = t2.id_hoat_dong group by t1.id_hoat_dong	activity_1
+select t1.ten , t1.ho from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien group by t1.id_giang_vien order by count ( * ) desc limit 1	activity_1
+select t1.ten , t1.ho from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien group by t1.id_giang_vien order by count ( * ) desc limit 1	activity_1
+select t1.ten_hoat_dong from hoat_dong as t1 join giang_vien_tham_gia_vao as t2 on t1.id_hoat_dong = t2.id_hoat_dong group by t1.id_hoat_dong order by count ( * ) desc limit 1	activity_1
+select t1.ten_hoat_dong from hoat_dong as t1 join giang_vien_tham_gia_vao as t2 on t1.id_hoat_dong = t2.id_hoat_dong group by t1.id_hoat_dong order by count ( * ) desc limit 1	activity_1
+select id_sinh_vien from sinh_vien except select id_sinh_vien from tham_gia_vao	activity_1
+select id_sinh_vien from sinh_vien except select id_sinh_vien from tham_gia_vao	activity_1
+select id_sinh_vien from tham_gia_vao intersect select id_sinh_vien from sinh_vien where tuoi < 20	activity_1
+select id_sinh_vien from tham_gia_vao intersect select id_sinh_vien from sinh_vien where tuoi < 20	activity_1
+select t1.ten , t1.ho from sinh_vien as t1 join tham_gia_vao as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien order by count ( * ) desc limit 1	activity_1
+select t1.ten , t1.ho from sinh_vien as t1 join tham_gia_vao as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien order by count ( * ) desc limit 1	activity_1
+select t1.ten_hoat_dong from hoat_dong as t1 join tham_gia_vao as t2 on t1.id_hoat_dong = t2.id_hoat_dong group by t1.id_hoat_dong order by count ( * ) desc limit 1	activity_1
+select t1.ten_hoat_dong from hoat_dong as t1 join tham_gia_vao as t2 on t1.id_hoat_dong = t2.id_hoat_dong group by t1.id_hoat_dong order by count ( * ) desc limit 1	activity_1
+select distinct t1.ho from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien join hoat_dong as t3 on t2.id_hoat_dong = t2.id_hoat_dong where t3.ten_hoat_dong = "canoeing" or t3.ten_hoat_dong = "kayaking"	activity_1
+select distinct t1.ho from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien join hoat_dong as t3 on t2.id_hoat_dong = t2.id_hoat_dong where t3.ten_hoat_dong = "canoeing" or t3.ten_hoat_dong = "kayaking"	activity_1
+select ho from giang_vien where ngach = "professor" except select distinct t1.ho from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien join hoat_dong as t3 on t2.id_hoat_dong = t2.id_hoat_dong where t3.ten_hoat_dong = "canoeing" or t3.ten_hoat_dong = "kayaking"	activity_1
+select ho from giang_vien where ngach = "professor" except select distinct t1.ho from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien join hoat_dong as t3 on t2.id_hoat_dong = t2.id_hoat_dong where t3.ten_hoat_dong = "canoeing" or t3.ten_hoat_dong = "kayaking"	activity_1
+select t1.ho from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien join hoat_dong as t3 on t2.id_hoat_dong = t2.id_hoat_dong where t3.ten_hoat_dong = "canoeing" intersect select t1.ho from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien join hoat_dong as t3 on t2.id_hoat_dong = t2.id_hoat_dong where t3.ten_hoat_dong = "kayaking"	activity_1
+select t1.ho from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien join hoat_dong as t3 on t2.id_hoat_dong = t2.id_hoat_dong where t3.ten_hoat_dong = "canoeing" intersect select t1.ho from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien join hoat_dong as t3 on t2.id_hoat_dong = t2.id_hoat_dong where t3.ten_hoat_dong = "kayaking"	activity_1
+select t1.id_sinh_vien from tham_gia_vao as t1 join hoat_dong as t2 on t2.id_hoat_dong = t2.id_hoat_dong where t2.ten_hoat_dong = "canoeing" intersect select t1.id_sinh_vien from tham_gia_vao as t1 join hoat_dong as t2 on t2.id_hoat_dong = t2.id_hoat_dong where t2.ten_hoat_dong = "kayaking"	activity_1
+select t1.id_sinh_vien from tham_gia_vao as t1 join hoat_dong as t2 on t2.id_hoat_dong = t2.id_hoat_dong where t2.ten_hoat_dong = "canoeing" intersect select t1.id_sinh_vien from tham_gia_vao as t1 join hoat_dong as t2 on t2.id_hoat_dong = t2.id_hoat_dong where t2.ten_hoat_dong = "kayaking"	activity_1
+select count ( * ) from nguoi_luyen_the_hinh	body_builder
+select tong from nguoi_luyen_the_hinh order by tong asc	body_builder
+select cu_giat , cu_day from nguoi_luyen_the_hinh order by cu_giat asc	body_builder
+select avg ( cu_giat ) from nguoi_luyen_the_hinh	body_builder
+select cu_day from nguoi_luyen_the_hinh order by tong desc limit 1	body_builder
+select ngay_sinh from ca_nhan order by chieu_cao asc	body_builder
+select t2.ten from nguoi_luyen_the_hinh as t1 join ca_nhan as t2 on t1.id_ca_nhan = t2.id_ca_nhan	body_builder
+select t2.ten from nguoi_luyen_the_hinh as t1 join ca_nhan as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t1.tong > 300	body_builder
+select t2.ten from nguoi_luyen_the_hinh as t1 join ca_nhan as t2 on t1.id_ca_nhan = t2.id_ca_nhan order by t2.can_nang desc limit 1	body_builder
+select t2.ngay_sinh , t2.noi_sinh from nguoi_luyen_the_hinh as t1 join ca_nhan as t2 on t1.id_ca_nhan = t2.id_ca_nhan order by t1.tong desc limit 1	body_builder
+select t2.chieu_cao from nguoi_luyen_the_hinh as t1 join ca_nhan as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t1.tong < 315	body_builder
+select avg ( t1.tong ) from nguoi_luyen_the_hinh as t1 join ca_nhan as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t2.chieu_cao > 200	body_builder
+select t2.ten from nguoi_luyen_the_hinh as t1 join ca_nhan as t2 on t1.id_ca_nhan = t2.id_ca_nhan order by t1.tong desc	body_builder
+select noi_sinh , count ( * ) from ca_nhan group by noi_sinh	body_builder
+select noi_sinh from ca_nhan group by noi_sinh order by count ( * ) desc limit 1	body_builder
+select noi_sinh from ca_nhan group by noi_sinh having count ( * ) >= 2	body_builder
+select chieu_cao , can_nang from ca_nhan order by chieu_cao desc	body_builder
+select * from nguoi_luyen_the_hinh	body_builder
+select ten , noi_sinh from ca_nhan except select t1.ten , t1.noi_sinh from ca_nhan as t1 join nguoi_luyen_the_hinh as t2 on t1.id_ca_nhan = t2.id_ca_nhan	body_builder
+select count ( distinct noi_sinh ) from ca_nhan	body_builder
+select count ( * ) from ca_nhan where id_ca_nhan not in ( select id_ca_nhan from nguoi_luyen_the_hinh )	body_builder
+select t2.can_nang from nguoi_luyen_the_hinh as t1 join ca_nhan as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t1.cu_giat > 140 or t2.chieu_cao > 200	body_builder
+select t1.tong from nguoi_luyen_the_hinh as t1 join ca_nhan as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t2.ngay_sinh like "%january%"	body_builder
+select min ( cu_giat ) from nguoi_luyen_the_hinh	body_builder
+select count ( * ) from ung_cu_vien	candidate_poll
+select count ( * ) from ung_cu_vien	candidate_poll
+select nguon_tham_do_y_kien from ung_cu_vien group by nguon_tham_do_y_kien order by count ( * ) desc limit 1	candidate_poll
+select nguon_tham_do_y_kien from ung_cu_vien group by nguon_tham_do_y_kien order by count ( * ) desc limit 1	candidate_poll
+select ty_le_ung_ho from ung_cu_vien order by ty_le_ung_ho desc limit 3	candidate_poll
+select ty_le_ung_ho from ung_cu_vien order by ty_le_ung_ho desc limit 3	candidate_poll
+select id_ung_cu_vien from ung_cu_vien order by ty_le_phan_doi limit 1	candidate_poll
+select id_ung_cu_vien from ung_cu_vien order by ty_le_phan_doi limit 1	candidate_poll
+select ty_le_ung_ho , ty_le_xem_xet , ty_le_phan_doi from ung_cu_vien order by ty_le_khong_chac_chan	candidate_poll
+select ty_le_ung_ho , ty_le_xem_xet , ty_le_phan_doi from ung_cu_vien order by ty_le_khong_chac_chan	candidate_poll
+select nguon_tham_do_y_kien from ung_cu_vien order by ty_le_phan_doi desc limit 1	candidate_poll
+select nguon_tham_do_y_kien from ung_cu_vien order by ty_le_phan_doi desc limit 1	candidate_poll
+select ten from ca_nhan order by ngay_sinh	candidate_poll
+select ten from ca_nhan order by ngay_sinh	candidate_poll
+select avg ( chieu_cao ) , avg ( can_nang ) from ca_nhan where gioi_tinh = "m"	candidate_poll
+select avg ( chieu_cao ) , avg ( can_nang ) from ca_nhan where gioi_tinh = "m"	candidate_poll
+select ten from ca_nhan where chieu_cao > 200 or chieu_cao < 190	candidate_poll
+select ten from ca_nhan where chieu_cao > 200 or chieu_cao < 190	candidate_poll
+select avg ( can_nang ) , min ( can_nang ) , gioi_tinh from ca_nhan group by gioi_tinh	candidate_poll
+select avg ( can_nang ) , min ( can_nang ) , gioi_tinh from ca_nhan group by gioi_tinh	candidate_poll
+select t1.ten , t1.gioi_tinh from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ca_nhan order by t2.ty_le_ung_ho desc limit 1	candidate_poll
+select t1.ten , t1.gioi_tinh from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ca_nhan order by t2.ty_le_ung_ho desc limit 1	candidate_poll
+select t1.ten , t1.gioi_tinh , min ( ty_le_phan_doi ) from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ca_nhan group by t1.gioi_tinh	candidate_poll
+select t1.ten , t1.gioi_tinh , min ( ty_le_phan_doi ) from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ca_nhan group by t1.gioi_tinh	candidate_poll
+select t1.gioi_tinh from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ca_nhan group by t1.gioi_tinh order by avg ( t2.ty_le_khong_chac_chan ) desc limit 1	candidate_poll
+select t1.gioi_tinh from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ca_nhan group by t1.gioi_tinh order by avg ( t2.ty_le_khong_chac_chan ) desc limit 1	candidate_poll
+select ten from ca_nhan where id_ca_nhan not in ( select id_ca_nhan from ung_cu_vien )	candidate_poll
+select ten from ca_nhan where id_ca_nhan not in ( select id_ca_nhan from ung_cu_vien )	candidate_poll
+select t1.ten from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t2.ty_le_ung_ho < t2.ty_le_phan_doi	candidate_poll
+select t1.ten from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t2.ty_le_ung_ho < t2.ty_le_phan_doi	candidate_poll
+select count ( * ) , gioi_tinh from ca_nhan where can_nang > 85 group by gioi_tinh	candidate_poll
+select count ( * ) , gioi_tinh from ca_nhan where can_nang > 85 group by gioi_tinh	candidate_poll
+select max ( ty_le_ung_ho ) , min ( ty_le_xem_xet ) , min ( ty_le_phan_doi ) from ung_cu_vien	candidate_poll
+select max ( ty_le_ung_ho ) , min ( ty_le_xem_xet ) , min ( ty_le_phan_doi ) from ung_cu_vien	candidate_poll
+select t1.ten from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t1.gioi_tinh = "f" order by t1.ten	candidate_poll
+select t1.ten from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t1.gioi_tinh = "f" order by t1.ten	candidate_poll
+select ten from ca_nhan where chieu_cao < ( select avg ( chieu_cao ) from ca_nhan )	candidate_poll
+select ten from ca_nhan where chieu_cao < ( select avg ( chieu_cao ) from ca_nhan )	candidate_poll
+select * from ca_nhan	candidate_poll
+select * from ca_nhan	candidate_poll
+select thanh_pho_chu_nha from thanh_pho_chu_nha order by nam desc limit 1	city_record
+select thanh_pho_chu_nha from thanh_pho_chu_nha order by nam desc limit 1	city_record
+select id_tran_dau from tran_dau where giai_dau = "1994 fifa world cup qualification"	city_record
+select id_tran_dau from tran_dau where giai_dau = "1994 fifa world cup qualification"	city_record
+select t1.thanh_pho from thanh_pho as t1 join thanh_pho_chu_nha as t2 on t1.id_thanh_pho = t2.thanh_pho_chu_nha where t2.nam > 2010	city_record
+select t1.thanh_pho from thanh_pho as t1 join thanh_pho_chu_nha as t2 on t1.id_thanh_pho = t2.thanh_pho_chu_nha where t2.nam > 2010	city_record
+select t1.thanh_pho from thanh_pho as t1 join thanh_pho_chu_nha as t2 on t1.id_thanh_pho = t2.thanh_pho_chu_nha group by t2.thanh_pho_chu_nha order by count ( * ) desc limit 1	city_record
+select t1.thanh_pho from thanh_pho as t1 join thanh_pho_chu_nha as t2 on t1.id_thanh_pho = t2.thanh_pho_chu_nha group by t2.thanh_pho_chu_nha order by count ( * ) desc limit 1	city_record
+select t3.dia_diem from thanh_pho as t1 join thanh_pho_chu_nha as t2 on t1.id_thanh_pho = t2.thanh_pho_chu_nha join tran_dau as t3 on t2.id_tran_dau = t3.id_tran_dau where t1.thanh_pho = "nanjing ( jiangsu )" and t3.giai_dau = "1994 fifa world cup qualification"	city_record
+select t3.dia_diem from thanh_pho as t1 join thanh_pho_chu_nha as t2 on t1.id_thanh_pho = t2.thanh_pho_chu_nha join tran_dau as t3 on t2.id_tran_dau = t3.id_tran_dau where t1.thanh_pho = "nanjing ( jiangsu )" and t3.giai_dau = "1994 fifa world cup qualification"	city_record
+select t2.thang_mot from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t1.thanh_pho = "shanghai"	city_record
+select t2.thang_mot from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t1.thanh_pho = "shanghai"	city_record
+select t2.nam from thanh_pho as t1 join thanh_pho_chu_nha as t2 on t1.id_thanh_pho = t2.thanh_pho_chu_nha where t1.thanh_pho = "taizhou ( zhejiang )"	city_record
+select t2.nam from thanh_pho as t1 join thanh_pho_chu_nha as t2 on t1.id_thanh_pho = t2.thanh_pho_chu_nha where t1.thanh_pho = "taizhou ( zhejiang )"	city_record
+select thanh_pho from thanh_pho order by dan_so_khu_vuc desc limit 3	city_record
+select thanh_pho from thanh_pho order by dan_so_khu_vuc desc limit 3	city_record
+select thanh_pho , gdp from thanh_pho order by gdp limit 1	city_record
+select thanh_pho , gdp from thanh_pho order by gdp limit 1	city_record
+select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho order by t2.thang_hai desc limit 1	city_record
+select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho order by t2.thang_hai desc limit 1	city_record
+select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t2.thang_ba < t2.thang_bay or t2.thang_ba > t2.thang_muoi	city_record
+select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t2.thang_ba < t2.thang_bay or t2.thang_ba > t2.thang_muoi	city_record
+select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t2.thang_ba < t2.thang_bay intersect select t3.thanh_pho from thanh_pho as t3 join thanh_pho_chu_nha as t4 on t3.id_thanh_pho = t4.thanh_pho_chu_nha	city_record
+select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t2.thang_ba < t2.thang_bay intersect select t3.thanh_pho from thanh_pho as t3 join thanh_pho_chu_nha as t4 on t3.id_thanh_pho = t4.thanh_pho_chu_nha	city_record
+select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t2.thang_ba < t2.thang_muoi_hai except select t3.thanh_pho from thanh_pho as t3 join thanh_pho_chu_nha as t4 on t3.id_thanh_pho = t4.thanh_pho_chu_nha	city_record
+select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t2.thang_ba < t2.thang_muoi_hai except select t3.thanh_pho from thanh_pho as t3 join thanh_pho_chu_nha as t4 on t3.id_thanh_pho = t4.thanh_pho_chu_nha	city_record
+select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t2.thang_hai > t2.thang_sau union select t3.thanh_pho from thanh_pho as t3 join thanh_pho_chu_nha as t4 on t3.id_thanh_pho = t4.thanh_pho_chu_nha	city_record
+select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t2.thang_hai > t2.thang_sau union select t3.thanh_pho from thanh_pho as t3 join thanh_pho_chu_nha as t4 on t3.id_thanh_pho = t4.thanh_pho_chu_nha	city_record
+select thanh_pho from thanh_pho where dan_so_khu_vuc > 10000000	city_record
+select thanh_pho from thanh_pho where dan_so_khu_vuc > 10000000	city_record
+select thanh_pho from thanh_pho where dan_so_khu_vuc > 10000000 union select thanh_pho from thanh_pho where dan_so_khu_vuc < 5000000	city_record
+select thanh_pho from thanh_pho where dan_so_khu_vuc > 10000000 union select thanh_pho from thanh_pho where dan_so_khu_vuc < 5000000	city_record
+select count ( * ) , giai_dau from tran_dau group by giai_dau	city_record
+select count ( * ) , giai_dau from tran_dau group by giai_dau	city_record
+select dia_diem from tran_dau order by ngay desc	city_record
+select dia_diem from tran_dau order by ngay desc	city_record
+select gdp from thanh_pho order by dan_so_khu_vuc desc limit 1	city_record
+select gdp from thanh_pho order by dan_so_khu_vuc desc limit 1	city_record
+select t1.gdp , t1.dan_so_khu_vuc from thanh_pho as t1 join thanh_pho_chu_nha as t2 on t1.id_thanh_pho = t2.thanh_pho_chu_nha group by t2.thanh_pho_chu_nha having count ( * ) > 1	city_record
+select t1.gdp , t1.dan_so_khu_vuc from thanh_pho as t1 join thanh_pho_chu_nha as t2 on t1.id_thanh_pho = t2.thanh_pho_chu_nha group by t2.thanh_pho_chu_nha having count ( * ) > 1	city_record
+select count ( * ) from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa where ten_khoa = "accounting"	college_1
+select count ( * ) from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa where ten_khoa = "accounting"	college_1
+select count ( distinct ma_so_nhan_vien_cua_giao_su ) from lop_hoc where ma_khoa_hoc = "acct-211"	college_1
+select count ( distinct ma_so_nhan_vien_cua_giao_su ) from lop_hoc where ma_khoa_hoc = "acct-211"	college_1
+select t3.ten_cua_nhan_vien , t3.ho_cua_nhan_vien from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa join nhan_vien as t3 on t1.ma_so_nhan_vien = t3.ma_so_nhan_vien where ten_khoa = "biology"	college_1
+select t3.ten_cua_nhan_vien , t3.ho_cua_nhan_vien from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa join nhan_vien as t3 on t1.ma_so_nhan_vien = t3.ma_so_nhan_vien where ten_khoa = "biology"	college_1
+select distinct t1.ten_cua_nhan_vien , t1.ngay_sinh_cua_nhan_vien from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su where ma_khoa_hoc = "acct-211"	college_1
+select distinct t1.ten_cua_nhan_vien , t1.ngay_sinh_cua_nhan_vien from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su where ma_khoa_hoc = "acct-211"	college_1
+select count ( * ) from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su where t1.ho_cua_nhan_vien = "graztevski"	college_1
+select count ( * ) from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su where t1.ho_cua_nhan_vien = "graztevski"	college_1
+select ma_truong from khoa where ten_khoa = "accounting"	college_1
+select ma_truong from khoa where ten_khoa = "accounting"	college_1
+select so_luong_tin_chi_cua_khoa_hoc , mo_ta_ve_khoa_hoc from khoa_hoc where ma_khoa_hoc = "cis-220"	college_1
+select so_luong_tin_chi_cua_khoa_hoc , mo_ta_ve_khoa_hoc from khoa_hoc where ma_khoa_hoc = "cis-220"	college_1
+select dia_chi_khoa from khoa where ten_khoa = "history"	college_1
+select dia_chi_khoa from khoa where ten_khoa = "history"	college_1
+select count ( distinct dia_chi_khoa ) from khoa where ma_truong = "bus"	college_1
+select count ( distinct dia_chi_khoa ) from khoa where ma_truong = "bus"	college_1
+select count ( distinct dia_chi_khoa ) , ma_truong from khoa group by ma_truong	college_1
+select count ( distinct dia_chi_khoa ) , ma_truong from khoa group by ma_truong	college_1
+select so_luong_tin_chi_cua_khoa_hoc , mo_ta_ve_khoa_hoc from khoa_hoc where ma_khoa_hoc = "qm-261"	college_1
+select so_luong_tin_chi_cua_khoa_hoc , mo_ta_ve_khoa_hoc from khoa_hoc where ma_khoa_hoc = "qm-261"	college_1
+select count ( distinct ten_khoa ) , ma_truong from khoa group by ma_truong	college_1
+select count ( distinct ten_khoa ) , ma_truong from khoa group by ma_truong	college_1
+select count ( distinct ten_khoa ) , ma_truong from khoa group by ma_truong having count ( distinct ten_khoa ) < 5	college_1
+select count ( distinct ten_khoa ) , ma_truong from khoa group by ma_truong having count ( distinct ten_khoa ) < 5	college_1
+select count ( * ) , ma_khoa_hoc from lop_hoc group by ma_khoa_hoc	college_1
+select count ( * ) , ma_khoa_hoc from lop_hoc group by ma_khoa_hoc	college_1
+select sum ( so_luong_tin_chi_cua_khoa_hoc ) , ma_khoa from khoa_hoc group by ma_khoa	college_1
+select sum ( so_luong_tin_chi_cua_khoa_hoc ) , ma_khoa from khoa_hoc group by ma_khoa	college_1
+select count ( * ) , phong_hoc from lop_hoc group by phong_hoc having count ( * ) >= 2	college_1
+select count ( * ) , phong_hoc from lop_hoc group by phong_hoc having count ( * ) >= 2	college_1
+select count ( * ) , ma_khoa from lop_hoc as t1 join khoa_hoc as t2 on t1.ma_khoa_hoc = t2.ma_khoa_hoc group by ma_khoa	college_1
+select count ( * ) , ma_khoa from lop_hoc as t1 join khoa_hoc as t2 on t1.ma_khoa_hoc = t2.ma_khoa_hoc group by ma_khoa	college_1
+select count ( * ) , t3.ma_truong from lop_hoc as t1 join khoa_hoc as t2 on t1.ma_khoa_hoc = t2.ma_khoa_hoc join khoa as t3 on t2.ma_khoa = t3.ma_khoa group by t3.ma_truong	college_1
+select count ( * ) , t3.ma_truong from lop_hoc as t1 join khoa_hoc as t2 on t1.ma_khoa_hoc = t2.ma_khoa_hoc join khoa as t3 on t2.ma_khoa = t3.ma_khoa group by t3.ma_truong	college_1
+select count ( * ) , t1.ma_truong from khoa as t1 join giao_su as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_truong	college_1
+select count ( * ) , t1.ma_truong from khoa as t1 join giao_su as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_truong	college_1
+select ma_cong_viec_cua_nhan_vien , count ( * ) from nhan_vien group by ma_cong_viec_cua_nhan_vien order by count ( * ) desc limit 1	college_1
+select ma_cong_viec_cua_nhan_vien , count ( * ) from nhan_vien group by ma_cong_viec_cua_nhan_vien order by count ( * ) desc limit 1	college_1
+select t1.ma_truong from khoa as t1 join giao_su as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_truong order by count ( * ) limit 1	college_1
+select t1.ma_truong from khoa as t1 join giao_su as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_truong order by count ( * ) limit 1	college_1
+select count ( * ) , ma_khoa from giao_su where bang_cap_cao_nhat = "ph.d." group by ma_khoa	college_1
+select count ( * ) , ma_khoa from giao_su where bang_cap_cao_nhat = "ph.d." group by ma_khoa	college_1
+select count ( * ) , ma_khoa from sinh_vien group by ma_khoa	college_1
+select count ( * ) , ma_khoa from sinh_vien group by ma_khoa	college_1
+select sum ( gio_hoc_cua_sinh_vien ) , ma_khoa from sinh_vien group by ma_khoa	college_1
+select sum ( gio_hoc_cua_sinh_vien ) , ma_khoa from sinh_vien group by ma_khoa	college_1
+select max ( gpa_cua_sinh_vien ) , avg ( gpa_cua_sinh_vien ) , min ( gpa_cua_sinh_vien ) , ma_khoa from sinh_vien group by ma_khoa	college_1
+select max ( gpa_cua_sinh_vien ) , avg ( gpa_cua_sinh_vien ) , min ( gpa_cua_sinh_vien ) , ma_khoa from sinh_vien group by ma_khoa	college_1
+select t2.ten_khoa , avg ( t1.gpa_cua_sinh_vien ) from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by avg ( t1.gpa_cua_sinh_vien ) desc limit 1	college_1
+select t2.ten_khoa , avg ( t1.gpa_cua_sinh_vien ) from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by avg ( t1.gpa_cua_sinh_vien ) desc limit 1	college_1
+select count ( distinct ma_truong ) from khoa	college_1
+select count ( distinct ma_truong ) from khoa	college_1
+select count ( distinct ma_lop_hoc ) from lop_hoc	college_1
+select count ( distinct ma_lop_hoc ) from lop_hoc	college_1
+select count ( distinct ma_khoa_hoc ) from lop_hoc	college_1
+select count ( distinct ma_khoa_hoc ) from lop_hoc	college_1
+select count ( distinct ten_khoa ) from khoa	college_1
+select count ( distinct ten_khoa ) from khoa	college_1
+select count ( * ) from khoa as t1 join khoa_hoc as t2 on t1.ma_khoa = t2.ma_khoa where ten_khoa = "computer info. systems"	college_1
+select count ( * ) from khoa as t1 join khoa_hoc as t2 on t1.ma_khoa = t2.ma_khoa where ten_khoa = "computer info. systems"	college_1
+select count ( distinct lop_hoc_phan ) from lop_hoc where ma_khoa_hoc = "acct-211"	college_1
+select count ( distinct lop_hoc_phan ) from lop_hoc where ma_khoa_hoc = "acct-211"	college_1
+select sum ( t1.so_luong_tin_chi_cua_khoa_hoc ) , t1.ma_khoa from khoa_hoc as t1 join lop_hoc as t2 on t1.ma_khoa_hoc = t2.ma_khoa_hoc group by t1.ma_khoa	college_1
+select sum ( t1.so_luong_tin_chi_cua_khoa_hoc ) , t1.ma_khoa from khoa_hoc as t1 join lop_hoc as t2 on t1.ma_khoa_hoc = t2.ma_khoa_hoc group by t1.ma_khoa	college_1
+select t3.ten_khoa from khoa_hoc as t1 join lop_hoc as t2 on t1.ma_khoa_hoc = t2.ma_khoa_hoc join khoa as t3 on t1.ma_khoa = t3.ma_khoa group by t1.ma_khoa order by sum ( t1.so_luong_tin_chi_cua_khoa_hoc ) desc limit 1	college_1
+select t3.ten_khoa from khoa_hoc as t1 join lop_hoc as t2 on t1.ma_khoa_hoc = t2.ma_khoa_hoc join khoa as t3 on t1.ma_khoa = t3.ma_khoa group by t1.ma_khoa order by sum ( t1.so_luong_tin_chi_cua_khoa_hoc ) desc limit 1	college_1
+select count ( * ) from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop where t1.ma_khoa_hoc = "acct-211"	college_1
+select count ( * ) from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop where t1.ma_khoa_hoc = "acct-211"	college_1
+select t3.ten_cua_sinh_vien from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop join sinh_vien as t3 on t2.ma_so_sinh_vien = t3.ma_so_sinh_vien where t1.ma_khoa_hoc = "acct-211"	college_1
+select t3.ten_cua_sinh_vien from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop join sinh_vien as t3 on t2.ma_so_sinh_vien = t3.ma_so_sinh_vien where t1.ma_khoa_hoc = "acct-211"	college_1
+select t3.ten_cua_sinh_vien from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop join sinh_vien as t3 on t2.ma_so_sinh_vien = t3.ma_so_sinh_vien where t1.ma_khoa_hoc = "acct-211" and t2.diem_so = "c"	college_1
+select t3.ten_cua_sinh_vien from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop join sinh_vien as t3 on t2.ma_so_sinh_vien = t3.ma_so_sinh_vien where t1.ma_khoa_hoc = "acct-211" and t2.diem_so = "c"	college_1
+select count ( * ) from nhan_vien	college_1
+select count ( * ) from nhan_vien	college_1
+select count ( * ) from giao_su where bang_cap_cao_nhat = "ph.d."	college_1
+select count ( * ) from giao_su where bang_cap_cao_nhat = "ph.d."	college_1
+select count ( * ) from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop join khoa_hoc as t3 on t1.ma_khoa_hoc = t3.ma_khoa_hoc join khoa as t4 on t3.ma_khoa = t4.ma_khoa where t4.ten_khoa = "accounting"	college_1
+select count ( * ) from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop join khoa_hoc as t3 on t1.ma_khoa_hoc = t3.ma_khoa_hoc join khoa as t4 on t3.ma_khoa = t4.ma_khoa where t4.ten_khoa = "accounting"	college_1
+select t4.ten_khoa from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop join khoa_hoc as t3 on t1.ma_khoa_hoc = t3.ma_khoa_hoc join khoa as t4 on t3.ma_khoa = t4.ma_khoa group by t3.ma_khoa order by count ( * ) desc limit 1	college_1
+select t4.ten_khoa from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop join khoa_hoc as t3 on t1.ma_khoa_hoc = t3.ma_khoa_hoc join khoa as t4 on t3.ma_khoa = t4.ma_khoa group by t3.ma_khoa order by count ( * ) desc limit 1	college_1
+select ten_khoa from khoa order by ten_khoa	college_1
+select ten_khoa from khoa order by ten_khoa	college_1
+select ma_lop_hoc from lop_hoc where phong_hoc = "klr209"	college_1
+select ma_lop_hoc from lop_hoc where phong_hoc = "klr209"	college_1
+select ten_cua_nhan_vien from nhan_vien where ma_cong_viec_cua_nhan_vien = "prof" order by ngay_sinh_cua_nhan_vien	college_1
+select ten_cua_nhan_vien from nhan_vien where ma_cong_viec_cua_nhan_vien = "prof" order by ngay_sinh_cua_nhan_vien	college_1
+select t2.ten_cua_nhan_vien , t1.van_phong_giao_su from giao_su as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien order by t2.ten_cua_nhan_vien	college_1
+select t2.ten_cua_nhan_vien , t1.van_phong_giao_su from giao_su as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien order by t2.ten_cua_nhan_vien	college_1
+select ten_cua_nhan_vien , ho_cua_nhan_vien from nhan_vien order by ngay_sinh_cua_nhan_vien limit 1	college_1
+select ten_cua_nhan_vien , ho_cua_nhan_vien from nhan_vien order by ngay_sinh_cua_nhan_vien limit 1	college_1
+select ten_cua_sinh_vien , ho_cua_sinh_vien , gpa_cua_sinh_vien from sinh_vien where gpa_cua_sinh_vien > 3 order by ngay_sinh_cua_sinh_vien desc limit 1	college_1
+select ten_cua_sinh_vien , ho_cua_sinh_vien , gpa_cua_sinh_vien from sinh_vien where gpa_cua_sinh_vien > 3 order by ngay_sinh_cua_sinh_vien desc limit 1	college_1
+select distinct ten_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien where diem_so = "c"	college_1
+select distinct ten_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien where diem_so = "c"	college_1
+select t2.ten_khoa from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by count ( * ) limit 1	college_1
+select t2.ten_khoa from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by count ( * ) limit 1	college_1
+select t2.ten_khoa , t1.ma_khoa from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa where t1.bang_cap_cao_nhat = "ph.d." group by t1.ma_khoa order by count ( * ) desc limit 1	college_1
+select t2.ten_khoa , t1.ma_khoa from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa where t1.bang_cap_cao_nhat = "ph.d." group by t1.ma_khoa order by count ( * ) desc limit 1	college_1
+select ten_cua_nhan_vien from nhan_vien where ma_cong_viec_cua_nhan_vien = "prof" except select t1.ten_cua_nhan_vien from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su	college_1
+select ten_cua_nhan_vien from nhan_vien where ma_cong_viec_cua_nhan_vien = "prof" except select t1.ten_cua_nhan_vien from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su	college_1
+select t1.ten_cua_nhan_vien from nhan_vien as t1 join giao_su as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t2.ma_khoa = t3.ma_khoa where t3.ten_khoa = "history" except select t4.ten_cua_nhan_vien from nhan_vien as t4 join lop_hoc as t5 on t4.ma_so_nhan_vien = t5.ma_so_nhan_vien_cua_giao_su	college_1
+select t1.ten_cua_nhan_vien from nhan_vien as t1 join giao_su as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t2.ma_khoa = t3.ma_khoa where t3.ten_khoa = "history" except select t4.ten_cua_nhan_vien from nhan_vien as t4 join lop_hoc as t5 on t4.ma_so_nhan_vien = t5.ma_so_nhan_vien_cua_giao_su	college_1
+select t1.ho_cua_nhan_vien , t2.van_phong_giao_su from nhan_vien as t1 join giao_su as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t2.ma_khoa = t3.ma_khoa where t3.ten_khoa = "history"	college_1
+select t1.ho_cua_nhan_vien , t2.van_phong_giao_su from nhan_vien as t1 join giao_su as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t2.ma_khoa = t3.ma_khoa where t3.ten_khoa = "history"	college_1
+select t3.ten_khoa , t2.van_phong_giao_su from nhan_vien as t1 join giao_su as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t2.ma_khoa = t3.ma_khoa where t1.ho_cua_nhan_vien = "heffington"	college_1
+select t3.ten_khoa , t2.van_phong_giao_su from nhan_vien as t1 join giao_su as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t2.ma_khoa = t3.ma_khoa where t1.ho_cua_nhan_vien = "heffington"	college_1
+select t1.ho_cua_nhan_vien , t1.ngay_bat_dau_cong_viec_cua_nhan_vien from nhan_vien as t1 join giao_su as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien where t2.van_phong_giao_su = "dre 102"	college_1
+select t1.ho_cua_nhan_vien , t1.ngay_bat_dau_cong_viec_cua_nhan_vien from nhan_vien as t1 join giao_su as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien where t2.van_phong_giao_su = "dre 102"	college_1
+select t1.ma_khoa_hoc from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop join sinh_vien as t3 on t3.ma_so_sinh_vien = t2.ma_so_sinh_vien where t3.ho_cua_sinh_vien = "smithson"	college_1
+select t1.ma_khoa_hoc from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop join sinh_vien as t3 on t3.ma_so_sinh_vien = t2.ma_so_sinh_vien where t3.ho_cua_sinh_vien = "smithson"	college_1
+select t4.mo_ta_ve_khoa_hoc , t4.so_luong_tin_chi_cua_khoa_hoc from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop join sinh_vien as t3 on t3.ma_so_sinh_vien = t2.ma_so_sinh_vien join khoa_hoc as t4 on t4.ma_khoa_hoc = t1.ma_khoa_hoc where t3.ho_cua_sinh_vien = "smithson"	college_1
+select t4.mo_ta_ve_khoa_hoc , t4.so_luong_tin_chi_cua_khoa_hoc from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop join sinh_vien as t3 on t3.ma_so_sinh_vien = t2.ma_so_sinh_vien join khoa_hoc as t4 on t4.ma_khoa_hoc = t1.ma_khoa_hoc where t3.ho_cua_sinh_vien = "smithson"	college_1
+select count ( * ) from giao_su where bang_cap_cao_nhat = "ph.d." or bang_cap_cao_nhat = "ma"	college_1
+select count ( * ) from giao_su where bang_cap_cao_nhat = "ph.d." or bang_cap_cao_nhat = "ma"	college_1
+select count ( * ) from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa where t2.ten_khoa = "accounting" or t2.ten_khoa = "biology"	college_1
+select count ( * ) from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa where t2.ten_khoa = "accounting" or t2.ten_khoa = "biology"	college_1
+select t1.ten_cua_nhan_vien from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su where ma_khoa_hoc = "cis-220" intersect select t1.ten_cua_nhan_vien from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su where ma_khoa_hoc = "qm-261"	college_1
+select t1.ten_cua_nhan_vien from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su where ma_khoa_hoc = "cis-220" intersect select t1.ten_cua_nhan_vien from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su where ma_khoa_hoc = "qm-261"	college_1
+select t1.ten_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien join lop_hoc as t3 on t2.ma_lop = t3.ma_lop_hoc join khoa_hoc as t4 on t3.ma_khoa_hoc = t4.ma_khoa_hoc join khoa as t5 on t5.ma_khoa = t4.ma_khoa where t5.ten_khoa = "accounting" intersect select t1.ten_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien join lop_hoc as t3 on t2.ma_lop = t3.ma_lop_hoc join khoa_hoc as t4 on t3.ma_khoa_hoc = t4.ma_khoa_hoc join khoa as t5 on t5.ma_khoa = t4.ma_khoa where t5.ten_khoa = "computer info. systems"	college_1
+select t1.ten_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien join lop_hoc as t3 on t2.ma_lop = t3.ma_lop_hoc join khoa_hoc as t4 on t3.ma_khoa_hoc = t4.ma_khoa_hoc join khoa as t5 on t5.ma_khoa = t4.ma_khoa where t5.ten_khoa = "accounting" intersect select t1.ten_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien join lop_hoc as t3 on t2.ma_lop = t3.ma_lop_hoc join khoa_hoc as t4 on t3.ma_khoa_hoc = t4.ma_khoa_hoc join khoa as t5 on t5.ma_khoa = t4.ma_khoa where t5.ten_khoa = "computer info. systems"	college_1
+select avg ( t2.gpa_cua_sinh_vien ) from dang_ky_khoa_hoc as t1 join sinh_vien as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien join lop_hoc as t3 on t1.ma_lop = t3.ma_lop_hoc where t3.ma_khoa_hoc = "acct-211"	college_1
+select avg ( t2.gpa_cua_sinh_vien ) from dang_ky_khoa_hoc as t1 join sinh_vien as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien join lop_hoc as t3 on t1.ma_lop = t3.ma_lop_hoc where t3.ma_khoa_hoc = "acct-211"	college_1
+select gpa_cua_sinh_vien , so_dien_thoai_cua_sinh_vien , ten_cua_sinh_vien from sinh_vien order by gpa_cua_sinh_vien desc limit 5	college_1
+select gpa_cua_sinh_vien , so_dien_thoai_cua_sinh_vien , ten_cua_sinh_vien from sinh_vien order by gpa_cua_sinh_vien desc limit 5	college_1
+select t2.ten_khoa from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa order by gpa_cua_sinh_vien limit 1	college_1
+select t2.ten_khoa from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa order by gpa_cua_sinh_vien limit 1	college_1
+select ten_cua_sinh_vien , gpa_cua_sinh_vien from sinh_vien where gpa_cua_sinh_vien < ( select avg ( gpa_cua_sinh_vien ) from sinh_vien )	college_1
+select ten_cua_sinh_vien , gpa_cua_sinh_vien from sinh_vien where gpa_cua_sinh_vien < ( select avg ( gpa_cua_sinh_vien ) from sinh_vien )	college_1
+select t2.ten_khoa , t2.dia_chi_khoa from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by count ( * ) desc limit 1	college_1
+select t2.ten_khoa , t2.dia_chi_khoa from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by count ( * ) desc limit 1	college_1
+select t2.ten_khoa , t2.dia_chi_khoa , count ( * ) from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by count ( * ) desc limit 3	college_1
+select t2.ten_khoa , t2.dia_chi_khoa , count ( * ) from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by count ( * ) desc limit 3	college_1
+select t1.ten_cua_nhan_vien , t2.van_phong_giao_su from nhan_vien as t1 join giao_su as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t3.ma_khoa = t2.ma_khoa where t3.ten_khoa = "history" and t2.bang_cap_cao_nhat = "ph.d."	college_1
+select t1.ten_cua_nhan_vien , t2.van_phong_giao_su from nhan_vien as t1 join giao_su as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t3.ma_khoa = t2.ma_khoa where t3.ten_khoa = "history" and t2.bang_cap_cao_nhat = "ph.d."	college_1
+select t2.ten_cua_nhan_vien , t1.ma_khoa_hoc from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien	college_1
+select t2.ten_cua_nhan_vien , t1.ma_khoa_hoc from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien	college_1
+select t2.ten_cua_nhan_vien , t3.mo_ta_ve_khoa_hoc from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join khoa_hoc as t3 on t1.ma_khoa_hoc = t3.ma_khoa_hoc	college_1
+select t2.ten_cua_nhan_vien , t3.mo_ta_ve_khoa_hoc from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join khoa_hoc as t3 on t1.ma_khoa_hoc = t3.ma_khoa_hoc	college_1
+select t2.ten_cua_nhan_vien , t4.van_phong_giao_su , t3.mo_ta_ve_khoa_hoc from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join khoa_hoc as t3 on t1.ma_khoa_hoc = t3.ma_khoa_hoc join giao_su as t4 on t2.ma_so_nhan_vien = t4.ma_so_nhan_vien	college_1
+select t2.ten_cua_nhan_vien , t4.van_phong_giao_su , t3.mo_ta_ve_khoa_hoc from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join khoa_hoc as t3 on t1.ma_khoa_hoc = t3.ma_khoa_hoc join giao_su as t4 on t2.ma_so_nhan_vien = t4.ma_so_nhan_vien	college_1
+select t2.ten_cua_nhan_vien , t4.van_phong_giao_su , t3.mo_ta_ve_khoa_hoc , t5.ten_khoa from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join khoa_hoc as t3 on t1.ma_khoa_hoc = t3.ma_khoa_hoc join giao_su as t4 on t2.ma_so_nhan_vien = t4.ma_so_nhan_vien join khoa as t5 on t4.ma_khoa = t5.ma_khoa	college_1
+select t2.ten_cua_nhan_vien , t4.van_phong_giao_su , t3.mo_ta_ve_khoa_hoc , t5.ten_khoa from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join khoa_hoc as t3 on t1.ma_khoa_hoc = t3.ma_khoa_hoc join giao_su as t4 on t2.ma_so_nhan_vien = t4.ma_so_nhan_vien join khoa as t5 on t4.ma_khoa = t5.ma_khoa	college_1
+select t1.ten_cua_sinh_vien , t1.ho_cua_sinh_vien , t4.mo_ta_ve_khoa_hoc from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien join lop_hoc as t3 on t2.ma_lop = t3.ma_lop_hoc join khoa_hoc as t4 on t3.ma_khoa_hoc = t4.ma_khoa_hoc	college_1
+select t1.ten_cua_sinh_vien , t1.ho_cua_sinh_vien , t4.mo_ta_ve_khoa_hoc from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien join lop_hoc as t3 on t2.ma_lop = t3.ma_lop_hoc join khoa_hoc as t4 on t3.ma_khoa_hoc = t4.ma_khoa_hoc	college_1
+select t1.ten_cua_sinh_vien , t1.ho_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien where t2.diem_so = "c" or t2.diem_so = "a"	college_1
+select t1.ten_cua_sinh_vien , t1.ho_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien where t2.diem_so = "c" or t2.diem_so = "a"	college_1
+select t2.ten_cua_nhan_vien , t1.phong_hoc from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join giao_su as t3 on t2.ma_so_nhan_vien = t3.ma_so_nhan_vien join khoa as t4 on t4.ma_khoa = t3.ma_khoa where t4.ten_khoa = "accounting"	college_1
+select t2.ten_cua_nhan_vien , t1.phong_hoc from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join giao_su as t3 on t2.ma_so_nhan_vien = t3.ma_so_nhan_vien join khoa as t4 on t4.ma_khoa = t3.ma_khoa where t4.ten_khoa = "accounting"	college_1
+select distinct t2.ten_cua_nhan_vien , t3.bang_cap_cao_nhat from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join giao_su as t3 on t2.ma_so_nhan_vien = t3.ma_so_nhan_vien join khoa as t4 on t4.ma_khoa = t3.ma_khoa where t4.ten_khoa = "computer info. systems"	college_1
+select distinct t2.ten_cua_nhan_vien , t3.bang_cap_cao_nhat from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join giao_su as t3 on t2.ma_so_nhan_vien = t3.ma_so_nhan_vien join khoa as t4 on t4.ma_khoa = t3.ma_khoa where t4.ten_khoa = "computer info. systems"	college_1
+select t1.ho_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien where t2.diem_so = "a" and t2.ma_lop = 10018	college_1
+select t1.ho_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien where t2.diem_so = "a" and t2.ma_lop = 10018	college_1
+select t2.ten_cua_nhan_vien , t1.van_phong_giao_su from giao_su as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t1.ma_khoa = t3.ma_khoa where t3.ten_khoa = "history" and t1.bang_cap_cao_nhat != "ph.d."	college_1
+select t2.ten_cua_nhan_vien , t1.van_phong_giao_su from giao_su as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t1.ma_khoa = t3.ma_khoa where t3.ten_khoa = "history" and t1.bang_cap_cao_nhat != "ph.d."	college_1
+select t2.ten_cua_nhan_vien from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien group by t1.ma_so_nhan_vien_cua_giao_su having count ( * ) > 1	college_1
+select t2.ten_cua_nhan_vien from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien group by t1.ma_so_nhan_vien_cua_giao_su having count ( * ) > 1	college_1
+select t1.ten_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien group by t2.ma_so_sinh_vien having count ( * ) = 1	college_1
+select t1.ten_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien group by t2.ma_so_sinh_vien having count ( * ) = 1	college_1
+select t2.ten_khoa from khoa_hoc as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa where t1.mo_ta_ve_khoa_hoc like "%statistics%"	college_1
+select t2.ten_khoa from khoa_hoc as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa where t1.mo_ta_ve_khoa_hoc like "%statistics%"	college_1
+select t1.ten_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien join lop_hoc as t3 on t2.ma_lop = t3.ma_lop_hoc where t3.ma_khoa_hoc = "acct-211" and t1.ho_cua_sinh_vien like "s%"	college_1
+select t1.ten_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien join lop_hoc as t3 on t2.ma_lop = t3.ma_lop_hoc where t3.ma_khoa_hoc = "acct-211" and t1.ho_cua_sinh_vien like "s%"	college_1
+select ma_trang_thai_tai_lieu from trang_thai_cua_tai_lieu	cre_Doc_Control_Systems
+select mo_ta_ve_trang_thai_tai_lieu from trang_thai_cua_tai_lieu where ma_trang_thai_tai_lieu = "working"	cre_Doc_Control_Systems
+select ma_loai_tai_lieu from loai_tai_lieu	cre_Doc_Control_Systems
+select mo_ta_ve_loai_tai_lieu from loai_tai_lieu where ma_loai_tai_lieu = "paper"	cre_Doc_Control_Systems
+select ten_dai_ly_van_chuyen from dai_ly_van_chuyen_tai_lieu	cre_Doc_Control_Systems
+select ma_dai_ly_van_chuyen from dai_ly_van_chuyen_tai_lieu where ten_dai_ly_van_chuyen = "ups"	cre_Doc_Control_Systems
+select ma_vai_tro from vai_tro	cre_Doc_Control_Systems
+select mo_ta_ve_vai_tro from vai_tro where ma_vai_tro = "ed"	cre_Doc_Control_Systems
+select count ( * ) from nhan_vien	cre_Doc_Control_Systems
+select t1.mo_ta_ve_vai_tro from vai_tro as t1 join nhan_vien as t2 on t1.ma_vai_tro = t2.ma_vai_tro where t2.ten_nhan_vien = "koby"	cre_Doc_Control_Systems
+select id_tai_lieu , ngay_lap_bien_lai from tai_lieu	cre_Doc_Control_Systems
+select t1.mo_ta_ve_vai_tro , t2.ma_vai_tro , count ( * ) from vai_tro as t1 join nhan_vien as t2 on t1.ma_vai_tro = t2.ma_vai_tro group by t2.ma_vai_tro	cre_Doc_Control_Systems
+select vai_tro.mo_ta_ve_vai_tro , count ( nhan_vien.id_nhan_vien ) from vai_tro join nhan_vien on nhan_vien.ma_vai_tro = vai_tro.ma_vai_tro group by nhan_vien.ma_vai_tro having count ( nhan_vien.id_nhan_vien ) > 1	cre_Doc_Control_Systems
+select trang_thai_cua_tai_lieu.mo_ta_ve_trang_thai_tai_lieu from trang_thai_cua_tai_lieu join tai_lieu on tai_lieu.ma_trang_thai_tai_lieu = trang_thai_cua_tai_lieu.ma_trang_thai_tai_lieu where tai_lieu.id_tai_lieu = 1	cre_Doc_Control_Systems
+select count ( * ) from tai_lieu where ma_trang_thai_tai_lieu = "done"	cre_Doc_Control_Systems
+select ma_loai_tai_lieu from tai_lieu where id_tai_lieu = 2	cre_Doc_Control_Systems
+select id_tai_lieu from tai_lieu where ma_trang_thai_tai_lieu = "done" and ma_loai_tai_lieu = "paper"	cre_Doc_Control_Systems
+select dai_ly_van_chuyen_tai_lieu.ten_dai_ly_van_chuyen from dai_ly_van_chuyen_tai_lieu join tai_lieu on tai_lieu.ma_dai_ly_van_chuyen = dai_ly_van_chuyen_tai_lieu.ma_dai_ly_van_chuyen where tai_lieu.id_tai_lieu = 2	cre_Doc_Control_Systems
+select count ( * ) from dai_ly_van_chuyen_tai_lieu join tai_lieu on tai_lieu.ma_dai_ly_van_chuyen = dai_ly_van_chuyen_tai_lieu.ma_dai_ly_van_chuyen where dai_ly_van_chuyen_tai_lieu.ten_dai_ly_van_chuyen = "usps"	cre_Doc_Control_Systems
+select dai_ly_van_chuyen_tai_lieu.ten_dai_ly_van_chuyen , count ( tai_lieu.id_tai_lieu ) from dai_ly_van_chuyen_tai_lieu join tai_lieu on tai_lieu.ma_dai_ly_van_chuyen = dai_ly_van_chuyen_tai_lieu.ma_dai_ly_van_chuyen group by dai_ly_van_chuyen_tai_lieu.ma_dai_ly_van_chuyen order by count ( tai_lieu.id_tai_lieu ) desc limit 1	cre_Doc_Control_Systems
+select ngay_lap_bien_lai from tai_lieu where id_tai_lieu = 3	cre_Doc_Control_Systems
+select dia_chi.chi_tiet_dia_chi from dia_chi join tai_lieu_duoc_gui on tai_lieu_duoc_gui.gui_den_dia_chi_co_id = dia_chi.id_dia_chi where id_tai_lieu = 4	cre_Doc_Control_Systems
+select ngay_gui from tai_lieu_duoc_gui where id_tai_lieu = 7	cre_Doc_Control_Systems
+select id_tai_lieu from tai_lieu where ma_trang_thai_tai_lieu = "done" and ma_loai_tai_lieu = "paper" except select id_tai_lieu from tai_lieu join dai_ly_van_chuyen_tai_lieu on tai_lieu.ma_dai_ly_van_chuyen = dai_ly_van_chuyen_tai_lieu.ma_dai_ly_van_chuyen where dai_ly_van_chuyen_tai_lieu.ten_dai_ly_van_chuyen = "usps"	cre_Doc_Control_Systems
+select id_tai_lieu from tai_lieu where ma_trang_thai_tai_lieu = "done" and ma_loai_tai_lieu = "paper" intersect select id_tai_lieu from tai_lieu join dai_ly_van_chuyen_tai_lieu on tai_lieu.ma_dai_ly_van_chuyen = dai_ly_van_chuyen_tai_lieu.ma_dai_ly_van_chuyen where dai_ly_van_chuyen_tai_lieu.ten_dai_ly_van_chuyen = "usps"	cre_Doc_Control_Systems
+select chi_tiet_du_thao from ban_du_thao_cua_tai_lieu where id_tai_lieu = 7	cre_Doc_Control_Systems
+select count ( * ) from ban_sao where id_tai_lieu = 2	cre_Doc_Control_Systems
+select id_tai_lieu , count ( so_luong_ban_sao ) from ban_sao group by id_tai_lieu order by count ( so_luong_ban_sao ) desc limit 1	cre_Doc_Control_Systems
+select id_tai_lieu , count ( * ) from ban_sao group by id_tai_lieu having count ( * ) > 1	cre_Doc_Control_Systems
+select nhan_vien.ten_nhan_vien from nhan_vien join lich_su_luu_hanh on lich_su_luu_hanh.id_nhan_vien = nhan_vien.id_nhan_vien where lich_su_luu_hanh.id_tai_lieu = 1	cre_Doc_Control_Systems
+select ten_nhan_vien from nhan_vien except select nhan_vien.ten_nhan_vien from nhan_vien join lich_su_luu_hanh on lich_su_luu_hanh.id_nhan_vien = nhan_vien.id_nhan_vien	cre_Doc_Control_Systems
+select nhan_vien.ten_nhan_vien , count ( * ) from nhan_vien join lich_su_luu_hanh on lich_su_luu_hanh.id_nhan_vien = nhan_vien.id_nhan_vien group by lich_su_luu_hanh.id_tai_lieu , lich_su_luu_hanh.so_luong_du_thao , lich_su_luu_hanh.so_luong_ban_sao order by count ( * ) desc limit 1	cre_Doc_Control_Systems
+select id_tai_lieu , count ( distinct id_nhan_vien ) from lich_su_luu_hanh group by id_tai_lieu	cre_Doc_Control_Systems
+select count ( * ) from luot_dat_hang	cre_Drama_Workshop_Groups
+select count ( * ) from luot_dat_hang	cre_Drama_Workshop_Groups
+select ngay_dat_hang from luot_dat_hang	cre_Drama_Workshop_Groups
+select ngay_dat_hang from luot_dat_hang	cre_Drama_Workshop_Groups
+select ngay_giao_hang_theo_ke_hoach , ngay_giao_hang_thuc_te from luot_dat_hang	cre_Drama_Workshop_Groups
+select ngay_giao_hang_theo_ke_hoach , ngay_giao_hang_thuc_te from luot_dat_hang	cre_Drama_Workshop_Groups
+select count ( * ) from khach_hang_1	cre_Drama_Workshop_Groups
+select count ( * ) from khach_hang_1	cre_Drama_Workshop_Groups
+select so_dien_thoai_khach_hang , dia_chi_email_khach_hang from khach_hang_1 where ten_khach_hang = "harold"	cre_Drama_Workshop_Groups
+select so_dien_thoai_khach_hang , dia_chi_email_khach_hang from khach_hang_1 where ten_khach_hang = "harold"	cre_Drama_Workshop_Groups
+select ten_cua_hang from nhom_hoi_thao_kich	cre_Drama_Workshop_Groups
+select ten_cua_hang from nhom_hoi_thao_kich	cre_Drama_Workshop_Groups
+select min ( so_luong_dat_hang ) , avg ( so_luong_dat_hang ) , max ( so_luong_dat_hang ) from hoa_don	cre_Drama_Workshop_Groups
+select min ( so_luong_dat_hang ) , avg ( so_luong_dat_hang ) , max ( so_luong_dat_hang ) from hoa_don	cre_Drama_Workshop_Groups
+select distinct ma_phuong_thuc_thanh_toan from hoa_don	cre_Drama_Workshop_Groups
+select distinct ma_phuong_thuc_thanh_toan from hoa_don	cre_Drama_Workshop_Groups
+select mo_ta_ve_khu_vuc_tiep_thi from khu_vuc_tiep_thi where ten_khu_vuc_tiep_thi = "china"	cre_Drama_Workshop_Groups
+select mo_ta_ve_khu_vuc_tiep_thi from khu_vuc_tiep_thi where ten_khu_vuc_tiep_thi = "china"	cre_Drama_Workshop_Groups
+select distinct ten_san_pham from cac_san_pham where gia_san_pham > ( select avg ( gia_san_pham ) from cac_san_pham )	cre_Drama_Workshop_Groups
+select distinct ten_san_pham from cac_san_pham where gia_san_pham > ( select avg ( gia_san_pham ) from cac_san_pham )	cre_Drama_Workshop_Groups
+select ten_san_pham from cac_san_pham order by gia_san_pham desc limit 1	cre_Drama_Workshop_Groups
+select ten_san_pham from cac_san_pham order by gia_san_pham desc limit 1	cre_Drama_Workshop_Groups
+select ten_san_pham from cac_san_pham order by gia_san_pham asc	cre_Drama_Workshop_Groups
+select ten_san_pham from cac_san_pham order by gia_san_pham asc	cre_Drama_Workshop_Groups
+select so_dien_thoai_khach_hang from nguoi_bieu_dien where ten_khach_hang = "ashley"	cre_Drama_Workshop_Groups
+select so_dien_thoai_khach_hang from nguoi_bieu_dien where ten_khach_hang = "ashley"	cre_Drama_Workshop_Groups
+select ma_phuong_thuc_thanh_toan , count ( * ) from hoa_don group by ma_phuong_thuc_thanh_toan	cre_Drama_Workshop_Groups
+select ma_phuong_thuc_thanh_toan , count ( * ) from hoa_don group by ma_phuong_thuc_thanh_toan	cre_Drama_Workshop_Groups
+select ma_phuong_thuc_thanh_toan from hoa_don group by ma_phuong_thuc_thanh_toan order by count ( * ) desc limit 1	cre_Drama_Workshop_Groups
+select ma_phuong_thuc_thanh_toan from hoa_don group by ma_phuong_thuc_thanh_toan order by count ( * ) desc limit 1	cre_Drama_Workshop_Groups
+select t1.thanh_pho_thi_tran from dia_chi as t1 join cua_hang as t2 on t1.id_dia_chi = t2.id_dia_chi where t2.ten_cua_hang = "fja filming"	cre_Drama_Workshop_Groups
+select t1.thanh_pho_thi_tran from dia_chi as t1 join cua_hang as t2 on t1.id_dia_chi = t2.id_dia_chi where t2.ten_cua_hang = "fja filming"	cre_Drama_Workshop_Groups
+select t1.quan_hat from dia_chi as t1 join cua_hang as t2 on t1.id_dia_chi = t2.id_dia_chi where t2.ma_khu_vuc_tiep_thi = "ca"	cre_Drama_Workshop_Groups
+select t1.quan_hat from dia_chi as t1 join cua_hang as t2 on t1.id_dia_chi = t2.id_dia_chi where t2.ma_khu_vuc_tiep_thi = "ca"	cre_Drama_Workshop_Groups
+select t1.ten_khu_vuc_tiep_thi from khu_vuc_tiep_thi as t1 join cua_hang as t2 on t1.ma_khu_vuc_tiep_thi = t2.ma_khu_vuc_tiep_thi where t2.ten_cua_hang = "rob dinning"	cre_Drama_Workshop_Groups
+select t1.ten_khu_vuc_tiep_thi from khu_vuc_tiep_thi as t1 join cua_hang as t2 on t1.ma_khu_vuc_tiep_thi = t2.ma_khu_vuc_tiep_thi where t2.ten_cua_hang = "rob dinning"	cre_Drama_Workshop_Groups
+select t1.mo_ta_ve_loai_dich_vu from loai_dich_vu as t1 join dich_vu as t2 on t1.ma_loai_dich_vu = t2.ma_loai_dich_vu where t2.gia_san_pham > 100	cre_Drama_Workshop_Groups
+select t1.mo_ta_ve_loai_dich_vu from loai_dich_vu as t1 join dich_vu as t2 on t1.ma_loai_dich_vu = t2.ma_loai_dich_vu where t2.gia_san_pham > 100	cre_Drama_Workshop_Groups
+select t1.mo_ta_ve_loai_dich_vu , t2.ma_loai_dich_vu , count ( * ) from loai_dich_vu as t1 join dich_vu as t2 on t1.ma_loai_dich_vu = t2.ma_loai_dich_vu group by t2.ma_loai_dich_vu	cre_Drama_Workshop_Groups
+select t1.mo_ta_ve_loai_dich_vu , t2.ma_loai_dich_vu , count ( * ) from loai_dich_vu as t1 join dich_vu as t2 on t1.ma_loai_dich_vu = t2.ma_loai_dich_vu group by t2.ma_loai_dich_vu	cre_Drama_Workshop_Groups
+select t1.mo_ta_ve_loai_dich_vu , t1.ma_loai_dich_vu from loai_dich_vu as t1 join dich_vu as t2 on t1.ma_loai_dich_vu = t2.ma_loai_dich_vu group by t1.ma_loai_dich_vu order by count ( * ) desc limit 1	cre_Drama_Workshop_Groups
+select t1.mo_ta_ve_loai_dich_vu , t1.ma_loai_dich_vu from loai_dich_vu as t1 join dich_vu as t2 on t1.ma_loai_dich_vu = t2.ma_loai_dich_vu group by t1.ma_loai_dich_vu order by count ( * ) desc limit 1	cre_Drama_Workshop_Groups
+select t1.so_dien_thoai_cua_hang , t1.dia_chi_email_cua_hang from nhom_hoi_thao_kich as t1 join dich_vu as t2 on t1.id_nhom_hoi_thao_kich = t2.id_nhom_hoi_thao_kich	cre_Drama_Workshop_Groups
+select t1.so_dien_thoai_cua_hang , t1.dia_chi_email_cua_hang from nhom_hoi_thao_kich as t1 join dich_vu as t2 on t1.id_nhom_hoi_thao_kich = t2.id_nhom_hoi_thao_kich	cre_Drama_Workshop_Groups
+select t1.so_dien_thoai_cua_hang , t1.dia_chi_email_cua_hang from nhom_hoi_thao_kich as t1 join dich_vu as t2 on t1.id_nhom_hoi_thao_kich = t2.id_nhom_hoi_thao_kich where t2.ten_san_pham = "film"	cre_Drama_Workshop_Groups
+select t1.so_dien_thoai_cua_hang , t1.dia_chi_email_cua_hang from nhom_hoi_thao_kich as t1 join dich_vu as t2 on t1.id_nhom_hoi_thao_kich = t2.id_nhom_hoi_thao_kich where t2.ten_san_pham = "film"	cre_Drama_Workshop_Groups
+select ten_san_pham , avg ( gia_san_pham ) from cac_san_pham group by ten_san_pham	cre_Drama_Workshop_Groups
+select ten_san_pham , avg ( gia_san_pham ) from cac_san_pham group by ten_san_pham	cre_Drama_Workshop_Groups
+select ten_san_pham from cac_san_pham group by ten_san_pham having avg ( gia_san_pham ) < 1000000	cre_Drama_Workshop_Groups
+select ten_san_pham from cac_san_pham group by ten_san_pham having avg ( gia_san_pham ) < 1000000	cre_Drama_Workshop_Groups
+select sum ( t1.so_luong_dat_hang ) from mat_hang_duoc_dat as t1 join cac_san_pham as t2 on t1.id_san_pham = t2.id_san_pham where t2.ten_san_pham = "photo"	cre_Drama_Workshop_Groups
+select sum ( t1.so_luong_dat_hang ) from mat_hang_duoc_dat as t1 join cac_san_pham as t2 on t1.id_san_pham = t2.id_san_pham where t2.ten_san_pham = "photo"	cre_Drama_Workshop_Groups
+select t1.chi_tiet_khac_ve_mat_hang from mat_hang_duoc_dat as t1 join cac_san_pham as t2 on t1.id_san_pham = t2.id_san_pham where t2.gia_san_pham > 2000	cre_Drama_Workshop_Groups
+select t1.chi_tiet_khac_ve_mat_hang from mat_hang_duoc_dat as t1 join cac_san_pham as t2 on t1.id_san_pham = t2.id_san_pham where t2.gia_san_pham > 2000	cre_Drama_Workshop_Groups
+select t1.ngay_giao_hang_thuc_te from luot_dat_hang_cua_khach_hang as t1 join mat_hang_duoc_dat as t2 on t1.id_don_hang = t2.id_don_hang where t2.so_luong_dat_hang = 1	cre_Drama_Workshop_Groups
+select t1.ngay_giao_hang_thuc_te from luot_dat_hang_cua_khach_hang as t1 join mat_hang_duoc_dat as t2 on t1.id_don_hang = t2.id_don_hang where t2.so_luong_dat_hang = 1	cre_Drama_Workshop_Groups
+select t1.ngay_dat_hang from luot_dat_hang_cua_khach_hang as t1 join mat_hang_duoc_dat as t2 on t1.id_don_hang = t2.id_don_hang join cac_san_pham as t3 on t2.id_san_pham = t3.id_san_pham where t3.gia_san_pham > 1000	cre_Drama_Workshop_Groups
+select t1.ngay_dat_hang from luot_dat_hang_cua_khach_hang as t1 join mat_hang_duoc_dat as t2 on t1.id_don_hang = t2.id_don_hang join cac_san_pham as t3 on t2.id_san_pham = t3.id_san_pham where t3.gia_san_pham > 1000	cre_Drama_Workshop_Groups
+select count ( distinct ma_tien_te ) from nhom_hoi_thao_kich	cre_Drama_Workshop_Groups
+select count ( distinct ma_tien_te ) from nhom_hoi_thao_kich	cre_Drama_Workshop_Groups
+select t2.ten_cua_hang from dia_chi as t1 join nhom_hoi_thao_kich as t2 on t1.id_dia_chi = t2.id_dia_chi where t1.thanh_pho_thi_tran = "feliciaberg"	cre_Drama_Workshop_Groups
+select t2.ten_cua_hang from dia_chi as t1 join nhom_hoi_thao_kich as t2 on t1.id_dia_chi = t2.id_dia_chi where t1.thanh_pho_thi_tran = "feliciaberg"	cre_Drama_Workshop_Groups
+select t2.dia_chi_email_cua_hang from dia_chi as t1 join nhom_hoi_thao_kich as t2 on t1.id_dia_chi = t2.id_dia_chi where t1.quan_hat = "alaska"	cre_Drama_Workshop_Groups
+select t2.dia_chi_email_cua_hang from dia_chi as t1 join nhom_hoi_thao_kich as t2 on t1.id_dia_chi = t2.id_dia_chi where t1.quan_hat = "alaska"	cre_Drama_Workshop_Groups
+select t1.thanh_pho_thi_tran , count ( * ) from dia_chi as t1 join nhom_hoi_thao_kich as t2 on t1.id_dia_chi = t2.id_dia_chi group by t1.thanh_pho_thi_tran	cre_Drama_Workshop_Groups
+select t1.thanh_pho_thi_tran , count ( * ) from dia_chi as t1 join nhom_hoi_thao_kich as t2 on t1.id_dia_chi = t2.id_dia_chi group by t1.thanh_pho_thi_tran	cre_Drama_Workshop_Groups
+select ma_khu_vuc_tiep_thi from nhom_hoi_thao_kich group by ma_khu_vuc_tiep_thi order by count ( * ) desc limit 1	cre_Drama_Workshop_Groups
+select ma_khu_vuc_tiep_thi from nhom_hoi_thao_kich group by ma_khu_vuc_tiep_thi order by count ( * ) desc limit 1	cre_Drama_Workshop_Groups
+select t1.thanh_pho_thi_tran from dia_chi as t1 join khach_hang_1 as t2 on t1.id_dia_chi = t2.id_dia_chi except select t1.thanh_pho_thi_tran from dia_chi as t1 join nguoi_bieu_dien as t2 on t1.id_dia_chi = t2.id_dia_chi	cre_Drama_Workshop_Groups
+select t1.thanh_pho_thi_tran from dia_chi as t1 join khach_hang_1 as t2 on t1.id_dia_chi = t2.id_dia_chi except select t1.thanh_pho_thi_tran from dia_chi as t1 join nguoi_bieu_dien as t2 on t1.id_dia_chi = t2.id_dia_chi	cre_Drama_Workshop_Groups
+select ma_trang_thai from luot_dat_hang group by ma_trang_thai order by count ( * ) desc limit 1	cre_Drama_Workshop_Groups
+select ma_trang_thai from luot_dat_hang group by ma_trang_thai order by count ( * ) desc limit 1	cre_Drama_Workshop_Groups
+select t2.ten_cua_hang from luot_dat_hang as t1 join nhom_hoi_thao_kich as t2 on t1.id_nhom_hoi_thao_kich = t2.id_nhom_hoi_thao_kich where t1.ma_trang_thai = "stop"	cre_Drama_Workshop_Groups
+select t2.ten_cua_hang from luot_dat_hang as t1 join nhom_hoi_thao_kich as t2 on t1.id_nhom_hoi_thao_kich = t2.id_nhom_hoi_thao_kich where t1.ma_trang_thai = "stop"	cre_Drama_Workshop_Groups
+select ten_khach_hang from khach_hang_1 except select t2.ten_khach_hang from luot_dat_hang as t1 join khach_hang_1 as t2 on t1.id_khach_hang = t2.id_khach_hang	cre_Drama_Workshop_Groups
+select ten_khach_hang from khach_hang_1 except select t2.ten_khach_hang from luot_dat_hang as t1 join khach_hang_1 as t2 on t1.id_khach_hang = t2.id_khach_hang	cre_Drama_Workshop_Groups
+select avg ( so_luong_dat_hang ) from hoa_don where ma_phuong_thuc_thanh_toan = "mastercard"	cre_Drama_Workshop_Groups
+select avg ( so_luong_dat_hang ) from hoa_don where ma_phuong_thuc_thanh_toan = "mastercard"	cre_Drama_Workshop_Groups
+select id_san_pham from hoa_don group by id_san_pham order by count ( * ) desc limit 1	cre_Drama_Workshop_Groups
+select id_san_pham from hoa_don group by id_san_pham order by count ( * ) desc limit 1	cre_Drama_Workshop_Groups
+select t1.mo_ta_ve_loai_dich_vu from loai_dich_vu as t1 join dich_vu as t2 on t1.ma_loai_dich_vu = t2.ma_loai_dich_vu where t2.ten_san_pham = "photo" intersect select t1.mo_ta_ve_loai_dich_vu from loai_dich_vu as t1 join dich_vu as t2 on t1.ma_loai_dich_vu = t2.ma_loai_dich_vu where t2.ten_san_pham = "film"	cre_Drama_Workshop_Groups
+select t1.mo_ta_ve_loai_dich_vu from loai_dich_vu as t1 join dich_vu as t2 on t1.ma_loai_dich_vu = t2.ma_loai_dich_vu where t2.ten_san_pham = "photo" intersect select t1.mo_ta_ve_loai_dich_vu from loai_dich_vu as t1 join dich_vu as t2 on t1.ma_loai_dich_vu = t2.ma_loai_dich_vu where t2.ten_san_pham = "film"	cre_Drama_Workshop_Groups
+select count ( * ) from tai_khoan	customers_and_invoices
+select count ( * ) from tai_khoan	customers_and_invoices
+select count ( distinct id_khach_hang ) from tai_khoan	customers_and_invoices
+select count ( distinct id_khach_hang ) from tai_khoan	customers_and_invoices
+select id_tai_khoan , ngay_mo_tai_khoan , ten_tai_khoan , chi_tiet_khac_ve_tai_khoan from tai_khoan	customers_and_invoices
+select id_tai_khoan , ngay_mo_tai_khoan , ten_tai_khoan , chi_tiet_khac_ve_tai_khoan from tai_khoan	customers_and_invoices
+select t1.id_tai_khoan , t1.ngay_mo_tai_khoan , t1.ten_tai_khoan , t1.chi_tiet_khac_ve_tai_khoan from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten_khach_hang = "meaghan"	customers_and_invoices
+select t1.id_tai_khoan , t1.ngay_mo_tai_khoan , t1.ten_tai_khoan , t1.chi_tiet_khac_ve_tai_khoan from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten_khach_hang = "meaghan"	customers_and_invoices
+select t1.ten_tai_khoan , t1.chi_tiet_khac_ve_tai_khoan from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten_khach_hang = "meaghan" and t2.ho_cua_khach_hang = "keeling"	customers_and_invoices
+select t1.ten_tai_khoan , t1.chi_tiet_khac_ve_tai_khoan from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten_khach_hang = "meaghan" and t2.ho_cua_khach_hang = "keeling"	customers_and_invoices
+select t2.ten_khach_hang , t2.ho_cua_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ten_tai_khoan = "900"	customers_and_invoices
+select t2.ten_khach_hang , t2.ho_cua_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ten_tai_khoan = "900"	customers_and_invoices
+select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from tai_khoan )	customers_and_invoices
+select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from tai_khoan )	customers_and_invoices
+select distinct t1.ten_khach_hang , t1.ho_cua_khach_hang , t1.so_dien_thoai from khach_hang as t1 join tai_khoan as t2 on t1.id_khach_hang = t2.id_khach_hang	customers_and_invoices
+select distinct t1.ten_khach_hang , t1.ho_cua_khach_hang , t1.so_dien_thoai from khach_hang as t1 join tai_khoan as t2 on t1.id_khach_hang = t2.id_khach_hang	customers_and_invoices
+select id_khach_hang from khach_hang except select id_khach_hang from tai_khoan	customers_and_invoices
+select id_khach_hang from khach_hang except select id_khach_hang from tai_khoan	customers_and_invoices
+select count ( * ) , id_khach_hang from tai_khoan group by id_khach_hang	customers_and_invoices
+select count ( * ) , id_khach_hang from tai_khoan group by id_khach_hang	customers_and_invoices
+select t1.id_khach_hang , t2.ten_khach_hang , t2.ho_cua_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) desc limit 1	customers_and_invoices
+select t1.id_khach_hang , t2.ten_khach_hang , t2.ho_cua_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) desc limit 1	customers_and_invoices
+select t1.id_khach_hang , t2.ten_khach_hang , t2.ho_cua_khach_hang , count ( * ) from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang	customers_and_invoices
+select t1.id_khach_hang , t2.ten_khach_hang , t2.ho_cua_khach_hang , count ( * ) from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang	customers_and_invoices
+select t2.ten_khach_hang , t1.id_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang having count ( * ) >= 2	customers_and_invoices
+select t2.ten_khach_hang , t1.id_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang having count ( * ) >= 2	customers_and_invoices
+select count ( * ) from khach_hang	customers_and_invoices
+select count ( * ) from khach_hang	customers_and_invoices
+select gioi_tinh , count ( * ) from khach_hang group by gioi_tinh	customers_and_invoices
+select gioi_tinh , count ( * ) from khach_hang group by gioi_tinh	customers_and_invoices
+select count ( * ) from giao_dich_tai_chinh	customers_and_invoices
+select count ( * ) from giao_dich_tai_chinh	customers_and_invoices
+select count ( * ) , id_tai_khoan from giao_dich_tai_chinh	customers_and_invoices
+select count ( * ) , id_tai_khoan from giao_dich_tai_chinh	customers_and_invoices
+select count ( * ) from giao_dich_tai_chinh as t1 join tai_khoan as t2 on t1.id_tai_khoan = t2.id_tai_khoan where t2.ten_tai_khoan = "337"	customers_and_invoices
+select count ( * ) from giao_dich_tai_chinh as t1 join tai_khoan as t2 on t1.id_tai_khoan = t2.id_tai_khoan where t2.ten_tai_khoan = "337"	customers_and_invoices
+select avg ( so_tien_giao_dich ) , min ( so_tien_giao_dich ) , max ( so_tien_giao_dich ) , sum ( so_tien_giao_dich ) from giao_dich_tai_chinh	customers_and_invoices
+select avg ( so_tien_giao_dich ) , min ( so_tien_giao_dich ) , max ( so_tien_giao_dich ) , sum ( so_tien_giao_dich ) from giao_dich_tai_chinh	customers_and_invoices
+select id_giao_dich from giao_dich_tai_chinh where so_tien_giao_dich > ( select avg ( so_tien_giao_dich ) from giao_dich_tai_chinh )	customers_and_invoices
+select id_giao_dich from giao_dich_tai_chinh where so_tien_giao_dich > ( select avg ( so_tien_giao_dich ) from giao_dich_tai_chinh )	customers_and_invoices
+select loai_giao_dich , sum ( so_tien_giao_dich ) from giao_dich_tai_chinh group by loai_giao_dich	customers_and_invoices
+select loai_giao_dich , sum ( so_tien_giao_dich ) from giao_dich_tai_chinh group by loai_giao_dich	customers_and_invoices
+select t2.ten_tai_khoan , t1.id_tai_khoan , count ( * ) from giao_dich_tai_chinh as t1 join tai_khoan as t2 on t1.id_tai_khoan = t2.id_tai_khoan group by t1.id_tai_khoan	customers_and_invoices
+select t2.ten_tai_khoan , t1.id_tai_khoan , count ( * ) from giao_dich_tai_chinh as t1 join tai_khoan as t2 on t1.id_tai_khoan = t2.id_tai_khoan group by t1.id_tai_khoan	customers_and_invoices
+select id_tai_khoan from giao_dich_tai_chinh group by id_tai_khoan order by count ( * ) desc limit 1	customers_and_invoices
+select id_tai_khoan from giao_dich_tai_chinh group by id_tai_khoan order by count ( * ) desc limit 1	customers_and_invoices
+select t1.id_tai_khoan , t2.ten_tai_khoan from giao_dich_tai_chinh as t1 join tai_khoan as t2 on t1.id_tai_khoan = t2.id_tai_khoan group by t1.id_tai_khoan having count ( * ) >= 4	customers_and_invoices
+select t1.id_tai_khoan , t2.ten_tai_khoan from giao_dich_tai_chinh as t1 join tai_khoan as t2 on t1.id_tai_khoan = t2.id_tai_khoan group by t1.id_tai_khoan having count ( * ) >= 4	customers_and_invoices
+select distinct kich_thuoc_san_pham from san_pham	customers_and_invoices
+select distinct kich_thuoc_san_pham from san_pham	customers_and_invoices
+select distinct mau_san_pham from san_pham	customers_and_invoices
+select distinct mau_san_pham from san_pham	customers_and_invoices
+select so_hoa_don , count ( * ) from giao_dich_tai_chinh group by so_hoa_don	customers_and_invoices
+select so_hoa_don , count ( * ) from giao_dich_tai_chinh group by so_hoa_don	customers_and_invoices
+select t2.so_hoa_don , t2.ngay_lap_hoa_don from giao_dich_tai_chinh as t1 join hoa_don as t2 on t1.so_hoa_don = t2.so_hoa_don group by t1.so_hoa_don order by count ( * ) desc limit 1	customers_and_invoices
+select t2.so_hoa_don , t2.ngay_lap_hoa_don from giao_dich_tai_chinh as t1 join hoa_don as t2 on t1.so_hoa_don = t2.so_hoa_don group by t1.so_hoa_don order by count ( * ) desc limit 1	customers_and_invoices
+select count ( * ) from hoa_don	customers_and_invoices
+select count ( * ) from hoa_don	customers_and_invoices
+select t1.ngay_lap_hoa_don , t1.id_don_hang , t2.chi_tiet_dat_hang from hoa_don as t1 join don_dat_hang as t2 on t1.id_don_hang = t2.id_don_hang	customers_and_invoices
+select t1.ngay_lap_hoa_don , t1.id_don_hang , t2.chi_tiet_dat_hang from hoa_don as t1 join don_dat_hang as t2 on t1.id_don_hang = t2.id_don_hang	customers_and_invoices
+select id_don_hang , count ( * ) from hoa_don group by id_don_hang	customers_and_invoices
+select id_don_hang , count ( * ) from hoa_don group by id_don_hang	customers_and_invoices
+select t2.id_don_hang , t2.chi_tiet_dat_hang from hoa_don as t1 join don_dat_hang as t2 on t1.id_don_hang = t2.id_don_hang group by t2.id_don_hang having count ( * ) > 2	customers_and_invoices
+select t2.id_don_hang , t2.chi_tiet_dat_hang from hoa_don as t1 join don_dat_hang as t2 on t1.id_don_hang = t2.id_don_hang group by t2.id_don_hang having count ( * ) > 2	customers_and_invoices
+select t2.ho_cua_khach_hang , t1.id_khach_hang , t2.so_dien_thoai from don_dat_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) desc limit 1	customers_and_invoices
+select t2.ho_cua_khach_hang , t1.id_khach_hang , t2.so_dien_thoai from don_dat_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) desc limit 1	customers_and_invoices
+select ten_san_pham from san_pham except select t1.ten_san_pham from san_pham as t1 join mat_hang_duoc_dat as t2 on t1.id_san_pham = t2.id_san_pham	customers_and_invoices
+select ten_san_pham from san_pham except select t1.ten_san_pham from san_pham as t1 join mat_hang_duoc_dat as t2 on t1.id_san_pham = t2.id_san_pham	customers_and_invoices
+select t2.ten_san_pham , sum ( t1.so_luong_san_pham ) from mat_hang_duoc_dat as t1 join san_pham as t2 on t1.id_san_pham = t2.id_san_pham group by t2.ten_san_pham	customers_and_invoices
+select t2.ten_san_pham , sum ( t1.so_luong_san_pham ) from mat_hang_duoc_dat as t1 join san_pham as t2 on t1.id_san_pham = t2.id_san_pham group by t2.ten_san_pham	customers_and_invoices
+select id_don_hang , count ( * ) from mat_hang_duoc_dat group by id_don_hang	customers_and_invoices
+select id_don_hang , count ( * ) from mat_hang_duoc_dat group by id_don_hang	customers_and_invoices
+select id_san_pham , count ( distinct id_don_hang ) from mat_hang_duoc_dat group by id_san_pham	customers_and_invoices
+select id_san_pham , count ( distinct id_don_hang ) from mat_hang_duoc_dat group by id_san_pham	customers_and_invoices
+select t2.ten_san_pham , count ( * ) from mat_hang_duoc_dat as t1 join san_pham as t2 on t1.id_san_pham = t2.id_san_pham join don_dat_hang as t3 on t3.id_don_hang = t1.id_don_hang group by t2.ten_san_pham	customers_and_invoices
+select t2.ten_san_pham , count ( * ) from mat_hang_duoc_dat as t1 join san_pham as t2 on t1.id_san_pham = t2.id_san_pham join don_dat_hang as t3 on t3.id_don_hang = t1.id_don_hang group by t2.ten_san_pham	customers_and_invoices
+select id_don_hang , count ( distinct id_san_pham ) from mat_hang_duoc_dat group by id_don_hang	customers_and_invoices
+select id_don_hang , count ( distinct id_san_pham ) from mat_hang_duoc_dat group by id_don_hang	customers_and_invoices
+select id_don_hang , sum ( so_luong_san_pham ) from mat_hang_duoc_dat group by id_don_hang	customers_and_invoices
+select id_don_hang , sum ( so_luong_san_pham ) from mat_hang_duoc_dat group by id_don_hang	customers_and_invoices
+select count ( * ) from san_pham where id_san_pham not in ( select id_san_pham from mat_hang_duoc_dat )	customers_and_invoices
+select count ( * ) from san_pham where id_san_pham not in ( select id_san_pham from mat_hang_duoc_dat )	customers_and_invoices
+select count ( * ) from dia_chi where quoc_gia = "usa"	customers_and_products_contacts
+select distinct thanh_pho from dia_chi	customers_and_products_contacts
+select tieu_bang , count ( * ) from dia_chi group by tieu_bang	customers_and_products_contacts
+select ten_khach_hang , dien_thoai_khach_hang from khach_hang where id_khach_hang not in ( select id_khach_hang from lich_su_dia_chi_khach_hang )	customers_and_products_contacts
+select t1.ten_khach_hang from khach_hang as t1 join luot_dat_hang_cua_khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) desc limit 1	customers_and_products_contacts
+select ma_loai_san_pham from san_pham group by ma_loai_san_pham having count ( * ) >= 2	customers_and_products_contacts
+select t1.ten_khach_hang from khach_hang as t1 join luot_dat_hang_cua_khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ma_trang_thai_don_hang = "completed" intersect select t1.ten_khach_hang from khach_hang as t1 join luot_dat_hang_cua_khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ma_trang_thai_don_hang = "part"	customers_and_products_contacts
+select ten_khach_hang , dien_thoai_khach_hang , ma_phuong_thuc_thanh_toan from khach_hang order by ma_so_khach_hang desc	customers_and_products_contacts
+select t1.ten_san_pham , sum ( t2.so_luong_dat_hang ) from san_pham as t1 join mat_hang_duoc_dat as t2 on t1.id_san_pham = t2.id_san_pham group by t1.id_san_pham	customers_and_products_contacts
+select min ( gia_san_pham ) , max ( gia_san_pham ) , avg ( gia_san_pham ) from san_pham	customers_and_products_contacts
+select count ( * ) from san_pham where gia_san_pham > ( select avg ( gia_san_pham ) from san_pham )	customers_and_products_contacts
+select t2.ten_khach_hang , t3.thanh_pho , t1.tu_ngay , t1.den_ngay from lich_su_dia_chi_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang join dia_chi as t3 on t1.id_dia_chi = t3.id_dia_chi	customers_and_products_contacts
+select t1.ten_khach_hang from khach_hang as t1 join luot_dat_hang_cua_khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ma_phuong_thuc_thanh_toan = "credit card" group by t1.id_khach_hang having count ( * ) > 2	customers_and_products_contacts
+select t1.ten_khach_hang , t1.dien_thoai_khach_hang from khach_hang as t1 join luot_dat_hang_cua_khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang join mat_hang_duoc_dat as t3 on t3.id_don_hang = t2.id_don_hang group by t1.id_khach_hang order by sum ( t3.so_luong_dat_hang ) desc limit 1	customers_and_products_contacts
+select ma_loai_san_pham , ten_san_pham from san_pham where gia_san_pham > 1000 or gia_san_pham < 500	customers_and_products_contacts
+select count ( * ) from bo_truong where tuoi > 56	department_management
+select ten , sinh_ra_o_tieu_bang , tuoi from bo_truong order by tuoi	department_management
+select nam_thanh_lap , ten , ngan_sach_tinh_theo_ty from cac_bo	department_management
+select max ( ngan_sach_tinh_theo_ty ) , min ( ngan_sach_tinh_theo_ty ) from cac_bo	department_management
+select avg ( so_luong_nhan_vien ) from cac_bo where xep_hang between 10 and 15	department_management
+select ten from bo_truong where sinh_ra_o_tieu_bang != "california"	department_management
+select distinct t1.nam_thanh_lap from cac_bo as t1 join su_quan_ly as t2 on t1.id_cac_bo = t2.id_cac_bo join bo_truong as t3 on t2.id_nguoi_dung_dau = t3.id_nguoi_dung_dau where t3.sinh_ra_o_tieu_bang = "alabama"	department_management
+select sinh_ra_o_tieu_bang from bo_truong group by sinh_ra_o_tieu_bang having count ( * ) >= 3	department_management
+select nam_thanh_lap from cac_bo group by nam_thanh_lap order by count ( * ) desc limit 1	department_management
+select t1.ten , t1.so_luong_nhan_vien from cac_bo as t1 join su_quan_ly as t2 on t1.id_cac_bo = t2.id_cac_bo where t2.vai_tro_tam_thoi = "yes"	department_management
+select count ( distinct vai_tro_tam_thoi ) from su_quan_ly	department_management
+select count ( * ) from cac_bo where id_cac_bo not in ( select id_cac_bo from su_quan_ly )	department_management
+select distinct t1.tuoi from su_quan_ly as t2 join bo_truong as t1 on t1.id_nguoi_dung_dau = t2.id_nguoi_dung_dau where t2.vai_tro_tam_thoi = "yes"	department_management
+select t3.sinh_ra_o_tieu_bang from cac_bo as t1 join su_quan_ly as t2 on t1.id_cac_bo = t2.id_cac_bo join bo_truong as t3 on t2.id_nguoi_dung_dau = t3.id_nguoi_dung_dau where t1.ten = "treasury" intersect select t3.sinh_ra_o_tieu_bang from cac_bo as t1 join su_quan_ly as t2 on t1.id_cac_bo = t2.id_cac_bo join bo_truong as t3 on t2.id_nguoi_dung_dau = t3.id_nguoi_dung_dau where t1.ten = "homeland security"	department_management
+select t1.id_cac_bo , t1.ten , count ( * ) from su_quan_ly as t2 join cac_bo as t1 on t1.id_cac_bo = t2.id_cac_bo group by t1.id_cac_bo having count ( * ) > 1	department_management
+select id_nguoi_dung_dau , ten from bo_truong where ten like "%ha%"	department_management
+select id from xe	driving_school
+select id from xe	driving_school
+select count ( * ) from xe	driving_school
+select count ( * ) from xe	driving_school
+select chi_tiet_ve_xe from xe where id = 1	driving_school
+select chi_tiet_ve_xe from xe where id = 1	driving_school
+select ten , ten_dem , ho from nhan_vien	driving_school
+select ten , ten_dem , ho from nhan_vien	driving_school
+select ngay_sinh from nhan_vien where ten = "janessa" and ho = "sawayn"	driving_school
+select ngay_sinh from nhan_vien where ten = "janessa" and ho = "sawayn"	driving_school
+select ngay_nhan_vien_gia_nhap from nhan_vien where ten = "janessa" and ho = "sawayn"	driving_school
+select ngay_nhan_vien_gia_nhap from nhan_vien where ten = "janessa" and ho = "sawayn"	driving_school
+select ngay_nhan_vien_roi_di from nhan_vien where ten = "janessa" and ho = "sawayn"	driving_school
+select ngay_nhan_vien_roi_di from nhan_vien where ten = "janessa" and ho = "sawayn"	driving_school
+select count ( * ) from nhan_vien where ten = "ludie"	driving_school
+select count ( * ) from nhan_vien where ten = "ludie"	driving_school
+select biet_danh from nhan_vien where ten = "janessa" and ho = "sawayn"	driving_school
+select biet_danh from nhan_vien where ten = "janessa" and ho = "sawayn"	driving_school
+select count ( * ) from nhan_vien	driving_school
+select count ( * ) from nhan_vien	driving_school
+select t1.thanh_pho from dia_chi as t1 join nhan_vien as t2 on t1.id_dia_chi = t2.id_dia_chi_nhan_vien where t2.ten = "janessa" and t2.ho = "sawayn"	driving_school
+select t1.thanh_pho from dia_chi as t1 join nhan_vien as t2 on t1.id_dia_chi = t2.id_dia_chi_nhan_vien where t2.ten = "janessa" and t2.ho = "sawayn"	driving_school
+select t1.quoc_gia , t1.tieu_bang from dia_chi as t1 join nhan_vien as t2 on t1.id_dia_chi = t2.id_dia_chi_nhan_vien where t2.ten = "janessa" and t2.ho = "sawayn"	driving_school
+select t1.quoc_gia , t1.tieu_bang from dia_chi as t1 join nhan_vien as t2 on t1.id_dia_chi = t2.id_dia_chi_nhan_vien where t2.ten = "janessa" and t2.ho = "sawayn"	driving_school
+select sum ( t1.gio_hoc ) from bai_giang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten = "rylan" and t2.ho = "goodwin"	driving_school
+select sum ( t1.gio_hoc ) from bai_giang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten = "rylan" and t2.ho = "goodwin"	driving_school
+select t1.ma_buu_dien from dia_chi as t1 join nhan_vien as t2 on t1.id_dia_chi = t2.id_dia_chi_nhan_vien where t2.ten = "janessa" and t2.ho = "sawayn"	driving_school
+select t1.ma_buu_dien from dia_chi as t1 join nhan_vien as t2 on t1.id_dia_chi = t2.id_dia_chi_nhan_vien where t2.ten = "janessa" and t2.ho = "sawayn"	driving_school
+select count ( * ) from dia_chi where tieu_bang = "georgia"	driving_school
+select count ( * ) from dia_chi where tieu_bang = "georgia"	driving_school
+select t2.ten , t2.ho from dia_chi as t1 join nhan_vien as t2 on t1.id_dia_chi = t2.id_dia_chi_nhan_vien where t1.thanh_pho = "damianfort"	driving_school
+select t2.ten , t2.ho from dia_chi as t1 join nhan_vien as t2 on t1.id_dia_chi = t2.id_dia_chi_nhan_vien where t1.thanh_pho = "damianfort"	driving_school
+select t1.thanh_pho , count ( * ) from dia_chi as t1 join nhan_vien as t2 on t1.id_dia_chi = t2.id_dia_chi_nhan_vien group by t1.thanh_pho order by count ( * ) desc limit 1	driving_school
+select t1.thanh_pho , count ( * ) from dia_chi as t1 join nhan_vien as t2 on t1.id_dia_chi = t2.id_dia_chi_nhan_vien group by t1.thanh_pho order by count ( * ) desc limit 1	driving_school
+select t1.tieu_bang from dia_chi as t1 join nhan_vien as t2 on t1.id_dia_chi = t2.id_dia_chi_nhan_vien group by t1.tieu_bang having count ( * ) between 2 and 4	driving_school
+select t1.tieu_bang from dia_chi as t1 join nhan_vien as t2 on t1.id_dia_chi = t2.id_dia_chi_nhan_vien group by t1.tieu_bang having count ( * ) between 2 and 4	driving_school
+select ten , ho from khach_hang	driving_school
+select ten , ho from khach_hang	driving_school
+select dia_chi_email , ngay_sinh from khach_hang where ten = "carole"	driving_school
+select dia_chi_email , ngay_sinh from khach_hang where ten = "carole"	driving_school
+select so_dien_thoai , dia_chi_email from khach_hang where so_tien_con_thieu > 2000	driving_school
+select so_dien_thoai , dia_chi_email from khach_hang where so_tien_con_thieu > 2000	driving_school
+select ma_trang_thai_khach_hang , so_dien_thoai_di_dong , dia_chi_email from khach_hang where ten = "marina" or ho = "kohler"	driving_school
+select ma_trang_thai_khach_hang , so_dien_thoai_di_dong , dia_chi_email from khach_hang where ten = "marina" or ho = "kohler"	driving_school
+select ngay_sinh from khach_hang where ma_trang_thai_khach_hang = "good customer"	driving_school
+select ngay_sinh from khach_hang where ma_trang_thai_khach_hang = "good customer"	driving_school
+select ngay_tro_thanh_khach_hang from khach_hang where ten = "carole" and ho = "bernhard"	driving_school
+select ngay_tro_thanh_khach_hang from khach_hang where ten = "carole" and ho = "bernhard"	driving_school
+select count ( * ) from khach_hang	driving_school
+select count ( * ) from khach_hang	driving_school
+select ma_trang_thai_khach_hang , count ( * ) from khach_hang group by ma_trang_thai_khach_hang	driving_school
+select ma_trang_thai_khach_hang , count ( * ) from khach_hang group by ma_trang_thai_khach_hang	driving_school
+select ma_trang_thai_khach_hang from khach_hang group by ma_trang_thai_khach_hang order by count ( * ) asc limit 1	driving_school
+select ma_trang_thai_khach_hang from khach_hang group by ma_trang_thai_khach_hang order by count ( * ) asc limit 1	driving_school
+select count ( * ) from bai_giang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten = "rylan" and t2.ho = "goodwin" and t1.ma_trang_thai_bai_giang = "completed"	driving_school
+select count ( * ) from bai_giang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten = "rylan" and t2.ho = "goodwin" and t1.ma_trang_thai_bai_giang = "completed"	driving_school
+select max ( so_tien_con_thieu ) , min ( so_tien_con_thieu ) , avg ( so_tien_con_thieu ) from khach_hang	driving_school
+select max ( so_tien_con_thieu ) , min ( so_tien_con_thieu ) , avg ( so_tien_con_thieu ) from khach_hang	driving_school
+select ten , ho from khach_hang where so_tien_con_thieu between 1000 and 3000	driving_school
+select ten , ho from khach_hang where so_tien_con_thieu between 1000 and 3000	driving_school
+select t1.ten , t1.ho from khach_hang as t1 join dia_chi as t2 on t1.id_dia_chi_khach_hang = t2.id_dia_chi where t2.thanh_pho = "lockmanfurt"	driving_school
+select t1.ten , t1.ho from khach_hang as t1 join dia_chi as t2 on t1.id_dia_chi_khach_hang = t2.id_dia_chi where t2.thanh_pho = "lockmanfurt"	driving_school
+select t2.quoc_gia from khach_hang as t1 join dia_chi as t2 on t1.id_dia_chi_khach_hang = t2.id_dia_chi where t1.ten = "carole" and t1.ho = "bernhard"	driving_school
+select t2.quoc_gia from khach_hang as t1 join dia_chi as t2 on t1.id_dia_chi_khach_hang = t2.id_dia_chi where t1.ten = "carole" and t1.ho = "bernhard"	driving_school
+select t2.ma_buu_dien from khach_hang as t1 join dia_chi as t2 on t1.id_dia_chi_khach_hang = t2.id_dia_chi where t1.ten = "carole" and t1.ho = "bernhard"	driving_school
+select t2.ma_buu_dien from khach_hang as t1 join dia_chi as t2 on t1.id_dia_chi_khach_hang = t2.id_dia_chi where t1.ten = "carole" and t1.ho = "bernhard"	driving_school
+select t2.thanh_pho from khach_hang as t1 join dia_chi as t2 on t1.id_dia_chi_khach_hang = t2.id_dia_chi group by t2.thanh_pho order by count ( * ) desc limit 1	driving_school
+select t2.thanh_pho from khach_hang as t1 join dia_chi as t2 on t1.id_dia_chi_khach_hang = t2.id_dia_chi group by t2.thanh_pho order by count ( * ) desc limit 1	driving_school
+select sum ( t1.so_tien_thanh_toan ) from khoan_thanh_toan_cua_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten = "carole" and t2.ho = "bernhard"	driving_school
+select sum ( t1.so_tien_thanh_toan ) from khoan_thanh_toan_cua_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten = "carole" and t2.ho = "bernhard"	driving_school
+select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from khoan_thanh_toan_cua_khach_hang )	driving_school
+select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from khoan_thanh_toan_cua_khach_hang )	driving_school
+select t2.ten , t2.ho from khoan_thanh_toan_cua_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang having count ( * ) > 2	driving_school
+select t2.ten , t2.ho from khoan_thanh_toan_cua_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang having count ( * ) > 2	driving_school
+select ma_phuong_thuc_thanh_toan , count ( * ) from khoan_thanh_toan_cua_khach_hang group by ma_phuong_thuc_thanh_toan	driving_school
+select ma_phuong_thuc_thanh_toan , count ( * ) from khoan_thanh_toan_cua_khach_hang group by ma_phuong_thuc_thanh_toan	driving_school
+select count ( * ) from bai_giang where ma_trang_thai_bai_giang = "cancelled"	driving_school
+select count ( * ) from bai_giang where ma_trang_thai_bai_giang = "cancelled"	driving_school
+select t1.id_bai_giang from bai_giang as t1 join nhan_vien as t2 on t1.id_nhan_vien = t2.id_nhan_vien where t2.ten = "janessa" and t2.ho = "sawayn" and biet_danh like "%s%"	driving_school
+select t1.id_bai_giang from bai_giang as t1 join nhan_vien as t2 on t1.id_nhan_vien = t2.id_nhan_vien where t2.ten = "janessa" and t2.ho = "sawayn" and biet_danh like "%s%"	driving_school
+select count ( * ) from bai_giang as t1 join nhan_vien as t2 on t1.id_nhan_vien = t2.id_nhan_vien where t2.ten like "%a%"	driving_school
+select count ( * ) from bai_giang as t1 join nhan_vien as t2 on t1.id_nhan_vien = t2.id_nhan_vien where t2.ten like "%a%"	driving_school
+select sum ( gio_hoc ) from bai_giang as t1 join nhan_vien as t2 on t1.id_nhan_vien = t2.id_nhan_vien where t2.ten = "janessa" and t2.ho = "sawayn"	driving_school
+select sum ( gio_hoc ) from bai_giang as t1 join nhan_vien as t2 on t1.id_nhan_vien = t2.id_nhan_vien where t2.ten = "janessa" and t2.ho = "sawayn"	driving_school
+select avg ( gia ) from bai_giang as t1 join nhan_vien as t2 on t1.id_nhan_vien = t2.id_nhan_vien where t2.ten = "janessa" and t2.ho = "sawayn"	driving_school
+select avg ( gia ) from bai_giang as t1 join nhan_vien as t2 on t1.id_nhan_vien = t2.id_nhan_vien where t2.ten = "janessa" and t2.ho = "sawayn"	driving_school
+select count ( * ) from bai_giang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten = "ray"	driving_school
+select count ( * ) from bai_giang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten = "ray"	driving_school
+select ho from khach_hang intersect select ho from nhan_vien	driving_school
+select ho from khach_hang intersect select ho from nhan_vien	driving_school
+select ten from nhan_vien except select t2.ten from bai_giang as t1 join nhan_vien as t2 on t1.id_nhan_vien = t2.id_nhan_vien	driving_school
+select ten from nhan_vien except select t2.ten from bai_giang as t1 join nhan_vien as t2 on t1.id_nhan_vien = t2.id_nhan_vien	driving_school
+select t1.id , t1.chi_tiet_ve_xe from xe as t1 join bai_giang as t2 on t1.id = t2.id_xe group by t1.id order by count ( * ) desc limit 1	driving_school
+select count ( * ) from nhan_vien	employee_hire_evaluation
+select count ( * ) from nhan_vien	employee_hire_evaluation
+select ten from nhan_vien order by tuoi	employee_hire_evaluation
+select ten from nhan_vien order by tuoi	employee_hire_evaluation
+select count ( * ) , thanh_pho from nhan_vien group by thanh_pho	employee_hire_evaluation
+select count ( * ) , thanh_pho from nhan_vien group by thanh_pho	employee_hire_evaluation
+select thanh_pho from nhan_vien where tuoi < 30 group by thanh_pho having count ( * ) > 1	employee_hire_evaluation
+select thanh_pho from nhan_vien where tuoi < 30 group by thanh_pho having count ( * ) > 1	employee_hire_evaluation
+select count ( * ) , dia_diem from cua_hang group by dia_diem	employee_hire_evaluation
+select count ( * ) , dia_diem from cua_hang group by dia_diem	employee_hire_evaluation
+select ten_nguoi_quan_ly , quan from cua_hang order by so_luong_san_pham desc limit 1	employee_hire_evaluation
+select ten_nguoi_quan_ly , quan from cua_hang order by so_luong_san_pham desc limit 1	employee_hire_evaluation
+select min ( so_luong_san_pham ) , max ( so_luong_san_pham ) from cua_hang	employee_hire_evaluation
+select min ( so_luong_san_pham ) , max ( so_luong_san_pham ) from cua_hang	employee_hire_evaluation
+select ten , dia_diem , quan from cua_hang order by so_luong_san_pham desc	employee_hire_evaluation
+select ten , dia_diem , quan from cua_hang order by so_luong_san_pham desc	employee_hire_evaluation
+select ten from cua_hang where so_luong_san_pham > ( select avg ( so_luong_san_pham ) from cua_hang )	employee_hire_evaluation
+select ten from cua_hang where so_luong_san_pham > ( select avg ( so_luong_san_pham ) from cua_hang )	employee_hire_evaluation
+select t1.ten from nhan_vien as t1 join danh_gia as t2 on t1.id_nhan_vien = t2.id_nhan_vien group by t2.id_nhan_vien order by count ( * ) desc limit 1	employee_hire_evaluation
+select t1.ten from nhan_vien as t1 join danh_gia as t2 on t1.id_nhan_vien = t2.id_nhan_vien group by t2.id_nhan_vien order by count ( * ) desc limit 1	employee_hire_evaluation
+select t1.ten from nhan_vien as t1 join danh_gia as t2 on t1.id_nhan_vien = t2.id_nhan_vien order by t2.tien_thuong desc limit 1	employee_hire_evaluation
+select t1.ten from nhan_vien as t1 join danh_gia as t2 on t1.id_nhan_vien = t2.id_nhan_vien order by t2.tien_thuong desc limit 1	employee_hire_evaluation
+select ten from nhan_vien where id_nhan_vien not in ( select id_nhan_vien from danh_gia )	employee_hire_evaluation
+select ten from nhan_vien where id_nhan_vien not in ( select id_nhan_vien from danh_gia )	employee_hire_evaluation
+select t2.ten from tuyen_dung as t1 join cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang group by t1.id_cua_hang order by count ( * ) desc limit 1	employee_hire_evaluation
+select t2.ten from tuyen_dung as t1 join cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang group by t1.id_cua_hang order by count ( * ) desc limit 1	employee_hire_evaluation
+select ten from cua_hang where id_cua_hang not in ( select id_cua_hang from tuyen_dung )	employee_hire_evaluation
+select ten from cua_hang where id_cua_hang not in ( select id_cua_hang from tuyen_dung )	employee_hire_evaluation
+select count ( * ) , t2.ten from tuyen_dung as t1 join cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang group by t2.ten	employee_hire_evaluation
+select count ( * ) , t2.ten from tuyen_dung as t1 join cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang group by t2.ten	employee_hire_evaluation
+select sum ( tien_thuong ) from danh_gia	employee_hire_evaluation
+select sum ( tien_thuong ) from danh_gia	employee_hire_evaluation
+select * from tuyen_dung	employee_hire_evaluation
+select * from tuyen_dung	employee_hire_evaluation
+select quan from cua_hang where so_luong_san_pham < 3000 intersect select quan from cua_hang where so_luong_san_pham > 10000	employee_hire_evaluation
+select quan from cua_hang where so_luong_san_pham < 3000 intersect select quan from cua_hang where so_luong_san_pham > 10000	employee_hire_evaluation
+select count ( distinct dia_diem ) from cua_hang	employee_hire_evaluation
+select count ( distinct dia_diem ) from cua_hang	employee_hire_evaluation
+select quoc_gia from hang_hang_khong where ten_hang_hang_khong = "jetblue airways"	flight_2
+select quoc_gia from hang_hang_khong where ten_hang_hang_khong = "jetblue airways"	flight_2
+select ten_viet_tat from hang_hang_khong where ten_hang_hang_khong = "jetblue airways"	flight_2
+select ten_viet_tat from hang_hang_khong where ten_hang_hang_khong = "jetblue airways"	flight_2
+select ten_hang_hang_khong , ten_viet_tat from hang_hang_khong where quoc_gia = "usa"	flight_2
+select ten_hang_hang_khong , ten_viet_tat from hang_hang_khong where quoc_gia = "usa"	flight_2
+select ma_san_bay , ten_san_bay from san_bay where thanh_pho = "anthony"	flight_2
+select ma_san_bay , ten_san_bay from san_bay where thanh_pho = "anthony"	flight_2
+select count ( * ) from hang_hang_khong	flight_2
+select count ( * ) from hang_hang_khong	flight_2
+select count ( * ) from san_bay	flight_2
+select count ( * ) from san_bay	flight_2
+select count ( * ) from chuyen_bay	flight_2
+select count ( * ) from chuyen_bay	flight_2
+select ten_hang_hang_khong from hang_hang_khong where ten_viet_tat = "ual"	flight_2
+select ten_hang_hang_khong from hang_hang_khong where ten_viet_tat = "ual"	flight_2
+select count ( * ) from hang_hang_khong where quoc_gia = "usa"	flight_2
+select count ( * ) from hang_hang_khong where quoc_gia = "usa"	flight_2
+select thanh_pho , quoc_gia from san_bay where ten_san_bay = "alton"	flight_2
+select thanh_pho , quoc_gia from san_bay where ten_san_bay = "alton"	flight_2
+select ten_san_bay from san_bay where ma_san_bay = "ako"	flight_2
+select ten_san_bay from san_bay where ma_san_bay = "ako"	flight_2
+select ten_san_bay from san_bay where thanh_pho = "aberdeen"	flight_2
+select ten_san_bay from san_bay where thanh_pho = "aberdeen"	flight_2
+select count ( * ) from chuyen_bay where san_bay_khoi_hanh = "apg"	flight_2
+select count ( * ) from chuyen_bay where san_bay_khoi_hanh = "apg"	flight_2
+select count ( * ) from chuyen_bay where san_bay_dich = "ato"	flight_2
+select count ( * ) from chuyen_bay where san_bay_dich = "ato"	flight_2
+select count ( * ) from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_khoi_hanh = t2.ma_san_bay where t2.thanh_pho = "aberdeen"	flight_2
+select count ( * ) from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_khoi_hanh = t2.ma_san_bay where t2.thanh_pho = "aberdeen"	flight_2
+select count ( * ) from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_dich = t2.ma_san_bay where t2.thanh_pho = "aberdeen"	flight_2
+select count ( * ) from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_dich = t2.ma_san_bay where t2.thanh_pho = "aberdeen"	flight_2
+select count ( * ) from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_dich = t2.ma_san_bay join san_bay as t3 on t1.san_bay_khoi_hanh = t3.ma_san_bay where t2.thanh_pho = "ashley" and t3.thanh_pho = "aberdeen"	flight_2
+select count ( * ) from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_dich = t2.ma_san_bay join san_bay as t3 on t1.san_bay_khoi_hanh = t3.ma_san_bay where t2.thanh_pho = "ashley" and t3.thanh_pho = "aberdeen"	flight_2
+select count ( * ) from chuyen_bay as t1 join hang_hang_khong as t2 on t1.hang_hang_khong = t2.id_hang_hang_khong where t2.ten_hang_hang_khong = "jetblue airways"	flight_2
+select count ( * ) from chuyen_bay as t1 join hang_hang_khong as t2 on t1.hang_hang_khong = t2.id_hang_hang_khong where t2.ten_hang_hang_khong = "jetblue airways"	flight_2
+select count ( * ) from hang_hang_khong as t1 join chuyen_bay as t2 on t2.hang_hang_khong = t1.id_hang_hang_khong where t1.ten_hang_hang_khong = "united airlines" and t2.san_bay_dich = "asy"	flight_2
+select count ( * ) from hang_hang_khong as t1 join chuyen_bay as t2 on t2.hang_hang_khong = t1.id_hang_hang_khong where t1.ten_hang_hang_khong = "united airlines" and t2.san_bay_dich = "asy"	flight_2
+select count ( * ) from hang_hang_khong as t1 join chuyen_bay as t2 on t2.hang_hang_khong = t1.id_hang_hang_khong where t1.ten_hang_hang_khong = "united airlines" and t2.san_bay_khoi_hanh = "ahd"	flight_2
+select count ( * ) from hang_hang_khong as t1 join chuyen_bay as t2 on t2.hang_hang_khong = t1.id_hang_hang_khong where t1.ten_hang_hang_khong = "united airlines" and t2.san_bay_khoi_hanh = "ahd"	flight_2
+select count ( * ) from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_dich = t2.ma_san_bay join hang_hang_khong as t3 on t3.id_hang_hang_khong = t1.hang_hang_khong where t2.thanh_pho = "aberdeen" and t3.ten_hang_hang_khong = "united airlines"	flight_2
+select count ( * ) from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_dich = t2.ma_san_bay join hang_hang_khong as t3 on t3.id_hang_hang_khong = t1.hang_hang_khong where t2.thanh_pho = "aberdeen" and t3.ten_hang_hang_khong = "united airlines"	flight_2
+select t1.thanh_pho from san_bay as t1 join chuyen_bay as t2 on t1.ma_san_bay = t2.san_bay_dich group by t1.thanh_pho order by count ( * ) desc limit 1	flight_2
+select t1.thanh_pho from san_bay as t1 join chuyen_bay as t2 on t1.ma_san_bay = t2.san_bay_dich group by t1.thanh_pho order by count ( * ) desc limit 1	flight_2
+select t1.thanh_pho from san_bay as t1 join chuyen_bay as t2 on t1.ma_san_bay = t2.san_bay_khoi_hanh group by t1.thanh_pho order by count ( * ) desc limit 1	flight_2
+select t1.thanh_pho from san_bay as t1 join chuyen_bay as t2 on t1.ma_san_bay = t2.san_bay_khoi_hanh group by t1.thanh_pho order by count ( * ) desc limit 1	flight_2
+select t1.ma_san_bay from san_bay as t1 join chuyen_bay as t2 on t1.ma_san_bay = t2.san_bay_dich or t1.ma_san_bay = t2.san_bay_khoi_hanh group by t1.ma_san_bay order by count ( * ) desc limit 1	flight_2
+select t1.ma_san_bay from san_bay as t1 join chuyen_bay as t2 on t1.ma_san_bay = t2.san_bay_dich or t1.ma_san_bay = t2.san_bay_khoi_hanh group by t1.ma_san_bay order by count ( * ) desc limit 1	flight_2
+select t1.ma_san_bay from san_bay as t1 join chuyen_bay as t2 on t1.ma_san_bay = t2.san_bay_dich or t1.ma_san_bay = t2.san_bay_khoi_hanh group by t1.ma_san_bay order by count ( * ) limit 1	flight_2
+select t1.ma_san_bay from san_bay as t1 join chuyen_bay as t2 on t1.ma_san_bay = t2.san_bay_dich or t1.ma_san_bay = t2.san_bay_khoi_hanh group by t1.ma_san_bay order by count ( * ) limit 1	flight_2
+select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong group by t1.ten_hang_hang_khong order by count ( * ) desc limit 1	flight_2
+select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong group by t1.ten_hang_hang_khong order by count ( * ) desc limit 1	flight_2
+select t1.ten_viet_tat , t1.quoc_gia from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong group by t1.ten_hang_hang_khong order by count ( * ) limit 1	flight_2
+select t1.ten_viet_tat , t1.quoc_gia from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong group by t1.ten_hang_hang_khong order by count ( * ) limit 1	flight_2
+select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = "ahd"	flight_2
+select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = "ahd"	flight_2
+select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_dich = "ahd"	flight_2
+select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_dich = "ahd"	flight_2
+select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = "apg" intersect select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = "cvo"	flight_2
+select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = "apg" intersect select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = "cvo"	flight_2
+select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = "cvo" except select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = "apg"	flight_2
+select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = "cvo" except select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = "apg"	flight_2
+select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong group by t1.ten_hang_hang_khong having count ( * ) > 10	flight_2
+select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong group by t1.ten_hang_hang_khong having count ( * ) > 10	flight_2
+select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong group by t1.ten_hang_hang_khong having count ( * ) < 200	flight_2
+select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong group by t1.ten_hang_hang_khong having count ( * ) < 200	flight_2
+select t1.so_hieu_chuyen_bay from chuyen_bay as t1 join hang_hang_khong as t2 on t2.id_hang_hang_khong = t1.hang_hang_khong where t2.ten_hang_hang_khong = "united airlines"	flight_2
+select t1.so_hieu_chuyen_bay from chuyen_bay as t1 join hang_hang_khong as t2 on t2.id_hang_hang_khong = t1.hang_hang_khong where t2.ten_hang_hang_khong = "united airlines"	flight_2
+select so_hieu_chuyen_bay from chuyen_bay where san_bay_khoi_hanh = "apg"	flight_2
+select so_hieu_chuyen_bay from chuyen_bay where san_bay_khoi_hanh = "apg"	flight_2
+select so_hieu_chuyen_bay from chuyen_bay where san_bay_dich = "apg"	flight_2
+select so_hieu_chuyen_bay from chuyen_bay where san_bay_dich = "apg"	flight_2
+select t1.so_hieu_chuyen_bay from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_khoi_hanh = t2.ma_san_bay where t2.thanh_pho = "aberdeen"	flight_2
+select t1.so_hieu_chuyen_bay from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_khoi_hanh = t2.ma_san_bay where t2.thanh_pho = "aberdeen"	flight_2
+select t1.so_hieu_chuyen_bay from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_dich = t2.ma_san_bay where t2.thanh_pho = "aberdeen"	flight_2
+select t1.so_hieu_chuyen_bay from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_dich = t2.ma_san_bay where t2.thanh_pho = "aberdeen"	flight_2
+select count ( * ) from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_dich = t2.ma_san_bay where t2.thanh_pho = "aberdeen" or t2.thanh_pho = "abilene"	flight_2
+select count ( * ) from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_dich = t2.ma_san_bay where t2.thanh_pho = "aberdeen" or t2.thanh_pho = "abilene"	flight_2
+select ten_san_bay from san_bay where ma_san_bay not in ( select san_bay_khoi_hanh from chuyen_bay union select san_bay_dich from chuyen_bay )	flight_2
+select ten_san_bay from san_bay where ma_san_bay not in ( select san_bay_khoi_hanh from chuyen_bay union select san_bay_dich from chuyen_bay )	flight_2
+select count ( * ) from tran_dau where mua_giai > 2007	game_injury
+select ngay from tran_dau order by doi_chu_nha desc	game_injury
+select mua_giai , doi_chu_nha , doi_khach from tran_dau	game_injury
+select max ( tran_dau_san_nha ) , min ( tran_dau_san_nha ) , avg ( tran_dau_san_nha ) from san_van_dong	game_injury
+select so_luong_nguoi_tham_du_trung_binh from san_van_dong where phan_tram_suc_chua > 100	game_injury
+select cau_thu , so_luong_tran_dau , nguon_thong_tin from chan_thuong where chan_thuong != "knee problem"	game_injury
+select t1.mua_giai from tran_dau as t1 join chan_thuong as t2 on t1.id = t2.id_tran_dau where t2.cau_thu = "walter samuel"	game_injury
+select t1.id , t1.ti_so , t1.ngay from tran_dau as t1 join chan_thuong as t2 on t2.id_tran_dau = t1.id group by t1.id having count ( * ) >= 2	game_injury
+select t1.id , t1.ten from san_van_dong as t1 join tran_dau as t2 on t1.id = t2.id_san_van_dong join chan_thuong as t3 on t2.id = t3.id_tran_dau group by t1.id order by count ( * ) desc limit 1	game_injury
+select t1.id , t1.ten from san_van_dong as t1 join tran_dau as t2 on t1.id = t2.id_san_van_dong join chan_thuong as t3 on t2.id = t3.id_tran_dau group by t1.id order by count ( * ) desc limit 1	game_injury
+select t1.mua_giai , t2.ten from tran_dau as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id join chan_thuong as t3 on t1.id = t3.id_tran_dau where t3.chan_thuong = "foot injury" or t3.chan_thuong = "knee problem"	game_injury
+select count ( distinct nguon_thong_tin ) from chan_thuong	game_injury
+select count ( * ) from tran_dau where id not in ( select id_tran_dau from chan_thuong )	game_injury
+select count ( distinct t1.chan_thuong ) from chan_thuong as t1 join tran_dau as t2 on t1.id_tran_dau = t2.id where t2.mua_giai > 2010	game_injury
+select t2.ten from tran_dau as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id join chan_thuong as t3 on t1.id = t3.id_tran_dau where t3.cau_thu = "walter samuel" intersect select t2.ten from tran_dau as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id join chan_thuong as t3 on t1.id = t3.id_tran_dau where t3.cau_thu = "thiago motta"	game_injury
+select ten , so_luong_nguoi_tham_du_trung_binh , tong_so_nguoi_tham_du from san_van_dong except select t2.ten , t2.so_luong_nguoi_tham_du_trung_binh , t2.tong_so_nguoi_tham_du from tran_dau as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id join chan_thuong as t3 on t1.id = t3.id_tran_dau	game_injury
+select ten from san_van_dong where ten like "%bank%"	game_injury
+select t1.id , count ( * ) from san_van_dong as t1 join tran_dau as t2 on t1.id = t2.id_san_van_dong group by t1.id	game_injury
+select t1.ngay , t2.cau_thu from tran_dau as t1 join chan_thuong as t2 on t1.id = t2.id_tran_dau order by t1.mua_giai desc	game_injury
+select nam_phat_hanh from bo_phim where tieu_de = "the imitation game"	imdb
+select nam_phat_hanh from bo_phim where tieu_de = "the imitation game"	imdb
+select nam_sinh from dien_vien where ten = "benedict cumberbatch"	imdb
+select nam_sinh from dien_vien where ten = "benedict cumberbatch"	imdb
+select quoc_tich from dien_vien where ten = "christoph waltz"	imdb
+select quoc_tich from dien_vien where ten = "christoph waltz"	imdb
+select tieu_de from bo_phim where nam_phat_hanh = 2015	imdb
+select ten from dien_vien where noi_sinh = "tehran"	imdb
+select ten from dien_vien where noi_sinh = "tehran"	imdb
+select ten from dien_vien where noi_sinh = "tehran"	imdb
+select ten from dien_vien where quoc_tich = "afghanistan"	imdb
+select ten from dien_vien where quoc_tich = "afghanistan"	imdb
+select ten from dien_vien where quoc_tich = "afghanistan"	imdb
+select ten from dien_vien where nam_sinh = 1984	imdb
+select nam_sinh from dien_vien where ten = "actor name0"	imdb
+select nam_sinh from dien_vien where ten = "actor name0"	imdb
+select noi_sinh from dao_dien where ten = "director name0"	imdb
+select noi_sinh from dao_dien where ten = "director name0"	imdb
+select quoc_tich from dao_dien where ten = "director name0"	imdb
+select ngan_sach from bo_phim where tieu_de = "finding nemo"	imdb
+select t3.tieu_de from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t2.ten = "steven spielberg" and t3.nam_phat_hanh > 2006	imdb
+select t2.ten from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t3.tieu_de = "james bond"	imdb
+select t2.ten from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t3.tieu_de = "james bond"	imdb
+select t2.ten from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t3.tieu_de = "james bond"	imdb
+select t1.ten from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t2.vai_dien = "alan turing" and t3.tieu_de = "the imitation game"	imdb
+select t1.ten from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t2.vai_dien = "alan turing" and t3.tieu_de = "the imitation game"	imdb
+select t1.ten from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t2.vai_dien = "alan turing" and t3.tieu_de = "the imitation game"	imdb
+select t1.ten from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t2.vai_dien = "alan turing" and t3.tieu_de = "the imitation game"	imdb
+select t1.ten from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t2.vai_dien = "alan turing" and t3.tieu_de = "the imitation game"	imdb
+select t2.the_loai from the_loai as t2 join phan_loai as t1 on t2.id_the_loai = t1.id_the_loai join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t3.tieu_de = "jurassic park"	imdb
+select t2.ten from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t3.nam_phat_hanh = 2015 and t3.tieu_de = "joy"	imdb
+select t1.tieu_de from duoc_viet_boi as t3 join bo_phim as t1 on t3.id_se_ri_phim = t1.id_bo_phim join nha_viet_kich_ban as t2 on t3.id_nha_viet_kich_ban = t2.id_nha_viet_kich_ban where t2.ten = "matt damon"	imdb
+select t2.tieu_de from bo_phim as t2 join duoc_lam_boi as t3 on t2.id_bo_phim = t3.id_se_ri_phim join nha_san_xuat as t1 on t1.id_nha_san_xuat = t3.id_nha_san_xuat join duoc_viet_boi as t5 on t5.id_se_ri_phim = t2.id_bo_phim join nha_viet_kich_ban as t4 on t5.id_nha_viet_kich_ban = t4.id_nha_viet_kich_ban where t1.ten = "woody allen" and t4.ten = "woody allen"	imdb
+select t2.tieu_de from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join bo_phim as t2 on t2.id_bo_phim = t3.id_se_ri_phim where t1.ten = "robin wright"	imdb
+select t2.tieu_de from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join bo_phim as t2 on t2.id_bo_phim = t3.id_se_ri_phim where t1.ten = "robin wright"	imdb
+select t2.tieu_de from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join bo_phim as t2 on t2.id_bo_phim = t3.id_se_ri_phim where t1.ten = "robin wright"	imdb
+select ngan_sach from bo_phim where nam_phat_hanh = 2007 and tieu_de = "juno"	imdb
+select t3.tieu_de from the_loai as t2 join phan_loai as t1 on t2.id_the_loai = t1.id_the_loai join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t2.the_loai = "sci-fi" and t3.nam_phat_hanh = 2010	imdb
+select t3.tieu_de from the_loai as t2 join phan_loai as t1 on t2.id_the_loai = t1.id_the_loai join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t2.the_loai = "sci-fi" and t3.nam_phat_hanh = 2010	imdb
+select ten from dien_vien where noi_sinh = "austin" and nam_sinh > 1980	imdb
+select ten from dien_vien where noi_sinh = "austin" and nam_sinh > 1980	imdb
+select ten from dien_vien where noi_sinh = "austin" and nam_sinh > 1980	imdb
+select t3.tieu_de from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t2.noi_sinh = "los angeles"	imdb
+select ten from dien_vien where noi_sinh = "new york city" and nam_sinh = 1984	imdb
+select t3.tieu_de from nhan as t2 join tu_khoa as t1 on t2.id_tu_khoa = t1.id join bo_phim as t3 on t2.id_se_ri_phim = t3.id_bo_phim where t1.tu_khoa = "nuclear weapons"	imdb
+select t3.tieu_de from nhan as t2 join tu_khoa as t1 on t2.id_tu_khoa = t1.id join bo_phim as t3 on t2.id_se_ri_phim = t3.id_bo_phim where t1.tu_khoa = "nuclear weapons"	imdb
+select t3.tieu_de from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t2.ten = "alfred hitchcock"	imdb
+select t4.tieu_de from phan_vai as t5 join dien_vien as t1 on t5.id_dien_vien = t1.id_dien_vien join bo_phim as t4 on t4.id_bo_phim = t5.id_se_ri_phim join dao_dien_boi as t2 on t4.id_bo_phim = t2.id_se_ri_phim join dao_dien as t3 on t3.id_dao_dien = t2.id_dao_dien where t1.ten = "taraneh alidoosti" and t3.ten = "asghar farhadi"	imdb
+select t4.tieu_de from phan_vai as t5 join dien_vien as t1 on t5.id_dien_vien = t1.id_dien_vien join bo_phim as t4 on t4.id_bo_phim = t5.id_se_ri_phim join dao_dien_boi as t2 on t4.id_bo_phim = t2.id_se_ri_phim join dao_dien as t3 on t3.id_dao_dien = t2.id_dao_dien where t1.ten = "taraneh alidoosti" and t3.ten = "asghar farhadi"	imdb
+select t4.tieu_de from phan_vai as t5 join dien_vien as t1 on t5.id_dien_vien = t1.id_dien_vien join bo_phim as t4 on t4.id_bo_phim = t5.id_se_ri_phim join dao_dien_boi as t2 on t4.id_bo_phim = t2.id_se_ri_phim join dao_dien as t3 on t3.id_dao_dien = t2.id_dao_dien where t1.ten = "taraneh alidoosti" and t3.ten = "asghar farhadi"	imdb
+select t4.tieu_de from phan_vai as t5 join dien_vien as t1 on t5.id_dien_vien = t1.id_dien_vien join bo_phim as t4 on t4.id_bo_phim = t5.id_se_ri_phim join dao_dien_boi as t2 on t4.id_bo_phim = t2.id_se_ri_phim join dao_dien as t3 on t3.id_dao_dien = t2.id_dao_dien where t1.ten = "taraneh alidoosti" and t3.ten = "asghar farhadi"	imdb
+select t2.tieu_de from nha_san_xuat as t1 join duoc_lam_boi as t3 on t1.id_nha_san_xuat = t3.id_nha_san_xuat join phim_truyen_hinh_nhieu_tap as t2 on t2.id_se_ri_phim_truyen_hinh = t3.id_se_ri_phim where t1.ten = "shonda rhimes"	imdb
+select t1.ten from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join phim_truyen_hinh_nhieu_tap as t2 on t2.id_se_ri_phim_truyen_hinh = t3.id_se_ri_phim where t3.vai_dien = "olivia pope" and t2.tieu_de = "scandal"	imdb
+select t2.ten from duoc_viet_boi as t3 join bo_phim as t1 on t3.id_se_ri_phim = t1.id_bo_phim join nha_viet_kich_ban as t2 on t3.id_nha_viet_kich_ban = t2.id_nha_viet_kich_ban where t1.tieu_de = "the truman show"	imdb
+select t2.ten from duoc_viet_boi as t3 join bo_phim as t1 on t3.id_se_ri_phim = t1.id_bo_phim join nha_viet_kich_ban as t2 on t3.id_nha_viet_kich_ban = t2.id_nha_viet_kich_ban where t1.tieu_de = "the truman show"	imdb
+select t2.tieu_de from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join phim_truyen_hinh_nhieu_tap as t2 on t2.id_se_ri_phim_truyen_hinh = t3.id_se_ri_phim where t1.ten = "scott foley"	imdb
+select t2.tieu_de from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join phim_truyen_hinh_nhieu_tap as t2 on t2.id_se_ri_phim_truyen_hinh = t3.id_se_ri_phim where t1.ten = "scott foley"	imdb
+select t3.ten from phan_vai as t4 join dien_vien as t1 on t4.id_dien_vien = t1.id_dien_vien join bo_phim as t5 on t5.id_bo_phim = t4.id_se_ri_phim join dao_dien_boi as t2 on t5.id_bo_phim = t2.id_se_ri_phim join dao_dien as t3 on t3.id_dao_dien = t2.id_dao_dien where t1.ten = "kate winslet"	imdb
+select t1.ten from phan_vai as t3 join dien_vien as t2 on t3.id_dien_vien = t2.id_dien_vien join bo_phim as t5 on t5.id_bo_phim = t3.id_se_ri_phim join duoc_lam_boi as t4 on t5.id_bo_phim = t4.id_se_ri_phim join nha_san_xuat as t1 on t1.id_nha_san_xuat = t4.id_nha_san_xuat where t2.ten = "kate winslet"	imdb
+select t2.ten from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join phim_truyen_hinh_nhieu_tap as t3 on t3.id_se_ri_phim_truyen_hinh = t1.id_se_ri_phim where t3.nam_phat_hanh = 2013 and t3.tieu_de = "house of cards"	imdb
+select ten from dien_vien where noi_sinh = "austin" and gioi_tinh = "female"	imdb
+select ten from dien_vien where nam_sinh > 1980 and quoc_tich = "italy"	imdb
+select ten from dien_vien where noi_sinh = "new york city" and nam_sinh > 1980 and gioi_tinh = "female"	imdb
+select t1.ten from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t1.gioi_tinh = "female" and t3.tieu_de = "saving private ryan"	imdb
+select ten from dao_dien where quoc_tich = "afghanistan"	imdb
+select t1.ten from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t3.tieu_de = "camp x-ray"	imdb
+select t1.ten from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t1.quoc_tich = "canada" and t3.tieu_de = "james bond"	imdb
+select t2.tieu_de from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join bo_phim as t2 on t2.id_bo_phim = t3.id_se_ri_phim where t1.ten = "rowan atkinson" and t3.vai_dien = "mr. bean"	imdb
+select t2.noi_sinh from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t3.tieu_de = "the past"	imdb
+select t1.ten from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien where t2.vai_dien = "mr. bean"	imdb
+select t3.the_loai from dao_dien as t5 join dao_dien_boi as t2 on t5.id_dao_dien = t2.id_dao_dien join bo_phim as t4 on t4.id_bo_phim = t2.id_se_ri_phim join phan_loai as t1 on t4.id_bo_phim = t1.id_se_ri_phim join the_loai as t3 on t3.id_the_loai = t1.id_the_loai where t5.ten = "asghar farhadi"	imdb
+select t1.tieu_de from bo_phim as t1 join phan_vai as t2 on t1.id_bo_phim = t2.id_se_ri_phim where t2.vai_dien = "daffy duck"	imdb
+select t2.vai_dien from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t3.tieu_de = "daddy long legs"	imdb
+select t3.ten from dao_dien as t3 join dao_dien_boi as t2 on t3.id_dao_dien = t2.id_dao_dien join bo_phim as t4 on t4.id_bo_phim = t2.id_se_ri_phim join nhan as t5 on t5.id_se_ri_phim = t4.id_bo_phim join tu_khoa as t1 on t5.id_tu_khoa = t1.id where t1.tu_khoa = "nuclear weapons"	imdb
+select count ( distinct t2.tieu_de ) from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join bo_phim as t2 on t2.id_bo_phim = t3.id_se_ri_phim where t1.ten = "jennifer aniston" and t2.nam_phat_hanh > 2010	imdb
+select count ( distinct t1.ten ) from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t3.tieu_de = "saving private ryan"	imdb
+select count ( distinct t1.ten ) from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t3.tieu_de = "saving private ryan"	imdb
+select count ( distinct t3.tieu_de ) from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t2.ten = "steven spielberg"	imdb
+select count ( distinct tieu_de ) from bo_phim where nam_phat_hanh = 2013	imdb
+select count ( distinct tieu_de ) from bo_phim where nam_phat_hanh = 2013	imdb
+select count ( distinct t3.tieu_de ) , t3.nam_phat_hanh from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t2.ten = "woody allen" group by t3.nam_phat_hanh	imdb
+select count ( distinct t2.tieu_de ) from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join bo_phim as t2 on t2.id_bo_phim = t3.id_se_ri_phim where t1.ten = "shahab hosseini"	imdb
+select count ( distinct t2.tieu_de ) from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join bo_phim as t2 on t2.id_bo_phim = t3.id_se_ri_phim where t1.ten = "shahab hosseini"	imdb
+select count ( distinct t2.tieu_de ) from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join bo_phim as t2 on t2.id_bo_phim = t3.id_se_ri_phim where t1.ten = "shahab hosseini"	imdb
+select count ( distinct t2.tieu_de ) from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join bo_phim as t2 on t2.id_bo_phim = t3.id_se_ri_phim where t1.ten = "shahab hosseini"	imdb
+select count ( distinct ten ) from dien_vien where noi_sinh = "los angeles" and nam_sinh > 2000	imdb
+select count ( distinct t2.tieu_de ) from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join bo_phim as t2 on t2.id_bo_phim = t3.id_se_ri_phim where t1.ten = "humphrey bogart" and t2.nam_phat_hanh < 1942	imdb
+select count ( distinct t2.tieu_de ) , t2.nam_phat_hanh from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join bo_phim as t2 on t2.id_bo_phim = t3.id_se_ri_phim where t1.ten = "brad pitt" group by t2.nam_phat_hanh	imdb
+select count ( distinct t3.tieu_de ) from nhan as t2 join tu_khoa as t1 on t2.id_tu_khoa = t1.id join bo_phim as t3 on t2.id_se_ri_phim = t3.id_bo_phim where t1.tu_khoa = "iraq war" and t3.nam_phat_hanh = 2015	imdb
+select count ( distinct t3.tieu_de ) from nhan as t2 join tu_khoa as t1 on t2.id_tu_khoa = t1.id join bo_phim as t3 on t2.id_se_ri_phim = t3.id_bo_phim where t1.tu_khoa = "persians" and t3.nam_phat_hanh > 1990	imdb
+select count ( distinct t3.tieu_de ) from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t2.ten = "quentin tarantino" and t3.nam_phat_hanh > 2010	imdb
+select count ( distinct t3.tieu_de ) from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t2.ten = "quentin tarantino" and t3.nam_phat_hanh < 2010	imdb
+select count ( distinct t4.tieu_de ) from dao_dien as t3 join dao_dien_boi as t2 on t3.id_dao_dien = t2.id_dao_dien join bo_phim as t4 on t4.id_bo_phim = t2.id_se_ri_phim join duoc_lam_boi as t5 on t4.id_bo_phim = t5.id_se_ri_phim join nha_san_xuat as t1 on t1.id_nha_san_xuat = t5.id_nha_san_xuat where t3.ten = "quentin tarantino" and t4.nam_phat_hanh < 2010 and t4.nam_phat_hanh > 2002	imdb
+select count ( distinct ten ) from dien_vien where noi_sinh = "new york city" and nam_sinh > 1980 and gioi_tinh = "female"	imdb
+select count ( distinct t1.ten ) from phan_vai as t4 join dien_vien as t1 on t4.id_dien_vien = t1.id_dien_vien join bo_phim as t5 on t5.id_bo_phim = t4.id_se_ri_phim join dao_dien_boi as t2 on t5.id_bo_phim = t2.id_se_ri_phim join dao_dien as t3 on t3.id_dao_dien = t2.id_dao_dien where t1.quoc_tich = "iran" and t3.ten = "jim jarmusch"	imdb
+select count ( distinct t1.ten ) from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t1.quoc_tich = "china" and t3.tieu_de = "rush hour 3"	imdb
+select t4.tieu_de from phan_vai as t5 join dien_vien as t1 on t5.id_dien_vien = t1.id_dien_vien join bo_phim as t4 on t4.id_bo_phim = t5.id_se_ri_phim join phan_vai as t3 on t4.id_bo_phim = t3.id_se_ri_phim join dien_vien as t2 on t3.id_dien_vien = t2.id_dien_vien where t1.ten = "woody strode" and t2.ten = "jason robards"	imdb
+select t4.tieu_de from phan_vai as t5 join dien_vien as t1 on t5.id_dien_vien = t1.id_dien_vien join bo_phim as t4 on t4.id_bo_phim = t5.id_se_ri_phim join phan_vai as t3 on t4.id_bo_phim = t3.id_se_ri_phim join dien_vien as t2 on t3.id_dien_vien = t2.id_dien_vien where t1.ten = "woody strode" and t2.ten = "jason robards"	imdb
+select t4.tieu_de from phan_vai as t5 join dien_vien as t1 on t5.id_dien_vien = t1.id_dien_vien join bo_phim as t4 on t4.id_bo_phim = t5.id_se_ri_phim join phan_vai as t3 on t4.id_bo_phim = t3.id_se_ri_phim join dien_vien as t2 on t3.id_dien_vien = t2.id_dien_vien where t1.ten = "woody strode" and t2.ten = "jason robards"	imdb
+select t4.tieu_de from phan_vai as t5 join dien_vien as t1 on t5.id_dien_vien = t1.id_dien_vien join bo_phim as t4 on t4.id_bo_phim = t5.id_se_ri_phim join phan_vai as t3 on t4.id_bo_phim = t3.id_se_ri_phim join dien_vien as t2 on t3.id_dien_vien = t2.id_dien_vien where t1.ten = "woody strode" and t2.ten = "jason robards"	imdb
+select t1.ten from phan_vai as t4 join dien_vien as t1 on t4.id_dien_vien = t1.id_dien_vien join bo_phim as t5 on t5.id_bo_phim = t4.id_se_ri_phim join phan_vai as t3 on t5.id_bo_phim = t3.id_se_ri_phim join dien_vien as t2 on t3.id_dien_vien = t2.id_dien_vien where t2.ten = "tom hanks"	imdb
+select t3.tieu_de from dao_dien as t5 join dao_dien_boi as t2 on t5.id_dao_dien = t2.id_dao_dien join dao_dien_boi as t1 on t5.id_dao_dien = t1.id_dao_dien join bo_phim as t4 on t4.id_bo_phim = t2.id_se_ri_phim join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t4.tieu_de = "revolutionary road"	imdb
+select t3.tieu_de from the_loai as t2 join phan_loai as t1 on t2.id_the_loai = t1.id_the_loai join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim group by t3.tieu_de order by count ( distinct t2.the_loai ) desc limit 1	imdb
+select t2.tieu_de from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join bo_phim as t2 on t2.id_bo_phim = t3.id_se_ri_phim where t1.quoc_tich = "china" group by t2.tieu_de order by count ( distinct t1.ten ) desc limit 1	imdb
+select t1.ten from phan_vai as t4 join dien_vien as t1 on t4.id_dien_vien = t1.id_dien_vien join bo_phim as t5 on t5.id_bo_phim = t4.id_se_ri_phim join dao_dien_boi as t2 on t5.id_bo_phim = t2.id_se_ri_phim join dao_dien as t3 on t3.id_dao_dien = t2.id_dao_dien where t3.ten = "quentin tarantino" order by t5.nam_phat_hanh desc limit 1	imdb
+select t3.ngan_sach , t3.tieu_de from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t2.ten = "quentin tarantino" order by t3.nam_phat_hanh desc limit 1	imdb
+select t3.tieu_de from dao_dien as t2 join dao_dien_boi as t1 on t2.id_dao_dien = t1.id_dao_dien join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t2.ten = "jim jarmusch" order by t3.nam_phat_hanh desc limit 1	imdb
+select t1.ten from dao_dien as t3 join dao_dien_boi as t2 on t3.id_dao_dien = t2.id_dao_dien join bo_phim as t4 on t4.id_bo_phim = t2.id_se_ri_phim join duoc_lam_boi as t5 on t4.id_bo_phim = t5.id_se_ri_phim join nha_san_xuat as t1 on t1.id_nha_san_xuat = t5.id_nha_san_xuat group by t1.ten order by count ( distinct t3.ten ) desc limit 1	imdb
+select t1.ten from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t1.ten = "gabriele ferzetti" order by t3.nam_phat_hanh desc limit 1	imdb
+select chi_tiet_khach_hang from khach_hang order by chi_tiet_khach_hang	insurance_and_eClaims
+select chi_tiet_khach_hang from khach_hang order by chi_tiet_khach_hang	insurance_and_eClaims
+select ma_loai_chinh_sach from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.chi_tiet_khach_hang = "dayana robel"	insurance_and_eClaims
+select ma_loai_chinh_sach from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.chi_tiet_khach_hang = "dayana robel"	insurance_and_eClaims
+select ma_loai_chinh_sach from chinh_sach group by ma_loai_chinh_sach order by count ( * ) desc limit 1	insurance_and_eClaims
+select ma_loai_chinh_sach from chinh_sach group by ma_loai_chinh_sach order by count ( * ) desc limit 1	insurance_and_eClaims
+select ma_loai_chinh_sach from chinh_sach group by ma_loai_chinh_sach having count ( * ) > 2	insurance_and_eClaims
+select ma_loai_chinh_sach from chinh_sach group by ma_loai_chinh_sach having count ( * ) > 2	insurance_and_eClaims
+select sum ( so_tien_duoc_tra ) , avg ( so_tien_duoc_tra ) from tieu_de_cua_yeu_cau	insurance_and_eClaims
+select sum ( so_tien_duoc_tra ) , avg ( so_tien_duoc_tra ) from tieu_de_cua_yeu_cau	insurance_and_eClaims
+select sum ( t1.so_tien_duoc_yeu_cau ) from tieu_de_cua_yeu_cau as t1 join tai_lieu_cua_yeu_cau as t2 on t1.id_tieu_de_cua_yeu_cau = t2.id_yeu_cau where t2.ngay_tao_ra = ( select ngay_tao_ra from tai_lieu_cua_yeu_cau order by ngay_tao_ra limit 1 )	insurance_and_eClaims
+select sum ( t1.so_tien_duoc_yeu_cau ) from tieu_de_cua_yeu_cau as t1 join tai_lieu_cua_yeu_cau as t2 on t1.id_tieu_de_cua_yeu_cau = t2.id_yeu_cau where t2.ngay_tao_ra = ( select ngay_tao_ra from tai_lieu_cua_yeu_cau order by ngay_tao_ra limit 1 )	insurance_and_eClaims
+select t3.chi_tiet_khach_hang from tieu_de_cua_yeu_cau as t1 join chinh_sach as t2 on t1.id_chinh_sach = t2.id_chinh_sach join khach_hang as t3 on t2.id_khach_hang = t3.id_khach_hang where t1.so_tien_duoc_yeu_cau = ( select max ( so_tien_duoc_yeu_cau ) from tieu_de_cua_yeu_cau )	insurance_and_eClaims
+select t3.chi_tiet_khach_hang from tieu_de_cua_yeu_cau as t1 join chinh_sach as t2 on t1.id_chinh_sach = t2.id_chinh_sach join khach_hang as t3 on t2.id_khach_hang = t3.id_khach_hang where t1.so_tien_duoc_yeu_cau = ( select max ( so_tien_duoc_yeu_cau ) from tieu_de_cua_yeu_cau )	insurance_and_eClaims
+select t3.chi_tiet_khach_hang from tieu_de_cua_yeu_cau as t1 join chinh_sach as t2 on t1.id_chinh_sach = t2.id_chinh_sach join khach_hang as t3 on t2.id_khach_hang = t3.id_khach_hang where t1.so_tien_duoc_tra = ( select min ( so_tien_duoc_tra ) from tieu_de_cua_yeu_cau )	insurance_and_eClaims
+select t3.chi_tiet_khach_hang from tieu_de_cua_yeu_cau as t1 join chinh_sach as t2 on t1.id_chinh_sach = t2.id_chinh_sach join khach_hang as t3 on t2.id_khach_hang = t3.id_khach_hang where t1.so_tien_duoc_tra = ( select min ( so_tien_duoc_tra ) from tieu_de_cua_yeu_cau )	insurance_and_eClaims
+select chi_tiet_khach_hang from khach_hang except select t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang	insurance_and_eClaims
+select chi_tiet_khach_hang from khach_hang except select t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang	insurance_and_eClaims
+select count ( * ) from giai_doan_xu_ly_yeu_cau	insurance_and_eClaims
+select count ( * ) from giai_doan_xu_ly_yeu_cau	insurance_and_eClaims
+select t2.ten_tinh_trang_yeu_cau from xu_ly_yeu_cau as t1 join giai_doan_xu_ly_yeu_cau as t2 on t1.id_giai_doan_xu_ly_yeu_cau = t2.id_giai_doan_yeu_cau group by t1.id_giai_doan_xu_ly_yeu_cau order by count ( * ) desc limit 1	insurance_and_eClaims
+select t2.ten_tinh_trang_yeu_cau from xu_ly_yeu_cau as t1 join giai_doan_xu_ly_yeu_cau as t2 on t1.id_giai_doan_xu_ly_yeu_cau = t2.id_giai_doan_yeu_cau group by t1.id_giai_doan_xu_ly_yeu_cau order by count ( * ) desc limit 1	insurance_and_eClaims
+select chi_tiet_khach_hang from khach_hang where chi_tiet_khach_hang like "%diana%"	insurance_and_eClaims
+select chi_tiet_khach_hang from khach_hang where chi_tiet_khach_hang like "%diana%"	insurance_and_eClaims
+select distinct t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ma_loai_chinh_sach = "deputy"	insurance_and_eClaims
+select distinct t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ma_loai_chinh_sach = "deputy"	insurance_and_eClaims
+select distinct t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ma_loai_chinh_sach = "deputy" or t1.ma_loai_chinh_sach = "uniform"	insurance_and_eClaims
+select distinct t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ma_loai_chinh_sach = "deputy" or t1.ma_loai_chinh_sach = "uniform"	insurance_and_eClaims
+select chi_tiet_khach_hang from khach_hang union select chi_tiet_nhan_vien from nhan_vien	insurance_and_eClaims
+select chi_tiet_khach_hang from khach_hang union select chi_tiet_nhan_vien from nhan_vien	insurance_and_eClaims
+select ma_loai_chinh_sach , count ( * ) from chinh_sach group by ma_loai_chinh_sach	insurance_and_eClaims
+select ma_loai_chinh_sach , count ( * ) from chinh_sach group by ma_loai_chinh_sach	insurance_and_eClaims
+select t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t2.chi_tiet_khach_hang order by count ( * ) desc limit 1	insurance_and_eClaims
+select t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t2.chi_tiet_khach_hang order by count ( * ) desc limit 1	insurance_and_eClaims
+select mo_ta_ve_tinh_trang_yeu_cau from giai_doan_xu_ly_yeu_cau where ten_tinh_trang_yeu_cau = "open"	insurance_and_eClaims
+select mo_ta_ve_tinh_trang_yeu_cau from giai_doan_xu_ly_yeu_cau where ten_tinh_trang_yeu_cau = "open"	insurance_and_eClaims
+select count ( distinct ma_ket_qua_cua_yeu_cau ) from xu_ly_yeu_cau	insurance_and_eClaims
+select count ( distinct ma_ket_qua_cua_yeu_cau ) from xu_ly_yeu_cau	insurance_and_eClaims
+select t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ngay_bat_dau = ( select max ( ngay_bat_dau ) from chinh_sach )	insurance_and_eClaims
+select t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ngay_bat_dau = ( select max ( ngay_bat_dau ) from chinh_sach )	insurance_and_eClaims
+select t1.chi_tiet_su_kien from su_kien as t1 join dich_vu as t2 on t1.id_dich_vu = t2.id_dich_vu where t2.ma_loai_dich_vu = "marriage"	local_govt_in_alabama
+select t1.id_su_kien , t1.chi_tiet_su_kien from su_kien as t1 join nguoi_tham_gia_su_kien as t2 on t1.id_su_kien = t2.id_su_kien group by t1.id_su_kien having count ( * ) > 1	local_govt_in_alabama
+select t1.id_nguoi_tham_gia , t1.ma_loai_nguoi_tham_gia , count ( * ) from nguoi_tham_gia as t1 join nguoi_tham_gia_su_kien as t2 on t1.id_nguoi_tham_gia = t2.id_nguoi_tham_gia group by t1.id_nguoi_tham_gia	local_govt_in_alabama
+select id_nguoi_tham_gia , ma_loai_nguoi_tham_gia , chi_tiet_nguoi_tham_gia from nguoi_tham_gia	local_govt_in_alabama
+select count ( * ) from nguoi_tham_gia where ma_loai_nguoi_tham_gia = "organizer"	local_govt_in_alabama
+select ma_loai_dich_vu from dich_vu order by ma_loai_dich_vu	local_govt_in_alabama
+select id_dich_vu , chi_tiet_su_kien from su_kien	local_govt_in_alabama
+select count ( * ) from nguoi_tham_gia as t1 join nguoi_tham_gia_su_kien as t2 on t1.id_nguoi_tham_gia = t2.id_nguoi_tham_gia where t1.chi_tiet_nguoi_tham_gia like "%dr.%"	local_govt_in_alabama
+select ma_loai_nguoi_tham_gia from nguoi_tham_gia group by ma_loai_nguoi_tham_gia order by count ( * ) desc limit 1	local_govt_in_alabama
+select t3.id_dich_vu , t4.ma_loai_dich_vu from nguoi_tham_gia as t1 join nguoi_tham_gia_su_kien as t2 on t1.id_nguoi_tham_gia = t2.id_nguoi_tham_gia join su_kien as t3 on t2.id_su_kien = t3.id_su_kien join dich_vu as t4 on t3.id_dich_vu = t4.id_dich_vu group by t3.id_dich_vu order by count ( * ) asc limit 1	local_govt_in_alabama
+select id_su_kien from nguoi_tham_gia_su_kien group by id_su_kien order by count ( * ) desc limit 1	local_govt_in_alabama
+select id_su_kien from su_kien except select t1.id_su_kien from nguoi_tham_gia_su_kien as t1 join nguoi_tham_gia as t2 on t1.id_nguoi_tham_gia = t2.id_nguoi_tham_gia where chi_tiet_nguoi_tham_gia = "kenyatta kuhn"	local_govt_in_alabama
+select t1.ma_loai_dich_vu from dich_vu as t1 join su_kien as t2 on t1.id_dich_vu = t2.id_dich_vu where t2.chi_tiet_su_kien = "success" intersect select t1.ma_loai_dich_vu from dich_vu as t1 join su_kien as t2 on t1.id_dich_vu = t2.id_dich_vu where t2.chi_tiet_su_kien = "fail"	local_govt_in_alabama
+select count ( * ) from su_kien where id_su_kien not in ( select id_su_kien from nguoi_tham_gia_su_kien )	local_govt_in_alabama
+select count ( distinct id_nguoi_tham_gia ) from nguoi_tham_gia_su_kien	local_govt_in_alabama
+select count ( * ) from ky_thuat_vien	machine_repair
+select count ( * ) from ky_thuat_vien	machine_repair
+select ten from ky_thuat_vien order by tuoi asc	machine_repair
+select ten from ky_thuat_vien order by tuoi asc	machine_repair
+select doi , nam_bat_dau from ky_thuat_vien	machine_repair
+select doi , nam_bat_dau from ky_thuat_vien	machine_repair
+select ten from ky_thuat_vien where doi != "nyy"	machine_repair
+select ten from ky_thuat_vien where doi != "nyy"	machine_repair
+select ten from ky_thuat_vien where tuoi = 36 or tuoi = 37	machine_repair
+select ten from ky_thuat_vien where tuoi = 36 or tuoi = 37	machine_repair
+select nam_bat_dau from ky_thuat_vien order by tuoi desc limit 1	machine_repair
+select nam_bat_dau from ky_thuat_vien order by tuoi desc limit 1	machine_repair
+select doi , count ( * ) from ky_thuat_vien group by doi	machine_repair
+select doi , count ( * ) from ky_thuat_vien group by doi	machine_repair
+select doi from ky_thuat_vien group by doi order by count ( * ) desc limit 1	machine_repair
+select doi from ky_thuat_vien group by doi order by count ( * ) desc limit 1	machine_repair
+select doi from ky_thuat_vien group by doi having count ( * ) >= 2	machine_repair
+select doi from ky_thuat_vien group by doi having count ( * ) >= 2	machine_repair
+select t3.ten , t2.loat_may from phan_cong_sua_chua as t1 join may_moc as t2 on t1.id_may = t2.id_may join ky_thuat_vien as t3 on t1.id_ky_thuat_vien = t3.id_ky_thuat_vien	machine_repair
+select t3.ten , t2.loat_may from phan_cong_sua_chua as t1 join may_moc as t2 on t1.id_may = t2.id_may join ky_thuat_vien as t3 on t1.id_ky_thuat_vien = t3.id_ky_thuat_vien	machine_repair
+select t3.ten from phan_cong_sua_chua as t1 join may_moc as t2 on t1.id_may = t2.id_may join ky_thuat_vien as t3 on t1.id_ky_thuat_vien = t3.id_ky_thuat_vien order by t2.xep_hang_chat_luong	machine_repair
+select t3.ten from phan_cong_sua_chua as t1 join may_moc as t2 on t1.id_may = t2.id_may join ky_thuat_vien as t3 on t1.id_ky_thuat_vien = t3.id_ky_thuat_vien order by t2.xep_hang_chat_luong	machine_repair
+select t3.ten from phan_cong_sua_chua as t1 join may_moc as t2 on t1.id_may = t2.id_may join ky_thuat_vien as t3 on t1.id_ky_thuat_vien = t3.id_ky_thuat_vien where t2.diem_gia_tri > 70	machine_repair
+select t3.ten from phan_cong_sua_chua as t1 join may_moc as t2 on t1.id_may = t2.id_may join ky_thuat_vien as t3 on t1.id_ky_thuat_vien = t3.id_ky_thuat_vien where t2.diem_gia_tri > 70	machine_repair
+select t2.ten , count ( * ) from phan_cong_sua_chua as t1 join ky_thuat_vien as t2 on t1.id_ky_thuat_vien = t2.id_ky_thuat_vien group by t2.ten	machine_repair
+select t2.ten , count ( * ) from phan_cong_sua_chua as t1 join ky_thuat_vien as t2 on t1.id_ky_thuat_vien = t2.id_ky_thuat_vien group by t2.ten	machine_repair
+select ten from ky_thuat_vien where id_ky_thuat_vien not in ( select id_ky_thuat_vien from phan_cong_sua_chua )	machine_repair
+select ten from ky_thuat_vien where id_ky_thuat_vien not in ( select id_ky_thuat_vien from phan_cong_sua_chua )	machine_repair
+select nam_bat_dau from ky_thuat_vien where doi = "cle" intersect select nam_bat_dau from ky_thuat_vien where doi = "cws"	machine_repair
+select nam_bat_dau from ky_thuat_vien where doi = "cle" intersect select nam_bat_dau from ky_thuat_vien where doi = "cws"	machine_repair
+select count ( * ) from ong_kinh_may_anh where do_dai_tieu_cu_theo_mm > 15	mountain_photos
+select nhan_hieu , ten from ong_kinh_may_anh order by khau_do_toi_da desc	mountain_photos
+select id , mau_sac , ten from anh	mountain_photos
+select max ( chieu_cao ) , avg ( chieu_cao ) from nui	mountain_photos
+select avg ( do_noi ) from nui where quoc_gia = "morocco"	mountain_photos
+select ten , chieu_cao , do_noi from nui where day_nui != "aberdare range"	mountain_photos
+select t1.id , t1.ten from nui as t1 join anh as t2 on t1.id = t2.id_nui where t1.chieu_cao > 4000	mountain_photos
+select t1.id , t1.ten from nui as t1 join anh as t2 on t1.id = t2.id_nui group by t1.id having count ( * ) >= 2	mountain_photos
+select t2.ten from anh as t1 join ong_kinh_may_anh as t2 on t1.id_ong_kinh_may_anh = t2.id group by t2.id order by count ( * ) desc limit 1	mountain_photos
+select t1.ten from ong_kinh_may_anh as t1 join anh as t2 on t2.id_ong_kinh_may_anh = t1.id where t1.nhan_hieu = "sigma" or t1.nhan_hieu = "olympus"	mountain_photos
+select count ( distinct nhan_hieu ) from ong_kinh_may_anh	mountain_photos
+select count ( * ) from ong_kinh_may_anh where id not in ( select id_ong_kinh_may_anh from anh )	mountain_photos
+select count ( distinct t2.id_ong_kinh_may_anh ) from nui as t1 join anh as t2 on t1.id = t2.id_nui where t1.quoc_gia = "ethiopia"	mountain_photos
+select t3.nhan_hieu from nui as t1 join anh as t2 on t1.id = t2.id_nui join ong_kinh_may_anh as t3 on t2.id_ong_kinh_may_anh = t3.id where t1.day_nui = "toubkal atlas" intersect select t3.nhan_hieu from nui as t1 join anh as t2 on t1.id = t2.id_nui join ong_kinh_may_anh as t3 on t2.id_ong_kinh_may_anh = t3.id where t1.day_nui = "lasta massif"	mountain_photos
+select ten , do_noi from nui except select t1.ten , t1.do_noi from nui as t1 join anh as t2 on t1.id = t2.id_nui join ong_kinh_may_anh as t3 on t2.id_ong_kinh_may_anh = t3.id where t3.nhan_hieu = "sigma"	mountain_photos
+select ten from ong_kinh_may_anh where ten like "%digital%"	mountain_photos
+select t1.ten , count ( * ) from ong_kinh_may_anh as t1 join anh as t2 on t1.id = t2.id_ong_kinh_may_anh group by t1.id order by count ( * )	mountain_photos
+select count ( * ) from ban_nhac	music_2
+select count ( * ) from ban_nhac	music_2
+select distinct hang_thu_am from album	music_2
+select distinct hang_thu_am from album	music_2
+select * from album where nam = 2012	music_2
+select * from album where nam = 2012	music_2
+select distinct t1.vi_tri_tren_san_khau from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where ten = "solveig"	music_2
+select distinct t1.vi_tri_tren_san_khau from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where ten = "solveig"	music_2
+select count ( * ) from bai_hat	music_2
+select count ( * ) from bai_hat	music_2
+select t3.tieu_de from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t2.ho = "heilo"	music_2
+select t3.tieu_de from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t2.ho = "heilo"	music_2
+select count ( * ) from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t3.tieu_de = "flash"	music_2
+select count ( * ) from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t3.tieu_de = "flash"	music_2
+select t3.tieu_de from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t2.ten = "marianne"	music_2
+select t3.tieu_de from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t2.ten = "marianne"	music_2
+select t2.ten , t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t3.tieu_de = "badlands"	music_2
+select t2.ten , t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t3.tieu_de = "badlands"	music_2
+select t2.ten , t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t3.tieu_de = "badlands" and t1.vi_tri_tren_san_khau = "back"	music_2
+select t2.ten , t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t3.tieu_de = "badlands" and t1.vi_tri_tren_san_khau = "back"	music_2
+select count ( distinct hang_thu_am ) from album	music_2
+select count ( distinct hang_thu_am ) from album	music_2
+select hang_thu_am from album group by hang_thu_am order by count ( * ) desc limit 1	music_2
+select hang_thu_am from album group by hang_thu_am order by count ( * ) desc limit 1	music_2
+select t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat group by ho order by count ( * ) desc limit 1	music_2
+select t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat group by ho order by count ( * ) desc limit 1	music_2
+select t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where vi_tri_tren_san_khau = "back" group by ho order by count ( * ) desc limit 1	music_2
+select t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where vi_tri_tren_san_khau = "back" group by ho order by count ( * ) desc limit 1	music_2
+select tieu_de from bai_hat where tieu_de like "% the %"	music_2
+select tieu_de from bai_hat where tieu_de like "% the %"	music_2
+select distinct nhac_cu from nhac_cu	music_2
+select distinct nhac_cu from nhac_cu	music_2
+select t4.nhac_cu from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat join nhac_cu as t4 on t4.id_bai_hat = t3.id_bai_hat and t4.id_nghe_si_trong_ban_nhac = t2.id where t2.ho = "heilo" and t3.tieu_de = "le pop"	music_2
+select t4.nhac_cu from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat join nhac_cu as t4 on t4.id_bai_hat = t3.id_bai_hat and t4.id_nghe_si_trong_ban_nhac = t2.id where t2.ho = "heilo" and t3.tieu_de = "le pop"	music_2
+select nhac_cu from nhac_cu group by nhac_cu order by count ( * ) desc limit 1	music_2
+select nhac_cu from nhac_cu group by nhac_cu order by count ( * ) desc limit 1	music_2
+select count ( * ) from nhac_cu where nhac_cu = "drums"	music_2
+select count ( * ) from nhac_cu where nhac_cu = "drums"	music_2
+select nhac_cu from nhac_cu as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where tieu_de = "le pop"	music_2
+select nhac_cu from nhac_cu as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where tieu_de = "le pop"	music_2
+select count ( distinct nhac_cu ) from nhac_cu as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where tieu_de = "le pop"	music_2
+select count ( distinct nhac_cu ) from nhac_cu as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where tieu_de = "le pop"	music_2
+select count ( distinct nhac_cu ) from nhac_cu as t1 join ban_nhac as t2 on t1.id_nghe_si_trong_ban_nhac = t2.id where t2.ho = "heilo"	music_2
+select count ( distinct nhac_cu ) from nhac_cu as t1 join ban_nhac as t2 on t1.id_nghe_si_trong_ban_nhac = t2.id where t2.ho = "heilo"	music_2
+select nhac_cu from nhac_cu as t1 join ban_nhac as t2 on t1.id_nghe_si_trong_ban_nhac = t2.id where t2.ho = "heilo"	music_2
+select nhac_cu from nhac_cu as t1 join ban_nhac as t2 on t1.id_nghe_si_trong_ban_nhac = t2.id where t2.ho = "heilo"	music_2
+select tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat group by t1.id_bai_hat order by count ( * ) desc limit 1	music_2
+select tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat group by t1.id_bai_hat order by count ( * ) desc limit 1	music_2
+select loai from giong_hat group by loai order by count ( * ) desc limit 1	music_2
+select loai from giong_hat group by loai order by count ( * ) desc limit 1	music_2
+select loai from giong_hat as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where ho = "heilo" group by loai order by count ( * ) desc limit 1	music_2
+select loai from giong_hat as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where ho = "heilo" group by loai order by count ( * ) desc limit 1	music_2
+select loai from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where tieu_de = "le pop"	music_2
+select loai from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where tieu_de = "le pop"	music_2
+select count ( * ) from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where tieu_de = "demon kitty rag"	music_2
+select count ( * ) from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where tieu_de = "demon kitty rag"	music_2
+select count ( distinct tieu_de ) from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where loai = "lead"	music_2
+select count ( distinct tieu_de ) from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where loai = "lead"	music_2
+select loai from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat join ban_nhac as t3 on t1.nghe_si_trong_ban_nhac = t3.id where t3.ten = "solveig" and t2.tieu_de = "a bar in amsterdam"	music_2
+select loai from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat join ban_nhac as t3 on t1.nghe_si_trong_ban_nhac = t3.id where t3.ten = "solveig" and t2.tieu_de = "a bar in amsterdam"	music_2
+select distinct tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat except select t2.tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where loai = "lead"	music_2
+select distinct tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat except select t2.tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where loai = "lead"	music_2
+select distinct loai from giong_hat	music_2
+select distinct loai from giong_hat	music_2
+select * from album where nam = 2010	music_2
+select * from album where nam = 2010	music_2
+select t2.ten , t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t3.tieu_de = "le pop"	music_2
+select t2.ten , t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t3.tieu_de = "le pop"	music_2
+select t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat group by ho order by count ( * ) desc limit 1	music_2
+select t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat group by ho order by count ( * ) desc limit 1	music_2
+select t4.nhac_cu from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat join nhac_cu as t4 on t4.id_bai_hat = t3.id_bai_hat and t4.id_nghe_si_trong_ban_nhac = t2.id where t2.ho = "heilo" and t3.tieu_de = "badlands"	music_2
+select t4.nhac_cu from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat join nhac_cu as t4 on t4.id_bai_hat = t3.id_bai_hat and t4.id_nghe_si_trong_ban_nhac = t2.id where t2.ho = "heilo" and t3.tieu_de = "badlands"	music_2
+select count ( distinct nhac_cu ) from nhac_cu as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where tieu_de = "badlands"	music_2
+select count ( distinct nhac_cu ) from nhac_cu as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where tieu_de = "badlands"	music_2
+select loai from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where tieu_de = "badlands"	music_2
+select loai from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where tieu_de = "badlands"	music_2
+select count ( * ) from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where tieu_de = "le pop"	music_2
+select count ( * ) from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where tieu_de = "le pop"	music_2
+select count ( distinct tieu_de ) from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where loai = "shared"	music_2
+select count ( distinct tieu_de ) from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where loai = "shared"	music_2
+select distinct tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat except select t2.tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where loai = "back"	music_2
+select distinct tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat except select t2.tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where loai = "back"	music_2
+select loai from giong_hat as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where ten = "solveig" group by loai order by count ( * ) desc limit 1	music_2
+select loai from giong_hat as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where ten = "solveig" group by loai order by count ( * ) desc limit 1	music_2
+select loai from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat join ban_nhac as t3 on t1.nghe_si_trong_ban_nhac = t3.id where t3.ho = "heilo" and t2.tieu_de = "der kapitan"	music_2
+select loai from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat join ban_nhac as t3 on t1.nghe_si_trong_ban_nhac = t3.id where t3.ho = "heilo" and t2.tieu_de = "der kapitan"	music_2
+select t2.ten from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat group by ten order by count ( * ) desc limit 1	music_2
+select t2.ten from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat group by ten order by count ( * ) desc limit 1	music_2
+select loai from giong_hat as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where ten = "marianne" group by loai order by count ( * ) desc limit 1	music_2
+select loai from giong_hat as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where ten = "marianne" group by loai order by count ( * ) desc limit 1	music_2
+select t2.ten , t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t3.tieu_de = "der kapitan" and t1.vi_tri_tren_san_khau = "back"	music_2
+select t2.ten , t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t3.tieu_de = "der kapitan" and t1.vi_tri_tren_san_khau = "back"	music_2
+select distinct tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat except select t2.tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where loai = "back"	music_2
+select distinct tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat except select t2.tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where loai = "back"	music_2
+select t3.tieu_de from album as t1 join danh_sach_bai_hat as t2 on t1.id_album = t2.id_album join bai_hat as t3 on t2.id_bai_hat = t3.id_bai_hat where t1.tieu_de = "a kiss before you go: live in hamburg"	music_2
+select t3.tieu_de from album as t1 join danh_sach_bai_hat as t2 on t1.id_album = t2.id_album join bai_hat as t3 on t2.id_bai_hat = t3.id_bai_hat where t1.tieu_de = "a kiss before you go: live in hamburg"	music_2
+select t3.tieu_de from album as t1 join danh_sach_bai_hat as t2 on t1.id_album = t2.id_album join bai_hat as t3 on t2.id_bai_hat = t3.id_bai_hat where t1.hang_thu_am = "universal music group"	music_2
+select t3.tieu_de from album as t1 join danh_sach_bai_hat as t2 on t1.id_album = t2.id_album join bai_hat as t3 on t2.id_bai_hat = t3.id_bai_hat where t1.hang_thu_am = "universal music group"	music_2
+select count ( distinct t3.tieu_de ) from album as t1 join danh_sach_bai_hat as t2 on t1.id_album = t2.id_album join bai_hat as t3 on t2.id_bai_hat = t3.id_bai_hat where t1.loai = "studio"	music_2
+select count ( distinct t3.tieu_de ) from album as t1 join danh_sach_bai_hat as t2 on t1.id_album = t2.id_album join bai_hat as t3 on t2.id_bai_hat = t3.id_bai_hat where t1.loai = "studio"	music_2
+select t1.khach_hang_tot_hay_xau from khach_hang as t1 join phieu_giam_gia as t2 on t1.id_phieu_giam_gia = t2.id_phieu_giam_gia where t2.so_tien_giam_gia = 500	products_for_hire
+select t1.id_khach_hang , t1.ten , count ( * ) from khach_hang as t1 join luot_dat_mua as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang	products_for_hire
+select id_khach_hang , sum ( so_tien_da_tra ) from thanh_toan group by id_khach_hang order by sum ( so_tien_da_tra ) desc limit 1	products_for_hire
+select t1.id_dat_mua , t1.so_tien_hoan_tra from luot_dat_mua as t1 join thanh_toan as t2 on t1.id_dat_mua = t2.id_dat_mua group by t1.id_dat_mua order by count ( * ) desc limit 1	products_for_hire
+select id_san_pham from san_pham_duoc_dat group by id_san_pham having count ( * ) = 3	products_for_hire
+select t2.mo_ta_san_pham from san_pham_duoc_dat as t1 join san_pham_cho_thue as t2 on t1.id_san_pham = t2.id_san_pham where t1.so_tien_da_dat = 102.76	products_for_hire
+select t3.ngay_bat_dau_dat_mua , t3.ngay_ket_thuc_dat_mua from san_pham_cho_thue as t1 join san_pham_duoc_dat as t2 on t1.id_san_pham = t2.id_san_pham join luot_dat_mua as t3 on t2.id_dat_mua = t3.id_dat_mua where t1.ten_san_pham = "book collection a"	products_for_hire
+select t2.ten_san_pham from san_pham_co_san as t1 join san_pham_cho_thue as t2 on t1.id_san_pham = t2.id_san_pham where t1.co_san_hay_khong = 1	products_for_hire
+select count ( distinct ma_loai_san_pham ) from san_pham_cho_thue	products_for_hire
+select ten , ho , gioi_tinh from khach_hang where khach_hang_tot_hay_xau = "good" order by ho	products_for_hire
+select avg ( so_tien_no ) from thanh_toan	products_for_hire
+select max ( so_luong_dat_mua ) , min ( so_luong_dat_mua ) , avg ( so_luong_dat_mua ) from san_pham_duoc_dat	products_for_hire
+select distinct ma_loai_thanh_toan from thanh_toan	products_for_hire
+select chi_phi_thue_hang_ngay from san_pham_cho_thue where ten_san_pham like "%book%"	products_for_hire
+select count ( * ) from san_pham_cho_thue where id_san_pham not in ( select id_san_pham from san_pham_duoc_dat where so_tien_da_dat > 200 )	products_for_hire
+select t1.so_tien_giam_gia from phieu_giam_gia as t1 join khach_hang as t2 on t1.id_phieu_giam_gia = t2.id_phieu_giam_gia where t2.khach_hang_tot_hay_xau = "good" intersect select t1.so_tien_giam_gia from phieu_giam_gia as t1 join khach_hang as t2 on t1.id_phieu_giam_gia = t2.id_phieu_giam_gia where t2.khach_hang_tot_hay_xau = "bad"	products_for_hire
+select ngay_thanh_toan from thanh_toan where so_tien_da_tra > 300 or ma_loai_thanh_toan = "check"	products_for_hire
+select ten_san_pham , mo_ta_san_pham from san_pham_cho_thue where ma_loai_san_pham = "cutlery" and chi_phi_thue_hang_ngay < 20	products_for_hire
+select ten_nha_hang from nha_hang	restaurant_1
+select dia_chi from nha_hang where ten_nha_hang = "subway"	restaurant_1
+select danh_gia_xep_hang from nha_hang where ten_nha_hang = "subway"	restaurant_1
+select ten_loai_nha_hang from loai_nha_hang	restaurant_1
+select mo_ta_ve_loai_nha_hang from loai_nha_hang where ten_loai_nha_hang = "sandwich"	restaurant_1
+select ten_nha_hang , danh_gia_xep_hang from nha_hang order by danh_gia_xep_hang desc limit 1	restaurant_1
+select tuoi from sinh_vien where ten = "linda" and ho = "smith"	restaurant_1
+select gioi_tinh from sinh_vien where ten = "linda" and ho = "smith"	restaurant_1
+select ten , ho from sinh_vien where chuyen_nganh = 600	restaurant_1
+select ma_thanh_pho from sinh_vien where ten = "linda" and ho = "smith"	restaurant_1
+select count ( * ) from sinh_vien where co_van = 1121	restaurant_1
+select co_van , count ( * ) from sinh_vien group by co_van order by count ( co_van ) desc limit 1	restaurant_1
+select chuyen_nganh , count ( * ) from sinh_vien group by chuyen_nganh order by count ( chuyen_nganh ) asc limit 1	restaurant_1
+select chuyen_nganh , count ( * ) from sinh_vien group by chuyen_nganh having count ( chuyen_nganh ) between 2 and 30	restaurant_1
+select ten , ho from sinh_vien where tuoi > 18 and chuyen_nganh = 600	restaurant_1
+select ten , ho from sinh_vien where tuoi > 18 and chuyen_nganh != 600 and gioi_tinh = "f"	restaurant_1
+select count ( * ) from nha_hang join loai_cua_nha_hang on nha_hang.id_nha_hang = loai_cua_nha_hang.id_nha_hang join loai_nha_hang on loai_cua_nha_hang.id_loai_nha_hang = loai_nha_hang.id_loai_nha_hang group by loai_cua_nha_hang.id_loai_nha_hang having loai_nha_hang.ten_loai_nha_hang = "sandwich"	restaurant_1
+select sum ( thoi_gian_danh_ra ) from sinh_vien join luot_ghe_tham_nha_hang on sinh_vien.id_sinh_vien = luot_ghe_tham_nha_hang.id_sinh_vien where sinh_vien.ten = "linda" and sinh_vien.ho = "smith"	restaurant_1
+select count ( * ) from sinh_vien join luot_ghe_tham_nha_hang on sinh_vien.id_sinh_vien = luot_ghe_tham_nha_hang.id_sinh_vien join nha_hang on luot_ghe_tham_nha_hang.id_nha_hang = nha_hang.id_nha_hang where sinh_vien.ten = "linda" and sinh_vien.ho = "smith" and nha_hang.ten_nha_hang = "subway"	restaurant_1
+select thoi_gian from sinh_vien join luot_ghe_tham_nha_hang on sinh_vien.id_sinh_vien = luot_ghe_tham_nha_hang.id_sinh_vien join nha_hang on luot_ghe_tham_nha_hang.id_nha_hang = nha_hang.id_nha_hang where sinh_vien.ten = "linda" and sinh_vien.ho = "smith" and nha_hang.ten_nha_hang = "subway"	restaurant_1
+select nha_hang.ten_nha_hang , sum ( luot_ghe_tham_nha_hang.thoi_gian_danh_ra ) from luot_ghe_tham_nha_hang join nha_hang on luot_ghe_tham_nha_hang.id_nha_hang = nha_hang.id_nha_hang group by nha_hang.id_nha_hang order by sum ( luot_ghe_tham_nha_hang.thoi_gian_danh_ra ) asc limit 1	restaurant_1
+select sinh_vien.ten , sinh_vien.ho from sinh_vien join luot_ghe_tham_nha_hang on sinh_vien.id_sinh_vien = luot_ghe_tham_nha_hang.id_sinh_vien group by sinh_vien.id_sinh_vien order by count ( * ) desc limit 1	restaurant_1
+select count ( distinct ho ) from dien_vien	sakila_1
+select count ( distinct ho ) from dien_vien	sakila_1
+select ten from dien_vien group by ten order by count ( * ) desc limit 1	sakila_1
+select ten from dien_vien group by ten order by count ( * ) desc limit 1	sakila_1
+select ten , ho from dien_vien group by ten , ho order by count ( * ) desc limit 1	sakila_1
+select ten , ho from dien_vien group by ten , ho order by count ( * ) desc limit 1	sakila_1
+select quan from dia_chi group by quan having count ( * ) >= 2	sakila_1
+select quan from dia_chi group by quan having count ( * ) >= 2	sakila_1
+select so_dien_thoai , ma_buu_dien from dia_chi where dia_chi = "1031 daugavpils parkway"	sakila_1
+select so_dien_thoai , ma_buu_dien from dia_chi where dia_chi = "1031 daugavpils parkway"	sakila_1
+select t2.thanh_pho , count ( * ) , t1.id_thanh_pho from dia_chi as t1 join thanh_pho as t2 on t1.id_thanh_pho = t2.id_thanh_pho group by t1.id_thanh_pho order by count ( * ) desc limit 1	sakila_1
+select t2.thanh_pho , count ( * ) , t1.id_thanh_pho from dia_chi as t1 join thanh_pho as t2 on t1.id_thanh_pho = t2.id_thanh_pho group by t1.id_thanh_pho order by count ( * ) desc limit 1	sakila_1
+select count ( * ) from dia_chi where quan = "california"	sakila_1
+select count ( * ) from dia_chi where quan = "california"	sakila_1
+select tieu_de , id_phim from phim where gia_cho_thue = 0.99 intersect select t1.tieu_de , t1.id_phim from phim as t1 join hang_ton_kho as t2 on t1.id_phim = t2.id_phim group by t1.id_phim having count ( * ) < 3	sakila_1
+select tieu_de , id_phim from phim where gia_cho_thue = 0.99 intersect select t1.tieu_de , t1.id_phim from phim as t1 join hang_ton_kho as t2 on t1.id_phim = t2.id_phim group by t1.id_phim having count ( * ) < 3	sakila_1
+select count ( * ) from thanh_pho as t1 join quoc_gia as t2 on t1.id_quoc_gia = t2.id_quoc_gia where t2.quoc_gia = "australia"	sakila_1
+select count ( * ) from thanh_pho as t1 join quoc_gia as t2 on t1.id_quoc_gia = t2.id_quoc_gia where t2.quoc_gia = "australia"	sakila_1
+select t2.quoc_gia from thanh_pho as t1 join quoc_gia as t2 on t1.id_quoc_gia = t2.id_quoc_gia group by t2.id_quoc_gia having count ( * ) >= 3	sakila_1
+select t2.quoc_gia from thanh_pho as t1 join quoc_gia as t2 on t1.id_quoc_gia = t2.id_quoc_gia group by t2.id_quoc_gia having count ( * ) >= 3	sakila_1
+select ngay_thanh_toan from khoan_thanh_toan where so_tien > 10 union select t1.ngay_thanh_toan from khoan_thanh_toan as t1 join nhan_vien as t2 on t1.id_nhan_vien = t2.id_nhan_vien where t2.ten = "elsa"	sakila_1
+select ngay_thanh_toan from khoan_thanh_toan where so_tien > 10 union select t1.ngay_thanh_toan from khoan_thanh_toan as t1 join nhan_vien as t2 on t1.id_nhan_vien = t2.id_nhan_vien where t2.ten = "elsa"	sakila_1
+select count ( * ) from khach_hang where co_hoat_dong_khong = "1"	sakila_1
+select count ( * ) from khach_hang where co_hoat_dong_khong = "1"	sakila_1
+select tieu_de , gia_cho_thue from phim order by gia_cho_thue desc limit 1	sakila_1
+select tieu_de , gia_cho_thue from phim order by gia_cho_thue desc limit 1	sakila_1
+select t2.tieu_de , t2.id_phim , t2.mo_ta from dien_vien_dien_anh as t1 join phim as t2 on t1.id_phim = t2.id_phim group by t2.id_phim order by count ( * ) desc limit 1	sakila_1
+select t2.tieu_de , t2.id_phim , t2.mo_ta from dien_vien_dien_anh as t1 join phim as t2 on t1.id_phim = t2.id_phim group by t2.id_phim order by count ( * ) desc limit 1	sakila_1
+select t2.ten , t2.ho , t2.id_dien_vien from dien_vien_dien_anh as t1 join dien_vien as t2 on t1.id_dien_vien = t2.id_dien_vien group by t2.id_dien_vien order by count ( * ) desc limit 1	sakila_1
+select t2.ten , t2.ho , t2.id_dien_vien from dien_vien_dien_anh as t1 join dien_vien as t2 on t1.id_dien_vien = t2.id_dien_vien group by t2.id_dien_vien order by count ( * ) desc limit 1	sakila_1
+select t2.ten , t2.ho from dien_vien_dien_anh as t1 join dien_vien as t2 on t1.id_dien_vien = t2.id_dien_vien group by t2.id_dien_vien having count ( * ) > 30	sakila_1
+select t2.ten , t2.ho from dien_vien_dien_anh as t1 join dien_vien as t2 on t1.id_dien_vien = t2.id_dien_vien group by t2.id_dien_vien having count ( * ) > 30	sakila_1
+select id_cua_hang from hang_ton_kho group by id_cua_hang order by count ( * ) desc limit 1	sakila_1
+select id_cua_hang from hang_ton_kho group by id_cua_hang order by count ( * ) desc limit 1	sakila_1
+select sum ( so_tien ) from khoan_thanh_toan	sakila_1
+select sum ( so_tien ) from khoan_thanh_toan	sakila_1
+select t1.ten , t1.ho , t1.id_khach_hang from khach_hang as t1 join khoan_thanh_toan as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by sum ( so_tien ) asc limit 1	sakila_1
+select t1.ten , t1.ho , t1.id_khach_hang from khach_hang as t1 join khoan_thanh_toan as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by sum ( so_tien ) asc limit 1	sakila_1
+select t1.ten from danh_muc as t1 join danh_muc_phim as t2 on t1.id_danh_muc = t2.id_danh_muc join phim as t3 on t2.id_phim = t3.id_phim where t3.tieu_de = "hunger roof"	sakila_1
+select t1.ten from danh_muc as t1 join danh_muc_phim as t2 on t1.id_danh_muc = t2.id_danh_muc join phim as t3 on t2.id_phim = t3.id_phim where t3.tieu_de = "hunger roof"	sakila_1
+select t2.ten , t1.id_danh_muc , count ( * ) from danh_muc_phim as t1 join danh_muc as t2 on t1.id_danh_muc = t2.id_danh_muc group by t1.id_danh_muc	sakila_1
+select t2.ten , t1.id_danh_muc , count ( * ) from danh_muc_phim as t1 join danh_muc as t2 on t1.id_danh_muc = t2.id_danh_muc group by t1.id_danh_muc	sakila_1
+select t1.tieu_de , t1.id_phim from phim as t1 join hang_ton_kho as t2 on t1.id_phim = t2.id_phim group by t1.id_phim order by count ( * ) desc limit 1	sakila_1
+select t1.tieu_de , t1.id_phim from phim as t1 join hang_ton_kho as t2 on t1.id_phim = t2.id_phim group by t1.id_phim order by count ( * ) desc limit 1	sakila_1
+select t1.tieu_de , t2.id_hang_ton_kho from phim as t1 join hang_ton_kho as t2 on t1.id_phim = t2.id_phim join luot_cho_thue as t3 on t2.id_hang_ton_kho = t3.id_hang_ton_kho group by t2.id_hang_ton_kho order by count ( * ) desc limit 1	sakila_1
+select t1.tieu_de , t2.id_hang_ton_kho from phim as t1 join hang_ton_kho as t2 on t1.id_phim = t2.id_phim join luot_cho_thue as t3 on t2.id_hang_ton_kho = t3.id_hang_ton_kho group by t2.id_hang_ton_kho order by count ( * ) desc limit 1	sakila_1
+select count ( distinct id_ngon_ngu ) from phim	sakila_1
+select count ( distinct id_ngon_ngu ) from phim	sakila_1
+select tieu_de from phim where danh_gia_xep_hang = "r"	sakila_1
+select tieu_de from phim where danh_gia_xep_hang = "r"	sakila_1
+select t2.dia_chi from cua_hang as t1 join dia_chi as t2 on t1.id_dia_chi = t2.id_dia_chi where id_cua_hang = 1	sakila_1
+select t2.dia_chi from cua_hang as t1 join dia_chi as t2 on t1.id_dia_chi = t2.id_dia_chi where id_cua_hang = 1	sakila_1
+select t1.ten , t1.ho , t1.id_nhan_vien from nhan_vien as t1 join khoan_thanh_toan as t2 on t1.id_nhan_vien = t2.id_nhan_vien group by t1.id_nhan_vien order by count ( * ) asc limit 1	sakila_1
+select t1.ten , t1.ho , t1.id_nhan_vien from nhan_vien as t1 join khoan_thanh_toan as t2 on t1.id_nhan_vien = t2.id_nhan_vien group by t1.id_nhan_vien order by count ( * ) asc limit 1	sakila_1
+select t2.ten from phim as t1 join ngon_ngu as t2 on t1.id_ngon_ngu = t2.id_ngon_ngu where t1.tieu_de = "airport pollock"	sakila_1
+select t2.ten from phim as t1 join ngon_ngu as t2 on t1.id_ngon_ngu = t2.id_ngon_ngu where t1.tieu_de = "airport pollock"	sakila_1
+select count ( * ) from cua_hang	sakila_1
+select count ( * ) from cua_hang	sakila_1
+select count ( distinct danh_gia_xep_hang ) from phim	sakila_1
+select count ( distinct danh_gia_xep_hang ) from phim	sakila_1
+select tieu_de from phim where tinh_nang_dac_biet like "%deleted scenes%"	sakila_1
+select tieu_de from phim where tinh_nang_dac_biet like "%deleted scenes%"	sakila_1
+select count ( * ) from hang_ton_kho where id_cua_hang = 1	sakila_1
+select count ( * ) from hang_ton_kho where id_cua_hang = 1	sakila_1
+select ngay_thanh_toan from khoan_thanh_toan order by ngay_thanh_toan asc limit 1	sakila_1
+select ngay_thanh_toan from khoan_thanh_toan order by ngay_thanh_toan asc limit 1	sakila_1
+select t2.dia_chi , t1.email from khach_hang as t1 join dia_chi as t2 on t2.id_dia_chi = t1.id_dia_chi where t1.ten = "linda"	sakila_1
+select t2.dia_chi , t1.email from khach_hang as t1 join dia_chi as t2 on t2.id_dia_chi = t1.id_dia_chi where t1.ten = "linda"	sakila_1
+select tieu_de from phim where thoi_luong_phim > 100 or danh_gia_xep_hang = "pg" except select tieu_de from phim where gia_thay_the > 200	sakila_1
+select tieu_de from phim where thoi_luong_phim > 100 or danh_gia_xep_hang = "pg" except select tieu_de from phim where gia_thay_the > 200	sakila_1
+select t1.ten , t1.ho from khach_hang as t1 join luot_cho_thue as t2 on t1.id_khach_hang = t2.id_khach_hang order by t2.ngay_cho_thue asc limit 1	sakila_1
+select t1.ten , t1.ho from khach_hang as t1 join luot_cho_thue as t2 on t1.id_khach_hang = t2.id_khach_hang order by t2.ngay_cho_thue asc limit 1	sakila_1
+select distinct t1.ten , t1.ho from nhan_vien as t1 join luot_cho_thue as t2 on t1.id_nhan_vien = t2.id_nhan_vien join khach_hang as t3 on t2.id_khach_hang = t3.id_khach_hang where t3.ten = "april" and t3.ho = "burns"	sakila_1
+select distinct t1.ten , t1.ho from nhan_vien as t1 join luot_cho_thue as t2 on t1.id_nhan_vien = t2.id_nhan_vien join khach_hang as t3 on t2.id_khach_hang = t3.id_khach_hang where t3.ten = "april" and t3.ho = "burns"	sakila_1
+select id_cua_hang from khach_hang group by id_cua_hang order by count ( * ) desc limit 1	sakila_1
+select id_cua_hang from khach_hang group by id_cua_hang order by count ( * ) desc limit 1	sakila_1
+select so_tien from khoan_thanh_toan order by so_tien desc limit 1	sakila_1
+select so_tien from khoan_thanh_toan order by so_tien desc limit 1	sakila_1
+select t2.dia_chi from nhan_vien as t1 join dia_chi as t2 on t1.id_dia_chi = t2.id_dia_chi where t1.ten = "elsa"	sakila_1
+select t2.dia_chi from nhan_vien as t1 join dia_chi as t2 on t1.id_dia_chi = t2.id_dia_chi where t1.ten = "elsa"	sakila_1
+select ten from khach_hang where id_khach_hang not in ( select id_khach_hang from luot_cho_thue where ngay_cho_thue > "2005-08-23 02:06:01" )	sakila_1
+select ten from khach_hang where id_khach_hang not in ( select id_khach_hang from luot_cho_thue where ngay_cho_thue > "2005-08-23 02:06:01" )	sakila_1
+select count ( * ) from tai_xe	school_bus
+select ten , thanh_pho_que_huong , tuoi from tai_xe	school_bus
+select dang , count ( * ) from tai_xe group by dang	school_bus
+select ten from tai_xe order by tuoi desc	school_bus
+select distinct thanh_pho_que_huong from tai_xe	school_bus
+select thanh_pho_que_huong from tai_xe group by thanh_pho_que_huong order by count ( * ) desc limit 1	school_bus
+select dang from tai_xe where thanh_pho_que_huong = "hartford" and tuoi > 40	school_bus
+select thanh_pho_que_huong from tai_xe where tuoi > 40 group by thanh_pho_que_huong having count ( * ) >= 2	school_bus
+select thanh_pho_que_huong from tai_xe except select thanh_pho_que_huong from tai_xe where tuoi > 40	school_bus
+select ten from tai_xe where id_tai_xe not in ( select id_tai_xe from xe_buyt_cua_truong_hoc )	school_bus
+select loai_hinh from truong_hoc group by loai_hinh having count ( * ) = 2	school_bus
+select t2.truong_hoc , t3.ten from xe_buyt_cua_truong_hoc as t1 join truong_hoc as t2 on t1.id_truong_hoc = t2.id_truong_hoc join tai_xe as t3 on t1.id_tai_xe = t3.id_tai_xe	school_bus
+select max ( so_nam_lam_viec ) , min ( so_nam_lam_viec ) , avg ( so_nam_lam_viec ) from xe_buyt_cua_truong_hoc	school_bus
+select truong_hoc , loai_hinh from truong_hoc where id_truong_hoc not in ( select id_truong_hoc from xe_buyt_cua_truong_hoc )	school_bus
+select t2.loai_hinh , count ( * ) from xe_buyt_cua_truong_hoc as t1 join truong_hoc as t2 on t1.id_truong_hoc = t2.id_truong_hoc group by t2.loai_hinh	school_bus
+select count ( * ) from tai_xe where thanh_pho_que_huong = "hartford" or tuoi < 40	school_bus
+select ten from tai_xe where thanh_pho_que_huong = "hartford" and tuoi < 40	school_bus
+select t1.ten from tai_xe as t1 join xe_buyt_cua_truong_hoc as t2 on t1.id_tai_xe = t2.id_tai_xe order by so_nam_lam_viec desc limit 1	school_bus
+select count ( * ) from truong_hoc	school_player
+select count ( * ) from truong_hoc	school_player
+select dia_diem from truong_hoc order by so_luong_nhap_hoc asc	school_player
+select dia_diem from truong_hoc order by so_luong_nhap_hoc asc	school_player
+select dia_diem from truong_hoc order by nam_thanh_lap desc	school_player
+select dia_diem from truong_hoc order by nam_thanh_lap desc	school_player
+select so_luong_nhap_hoc from truong_hoc where ton_giao != "catholic"	school_player
+select so_luong_nhap_hoc from truong_hoc where ton_giao != "catholic"	school_player
+select avg ( so_luong_nhap_hoc ) from truong_hoc	school_player
+select avg ( so_luong_nhap_hoc ) from truong_hoc	school_player
+select doi from cau_thu order by doi asc	school_player
+select doi from cau_thu order by doi asc	school_player
+select count ( distinct vi_tri ) from cau_thu	school_player
+select count ( distinct vi_tri ) from cau_thu	school_player
+select doi from cau_thu order by tuoi desc limit 1	school_player
+select doi from cau_thu order by tuoi desc limit 1	school_player
+select doi from cau_thu order by tuoi desc limit 5	school_player
+select doi from cau_thu order by tuoi desc limit 5	school_player
+select t1.doi , t2.dia_diem from cau_thu as t1 join truong_hoc as t2 on t1.id_truong = t2.id_truong	school_player
+select t1.doi , t2.dia_diem from cau_thu as t1 join truong_hoc as t2 on t1.id_truong = t2.id_truong	school_player
+select t2.dia_diem from cau_thu as t1 join truong_hoc as t2 on t1.id_truong = t2.id_truong group by t1.id_truong having count ( * ) > 1	school_player
+select t2.dia_diem from cau_thu as t1 join truong_hoc as t2 on t1.id_truong = t2.id_truong group by t1.id_truong having count ( * ) > 1	school_player
+select t2.ton_giao from cau_thu as t1 join truong_hoc as t2 on t1.id_truong = t2.id_truong group by t1.id_truong order by count ( * ) desc limit 1	school_player
+select t2.ton_giao from cau_thu as t1 join truong_hoc as t2 on t1.id_truong = t2.id_truong group by t1.id_truong order by count ( * ) desc limit 1	school_player
+select t1.dia_diem , t2.biet_danh from truong_hoc as t1 join chi_tiet_truong_hoc as t2 on t1.id_truong = t2.id_truong	school_player
+select t1.dia_diem , t2.biet_danh from truong_hoc as t1 join chi_tiet_truong_hoc as t2 on t1.id_truong = t2.id_truong	school_player
+select ton_giao , count ( * ) from truong_hoc group by ton_giao	school_player
+select ton_giao , count ( * ) from truong_hoc group by ton_giao	school_player
+select ton_giao , count ( * ) from truong_hoc group by ton_giao order by count ( * ) desc	school_player
+select ton_giao , count ( * ) from truong_hoc group by ton_giao order by count ( * ) desc	school_player
+select mau_cua_truong from truong_hoc order by so_luong_nhap_hoc desc limit 1	school_player
+select mau_cua_truong from truong_hoc order by so_luong_nhap_hoc desc limit 1	school_player
+select dia_diem from truong_hoc where id_truong not in ( select id_truong from cau_thu )	school_player
+select dia_diem from truong_hoc where id_truong not in ( select id_truong from cau_thu )	school_player
+select ton_giao from truong_hoc where nam_thanh_lap < 1890 intersect select ton_giao from truong_hoc where nam_thanh_lap > 1900	school_player
+select ton_giao from truong_hoc where nam_thanh_lap < 1890 intersect select ton_giao from truong_hoc where nam_thanh_lap > 1900	school_player
+select biet_danh from chi_tiet_truong_hoc where phan_hang != "division 1"	school_player
+select biet_danh from chi_tiet_truong_hoc where phan_hang != "division 1"	school_player
+select ton_giao from truong_hoc group by ton_giao having count ( * ) > 1	school_player
+select ton_giao from truong_hoc group by ton_giao having count ( * ) > 1	school_player
+select t1.ten , t2.ten from quoc_gia as t1 join giai_dau as t2 on t1.id = t2.id_quoc_gia	soccer_1
+select count ( * ) from quoc_gia as t1 join giai_dau as t2 on t1.id = t2.id_quoc_gia where t1.ten = "england"	soccer_1
+select avg ( can_nang ) from cau_thu	soccer_1
+select max ( can_nang ) , min ( can_nang ) from cau_thu	soccer_1
+select distinct t1.ten_cau_thu from cau_thu as t1 join dac_diem_cua_cau_thu as t2 on t1.id_cau_thu_api = t2.id_cau_thu_api where t2.danh_gia_tong_the > ( select avg ( danh_gia_tong_the ) from dac_diem_cua_cau_thu )	soccer_1
+select distinct t1.ten_cau_thu from cau_thu as t1 join dac_diem_cua_cau_thu as t2 on t1.id_cau_thu_api = t2.id_cau_thu_api where t2.re_bong = ( select max ( danh_gia_tong_the ) from dac_diem_cua_cau_thu )	soccer_1
+select distinct t1.ten_cau_thu from cau_thu as t1 join dac_diem_cua_cau_thu as t2 on t1.id_cau_thu_api = t2.id_cau_thu_api where t2.tat_bong > 90 and t2.chan_thuan = "right"	soccer_1
+select distinct t1.ten_cau_thu from cau_thu as t1 join dac_diem_cua_cau_thu as t2 on t1.id_cau_thu_api = t2.id_cau_thu_api where t2.chan_thuan = "left" and t2.danh_gia_tong_the >= 85 and t2.danh_gia_tong_the <= 90	soccer_1
+select chan_thuan , avg ( danh_gia_tong_the ) from dac_diem_cua_cau_thu group by chan_thuan	soccer_1
+select chan_thuan , count ( * ) from dac_diem_cua_cau_thu where danh_gia_tong_the > 80 group by chan_thuan	soccer_1
+select id_cau_thu_api from cau_thu where chieu_cao >= 180 intersect select id_cau_thu_api from dac_diem_cua_cau_thu where danh_gia_tong_the > 85	soccer_1
+select id_cau_thu_api from cau_thu where chieu_cao >= 180 and chieu_cao <= 190 intersect select id_cau_thu_api from dac_diem_cua_cau_thu where chan_thuan = "left"	soccer_1
+select distinct t1.ten_cau_thu from cau_thu as t1 join dac_diem_cua_cau_thu as t2 on t1.id_cau_thu_api = t2.id_cau_thu_api order by danh_gia_tong_the desc limit 3	soccer_1
+select distinct t1.ten_cau_thu , t1.ngay_sinh from cau_thu as t1 join dac_diem_cua_cau_thu as t2 on t1.id_cau_thu_api = t2.id_cau_thu_api order by tiem_nang desc limit 5	soccer_1
+select distinct ten_quan from quan order by dien_tich_cua_cac_thanh_pho desc	store_product
+select distinct ten_quan from quan order by dien_tich_cua_cac_thanh_pho desc	store_product
+select kich_thuoc_trang_toi_da from san_pham group by kich_thuoc_trang_toi_da having count ( * ) > 3	store_product
+select kich_thuoc_trang_toi_da from san_pham group by kich_thuoc_trang_toi_da having count ( * ) > 3	store_product
+select ten_quan , dan_so_thanh_pho from quan where dan_so_thanh_pho between 200000 and 2000000	store_product
+select ten_quan , dan_so_thanh_pho from quan where dan_so_thanh_pho between 200000 and 2000000	store_product
+select ten_quan from quan where dien_tich_cua_cac_thanh_pho > 10 or dan_so_thanh_pho > 100000	store_product
+select ten_quan from quan where dien_tich_cua_cac_thanh_pho > 10 or dan_so_thanh_pho > 100000	store_product
+select ten_quan from quan order by dan_so_thanh_pho desc limit 1	store_product
+select ten_quan from quan order by dan_so_thanh_pho desc limit 1	store_product
+select ten_quan from quan order by dien_tich_cua_cac_thanh_pho asc limit 1	store_product
+select ten_quan from quan order by dien_tich_cua_cac_thanh_pho asc limit 1	store_product
+select sum ( dan_so_thanh_pho ) from quan order by dien_tich_cua_cac_thanh_pho desc limit 3	store_product
+select sum ( dan_so_thanh_pho ) from quan order by dien_tich_cua_cac_thanh_pho desc limit 3	store_product
+select loai , count ( * ) from cua_hang group by loai	store_product
+select loai , count ( * ) from cua_hang group by loai	store_product
+select t1.ten_cua_hang from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang join quan as t3 on t2.id_quan = t3.id_quan where t3.ten_quan = "khanewal district"	store_product
+select t1.ten_cua_hang from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang join quan as t3 on t2.id_quan = t3.id_quan where t3.ten_quan = "khanewal district"	store_product
+select t1.ten_cua_hang from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang where id_quan = ( select id_quan from quan order by dan_so_thanh_pho desc limit 1 )	store_product
+select t1.ten_cua_hang from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang where id_quan = ( select id_quan from quan order by dan_so_thanh_pho desc limit 1 )	store_product
+select t3.thanh_pho_cua_cac_tru_so from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang join quan as t3 on t2.id_quan = t3.id_quan where t1.ten_cua_hang = "blackville"	store_product
+select t3.thanh_pho_cua_cac_tru_so from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang join quan as t3 on t2.id_quan = t3.id_quan where t1.ten_cua_hang = "blackville"	store_product
+select t3.thanh_pho_cua_cac_tru_so , count ( * ) from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang join quan as t3 on t2.id_quan = t3.id_quan group by t3.thanh_pho_cua_cac_tru_so	store_product
+select t3.thanh_pho_cua_cac_tru_so , count ( * ) from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang join quan as t3 on t2.id_quan = t3.id_quan group by t3.thanh_pho_cua_cac_tru_so	store_product
+select t3.thanh_pho_cua_cac_tru_so from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang join quan as t3 on t2.id_quan = t3.id_quan group by t3.thanh_pho_cua_cac_tru_so order by count ( * ) desc limit 1	store_product
+select t3.thanh_pho_cua_cac_tru_so from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang join quan as t3 on t2.id_quan = t3.id_quan group by t3.thanh_pho_cua_cac_tru_so order by count ( * ) desc limit 1	store_product
+select avg ( so_trang_mau_tren_tung_phut ) from san_pham	store_product
+select avg ( so_trang_mau_tren_tung_phut ) from san_pham	store_product
+select t1.san_pham from san_pham as t1 join san_pham_cua_cua_hang as t2 on t1.id_san_pham = t2.id_san_pham join cua_hang as t3 on t2.id_cua_hang = t3.id_cua_hang where t3.ten_cua_hang = "miramichi"	store_product
+select t1.san_pham from san_pham as t1 join san_pham_cua_cua_hang as t2 on t1.id_san_pham = t2.id_san_pham join cua_hang as t3 on t2.id_cua_hang = t3.id_cua_hang where t3.ten_cua_hang = "miramichi"	store_product
+select san_pham from san_pham where kich_thuoc_trang_toi_da = "a4" and so_trang_mau_tren_tung_phut < 5	store_product
+select san_pham from san_pham where kich_thuoc_trang_toi_da = "a4" and so_trang_mau_tren_tung_phut < 5	store_product
+select san_pham from san_pham where kich_thuoc_trang_toi_da = "a4" or so_trang_mau_tren_tung_phut < 5	store_product
+select san_pham from san_pham where kich_thuoc_trang_toi_da = "a4" or so_trang_mau_tren_tung_phut < 5	store_product
+select san_pham from san_pham where san_pham like "%scanner%"	store_product
+select san_pham from san_pham where san_pham like "%scanner%"	store_product
+select kich_thuoc_trang_toi_da from san_pham group by kich_thuoc_trang_toi_da order by count ( * ) desc limit 1	store_product
+select kich_thuoc_trang_toi_da from san_pham group by kich_thuoc_trang_toi_da order by count ( * ) desc limit 1	store_product
+select san_pham from san_pham where san_pham != ( select kich_thuoc_trang_toi_da from san_pham group by kich_thuoc_trang_toi_da order by count ( * ) desc limit 1 )	store_product
+select san_pham from san_pham where san_pham != ( select kich_thuoc_trang_toi_da from san_pham group by kich_thuoc_trang_toi_da order by count ( * ) desc limit 1 )	store_product
+select sum ( dan_so_thanh_pho ) from quan where dien_tich_cua_cac_thanh_pho > ( select avg ( dien_tich_cua_cac_thanh_pho ) from quan )	store_product
+select sum ( dan_so_thanh_pho ) from quan where dien_tich_cua_cac_thanh_pho > ( select avg ( dien_tich_cua_cac_thanh_pho ) from quan )	store_product
+select t3.ten_quan from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang join quan as t3 on t2.id_quan = t3.id_quan where t1.loai = "city mall" intersect select t3.ten_quan from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang join quan as t3 on t2.id_quan = t3.id_quan where t1.loai = "village store"	store_product
+select t3.ten_quan from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang join quan as t3 on t2.id_quan = t3.id_quan where t1.loai = "city mall" intersect select t3.ten_quan from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang join quan as t3 on t2.id_quan = t3.id_quan where t1.loai = "village store"	store_product
+select count ( * ) from khu_vuc	storm_record
+select count ( * ) from khu_vuc	storm_record
+select ma_khu_vuc , ten_khu_vuc from khu_vuc order by ma_khu_vuc	storm_record
+select ma_khu_vuc , ten_khu_vuc from khu_vuc order by ma_khu_vuc	storm_record
+select ten_khu_vuc from khu_vuc order by ten_khu_vuc	storm_record
+select ten_khu_vuc from khu_vuc order by ten_khu_vuc	storm_record
+select ten_khu_vuc from khu_vuc where ten_khu_vuc != "denmark"	storm_record
+select ten_khu_vuc from khu_vuc where ten_khu_vuc != "denmark"	storm_record
+select count ( * ) from bao where so_luong_nguoi_chet > 0	storm_record
+select count ( * ) from bao where so_luong_nguoi_chet > 0	storm_record
+select ten , ngay_hoat_dong , so_luong_nguoi_chet from bao where so_luong_nguoi_chet >= 1	storm_record
+select ten , ngay_hoat_dong , so_luong_nguoi_chet from bao where so_luong_nguoi_chet >= 1	storm_record
+select avg ( thiet_hai_theo_trieu_usd ) , max ( thiet_hai_theo_trieu_usd ) from bao where toc_do_toi_da > 1000	storm_record
+select avg ( thiet_hai_theo_trieu_usd ) , max ( thiet_hai_theo_trieu_usd ) from bao where toc_do_toi_da > 1000	storm_record
+select sum ( so_luong_nguoi_chet ) , sum ( thiet_hai_theo_trieu_usd ) from bao where toc_do_toi_da > ( select avg ( toc_do_toi_da ) from bao )	storm_record
+select sum ( so_luong_nguoi_chet ) , sum ( thiet_hai_theo_trieu_usd ) from bao where toc_do_toi_da > ( select avg ( toc_do_toi_da ) from bao )	storm_record
+select ten , thiet_hai_theo_trieu_usd from bao order by toc_do_toi_da desc	storm_record
+select ten , thiet_hai_theo_trieu_usd from bao order by toc_do_toi_da desc	storm_record
+select count ( distinct id_khu_vuc ) from khu_vuc_bi_anh_huong	storm_record
+select count ( distinct id_khu_vuc ) from khu_vuc_bi_anh_huong	storm_record
+select ten_khu_vuc from khu_vuc where id_khu_vuc not in ( select id_khu_vuc from khu_vuc_bi_anh_huong )	storm_record
+select ten_khu_vuc from khu_vuc where id_khu_vuc not in ( select id_khu_vuc from khu_vuc_bi_anh_huong )	storm_record
+select t1.ten_khu_vuc , count ( * ) from khu_vuc as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_khu_vuc = t2.id_khu_vuc group by t1.id_khu_vuc	storm_record
+select t1.ten_khu_vuc , count ( * ) from khu_vuc as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_khu_vuc = t2.id_khu_vuc group by t1.id_khu_vuc	storm_record
+select t1.ten , count ( * ) from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao	storm_record
+select t1.ten , count ( * ) from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao	storm_record
+select t1.ten , t1.toc_do_toi_da from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao order by count ( * ) desc limit 1	storm_record
+select t1.ten , t1.toc_do_toi_da from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao order by count ( * ) desc limit 1	storm_record
+select ten from bao where id_bao not in ( select id_bao from khu_vuc_bi_anh_huong )	storm_record
+select ten from bao where id_bao not in ( select id_bao from khu_vuc_bi_anh_huong )	storm_record
+select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao having count ( * ) >= 2 intersect select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao having sum ( t2.so_thanh_pho_bi_anh_huong ) >= 10	storm_record
+select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao having count ( * ) >= 2 intersect select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao having sum ( t2.so_thanh_pho_bi_anh_huong ) >= 10	storm_record
+select ten from bao except select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao having count ( * ) >= 2	storm_record
+select ten from bao except select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao having count ( * ) >= 2	storm_record
+select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t3.so_luong_nguoi_chet >= 10	storm_record
+select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t3.so_luong_nguoi_chet >= 10	storm_record
+select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t2.ten_khu_vuc = "denmark"	storm_record
+select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t2.ten_khu_vuc = "denmark"	storm_record
+select t1.ten_khu_vuc from khu_vuc as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_khu_vuc = t2.id_khu_vuc group by t1.id_khu_vuc having count ( * ) >= 2	storm_record
+select t1.ten_khu_vuc from khu_vuc as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_khu_vuc = t2.id_khu_vuc group by t1.id_khu_vuc having count ( * ) >= 2	storm_record
+select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao order by t3.so_luong_nguoi_chet desc limit 1	storm_record
+select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao order by t3.so_luong_nguoi_chet desc limit 1	storm_record
+select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t2.ten_khu_vuc = "afghanistan" intersect select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t2.ten_khu_vuc = "albania"	storm_record
+select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t2.ten_khu_vuc = "afghanistan" intersect select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t2.ten_khu_vuc = "albania"	storm_record
+select count ( * ) from danh_sach	student_1
+select count ( * ) from danh_sach	student_1
+select ho from danh_sach where phong_hoc = 111	student_1
+select ho from danh_sach where phong_hoc = 111	student_1
+select ten from danh_sach where phong_hoc = 108	student_1
+select ten from danh_sach where phong_hoc = 108	student_1
+select distinct ten from danh_sach where phong_hoc = 107	student_1
+select distinct ten from danh_sach where phong_hoc = 107	student_1
+select distinct phong_hoc , khoi_lop from danh_sach	student_1
+select distinct phong_hoc , khoi_lop from danh_sach	student_1
+select distinct khoi_lop from danh_sach where phong_hoc = 103	student_1
+select distinct khoi_lop from danh_sach where phong_hoc = 103	student_1
+select distinct khoi_lop from danh_sach where phong_hoc = 105	student_1
+select distinct khoi_lop from danh_sach where phong_hoc = 105	student_1
+select distinct phong_hoc from danh_sach where khoi_lop = 4	student_1
+select distinct phong_hoc from danh_sach where khoi_lop = 4	student_1
+select distinct phong_hoc from danh_sach where khoi_lop = 5	student_1
+select distinct phong_hoc from danh_sach where khoi_lop = 5	student_1
+select distinct t2.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where khoi_lop = 5	student_1
+select distinct t2.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where khoi_lop = 5	student_1
+select distinct t2.ten from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where khoi_lop = 1	student_1
+select distinct t2.ten from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where khoi_lop = 1	student_1
+select ten from giao_vien where phong_hoc = 110	student_1
+select ten from giao_vien where phong_hoc = 110	student_1
+select ho from giao_vien where phong_hoc = 109	student_1
+select ho from giao_vien where phong_hoc = 109	student_1
+select distinct ten , ho from giao_vien	student_1
+select distinct ten , ho from giao_vien	student_1
+select distinct ten , ho from danh_sach	student_1
+select distinct ten , ho from danh_sach	student_1
+select t1.ten , t1.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t2.ten = "otha" and t2.ho = "moyer"	student_1
+select t1.ten , t1.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t2.ten = "otha" and t2.ho = "moyer"	student_1
+select t1.ten , t1.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t2.ten = "marrotte" and t2.ho = "kirk"	student_1
+select t1.ten , t1.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t2.ten = "marrotte" and t2.ho = "kirk"	student_1
+select t2.ten , t2.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t1.ten = "evelina" and t1.ho = "bromley"	student_1
+select t2.ten , t2.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t1.ten = "evelina" and t1.ho = "bromley"	student_1
+select t2.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t1.ten = "gell" and t1.ho = "tami"	student_1
+select t2.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t1.ten = "gell" and t1.ho = "tami"	student_1
+select count ( * ) from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t2.ten = "loria" and t2.ho = "ondersma"	student_1
+select count ( * ) from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t2.ten = "loria" and t2.ho = "ondersma"	student_1
+select count ( * ) from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t2.ten = "kawa" and t2.ho = "gordon"	student_1
+select count ( * ) from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t2.ten = "kawa" and t2.ho = "gordon"	student_1
+select count ( * ) from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t2.ten = "tarring" and t2.ho = "leia"	student_1
+select count ( * ) from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t2.ten = "tarring" and t2.ho = "leia"	student_1
+select count ( * ) from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t1.ten = "chrissy" and t1.ho = "nabozny"	student_1
+select count ( * ) from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t1.ten = "chrissy" and t1.ho = "nabozny"	student_1
+select count ( * ) from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t1.ten = "madlock" and t1.ho = "ray"	student_1
+select count ( * ) from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t1.ten = "madlock" and t1.ho = "ray"	student_1
+select distinct t1.ten , t1.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t1.khoi_lop = 1 except select t1.ten , t1.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t2.ten = "otha" and t2.ho = "moyer"	student_1
+select distinct t1.ten , t1.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t1.khoi_lop = 1 except select t1.ten , t1.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t2.ten = "otha" and t2.ho = "moyer"	student_1
+select distinct t1.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t1.khoi_lop = 3 and t2.ten != "covin" and t2.ho != "jerome"	student_1
+select distinct t1.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc where t1.khoi_lop = 3 and t2.ten != "covin" and t2.ho != "jerome"	student_1
+select khoi_lop , count ( distinct phong_hoc ) , count ( * ) from danh_sach group by khoi_lop	student_1
+select khoi_lop , count ( distinct phong_hoc ) , count ( * ) from danh_sach group by khoi_lop	student_1
+select phong_hoc , count ( distinct khoi_lop ) from danh_sach group by phong_hoc	student_1
+select phong_hoc , count ( distinct khoi_lop ) from danh_sach group by phong_hoc	student_1
+select phong_hoc from danh_sach group by phong_hoc order by count ( * ) desc limit 1	student_1
+select phong_hoc from danh_sach group by phong_hoc order by count ( * ) desc limit 1	student_1
+select phong_hoc , count ( * ) from danh_sach group by phong_hoc	student_1
+select phong_hoc , count ( * ) from danh_sach group by phong_hoc	student_1
+select phong_hoc , count ( * ) from danh_sach where khoi_lop = "0" group by phong_hoc	student_1
+select phong_hoc , count ( * ) from danh_sach where khoi_lop = "0" group by phong_hoc	student_1
+select phong_hoc , count ( * ) from danh_sach where khoi_lop = "4" group by phong_hoc	student_1
+select phong_hoc , count ( * ) from danh_sach where khoi_lop = "4" group by phong_hoc	student_1
+select t2.ten , t2.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc group by t2.ten , t2.ho order by count ( * ) desc limit 1	student_1
+select t2.ten , t2.ho from danh_sach as t1 join giao_vien as t2 on t1.phong_hoc = t2.phong_hoc group by t2.ten , t2.ho order by count ( * ) desc limit 1	student_1
+select count ( * ) , phong_hoc from danh_sach group by phong_hoc	student_1
+select count ( * ) , phong_hoc from danh_sach group by phong_hoc	student_1
+select t1.ten_khoa_hoc from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.id_khoa_hoc order by count ( * ) desc limit 1	student_assessment
+select t1.ten_khoa_hoc from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.id_khoa_hoc order by count ( * ) desc limit 1	student_assessment
+select id_sinh_vien from luot_dang_ky_khoa_hoc_cua_sinh_vien group by id_sinh_vien order by count ( * ) limit 1	student_assessment
+select id_sinh_vien from luot_dang_ky_khoa_hoc_cua_sinh_vien group by id_sinh_vien order by count ( * ) limit 1	student_assessment
+select t2.ten , t2.ho from ung_cu_vien as t1 join ca_nhan as t2 on t1.id_ung_cu_vien = t2.id_ca_nhan	student_assessment
+select t2.ten , t2.ho from ung_cu_vien as t1 join ca_nhan as t2 on t1.id_ung_cu_vien = t2.id_ca_nhan	student_assessment
+select id_sinh_vien from sinh_vien where id_sinh_vien not in ( select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien )	student_assessment
+select id_sinh_vien from sinh_vien where id_sinh_vien not in ( select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien )	student_assessment
+select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien	student_assessment
+select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien	student_assessment
+select t1.id_sinh_vien , t2.ten_khoa_hoc from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc	student_assessment
+select t2.chi_tiet_sinh_vien from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien order by t1.ngay_dang_ki desc limit 1	student_assessment
+select t2.chi_tiet_sinh_vien from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien order by t1.ngay_dang_ki desc limit 1	student_assessment
+select count ( * ) from khoa_hoc as t1 join lan_tham_du_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_khoa_hoc = "english"	student_assessment
+select count ( * ) from khoa_hoc as t1 join lan_tham_du_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_khoa_hoc = "english"	student_assessment
+select count ( * ) from khoa_hoc as t1 join lan_tham_du_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t2.id_sinh_vien = 171	student_assessment
+select count ( * ) from khoa_hoc as t1 join lan_tham_du_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t2.id_sinh_vien = 171	student_assessment
+select t2.id_ung_cu_vien from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ung_cu_vien where t1.dia_chi_email = "stanley.monahan@example.org"	student_assessment
+select t2.id_ung_cu_vien from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ung_cu_vien where t1.dia_chi_email = "stanley.monahan@example.org"	student_assessment
+select id_ung_cu_vien from danh_gia_ung_cu_vien order by ngay_danh_gia desc limit 1	student_assessment
+select id_ung_cu_vien from danh_gia_ung_cu_vien order by ngay_danh_gia desc limit 1	student_assessment
+select t1.chi_tiet_sinh_vien from sinh_vien as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien order by count ( * ) desc limit 1	student_assessment
+select t1.chi_tiet_sinh_vien from sinh_vien as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien order by count ( * ) desc limit 1	student_assessment
+select t1.id_sinh_vien , count ( * ) from sinh_vien as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien	student_assessment
+select t1.id_sinh_vien , count ( * ) from sinh_vien as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien	student_assessment
+select t3.ten_khoa_hoc , count ( * ) from sinh_vien as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien join khoa_hoc as t3 on t2.id_khoa_hoc = t3.id_khoa_hoc group by t2.id_khoa_hoc	student_assessment
+select t3.ten_khoa_hoc , count ( * ) from sinh_vien as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien join khoa_hoc as t3 on t2.id_khoa_hoc = t3.id_khoa_hoc group by t2.id_khoa_hoc	student_assessment
+select id_ung_cu_vien from danh_gia_ung_cu_vien where ma_ket_qua_danh_gia = "pass"	student_assessment
+select id_ung_cu_vien from danh_gia_ung_cu_vien where ma_ket_qua_danh_gia = "pass"	student_assessment
+select t3.so_di_dong from ung_cu_vien as t1 join danh_gia_ung_cu_vien as t2 on t1.id_ung_cu_vien = t2.id_ung_cu_vien join ca_nhan as t3 on t1.id_ung_cu_vien = t3.id_ca_nhan where t2.ma_ket_qua_danh_gia = "fail"	student_assessment
+select t3.so_di_dong from ung_cu_vien as t1 join danh_gia_ung_cu_vien as t2 on t1.id_ung_cu_vien = t2.id_ung_cu_vien join ca_nhan as t3 on t1.id_ung_cu_vien = t3.id_ca_nhan where t2.ma_ket_qua_danh_gia = "fail"	student_assessment
+select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien where id_khoa_hoc = 301	student_assessment
+select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien where id_khoa_hoc = 301	student_assessment
+select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien where id_khoa_hoc = 301 order by ngay_tham_du desc limit 1	student_assessment
+select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien where id_khoa_hoc = 301 order by ngay_tham_du desc limit 1	student_assessment
+select distinct t1.thanh_pho from dia_chi as t1 join dia_chi_ca_nhan as t2 on t1.id_dia_chi = t2.id_dia_chi	student_assessment
+select distinct t1.thanh_pho from dia_chi as t1 join dia_chi_ca_nhan as t2 on t1.id_dia_chi = t2.id_dia_chi	student_assessment
+select distinct t1.thanh_pho from dia_chi as t1 join dia_chi_ca_nhan as t2 on t1.id_dia_chi = t2.id_dia_chi join sinh_vien as t3 on t2.id_ca_nhan = t3.id_sinh_vien	student_assessment
+select distinct t1.thanh_pho from dia_chi as t1 join dia_chi_ca_nhan as t2 on t1.id_dia_chi = t2.id_dia_chi join sinh_vien as t3 on t2.id_ca_nhan = t3.id_sinh_vien	student_assessment
+select ten_khoa_hoc from khoa_hoc order by ten_khoa_hoc	student_assessment
+select ten_khoa_hoc from khoa_hoc order by ten_khoa_hoc	student_assessment
+select ten from ca_nhan order by ten	student_assessment
+select ten from ca_nhan order by ten	student_assessment
+select id_sinh_vien from luot_dang_ky_khoa_hoc_cua_sinh_vien union select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien	student_assessment
+select id_sinh_vien from luot_dang_ky_khoa_hoc_cua_sinh_vien union select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien	student_assessment
+select id_khoa_hoc from luot_dang_ky_khoa_hoc_cua_sinh_vien where id_sinh_vien = 121 union select id_khoa_hoc from lan_tham_du_khoa_hoc_cua_sinh_vien where id_sinh_vien = 121	student_assessment
+select id_khoa_hoc from luot_dang_ky_khoa_hoc_cua_sinh_vien where id_sinh_vien = 121 union select id_khoa_hoc from lan_tham_du_khoa_hoc_cua_sinh_vien where id_sinh_vien = 121	student_assessment
+select * from luot_dang_ky_khoa_hoc_cua_sinh_vien where id_sinh_vien not in ( select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien )	student_assessment
+select * from luot_dang_ky_khoa_hoc_cua_sinh_vien where id_sinh_vien not in ( select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien )	student_assessment
+select t2.id_sinh_vien from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_khoa_hoc = "statistics" order by t2.ngay_dang_ki	student_assessment
+select t2.id_sinh_vien from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_khoa_hoc = "statistics" order by t2.ngay_dang_ki	student_assessment
+select t2.id_sinh_vien from khoa_hoc as t1 join lan_tham_du_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_khoa_hoc = "statistics" order by t2.ngay_tham_du	student_assessment
+select t2.id_sinh_vien from khoa_hoc as t1 join lan_tham_du_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_khoa_hoc = "statistics" order by t2.ngay_tham_du	student_assessment
+select count ( * ) from luot_nop_bai	workshop_paper
+select count ( * ) from luot_nop_bai	workshop_paper
+select tac_gia from luot_nop_bai order by so_diem asc	workshop_paper
+select tac_gia from luot_nop_bai order by so_diem asc	workshop_paper
+select tac_gia , truong_dai_hoc from luot_nop_bai	workshop_paper
+select tac_gia , truong_dai_hoc from luot_nop_bai	workshop_paper
+select tac_gia from luot_nop_bai where truong_dai_hoc = "florida" or truong_dai_hoc = "temple"	workshop_paper
+select tac_gia from luot_nop_bai where truong_dai_hoc = "florida" or truong_dai_hoc = "temple"	workshop_paper
+select avg ( so_diem ) from luot_nop_bai	workshop_paper
+select avg ( so_diem ) from luot_nop_bai	workshop_paper
+select tac_gia from luot_nop_bai order by so_diem desc limit 1	workshop_paper
+select tac_gia from luot_nop_bai order by so_diem desc limit 1	workshop_paper
+select truong_dai_hoc , count ( * ) from luot_nop_bai group by truong_dai_hoc	workshop_paper
+select truong_dai_hoc , count ( * ) from luot_nop_bai group by truong_dai_hoc	workshop_paper
+select truong_dai_hoc from luot_nop_bai group by truong_dai_hoc order by count ( * ) desc limit 1	workshop_paper
+select truong_dai_hoc from luot_nop_bai group by truong_dai_hoc order by count ( * ) desc limit 1	workshop_paper
+select truong_dai_hoc from luot_nop_bai where so_diem > 90 intersect select truong_dai_hoc from luot_nop_bai where so_diem < 80	workshop_paper
+select truong_dai_hoc from luot_nop_bai where so_diem > 90 intersect select truong_dai_hoc from luot_nop_bai where so_diem < 80	workshop_paper
+select t2.tac_gia , t1.ket_qua from chap_thuan as t1 join luot_nop_bai as t2 on t1.id_luot_nop_bai = t2.id_luot_nop_bai	workshop_paper
+select t2.tac_gia , t1.ket_qua from chap_thuan as t1 join luot_nop_bai as t2 on t1.id_luot_nop_bai = t2.id_luot_nop_bai	workshop_paper
+select t1.ket_qua from chap_thuan as t1 join luot_nop_bai as t2 on t1.id_luot_nop_bai = t2.id_luot_nop_bai order by t2.so_diem desc limit 1	workshop_paper
+select t1.ket_qua from chap_thuan as t1 join luot_nop_bai as t2 on t1.id_luot_nop_bai = t2.id_luot_nop_bai order by t2.so_diem desc limit 1	workshop_paper
+select t2.tac_gia , count ( distinct t1.id_hoi_thao ) from chap_thuan as t1 join luot_nop_bai as t2 on t1.id_luot_nop_bai = t2.id_luot_nop_bai group by t2.tac_gia	workshop_paper
+select t2.tac_gia , count ( distinct t1.id_hoi_thao ) from chap_thuan as t1 join luot_nop_bai as t2 on t1.id_luot_nop_bai = t2.id_luot_nop_bai group by t2.tac_gia	workshop_paper
+select t2.tac_gia from chap_thuan as t1 join luot_nop_bai as t2 on t1.id_luot_nop_bai = t2.id_luot_nop_bai group by t2.tac_gia having count ( distinct t1.id_hoi_thao ) > 1	workshop_paper
+select t2.tac_gia from chap_thuan as t1 join luot_nop_bai as t2 on t1.id_luot_nop_bai = t2.id_luot_nop_bai group by t2.tac_gia having count ( distinct t1.id_hoi_thao ) > 1	workshop_paper
+select ngay , dia_diem from hoi_thao order by dia_diem	workshop_paper
+select ngay , dia_diem from hoi_thao order by dia_diem	workshop_paper
+select tac_gia from luot_nop_bai where id_luot_nop_bai not in ( select id_luot_nop_bai from chap_thuan )	workshop_paper
+select tac_gia from luot_nop_bai where id_luot_nop_bai not in ( select id_luot_nop_bai from chap_thuan )	workshop_paper
+select ten from doanh_nghiep where anh_gia_xep_hang > 4.5	yelp
+select ten from doanh_nghiep where anh_gia_xep_hang = 3.5	yelp
+select id_nguoi_tieu_dung from nguoi_tieu_dung where ten = "michelle"	yelp
+select tieu_bang from doanh_nghiep where ten = "whataburger"	yelp
+select t1.thanh_pho from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "mgm grand buffet" and t2.ten_loai_hinh = "category category name0"	yelp
+select thanh_pho from doanh_nghiep where anh_gia_xep_hang < 1.5	yelp
+select thanh_pho from doanh_nghiep where ten = "taj mahal"	yelp
+select van_ban from anh_gia where anh_gia_xep_hang < 1	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.anh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "restaurant"	yelp
+select t1.thanh_pho from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "taj mahal" and t2.ten_loai_hinh = "restaurant"	yelp
+select t1.van_ban from nguoi_tieu_dung as t2 join anh_gia as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t2.ten = "niloofar"	yelp
+select t1.ten from anh_gia as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t3 on t3.id_nguoi_tieu_dung = t2.id_nguoi_tieu_dung where t3.ten = "niloofar"	yelp
+select t1.ten from anh_gia as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t3 on t3.id_nguoi_tieu_dung = t2.id_nguoi_tieu_dung where t2.anh_gia_xep_hang = 5 and t3.ten = "niloofar"	yelp
+select t4.van_ban from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t5 on t5.id_nguoi_tieu_dung = t4.id_nguoi_tieu_dung where t2.ten_loai_hinh = "italian" and t3.ten_loai_hinh = "category category name1" and t5.ten = "michelle"	yelp
+select count ( distinct t3.van_ban ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "cafe zinho" and t1.tieu_bang = "texas" and t2.ten_loai_hinh = "restaurant"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.anh_gia_xep_hang = 5 and t2.ten_loai_hinh = "italian" and t3.ten_loai_hinh = "restaurant"	yelp
+select t1.ten_khu_pho_lan_can from loai_hinh as t3 join doanh_nghiep as t2 on t3.id_doanh_nghiep = t2.id_doanh_nghiep join loai_hinh as t4 on t4.id_doanh_nghiep = t2.id_doanh_nghiep join khu_vuc_lan_can as t1 on t1.id_doanh_nghiep = t2.id_doanh_nghiep where t2.thanh_pho = "madison" and t3.ten_loai_hinh = "italian" and t4.ten_loai_hinh = "restaurant"	yelp
+select t1.ten_khu_pho_lan_can from loai_hinh as t3 join doanh_nghiep as t2 on t3.id_doanh_nghiep = t2.id_doanh_nghiep join loai_hinh as t4 on t4.id_doanh_nghiep = t2.id_doanh_nghiep join khu_vuc_lan_can as t1 on t1.id_doanh_nghiep = t2.id_doanh_nghiep where t2.thanh_pho = "madison" and t2.anh_gia_xep_hang < 2.5 and t3.ten_loai_hinh = "italian" and t4.ten_loai_hinh = "restaurant"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.tieu_bang = "pennsylvania" and t2.ten_loai_hinh = "restaurant"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.tieu_bang = "pennsylvania" and t2.ten_loai_hinh = "restaurant"	yelp
+select t3.van_ban from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.so_luong_anh_gia > 100 and t2.ten_loai_hinh = "pet groomers"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "breweries"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "breweries"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "breweries"	yelp
+select t4.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t4 on t4.id_nguoi_tieu_dung = t3.id_nguoi_tieu_dung where t1.ten = "mesa grill" and t2.ten_loai_hinh = "restaurant"	yelp
+select ia_chi_ay_u from doanh_nghiep where thanh_pho = "los angeles" and ten = "walmart"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t4 on t4.id_nguoi_tieu_dung = t3.id_nguoi_tieu_dung where t1.thanh_pho = "dallas" and t2.ten_loai_hinh = "restaurant" and t4.ten = "patrick"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t4 on t4.id_nguoi_tieu_dung = t3.id_nguoi_tieu_dung where t1.thanh_pho = "dallas" and t2.ten_loai_hinh = "restaurant" and t4.ten = "patrick"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t4 on t4.id_nguoi_tieu_dung = t3.id_nguoi_tieu_dung where t2.ten_loai_hinh = "bars" and t4.ten = "patrick"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t4 on t4.id_nguoi_tieu_dung = t3.id_nguoi_tieu_dung where t1.anh_gia_xep_hang >= 3 and t2.ten_loai_hinh = "bars" and t4.ten = "patrick"	yelp
+select t3.ten from khoan_tien_boa as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t3 on t3.id_nguoi_tieu_dung = t2.id_nguoi_tieu_dung where t1.ten = "barrio cafe" and t2.nam = 2015	yelp
+select ten from doanh_nghiep where anh_gia_xep_hang < 2 and tieu_bang = "texas"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "seafood" and t3.ten_loai_hinh = "restaurant"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "seafood" and t3.ten_loai_hinh = "restaurant"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "seafood" and t3.ten_loai_hinh = "restaurant"	yelp
+select t1.van_ban from nguoi_tieu_dung as t2 join anh_gia as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t1.anh_gia_xep_hang > 4 and t2.ten = "patrick"	yelp
+select id_doanh_nghiep from doanh_nghiep where thanh_pho = "los angeles" and ten = "apple store"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t1.anh_gia_xep_hang > 4.5 and t2.ten_loai_hinh = "restaurant"	yelp
+select t1.ten_khu_pho_lan_can from loai_hinh as t3 join doanh_nghiep as t2 on t3.id_doanh_nghiep = t2.id_doanh_nghiep join khu_vuc_lan_can as t1 on t1.id_doanh_nghiep = t2.id_doanh_nghiep where t2.ten = "flat top grill" and t3.ten_loai_hinh = "category category name0"	yelp
+select t2.van_ban from khoan_tien_boa as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "vintner grill" and t2.so_luot_thich > 9	yelp
+select t2.van_ban from anh_gia as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "kabob palace" and t2.nam = 2014	yelp
+select t3.ten from khoan_tien_boa as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t3 on t3.id_nguoi_tieu_dung = t2.id_nguoi_tieu_dung where t1.thanh_pho = "dallas"	yelp
+select t1.thanh_pho from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "mgm grand buffet" and t1.tieu_bang = "texas" and t2.ten_loai_hinh = "restaurant"	yelp
+select t4.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join khoan_tien_boa as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t4 on t4.id_nguoi_tieu_dung = t3.id_nguoi_tieu_dung where t2.ten_loai_hinh = "pet groomers"	yelp
+select t2.van_ban from khoan_tien_boa as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "cafe zinho" and t1.tieu_bang = "texas"	yelp
+select t4.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t4 on t4.id_nguoi_tieu_dung = t3.id_nguoi_tieu_dung where t2.ten_loai_hinh = "restaurant"	yelp
+select t2.van_ban from khoan_tien_boa as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "cafe zinho" and t1.tieu_bang = "pennsylvania" and t2.nam = 2010	yelp
+select t4.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t4 on t4.id_nguoi_tieu_dung = t3.id_nguoi_tieu_dung where t2.ten_loai_hinh = "restaurant" and t3.nam = 2010	yelp
+select t2.van_ban from nguoi_tieu_dung as t3 join anh_gia as t1 on t3.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung join khoan_tien_boa as t2 on t3.id_nguoi_tieu_dung = t2.id_nguoi_tieu_dung where t1.nam = 2012	yelp
+select t2.van_ban from anh_gia as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.anh_gia_xep_hang = 2.5	yelp
+select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "madison" and t2.ten_loai_hinh = "escape games"	yelp
+select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "madison" and t2.ten_loai_hinh = "escape games"	yelp
+select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "madison" and t2.ten_loai_hinh = "escape games"	yelp
+select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "madison" and t2.ten_loai_hinh = "escape games"	yelp
+select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "madison" and t2.ten_loai_hinh = "escape games"	yelp
+select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.anh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "restaurant"	yelp
+select sum ( t4.so_luong ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join luot_ang_ky as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "restaurant" and t3.ten_loai_hinh = "moroccan"	yelp
+select sum ( t4.so_luong ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join luot_ang_ky as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "moroccan" and t3.ten_loai_hinh = "restaurant" and t4.ngay = "friday"	yelp
+select t4.ngay , sum ( t4.so_luong ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join luot_ang_ky as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "moroccan" and t3.ten_loai_hinh = "restaurant" group by t4.ngay	yelp
+select t1.tieu_bang , sum ( t4.so_luong ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join luot_ang_ky as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep where t2.ten_loai_hinh = "italian" and t3.ten_loai_hinh = "delis" and t4.ngay = "sunday" group by t1.tieu_bang	yelp
+select count ( distinct t1.van_ban ) from nguoi_tieu_dung as t2 join anh_gia as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t1.nam = 2015 and t2.ten = "niloofar"	yelp
+select avg ( t1.anh_gia_xep_hang ) from nguoi_tieu_dung as t2 join anh_gia as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t2.ten = "michelle"	yelp
+select t2.so_luong from luot_ang_ky as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "cafe zinho" and t2.ngay = "friday"	yelp
+select count ( distinct t3.ten ) from anh_gia as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t3 on t3.id_nguoi_tieu_dung = t2.id_nguoi_tieu_dung where t1.thanh_pho = "pittsburgh" and t1.ten = "sushi too"	yelp
+select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "pittsburgh" and t1.anh_gia_xep_hang = 4.5 and t2.ten_loai_hinh = "restaurant"	yelp
+select count ( distinct van_ban ) from khoan_tien_boa where nam = 2015	yelp
+select sum ( t1.so_luot_thich ) from nguoi_tieu_dung as t2 join khoan_tien_boa as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t2.ten = "niloofar"	yelp
+select sum ( t2.so_luot_thich ) from khoan_tien_boa as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "cafe zinho"	yelp
+select sum ( t2.so_luot_thich ) from khoan_tien_boa as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t3 on t3.id_nguoi_tieu_dung = t2.id_nguoi_tieu_dung where t1.ten = "cafe zinho" and t3.ten = "niloofar"	yelp
+select count ( distinct t1.van_ban ) from nguoi_tieu_dung as t2 join khoan_tien_boa as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t1.nam = 2010 and t2.ten = "michelle"	yelp
+select count ( distinct t1.van_ban ) from nguoi_tieu_dung as t2 join khoan_tien_boa as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t1.nam = 2010 and t2.ten = "michelle"	yelp
+select count ( distinct t1.van_ban ) from nguoi_tieu_dung as t2 join khoan_tien_boa as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t1.thang = "april" and t2.ten = "michelle"	yelp
+select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.tieu_bang = "texas" and t2.ten_loai_hinh = "restaurant"	yelp
+select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t1.anh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "bars"	yelp
+select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t1.anh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "bars"	yelp
+select count ( distinct t4.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t4 on t4.id_nguoi_tieu_dung = t3.id_nguoi_tieu_dung where t1.thanh_pho = "dallas" and t1.ten = "texas de brazil" and t1.tieu_bang = "texas" and t2.ten_loai_hinh = "restaurant"	yelp
+select count ( distinct t3.ten ) from anh_gia as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t3 on t3.id_nguoi_tieu_dung = t2.id_nguoi_tieu_dung where t1.ten = "bistro di napoli" and t2.nam = 2015	yelp
+select count ( distinct t1.ten ) from loai_hinh as t3 join doanh_nghiep as t1 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join khu_vuc_lan_can as t2 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t3.ten_loai_hinh = "restaurant" and t2.ten_khu_pho_lan_can = "hazelwood"	yelp
+select count ( distinct id_doanh_nghiep ) from doanh_nghiep where thanh_pho = "dallas" and ten = "starbucks" and tieu_bang = "texas"	yelp
+select so_luong_anh_gia from doanh_nghiep where ten = "acacia cafe"	yelp
+select avg ( t3.so_luong ) , t3.ngay from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join luot_ang_ky as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "barrio cafe" and t2.ten_loai_hinh = "restaurant" group by t3.ngay	yelp
+select count ( distinct t1.ten ) from khu_vuc_lan_can as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "madison" and t2.ten_khu_pho_lan_can = "stone meadows"	yelp
+select count ( distinct t1.van_ban ) from nguoi_tieu_dung as t2 join anh_gia as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t2.ten = "adrienne"	yelp
+select count ( distinct t1.van_ban ) from nguoi_tieu_dung as t2 join anh_gia as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t1.thang = "march" and t1.nam = 2014 and t2.ten = "michelle"	yelp
+select count ( distinct t1.ten ) from anh_gia as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t3 on t3.id_nguoi_tieu_dung = t2.id_nguoi_tieu_dung where t2.nam = 2010 and t3.ten = "michelle"	yelp
+select count ( distinct t1.ten ) from anh_gia as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t3 on t3.id_nguoi_tieu_dung = t2.id_nguoi_tieu_dung where t1.thanh_pho = "san diego" and t2.nam = 2010 and t3.ten = "christine"	yelp
+select count ( distinct id_doanh_nghiep ) from doanh_nghiep where thanh_pho = "los angeles" and ten = "target"	yelp
+select count ( distinct t4.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t4 on t4.id_nguoi_tieu_dung = t3.id_nguoi_tieu_dung where t1.thanh_pho = "dallas" and t2.ten_loai_hinh = "irish pub"	yelp
+select avg ( anh_gia_xep_hang ) from anh_gia where nam = 2014	yelp
+select count ( distinct t4.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t4 on t4.id_nguoi_tieu_dung = t3.id_nguoi_tieu_dung where t1.ten = "vintner grill" and t2.ten_loai_hinh = "category category name0" and t3.nam = 2010	yelp
+select count ( distinct t3.van_ban ) from khu_vuc_lan_can as t1 join doanh_nghiep as t2 on t1.id_doanh_nghiep = t2.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t2.id_doanh_nghiep where t1.ten_khu_pho_lan_can = "south summerlin"	yelp
+select count ( distinct ten ) from nguoi_tieu_dung where ten = "michelle"	yelp
+select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t2.ten_loai_hinh = "restaurant"	yelp
+select count ( distinct thanh_pho ) from doanh_nghiep where ten = "panda express"	yelp
+select count ( distinct t1.van_ban ) from nguoi_tieu_dung as t2 join khoan_tien_boa as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t2.ten = "michelle"	yelp
+select sum ( t3.so_luong ) from luot_ang_ky as t3 join doanh_nghiep as t1 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join khu_vuc_lan_can as t2 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t2.ten_khu_pho_lan_can = "brighton heights"	yelp
+select count ( distinct van_ban ) from anh_gia where thang = "march"	yelp
+select count ( distinct van_ban ) , thang from khoan_tien_boa group by thang	yelp
+select count ( distinct t1.ten_khu_pho_lan_can ) from khu_vuc_lan_can as t1 join doanh_nghiep as t2 on t1.id_doanh_nghiep = t2.id_doanh_nghiep where t2.thanh_pho = "madison" and t2.anh_gia_xep_hang = 5	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.tieu_bang = "texas" and t2.ten_loai_hinh = "moroccan" and t3.ten_loai_hinh = "restaurant"	yelp
+select t1.ten from luot_ang_ky as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep group by t1.ten order by sum ( t2.so_luong ) desc limit 1	yelp
+select t1.ten_khu_pho_lan_can from khu_vuc_lan_can as t1 join doanh_nghiep as t2 on t1.id_doanh_nghiep = t2.id_doanh_nghiep where t2.thanh_pho = "madison" group by t1.ten_khu_pho_lan_can order by count ( distinct t2.ten ) desc limit 1	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t1.anh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "mexican" and t3.ten_loai_hinh = "restaurant"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t1.anh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "mexican" and t3.ten_loai_hinh = "restaurant"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t1.tieu_bang = "texas" and t2.ten_loai_hinh = "valet service" and t3.ten_loai_hinh = "restaurant"	yelp
+select t1.ten from loai_hinh as t3 join doanh_nghiep as t1 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep join khu_vuc_lan_can as t2 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "madison" and t3.ten_loai_hinh = "italian" and t4.ten_loai_hinh = "restaurant" and t2.ten_khu_pho_lan_can = "meadowood"	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t1.anh_gia_xep_hang > 3 and t1.so_luong_anh_gia > 30 and t2.ten_loai_hinh = "bars"	yelp
+select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "edinburgh" and t2.ten_loai_hinh = "restaurant" and t3.ten_loai_hinh = "egyptian"	yelp
+select t2.ten from nguoi_tieu_dung as t2 join anh_gia as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung group by t2.ten having avg ( t1.anh_gia_xep_hang ) < 3	yelp
+select t1.ten from anh_gia as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t2.thang = "april" group by t1.ten order by count ( distinct t2.van_ban ) desc limit 1	yelp
+select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep group by t1.ten order by count ( distinct t2.ten_loai_hinh ) desc limit 1	yelp

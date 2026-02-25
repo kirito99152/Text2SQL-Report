@@ -163,17 +163,34 @@ FILTER_CONDITIONS: id_khach_hang NOT IN (SELECT id_khach_hang FROM tai_khoan)
 RULES:
 - "mỗi"/"từng" → ENTITY_AGGREGATION
 - "nhất" → EXTREME_VALUE (ORDER BY+LIMIT, not MIN/MAX in WHERE)
-- "nhưng không"/"chưa"/"không có" → EXCEPT or NOT IN (subquery). NEVER LEFT JOIN IS NULL.
-- "vừa...vừa"/"cả...và" with separate sets → INTERSECT
+- "nhưng không"/"chưa"/"không có" → PREFER EXCEPT over NOT IN. NEVER LEFT JOIN IS NULL.
+- "vừa...vừa"/"cả...và" with separate sets → INTERSECT (full SELECT...INTERSECT SELECT...)
 - "A hoặc B nhưng C" where C only applies to B → UNION (SELECT...WHERE A UNION SELECT...WHERE B AND C)
 - "hoặc ... hoặc" with 2-3 values on same column → Use OR, not IN
 - Range comparison → Use BETWEEN, not >= AND <=
-- Literals: copy EXACTLY from schema/data (no Vietnamese translation of values)
-- GROUP BY: Use the JOINED/CHILD table's column (T2.col) when aggregating over a junction. If gold uses T1.FK, match the FK column.
+- "từ X trở lên"/"ít nhất X"/"tối thiểu X" → >= (not >)
+- "hơn X"/"nhiều hơn X" → > (not >=)
+
+⚠️ VALUE RULES (CRITICAL - #1 error source):
+- String values: Copy EXACTLY from schema/data in ENGLISH. ⛔ NEVER translate to Vietnamese.
+  Example: "American" stays "American", NOT "Mỹ". "Order" stays "Order", NOT "Đặt hàng".
+- Number values: No quotes. Compare as numbers, not strings.
+
+⚠️ SELECT RULES (CRITICAL - #2 error source):
+- SELECT: ONLY columns the question EXPLICITLY asks for. ⛔ NEVER add extra columns like id, count, etc.
+- "tên" alone → SELECT ten ONLY. NOT ho, ten. NOT ho || ten.
+- "tên đầy đủ"/"họ và tên" → SELECT ho, ten (two separate columns). NEVER || or CONCAT.
+- "liệt kê *" or "cho biết tất cả" about a table → SELECT * or list all columns from THAT table only.
+- EXTREME_VALUE: Put COUNT/SUM in ORDER BY only. ⛔ NEVER add COUNT/SUM to SELECT.
+- If question says "bao nhiêu" → SELECT COUNT(*). Don't add other columns unless asked.
+
+⚠️ SET OPERATION RULES:
+- PREFER EXCEPT/UNION/INTERSECT over NOT IN/OR/AND when question implies set difference/union/intersection.
+- "chưa có"/"không có"/"ngoại trừ" → EXCEPT (two full SELECT queries)
+- "vừa...vừa" / "cả A lẫn B" → INTERSECT (two full SELECT queries)
+
+- GROUP BY: Use the JOINED/CHILD table's column (T2.col) when aggregating over a junction.
 - COUNT: Always COUNT(*), never COUNT(column)
-- SELECT: ONLY columns the question asks for. Do NOT add extra columns.
-- "tên" alone → SELECT ten only. NOT ho, ten. NOT ho || ten.
-- "tên đầy đủ"/"họ và tên" → SELECT ho, ten (two separate columns). NEVER use || or CONCAT.
 - "một vài"/"một số"/"các" → SIMPLE_SELECT with DISTINCT (not GROUP BY HAVING)
 - If query needs only 1 table → Do NOT add unnecessary JOINs. Query the table directly.
 - "số lượng" / "bao nhiêu loại" → COUNT(DISTINCT col), not GROUP BY + COUNT
@@ -199,26 +216,34 @@ CURRENT DATETIME: {{current_datetime}}
 ==================================================
 ⚠️ STRICT SQL STYLE RULES (MUST FOLLOW ALL):
 
-1) SELECT: EXACTLY plan columns. ⛔ NEVER add extra columns. ⛔ NEVER use column aliases (AS name).
+1) SELECT: EXACTLY plan columns, EXACTLY plan order. ⛔ NEVER add extra columns. ⛔ NEVER use column aliases (AS name).
    - "tên" → SELECT ten only. NOT ho, ten.
    - "tên đầy đủ" → SELECT ho, ten (two columns). ⛔ NEVER ho || ' ' || ten or CONCAT.
    - EXTREME_VALUE → Do NOT add COUNT(*)/SUM() to SELECT. Use only in ORDER BY.
+   - If plan says SELECT T2.ten, COUNT(*) → output in EXACTLY that order.
 2) FROM: table AS T1. Always "AS" keyword. ⛔ NEVER INNER JOIN, LEFT JOIN. Only plain "JOIN".
-3) WHERE: String values EXACTLY as in schema (English original). Single quotes.
+3) WHERE: ⛔⛔⛔ String values MUST be in ENGLISH as stored in database. NEVER translate to Vietnamese.
+   - "American" stays 'American', NOT 'Mỹ'. "Order" stays 'Order', NOT 'Đặt hàng'.
+   - "Spring" stays 'Spring', NOT 'Mùa xuân'. "Cargo" stays 'Cargo', NOT 'Vận chuyển hàng hoá'.
    - 2-3 values: Use OR (col='a' OR col='b'), NOT IN(...)
    - Ranges: Use BETWEEN, NOT col>=a AND col<=b
+   - "từ X trở lên" → >= (not >). "hơn X" → > (not >=).
 4) GROUP BY: Match plan alias EXACTLY. If plan says GROUP BY T2.col → T2.col, not T1.col.
    - When aggregating over joined table, GROUP BY the FK/joined column.
+   - ⛔ Common mistake: GROUP BY T1.id instead of GROUP BY T2.id or T1.FK_col. Follow plan.
 5) HAVING: Use if in plan, else skip.
 6) ORDER BY: Use expression directly (COUNT(*)). ⛔ NEVER use alias names.
 7) LIMIT: Use if in plan.
 8) SET OPS: EXCEPT/UNION/INTERSECT → full SELECT...FROM... OPERATOR SELECT...FROM...
    - UNION: Each side is a complete query. "A hoặc B nhưng C" → SELECT...WHERE A UNION SELECT...WHERE B AND C
-9) EXCLUSION: NOT IN (subquery) or EXCEPT. ⛔ NEVER LEFT JOIN...IS NULL or NOT EXISTS.
+   - EXCEPT: "chưa có"/"không có" → SELECT...EXCEPT SELECT...(with JOIN)
+   - ⛔ NEVER replace EXCEPT with NOT IN or NOT EXISTS. NEVER replace INTERSECT with AND/EXISTS.
+9) EXCLUSION: PREFER EXCEPT. If NOT IN, use subquery. ⛔ NEVER LEFT JOIN...IS NULL or NOT EXISTS.
 10) COUNT: Always COUNT(*). ⛔ NEVER COUNT(column_name).
 11) No dbo., no backticks, no semicolons, no newlines. Single line output.
 12) DISTINCT: Use if plan says DISTINCT. ⛔ Do NOT replace DISTINCT with GROUP BY HAVING.
-13) SINGLE TABLE: If plan has no JOINs, do NOT add unnecessary JOINs.
+13) SINGLE TABLE: If plan has no JOINs, do NOT add unnecessary JOINs. Query ONE table directly.
+    - Example: "count distinct X from table_a" → select count ( distinct x ) from table_a. ⛔ NOT join another table.
 
 ==================================================
 EXAMPLES:
@@ -235,13 +260,13 @@ SQL: select t1.ten_nhan_vien , t1.id_nhan_vien from nhan_vien as t1 join nhat_ky
 Plan: FILTERED, khach_hang not in tai_khoan
 SQL: select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from tai_khoan )
 
-Plan: FILTERED, 2 values with OR
+Plan: FILTERED, 2 values with OR (English values!)
 SQL: select gia_ban from an_pham where nha_xuat_ban = 'Person' or nha_xuat_ban = 'Wiley'
 
 Plan: SIMPLE_SELECT with DISTINCT
 SQL: select distinct dia_diem from rap_chieu_phim
 
-Plan: INTERSECT
+Plan: INTERSECT (two full queries)
 SQL: select dia_diem from rap_chieu_phim where nam_mo_cua = 2010 intersect select dia_diem from rap_chieu_phim where nam_mo_cua = 2011
 
 Plan: UNION, "3 tín chỉ hoặc 1 tín chỉ nhưng 4 giờ"
@@ -250,8 +275,20 @@ SQL: select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 3 union select t
 Plan: GLOBAL_AGGREGATION, single table, no JOIN needed
 SQL: select count ( distinct id_khach_hang ) from tai_khoan
 
+Plan: SINGLE TABLE count/group (no JOIN!)
+SQL: select id_khach_hang , count ( * ) from the_khach_hang group by id_khach_hang
+
+Plan: EXCEPT, khach_hang not having credit cards
+SQL: select id_khach_hang , ten_cua_khach_hang from khach_hang except select t1.id_khach_hang , t2.ten_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where ma_loai_the = 'Credit'
+
 ==================================================
-FINAL CHECK: Count SELECT columns. If more than plan → REMOVE extras. Verify JOIN is plain (no INNER/LEFT). No semicolons.
+FINAL CHECK:
+1. Count SELECT columns. If more than plan → REMOVE extras.
+2. Check column ORDER matches plan.
+3. Verify JOIN is plain (no INNER/LEFT).
+4. Verify WHERE values are in ENGLISH (not Vietnamese).
+5. If plan says EXCEPT/UNION/INTERSECT → verify you used that operator (not NOT IN/OR/AND).
+6. No semicolons.
 
 OUTPUT: Raw SQL on single line. No markdown, no explanation.
 `;
@@ -270,22 +307,28 @@ SQL: {{generated_sql}}
 ==================================================
 CHECK (mark ✓ or ✗):
 
-1) SELECT: EXACTLY plan columns? No extra cols? No column aliases (AS name)?
-2) JOIN: Plain "JOIN" only? (INNER/LEFT → rewrite)
-3) WHERE: Schema-original values (not Vietnamese-translated)?
-4) GROUP BY: Correct table alias per plan? FK/joined column?
-5) ORDER BY: Expression not alias? Direction correct? LIMIT correct?
-6) SET OPS: Full EXCEPT/UNION/INTERSECT syntax? (not IN/OR shortcut)
-7) COUNT(*) only? No || or CONCAT? No newlines? Single line?
+1) SELECT: EXACTLY plan columns? No extra cols? No column aliases (AS name)? Column ORDER matches plan?
+2) JOIN: Plain "JOIN" only? (INNER/LEFT → rewrite to plain JOIN or remove)
+3) WHERE values: Are string values in ENGLISH (as stored in DB)? ⛔ Vietnamese values like 'Mỹ', 'Đặt hàng', 'Mùa xuân' = WRONG. Must be 'American', 'Order', 'Spring'.
+4) WHERE operators: ">" vs ">=" correct? "từ X trở lên" = >=. "hơn X" = >.
+5) GROUP BY: Correct table alias per plan? FK/joined column?
+6) ORDER BY: Expression not alias? Direction correct? LIMIT correct?
+7) SET OPS: If plan says EXCEPT → SQL uses EXCEPT? (NOT "NOT IN" or "NOT EXISTS")
+   If plan says INTERSECT → SQL uses INTERSECT? (NOT "AND" or "EXISTS")
+   If plan says UNION → SQL uses UNION? (NOT "OR")
+8) SINGLE TABLE: If plan has no JOINs, are there unnecessary JOINs in SQL? Remove them.
+9) COUNT(*) only? No || or CONCAT? No newlines? Single line?
 
 ==================================================
 COMMON FIXES:
-- INNER JOIN → JOIN | LEFT JOIN IS NULL → NOT IN subquery
+- INNER JOIN → JOIN | LEFT JOIN IS NULL → NOT IN subquery or EXCEPT
 - SELECT col AS name → remove AS name
 - ho || ' ' || ten → ho, ten (separate columns)
 - Extra COUNT(*) in SELECT → remove if not in plan
 - GROUP BY T1.col → T2.col (match plan)
 - Unnecessary JOIN → remove if single table query
+- Vietnamese values → English values (check schema for originals)
+- NOT IN/NOT EXISTS → rewrite as EXCEPT if plan says EXCEPT
 
 DECISION:
 All ✓ → Output: VALID
