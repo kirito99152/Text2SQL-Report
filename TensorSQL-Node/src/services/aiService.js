@@ -3,8 +3,8 @@ const axios = require('axios');
 
 class AiService {
     constructor() {
-        // Default to the URL found in the C# code, but allow override via env
-        this.endpoint = process.env.LLM_ENDPOINT_URL || "http://tensorrt-llm-qwen3:8000/generate_output";
+        // Default to the URL of the new Request-Hub, but allow override via env
+        this.endpoint = process.env.LLM_ENDPOINT_URL || "http://localhost:4000/generate_output";
         this.apiKey = process.env.LLM_API_KEY || "";
     }
 
@@ -22,7 +22,8 @@ class AiService {
             const config = {
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                timeout: 1000000 // 1000 seconds
             };
 
             if (this.apiKey) {

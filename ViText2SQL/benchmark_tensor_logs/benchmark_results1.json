@@ -1,0 +1,982 @@
+[
+  {
+    "id": 0,
+    "db_id": "architecture",
+    "question": "Có tất cả bao nhiêu kiến trúc sư nữ ?",
+    "gold_sql": "select count ( * ) from kien_truc_su where gioi_tinh = \"female\"",
+    "generated_sql": "SELECT COUNT(*) FROM kien_truc_su WHERE gioi_tinh = 'nữ'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 34404
+  },
+  {
+    "id": 1,
+    "db_id": "architecture",
+    "question": "Liệt kê tên , quốc tịch và id của tất cả các kiến trúc sư nam theo thứ tự tên .",
+    "gold_sql": "select ten , quoc_tich , id from kien_truc_su where gioi_tinh = \"male\" order by ten",
+    "generated_sql": "SELECT ten, quoc_tich, id FROM kien_truc_su WHERE gioi_tinh = 'nam' ORDER BY ten ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 31456
+  },
+  {
+    "id": 2,
+    "db_id": "architecture",
+    "question": "Cho biết tên của người kiến trúc sư đã tạo ra cây cầu dài nhất cũng như là chiều dài tính bằng mét của cây cầu này .",
+    "gold_sql": "select max ( t1.chieu_dai_theo_met ) , t2.ten from cau as t1 join kien_truc_su as t2 on t1.id_kien_truc_su = t2.id",
+    "generated_sql": "SELECT T2.ten, T1.chieu_dai_theo_met FROM cau AS T1 JOIN kien_truc_su AS T2 ON T1.id_kien_truc_su = T2.id ORDER BY T1.chieu_dai_theo_met DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 40346
+  },
+  {
+    "id": 3,
+    "db_id": "architecture",
+    "question": "Cho biết chiều dài trung bình tính theo feet của tất cả các cây cầu .",
+    "gold_sql": "select avg ( chieu_dai_theo_feet ) from cau",
+    "generated_sql": "SELECT AVG(chieu_dai_theo_feet) FROM cau",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 28441
+  },
+  {
+    "id": 4,
+    "db_id": "architecture",
+    "question": "Cho biết tên và năm xây dựng của các nhà máy thuộc loại ' Grondzeiler ' ?",
+    "gold_sql": "select ten , nam_xay_dung from nha_may where loai = \"Grondzeiler\"",
+    "generated_sql": "SELECT ten, nam_xay_dung FROM nha_may WHERE loai = 'Grondzeiler'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 33412
+  },
+  {
+    "id": 5,
+    "db_id": "architecture",
+    "question": "Cho biết tên và quốc tịch của những kiến trúc sư khác nhau đã từng xây dựng một nhà máy .",
+    "gold_sql": "select distinct t1.ten , t1.quoc_tich from kien_truc_su as t1 join nha_may as t2 on t1.id = t2.id_kien_truc_su",
+    "generated_sql": "SELECT DISTINCT T1.ten, T1.quoc_tich FROM kien_truc_su AS T1 INNER JOIN nha_may AS T2 ON T1.id = T2.id_kien_truc_su",
+    "exact_match": false,
+    "eval_error": "'inner'",
+    "duration_ms": 208576
+  },
+  {
+    "id": 6,
+    "db_id": "architecture",
+    "question": "Cho biết tên của các nhà máy không được đặt tại ' Donceel ' .",
+    "gold_sql": "select ten from nha_may where dia_diem != \"Donceel\"",
+    "generated_sql": "SELECT ten FROM nha_may WHERE dia_diem != 'Donceel'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 204196
+  },
+  {
+    "id": 7,
+    "db_id": "architecture",
+    "question": "Cho biết các loại nhà máy khác nhau đã được xây dựng bởi các kiến trúc sư người Mỹ hoặc các kiến trúc sư người Canada .",
+    "gold_sql": "select distinct t1.loai from nha_may as t1 join kien_truc_su as t2 on t1.id_kien_truc_su = t2.id where t2.quoc_tich = \"American\" or t2.quoc_tich = \"Canadian\"",
+    "generated_sql": "SELECT DISTINCT T1.loai FROM nha_may AS T1 JOIN kien_truc_su AS T2 ON T1.id_kien_truc_su = T2.id WHERE T2.quoc_tich IN ('Mỹ', 'Canada')",
+    "exact_match": false,
+    "eval_error": "",
+    "duration_ms": 54227
+  },
+  {
+    "id": 8,
+    "db_id": "architecture",
+    "question": "Cho biết id và tên của các kiến trúc sư đã xây dựng ít nhất 3 cây cầu .",
+    "gold_sql": "select t1.id , t1.ten from kien_truc_su as t1 join cau as t2 on t1.id = t2.id_kien_truc_su group by t1.id having count ( * ) >= 3",
+    "generated_sql": "SELECT T1.id, T1.ten FROM kien_truc_su AS T1 JOIN cau AS T2 ON T1.id = T2.id_kien_truc_su GROUP BY T1.id HAVING COUNT(*) >= 3",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 52506
+  },
+  {
+    "id": 9,
+    "db_id": "architecture",
+    "question": "Cho biết id , tên và quốc tịch của kiến trúc sư đã xây dựng nhiều nhà máy nhất .",
+    "gold_sql": "select t1.id , t1.ten , t1.quoc_tich from kien_truc_su as t1 join nha_may as t2 on t1.id = t2.id_kien_truc_su group by t1.id order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT T1.id, T1.ten, T1.quoc_tich FROM kien_truc_su AS T1 JOIN nha_may AS T2 ON T1.id = T2.id_kien_truc_su GROUP BY T1.id ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 113456
+  },
+  {
+    "id": 10,
+    "db_id": "architecture",
+    "question": "Cho biết id , tên và giới tính của các kiến trúc sư đã xây dựng hai cây cầu hoặc một nhà máy .",
+    "gold_sql": "select t1.id , t1.ten , t1.gioi_tinh from kien_truc_su as t1 join cau as t2 on t1.id = t2.id_kien_truc_su group by t1.id having count ( * ) = 2 union select t1.id , t1.ten , t1.gioi_tinh from kien_truc_su as t1 join nha_may as t2 on t1.id = t2.id_kien_truc_su group by t1.id having count ( * ) = 1",
+    "generated_sql": "SELECT T1.id, T1.ten, T1.gioi_tinh FROM kien_truc_su AS T1 JOIN cau AS T2 ON T1.id_kien_truc_su = T2.id_kien_truc_su JOIN nha_may AS T3 ON T1.id_kien_truc_su = T3.id_kien_truc_su GROUP BY T1.id HAVING COUNT(T2.id) >= 2 OR COUNT(T3.id) >= 1",
+    "exact_match": false,
+    "eval_error": "'kien_truc_su.id_kien_truc_su'",
+    "duration_ms": 119699
+  },
+  {
+    "id": 11,
+    "db_id": "architecture",
+    "question": "Cho biết địa điểm của cây cầu có tên là ' Cổng vòm Kolob ' hoặc cây cầu có tên là ' Cầu cầu vồng ' .",
+    "gold_sql": "select dia_diem from cau where ten = \"Kolob Arch\" or ten = \"Rainbow Bridge\"",
+    "generated_sql": "SELECT dia_diem FROM cau WHERE ten = 'Cổng vòm Kolob' OR ten = 'Cầu cầu vồng'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 54302
+  },
+  {
+    "id": 12,
+    "db_id": "architecture",
+    "question": "Cho biết tên của nhà máy có chứa từ tiếng Pháp ' Moulin ' trong tên .",
+    "gold_sql": "select ten from nha_may where ten like \"%Moulin%\"",
+    "generated_sql": "SELECT ten FROM nha_may WHERE ten LIKE '%Moulin%'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 47771
+  },
+  {
+    "id": 13,
+    "db_id": "architecture",
+    "question": "Cho biết tên của các nhà máy khác nhau được xây dựng bởi các kiến trúc sư đã từng xây dựng một cây cầu dài hơn 80 mét .",
+    "gold_sql": "select distinct t1.ten from nha_may as t1 join kien_truc_su as t2 on t1.id_kien_truc_su = t2.id join cau as t3 on t3.id_kien_truc_su = t2.id where t3.chieu_dai_theo_met > 80",
+    "generated_sql": "SELECT DISTINCT nha_may.ten FROM nha_may JOIN kien_truc_su ON nha_may.id_kien_truc_su = kien_truc_su.id JOIN cau ON kien_truc_su.id = cau.id_kien_truc_su WHERE cau.chieu_dai_theo_met > 80",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 79598
+  },
+  {
+    "id": 14,
+    "db_id": "architecture",
+    "question": "Cho biết loại nhà máy phổ biết nhất và có bao nhiêu nhà máy thuộc loại này ?",
+    "gold_sql": "select loai , count ( * ) from nha_may group by loai order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT loai , COUNT(*) FROM nha_may GROUP BY loai ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 78685
+  },
+  {
+    "id": 15,
+    "db_id": "architecture",
+    "question": "Có bao nhiêu kiến ​​trúc sư chưa từng xây dựng một nhà máy nào trước năm 1850 ?",
+    "gold_sql": "select count ( * ) from kien_truc_su where id not in ( select id_kien_truc_su from nha_may where nam_xay_dung < 1850 )",
+    "generated_sql": "SELECT COUNT(*) FROM kien_truc_su AS T1 WHERE T1.id NOT IN (SELECT T2.id_kien_truc_su FROM nha_may AS T2 WHERE T2.nam_xay_dung < 1850)",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 94562
+  },
+  {
+    "id": 16,
+    "db_id": "architecture",
+    "question": "Hiển thị tên của tất cả những cây cầu được thiết kế bởi các kiến ​​trúc sư người Mỹ và sắp xếp kết quả theo thứ tự chiều dài chân cầu .",
+    "gold_sql": "select t1.ten from cau as t1 join kien_truc_su as t2 on t1.id_kien_truc_su = t2.id where t2.quoc_tich = \"American\" order by t1.chieu_dai_theo_feet",
+    "generated_sql": "SELECT T1.ten, T1.chieu_dai_theo_met FROM cau AS T1 JOIN kien_truc_su AS T2 ON T1.id_kien_truc_su = T2.id WHERE T2.quoc_tich = 'Mỹ' ORDER BY T1.chieu_dai_theo_met ASC",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 95775
+  },
+  {
+    "id": 17,
+    "db_id": "cinema",
+    "question": "Hiển thị tất cả các địa điểm không có rạp chiếu phim với sức chứa trên 800 .",
+    "gold_sql": "select dia_diem from rap_chieu_phim except select dia_diem from rap_chieu_phim where suc_chua > 800",
+    "generated_sql": "SELECT dia_diem FROM rap_chieu_phim WHERE dia_diem NOT IN (SELECT dia_diem FROM rap_chieu_phim WHERE suc_chua > 800)",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 173943
+  },
+  {
+    "id": 18,
+    "db_id": "cinema",
+    "question": "Hiển thị tất cả các địa điểm nơi có một số rạp chiếu phim đã được mở vào năm 2010 và năm 2011 .",
+    "gold_sql": "select dia_diem from rap_chieu_phim where nam_mo_cua = 2010 intersect select dia_diem from rap_chieu_phim where nam_mo_cua = 2011",
+    "generated_sql": "SELECT dia_diem\nFROM rap_chieu_phim\nWHERE nam_mo_cua IN (2010, 2011)\nGROUP BY dia_diem\nHAVING COUNT(DISTINCT nam_mo_cua) = 2",
+    "exact_match": false,
+    "eval_error": "",
+    "duration_ms": 173016
+  },
+  {
+    "id": 19,
+    "db_id": "cinema",
+    "question": "Có bao nhiêu rạp chiếu phim ?",
+    "gold_sql": "select count ( * ) from rap_chieu_phim",
+    "generated_sql": "SELECT COUNT(*) FROM rap_chieu_phim",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 30008
+  },
+  {
+    "id": 20,
+    "db_id": "cinema",
+    "question": "Đếm số lượng rạp chiếu phim .",
+    "gold_sql": "select count ( * ) from rap_chieu_phim",
+    "generated_sql": "SELECT COUNT(*) FROM rap_chieu_phim",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 29037
+  },
+  {
+    "id": 21,
+    "db_id": "cinema",
+    "question": "Hiển thị tên , năm mở cửa , và sức chứa của từng rạp chiếu phim .",
+    "gold_sql": "select ten , nam_mo_cua , suc_chua from rap_chieu_phim",
+    "generated_sql": "SELECT ten, nam_mo_cua, suc_chua FROM rap_chieu_phim",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 32698
+  },
+  {
+    "id": 22,
+    "db_id": "cinema",
+    "question": "Hiển thị tên và địa điểm của các rạp chiếu phim có sức chứa trên mức trung bình .",
+    "gold_sql": "select ten , dia_diem from rap_chieu_phim where suc_chua > ( select avg ( suc_chua ) from rap_chieu_phim )",
+    "generated_sql": "SELECT ten, dia_diem FROM rap_chieu_phim WHERE suc_chua > (SELECT AVG(suc_chua) FROM rap_chieu_phim)",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 35364
+  },
+  {
+    "id": 23,
+    "db_id": "cinema",
+    "question": "Những địa điểm có một vài rạp chiếu phim là những địa điểm nào ?",
+    "gold_sql": "select distinct dia_diem from rap_chieu_phim",
+    "generated_sql": "SELECT dia_diem FROM rap_chieu_phim GROUP BY dia_diem HAVING COUNT(*) > 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 50701
+  },
+  {
+    "id": 24,
+    "db_id": "cinema",
+    "question": "Tìm những địa điểm khác nhau nơi có một vài rạp chiếu phim .",
+    "gold_sql": "select distinct dia_diem from rap_chieu_phim",
+    "generated_sql": "SELECT dia_diem FROM rap_chieu_phim GROUP BY dia_diem HAVING COUNT(*) > 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 50248
+  },
+  {
+    "id": 25,
+    "db_id": "cinema",
+    "question": "Hiển thị tên của tất cả các rạp chiếu phim và năm mở cửa của từng rạp theo thứ tự giảm dần về năm mở cửa .",
+    "gold_sql": "select ten , nam_mo_cua from rap_chieu_phim order by nam_mo_cua desc",
+    "generated_sql": "SELECT ten, nam_mo_cua FROM rap_chieu_phim ORDER BY nam_mo_cua DESC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 33662
+  },
+  {
+    "id": 26,
+    "db_id": "cinema",
+    "question": "Cho biết tên và địa điểm của rạp chiếu phim có sức chứa lớn nhất .",
+    "gold_sql": "select ten , dia_diem from rap_chieu_phim order by suc_chua desc limit 1",
+    "generated_sql": "SELECT ten, dia_diem FROM rap_chieu_phim ORDER BY suc_chua DESC LIMIT 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 34826
+  },
+  {
+    "id": 27,
+    "db_id": "cinema",
+    "question": "Hiển thị sức chứa trung bình , sức chứa tối thiểu và sức chứa tối đa của tất cả các rạp chiếu phim được mở từ sau năm 2011 .",
+    "gold_sql": "select avg ( suc_chua ) , min ( suc_chua ) , max ( suc_chua ) from rap_chieu_phim where nam_mo_cua >= 2011",
+    "generated_sql": "SELECT AVG(suc_chua), MIN(suc_chua), MAX(suc_chua) FROM rap_chieu_phim WHERE nam_mo_cua > 2011",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 56451
+  },
+  {
+    "id": 28,
+    "db_id": "cinema",
+    "question": "Hiển thị tất cả các địa điểm và số lượng rạp chiếu phim ở mỗi địa điểm .",
+    "gold_sql": "select dia_diem , count ( * ) from rap_chieu_phim group by dia_diem",
+    "generated_sql": "SELECT dia_diem, COUNT(*) FROM rap_chieu_phim GROUP BY dia_diem",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 87332
+  },
+  {
+    "id": 29,
+    "db_id": "cinema",
+    "question": "Địa điểm có nhiều rạp chiếu phim nhất được mở trong năm 2010 hoặc sau đó nằm ở đâu ?",
+    "gold_sql": "select dia_diem from rap_chieu_phim where nam_mo_cua >= 2010 group by dia_diem order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT dia_diem , COUNT ( * ) FROM rap_chieu_phim WHERE nam_mo_cua >= 2010 GROUP BY dia_diem ORDER BY COUNT ( * ) DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 52933
+  },
+  {
+    "id": 30,
+    "db_id": "cinema",
+    "question": "Hiển thị tất cả các địa điểm có ít nhất hai rạp chiếu phim với sức chứa trên 300 .",
+    "gold_sql": "select dia_diem from rap_chieu_phim where suc_chua > 300 group by dia_diem having count ( * ) >= 2",
+    "generated_sql": "SELECT dia_diem FROM rap_chieu_phim WHERE suc_chua > 300 GROUP BY id_rap_chieu_phim HAVING COUNT(*) >= 2",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 482033
+  },
+  {
+    "id": 31,
+    "db_id": "cinema",
+    "question": "Những địa điểm nào có từ 2 rạp chiếu phim với sức chứa lớn hơn 300 ?",
+    "gold_sql": "select dia_diem from rap_chieu_phim where suc_chua > 300 group by dia_diem having count ( * ) >= 2",
+    "generated_sql": "SELECT dia_diem FROM rap_chieu_phim WHERE suc_chua > 300 GROUP BY dia_diem HAVING COUNT(*) >= 2",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 62619
+  },
+  {
+    "id": 32,
+    "db_id": "cinema",
+    "question": "Hiển thị tiêu đề và đạo diễn của tất cả các bộ phim .",
+    "gold_sql": "select tieu_de , duoc_dao_dien_boi from phim",
+    "generated_sql": "SELECT tieu_de, duoc_dao_dien_boi FROM phim",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 29222
+  },
+  {
+    "id": 33,
+    "db_id": "cinema",
+    "question": "Tiêu đề và đạo diễn của từng bộ phim ?",
+    "gold_sql": "select tieu_de , duoc_dao_dien_boi from phim",
+    "generated_sql": "SELECT tieu_de, duoc_dao_dien_boi FROM phim",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 29765
+  },
+  {
+    "id": 34,
+    "db_id": "cinema",
+    "question": "Hiển thị tất cả các đạo diễn .",
+    "gold_sql": "select distinct duoc_dao_dien_boi from phim",
+    "generated_sql": "SELECT duoc_dao_dien_boi FROM phim",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 32122
+  },
+  {
+    "id": 35,
+    "db_id": "cinema",
+    "question": "Liệt kê tất cả các đạo diễn .",
+    "gold_sql": "select distinct duoc_dao_dien_boi from phim",
+    "generated_sql": "SELECT duoc_dao_dien_boi FROM phim",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 32106
+  },
+  {
+    "id": 37,
+    "db_id": "cinema",
+    "question": "Cho biết tổng số suất chiếu mỗi ngày của từng rạp chiếu phim .",
+    "gold_sql": "select t2.ten , sum ( t1.so_luong_suat_chieu_moi_ngay ) from lich_chieu_phim as t1 join rap_chieu_phim as t2 on t1.id_rap_chieu_phim = t2.id_rap_chieu_phim group by t1.id_rap_chieu_phim",
+    "generated_sql": "SELECT T1.id_rap_chieu_phim , SUM(T2.so_luong_suat_chieu_moi_ngay) FROM rap_chieu_phim AS T1 JOIN lich_chieu_phim AS T2 ON T1.id_rap_chieu_phim = T2.id_rap_chieu_phim GROUP BY T1.id_rap_chieu_phim",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 67459
+  },
+  {
+    "id": 38,
+    "db_id": "cinema",
+    "question": "Cho biết tiêu đề và giá cao nhất của mỗi bộ phim .",
+    "gold_sql": "select t2.tieu_de , max ( t1.gia ) from lich_chieu_phim as t1 join phim as t2 on t1.id_phim = t2.id_phim group by t1.id_phim",
+    "generated_sql": "SELECT T1.tieu_de, MAX(T2.gia) FROM phim AS T1 JOIN lich_chieu_phim AS T2 ON T1.id_phim = T2.id_phim GROUP BY T1.id_phim",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 41890
+  },
+  {
+    "id": 39,
+    "db_id": "cinema",
+    "question": "Tiêu đề và giá cao nhất của từng bộ phim ?",
+    "gold_sql": "select t2.tieu_de , max ( t1.gia ) from lich_chieu_phim as t1 join phim as t2 on t1.id_phim = t2.id_phim group by t1.id_phim",
+    "generated_sql": "SELECT phim.tieu_de, MAX(lich_chieu_phim.gia) FROM phim JOIN lich_chieu_phim ON phim.id_phim = lich_chieu_phim.id_phim GROUP BY phim.id_phim",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 41959
+  },
+  {
+    "id": 40,
+    "db_id": "cinema",
+    "question": "Hiển thị tên rạp chiếu phim , tiêu đề , ngày chiếu và giá của từng bộ phim có trong lịch chiếu .",
+    "gold_sql": "select t3.ten , t2.tieu_de , t1.ngay , t1.gia from lich_chieu_phim as t1 join phim as t2 on t1.id_phim = t2.id_phim join rap_chieu_phim as t3 on t1.id_rap_chieu_phim = t3.id_rap_chieu_phim",
+    "generated_sql": "SELECT T3.ten, T2.tieu_de, T1.ngay, T1.gia FROM lich_chieu_phim AS T1 JOIN phim AS T2 ON T1.id_phim = T2.id_phim JOIN rap_chieu_phim AS T3 ON T1.id_rap_chieu_phim = T3.id_rap_chieu_phim",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 52023
+  },
+  {
+    "id": 41,
+    "db_id": "cinema",
+    "question": "Cho biết tiêu đề và đạo diễn của những bộ phim không nằm trong lịch chiếu .",
+    "gold_sql": "select tieu_de , duoc_dao_dien_boi from phim where id_phim not in ( select id_phim from lich_chieu_phim )",
+    "generated_sql": "SELECT tieu_de, duoc_dao_dien_boi FROM phim EXCEPT SELECT phim.tieu_de, phim.duoc_dao_dien_boi FROM phim JOIN lich_chieu_phim ON phim.id_phim = lich_chieu_phim.id_phim",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 40489
+  },
+  {
+    "id": 42,
+    "db_id": "cinema",
+    "question": "Cho biết người đạo diễn có nhiều lần công chiếu nhất .",
+    "gold_sql": "select t2.duoc_dao_dien_boi from lich_chieu_phim as t1 join phim as t2 on t1.id_phim = t2.id_phim group by t2.duoc_dao_dien_boi order by sum ( t1.so_luong_suat_chieu_moi_ngay ) desc limit 1",
+    "generated_sql": "SELECT T1.duoc_dao_dien_boi , COUNT ( * ) FROM phim AS T1 JOIN lich_chieu_phim AS T2 ON T1.id_phim = T2.id_phim GROUP BY T1.id_phim ORDER BY COUNT ( * ) DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 53807
+  },
+  {
+    "id": 43,
+    "db_id": "cinema",
+    "question": "Tìm các địa điểm có nhiều hơn một rạp chiếu phim với sức chứa trên 300 .",
+    "gold_sql": "select dia_diem from rap_chieu_phim where suc_chua > 300 group by dia_diem having count ( * ) > 1",
+    "generated_sql": "SELECT dia_diem FROM rap_chieu_phim WHERE suc_chua > 300 GROUP BY dia_diem HAVING COUNT(*) > 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 51189
+  },
+  {
+    "id": 44,
+    "db_id": "cinema",
+    "question": "Những địa điểm nào có nhiều hơn một rạp chiếu phim với sức chứa trên 300 ?",
+    "gold_sql": "select dia_diem from rap_chieu_phim where suc_chua > 300 group by dia_diem having count ( * ) > 1",
+    "generated_sql": "SELECT dia_diem FROM rap_chieu_phim WHERE suc_chua > 300 GROUP BY dia_diem HAVING COUNT(*) > 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 55347
+  },
+  {
+    "id": 45,
+    "db_id": "cinema",
+    "question": "Có bao nhiêu bộ phim có từ ' Dummy ' trong tựa đề ?",
+    "gold_sql": "select count ( * ) from phim where tieu_de like \"%Dummy%\"",
+    "generated_sql": "SELECT COUNT(*) FROM phim WHERE tieu_de LIKE '%Dummy%'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 67527
+  },
+  {
+    "id": 46,
+    "db_id": "cinema",
+    "question": "Đếm số lượng phim có tựa đề chứa từ ' Dummy ' .",
+    "gold_sql": "select count ( * ) from phim where tieu_de like \"%Dummy%\"",
+    "generated_sql": "SELECT COUNT(*) FROM phim WHERE tieu_de LIKE '%Dummy%'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 24403
+  },
+  {
+    "id": 47,
+    "db_id": "college_3",
+    "question": "Tổng cộng có bao nhiêu khoá học ?",
+    "gold_sql": "select count ( * ) from khoa_hoc",
+    "generated_sql": "SELECT COUNT(*) FROM khoa_hoc",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 30348
+  },
+  {
+    "id": 48,
+    "db_id": "college_3",
+    "question": "Đếm số lượng các khoá học .",
+    "gold_sql": "select count ( * ) from khoa_hoc",
+    "generated_sql": "SELECT COUNT(*) FROM khoa_hoc",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 23813
+  },
+  {
+    "id": 49,
+    "db_id": "college_3",
+    "question": "Có bao nhiêu khoá học cung cấp nhiều hơn 2 tín chỉ ?",
+    "gold_sql": "select count ( * ) from khoa_hoc where so_luong_tin_chi > 2",
+    "generated_sql": "SELECT COUNT(*) FROM khoa_hoc WHERE so_luong_tin_chi > 2",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 36215
+  },
+  {
+    "id": 50,
+    "db_id": "college_3",
+    "question": "Đếm số lượng các khoá học cung cấp nhiều hơn 2 tín chỉ .",
+    "gold_sql": "select count ( * ) from khoa_hoc where so_luong_tin_chi > 2",
+    "generated_sql": "SELECT COUNT(*) FROM khoa_hoc WHERE so_luong_tin_chi > 2",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 31871
+  },
+  {
+    "id": 51,
+    "db_id": "college_3",
+    "question": "Liệt kê tên của các khoá học chỉ cung cấp duy nhất 1 tín chỉ .",
+    "gold_sql": "select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 1",
+    "generated_sql": "SELECT ten_khoa_hoc FROM khoa_hoc WHERE so_luong_tin_chi = 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 154129
+  },
+  {
+    "id": 52,
+    "db_id": "college_3",
+    "question": "Những khoá học chỉ cung cấp duy nhất 1 tín chỉ có tên là gì ?",
+    "gold_sql": "select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 1",
+    "generated_sql": "SELECT ten_khoa_hoc FROM khoa_hoc WHERE so_luong_tin_chi = 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 33305
+  },
+  {
+    "id": 53,
+    "db_id": "college_3",
+    "question": "Những khoá học nào được dạy vào những ngày MTW trong tuần ?",
+    "gold_sql": "select ten_khoa_hoc from khoa_hoc where ngay = \"MTW\"",
+    "generated_sql": "SELECT * FROM khoa_hoc WHERE ngay IN ('MON', 'TUE', 'WED')",
+    "exact_match": false,
+    "eval_error": "",
+    "duration_ms": 34279
+  },
+  {
+    "id": 54,
+    "db_id": "college_3",
+    "question": "Cho biết tên của những khoá học được dạy vào các ngày MTW trong tuần .",
+    "gold_sql": "select ten_khoa_hoc from khoa_hoc where ngay = \"MTW\"",
+    "generated_sql": "SELECT ten_khoa_hoc FROM khoa_hoc WHERE ngay = 'MTW'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 36016
+  },
+  {
+    "id": 55,
+    "db_id": "college_3",
+    "question": "Cho biết số lượng khoa nằm trong bộ phận ' AS ' .",
+    "gold_sql": "select count ( * ) from khoa where bo_phan = \"AS\"",
+    "generated_sql": "SELECT COUNT(*) FROM khoa WHERE bo_phan = 'AS'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 32039
+  },
+  {
+    "id": 56,
+    "db_id": "college_3",
+    "question": "Có bao nhiêu khoa nằm trong bộ phận ' AS ' ?",
+    "gold_sql": "select count ( * ) from khoa where bo_phan = \"AS\"",
+    "generated_sql": "SELECT COUNT(*) FROM khoa WHERE bo_phan = 'AS'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 84566
+  },
+  {
+    "id": 57,
+    "db_id": "college_3",
+    "question": "Cho biết số điện thoại của các khoa nằm ở phòng 268 .",
+    "gold_sql": "select so_dien_thoai_khoa from khoa where phong = 268",
+    "generated_sql": "SELECT so_dien_thoai_khoa FROM khoa WHERE phong = '268'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 33294
+  },
+  {
+    "id": 58,
+    "db_id": "college_3",
+    "question": "Số điện thoại của các khoa nằm ở phòng 268 ?",
+    "gold_sql": "select so_dien_thoai_khoa from khoa where phong = 268",
+    "generated_sql": "SELECT so_dien_thoai_khoa FROM khoa WHERE phong = '268'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 34386
+  },
+  {
+    "id": 59,
+    "db_id": "college_3",
+    "question": "Cho biết số lượng học sinh đã từng đạt điểm B.",
+    "gold_sql": "select count ( distinct id_sinh_vien ) from dang_ky_khoa_hoc where diem = \"B\"",
+    "generated_sql": "SELECT COUNT(DISTINCT T1.id_sinh_vien) FROM sinh_vien AS T1 JOIN dang_ky_khoa_hoc AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien WHERE T2.diem = 'B'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 98443
+  },
+  {
+    "id": 60,
+    "db_id": "college_3",
+    "question": "Có bao nhiêu học sinh đã từng đạt điểm B ?",
+    "gold_sql": "select count ( distinct id_sinh_vien ) from dang_ky_khoa_hoc where diem = \"B\"",
+    "generated_sql": "SELECT COUNT(*) FROM sinh_vien AS T1 JOIN dang_ky_khoa_hoc AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien WHERE T2.diem = 'B'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 114857
+  },
+  {
+    "id": 62,
+    "db_id": "college_3",
+    "question": "Cho biết điểm số cao nhất và điểm số thấp nhất .",
+    "gold_sql": "select max ( diem_so ) , min ( diem_so ) from chuyen_doi_diem",
+    "generated_sql": "SELECT MAX(diem_so), MIN(diem_so) FROM chuyen_doi_diem",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 78279
+  },
+  {
+    "id": 63,
+    "db_id": "college_3",
+    "question": "Cho biết tên của các học sinh có chứa chữ cái ' a ' trong tên .",
+    "gold_sql": "select distinct ten from sinh_vien where ten like \"%a%\"",
+    "generated_sql": "SELECT ho, ten FROM sinh_vien WHERE ten LIKE '%a%'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 28020
+  },
+  {
+    "id": 64,
+    "db_id": "college_3",
+    "question": "Những sinh viên có chứa chữ cái ' a ' trong tên của họ có tên là gì ?",
+    "gold_sql": "select distinct ten from sinh_vien where ten like \"%a%\"",
+    "generated_sql": "SELECT ho, ten FROM sinh_vien WHERE ho LIKE '%a%'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 31758
+  },
+  {
+    "id": 65,
+    "db_id": "college_3",
+    "question": "Tìm họ và tên của các giảng viên nam hiện đang làm việc ở toà nhà NEB .",
+    "gold_sql": "select ten , ho from giang_vien where gioi_tinh = \"M\" and toa_nha = \"NEB\"",
+    "generated_sql": "SELECT ho, ten FROM giang_vien WHERE gioi_tinh = 'nam' AND toa_nha = 'NEB'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 28606
+  },
+  {
+    "id": 66,
+    "db_id": "college_3",
+    "question": "Cho biết tên đầy đủ của các giảng viên nam hiện đang làm việc ở toà nhà NEB .",
+    "gold_sql": "select ten , ho from giang_vien where gioi_tinh = \"M\" and toa_nha = \"NEB\"",
+    "generated_sql": "SELECT ho , ten FROM giang_vien WHERE gioi_tinh = 'nam' AND toa_nha = 'NEB'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 28943
+  },
+  {
+    "id": 67,
+    "db_id": "college_3",
+    "question": "Cho biết phòng của các giảng viên có học hàm là ' Giáo sư ' và hiện đang làm việc ở khu nhà NEB .",
+    "gold_sql": "select phong from giang_vien where ngach = \"Professor\" and toa_nha = \"NEB\"",
+    "generated_sql": "SELECT phong FROM giang_vien WHERE ngach = 'Giáo sư' AND toa_nha = 'NEB'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 39116
+  },
+  {
+    "id": 68,
+    "db_id": "college_3",
+    "question": "Những giảng viên có học hàm ' Giáo sư ' hiện đang làm việc ở những phòng nào thuộc khu nhà NEB ?",
+    "gold_sql": "select phong from giang_vien where ngach = \"Professor\" and toa_nha = \"NEB\"",
+    "generated_sql": "SELECT phong FROM giang_vien WHERE ngach = 'Giáo sư' AND toa_nha = 'NEB'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 36222
+  },
+  {
+    "id": 69,
+    "db_id": "college_3",
+    "question": "Cho biết tên của các khoa hiện đang làm việc ở toà nhà ' Mergenthaler ' .",
+    "gold_sql": "select ten_khoa from khoa where toa_nha = \"Mergenthaler\"",
+    "generated_sql": "SELECT ten_khoa FROM khoa WHERE toa_nha = 'Mergenthaler'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 35598
+  },
+  {
+    "id": 70,
+    "db_id": "college_3",
+    "question": "Toà nhà ' Mergenthaler ' là nơi làm việc của những khoa nào ?",
+    "gold_sql": "select ten_khoa from khoa where toa_nha = \"Mergenthaler\"",
+    "generated_sql": "SELECT ten_khoa, ma_so_khoa FROM khoa WHERE toa_nha = 'Mergenthaler'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 35717
+  },
+  {
+    "id": 71,
+    "db_id": "college_3",
+    "question": "Liệt kê thông tin về tất cả các khoá học và sắp xếp kết quả theo thứ tự tăng dần về số lượng tín chỉ mà từng khoá học cung cấp .",
+    "gold_sql": "select * from khoa_hoc order by so_luong_tin_chi",
+    "generated_sql": "SELECT * FROM khoa_hoc ORDER BY so_luong_tin_chi ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 32427
+  },
+  {
+    "id": 72,
+    "db_id": "college_3",
+    "question": "Sắp xếp thông tin về các khoá học theo thứ tự tăng dần về số lượng tín chỉ mà từng khoá học cung cấp .",
+    "gold_sql": "select * from khoa_hoc order by so_luong_tin_chi",
+    "generated_sql": "SELECT * FROM khoa_hoc ORDER BY so_luong_tin_chi ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 31786
+  },
+  {
+    "id": 73,
+    "db_id": "college_3",
+    "question": "Liệt kê tên của các khoá học theo thứ tự tăng dần về số lượng tín chỉ mà từng khoá học cung cấp .",
+    "gold_sql": "select ten_khoa_hoc from khoa_hoc order by so_luong_tin_chi",
+    "generated_sql": "SELECT ten_khoa_hoc FROM khoa_hoc ORDER BY so_luong_tin_chi ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 35116
+  },
+  {
+    "id": 74,
+    "db_id": "college_3",
+    "question": "Sắp xếp tên của các khoá học theo thứ tự tăng dần về số lượng tín chỉ của từng khoá học .",
+    "gold_sql": "select ten_khoa_hoc from khoa_hoc order by so_luong_tin_chi",
+    "generated_sql": "SELECT ten_khoa_hoc FROM khoa_hoc ORDER BY so_luong_tin_chi ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 35024
+  },
+  {
+    "id": 75,
+    "db_id": "college_3",
+    "question": "Cho biết tên của các sinh viên theo thứ tự độ tuổi giảm dần .",
+    "gold_sql": "select ten from sinh_vien order by tuoi desc",
+    "generated_sql": "SELECT ho , ten FROM sinh_vien ORDER BY tuoi DESC",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 31087
+  },
+  {
+    "id": 76,
+    "db_id": "college_3",
+    "question": "Sắp xếp tên của các sinh viên theo thứ tự độ tuổi giảm dần .",
+    "gold_sql": "select ten from sinh_vien order by tuoi desc",
+    "generated_sql": "SELECT ten FROM sinh_vien ORDER BY tuoi DESC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 50877
+  },
+  {
+    "id": 77,
+    "db_id": "college_3",
+    "question": "Liệt kê họ của các sinh viên nữ ( giới tính là F ) theo thứ tự độ tuổi giảm dần .",
+    "gold_sql": "select ho from sinh_vien where gioi_tinh = \"F\" order by tuoi desc",
+    "generated_sql": "SELECT ho FROM sinh_vien WHERE gioi_tinh = 'F' ORDER BY tuoi DESC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 33067
+  },
+  {
+    "id": 78,
+    "db_id": "college_3",
+    "question": "Sắp xếp họ của các nữ sinh theo thứ tự độ tuổi giảm dần .",
+    "gold_sql": "select ho from sinh_vien where gioi_tinh = \"F\" order by tuoi desc",
+    "generated_sql": "SELECT ho FROM sinh_vien WHERE gioi_tinh = 'nữ' ORDER BY tuoi DESC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 30116
+  },
+  {
+    "id": 79,
+    "db_id": "college_3",
+    "question": "Liệt kê họ của các giảng viên đang làm việc tại toà nhà Barton theo thứ tự tăng dần của bảng chữ cái .",
+    "gold_sql": "select ho from giang_vien where toa_nha = \"Barton\" order by ho",
+    "generated_sql": "SELECT ho FROM giang_vien WHERE toa_nha = 'Barton' ORDER BY ho ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 25522
+  },
+  {
+    "id": 80,
+    "db_id": "college_3",
+    "question": "Sắp xếp họ của các giảng viên tại toà nhà Barton theo thứ tự tăng dần của bảng chữ cái .",
+    "gold_sql": "select ho from giang_vien where toa_nha = \"Barton\" order by ho",
+    "generated_sql": "SELECT ho FROM giang_vien WHERE toa_nha = 'Barton' ORDER BY ho ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 29063
+  },
+  {
+    "id": 81,
+    "db_id": "college_3",
+    "question": "Liệt kê tên của các giáo sư theo thứ tự bảng chữ cái tăng dần .",
+    "gold_sql": "select ten from giang_vien where ngach = \"Professor\" order by ten",
+    "generated_sql": "SELECT ho , ten FROM giang_vien ORDER BY ho ASC , ten ASC",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 33674
+  },
+  {
+    "id": 82,
+    "db_id": "college_3",
+    "question": "Sắp xếp tên của các giảng viên có học hàm ' Giáo sư ' theo thứ tự bảng chữ cái tăng dần .",
+    "gold_sql": "select ten from giang_vien where ngach = \"Professor\" order by ten",
+    "generated_sql": "SELECT ho , ten FROM giang_vien WHERE ngach = 'Giáo sư' ORDER BY ho , ten",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 64524
+  },
+  {
+    "id": 83,
+    "db_id": "college_3",
+    "question": "Cho biết tên của khoa có nhiều sinh viên đăng ký học chuyên ngành phụ nhất .",
+    "gold_sql": "select t1.ten_khoa from khoa as t1 join chuyen_nganh_phu as t2 on t1.ma_so_khoa = t2.ma_so_khoa group by t2.ma_so_khoa order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT T1.ten_khoa FROM khoa AS T1 JOIN chuyen_nganh_phu AS T2 ON T1.ma_so_khoa = T2.ma_so_khoa GROUP BY T1.ma_so_khoa ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 69421
+  },
+  {
+    "id": 84,
+    "db_id": "college_3",
+    "question": "Khoa nào có nhiều sinh viên đăng ký học chuyên ngành phụ nhất ? Cho biết tên của khoa này .",
+    "gold_sql": "select t1.ten_khoa from khoa as t1 join chuyen_nganh_phu as t2 on t1.ma_so_khoa = t2.ma_so_khoa group by t2.ma_so_khoa order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT T3.ten_khoa , COUNT ( * ) FROM sinh_vien AS T1 JOIN chuyen_nganh_phu AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien JOIN khoa AS T3 ON T2.ma_so_khoa = T3.ma_so_khoa GROUP BY T3.ma_so_khoa ORDER BY COUNT ( * ) DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 186831
+  },
+  {
+    "id": 85,
+    "db_id": "college_3",
+    "question": "Những khoa không có sinh viên nào đăng ký học chuyên ngành phụ có tên là gì ?",
+    "gold_sql": "select ten_khoa from khoa except select t1.ten_khoa from khoa as t1 join chuyen_nganh_phu as t2 on t1.ma_so_khoa = t2.ma_so_khoa",
+    "generated_sql": "SELECT ten_khoa FROM khoa LEFT JOIN chuyen_nganh_phu ON khoa.ma_so_khoa = chuyen_nganh_phu.ma_so_khoa WHERE chuyen_nganh_phu.id_sinh_vien IS NULL",
+    "exact_match": false,
+    "eval_error": "'left'",
+    "duration_ms": 85681
+  },
+  {
+    "id": 86,
+    "db_id": "college_3",
+    "question": "Những khoa nào không có sinh viên đăng ký học chuyên ngành phụ ? Cho biết tên của những khoa này .",
+    "gold_sql": "select ten_khoa from khoa except select t1.ten_khoa from khoa as t1 join chuyen_nganh_phu as t2 on t1.ma_so_khoa = t2.ma_so_khoa",
+    "generated_sql": "SELECT ten_khoa FROM khoa EXCEPT SELECT ten_khoa FROM khoa WHERE ma_so_khoa IN (SELECT ma_so_khoa FROM chuyen_nganh_phu)",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 63488
+  },
+  {
+    "id": 87,
+    "db_id": "college_3",
+    "question": "Tìm tên của khoa có ít thành viên nhất .",
+    "gold_sql": "select t1.ten_khoa from khoa as t1 join la_thanh_vien_cua as t2 on t1.ma_so_khoa = t2.ma_so_khoa group by t2.ma_so_khoa order by count ( * ) asc limit 1",
+    "generated_sql": "SELECT khoa.ten_khoa\nFROM khoa\nLEFT JOIN (\n    SELECT ma_so_khoa, COUNT(*) AS lecturer_count\n    FROM la_thanh_vien_cua\n    GROUP BY ma_so_khoa\n) AS lecturers ON khoa.ma_so_khoa = lecturers.ma_so_khoa\nLEFT JOIN (\n    SELECT ma_so_khoa, COUNT(*) AS student_count\n    FROM chuyen_nganh_phu\n    GROUP BY ma_so_khoa\n) AS students ON khoa.ma_so_khoa = students.ma_so_khoa\nGROUP BY khoa.ma_so_khoa, khoa.ten_khoa\nORDER BY COALESCE(lecturer_count, 0) + COALESCE(student_count, 0) ASC\nLIMIT 1",
+    "exact_match": false,
+    "eval_error": "'left'",
+    "duration_ms": 132365
+  },
+  {
+    "id": 88,
+    "db_id": "college_3",
+    "question": "Khoa có ít thành viên nhất tên là gì ?",
+    "gold_sql": "select t1.ten_khoa from khoa as t1 join la_thanh_vien_cua as t2 on t1.ma_so_khoa = t2.ma_so_khoa group by t2.ma_so_khoa order by count ( * ) asc limit 1",
+    "generated_sql": "SELECT khoa.ten_khoa FROM khoa LEFT JOIN la_thanh_vien_cua ON khoa.ma_so_khoa = la_thanh_vien_cua.ma_so_khoa LEFT JOIN chuyen_nganh_phu ON khoa.ma_so_khoa = chuyen_nganh_phu.ma_so_khoa GROUP BY khoa.ma_so_khoa ORDER BY COUNT(*) ASC LIMIT 1",
+    "exact_match": false,
+    "eval_error": "'left'",
+    "duration_ms": 87840
+  },
+  {
+    "id": 89,
+    "db_id": "college_3",
+    "question": "Cho biết ngạch giảng viên ít phổ biến nhất .",
+    "gold_sql": "select ngach from giang_vien group by ngach order by count ( * ) asc limit 1",
+    "generated_sql": "SELECT ngach, COUNT(*) FROM giang_vien GROUP BY ngach ORDER BY COUNT(*) ASC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 51207
+  },
+  {
+    "id": 90,
+    "db_id": "college_3",
+    "question": "Ngạch giảng viên ít phổ biến nhất là ngạch nào ?",
+    "gold_sql": "select ngach from giang_vien group by ngach order by count ( * ) asc limit 1",
+    "generated_sql": "SELECT ngach FROM giang_vien GROUP BY ngach ORDER BY COUNT(*) ASC LIMIT 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 31907
+  },
+  {
+    "id": 91,
+    "db_id": "college_3",
+    "question": "Cho biết họ và tên của 3 người hướng dẫn đã tham gia giảng dạy nhiều khoá học nhất .",
+    "gold_sql": "select t2.ten , t2.ho from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien group by t1.nguoi_huong_dan order by count ( * ) desc limit 3",
+    "generated_sql": "SELECT T1.ho , T1.ten FROM giang_vien AS T1 JOIN khoa_hoc AS T2 ON T1.id_giang_vien = T2.nguoi_huong_dan GROUP BY T1.id_giang_vien ORDER BY COUNT(*) DESC LIMIT 3",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 50031
+  },
+  {
+    "id": 92,
+    "db_id": "college_3",
+    "question": "Cho biết tên đầy đủ của 3 người hướng dẫn đã tham gia giảng dạy nhiều khoá học nhất .",
+    "gold_sql": "select t2.ten , t2.ho from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien group by t1.nguoi_huong_dan order by count ( * ) desc limit 3",
+    "generated_sql": "SELECT T1.ho, T1.ten, COUNT(*) AS so_khoa_hoc FROM giang_vien AS T1 JOIN khoa_hoc AS T2 ON T1.id_giang_vien = T2.nguoi_huong_dan GROUP BY T1.id_giang_vien ORDER BY COUNT(*) DESC LIMIT 3",
+    "exact_match": false,
+    "eval_error": "Error col: as",
+    "duration_ms": 45227
+  },
+  {
+    "id": 93,
+    "db_id": "college_3",
+    "question": "Người hướng dẫn đã giảng dạy nhiều khoá học nhất hiện đang làm việc ở toà nhà nào ?",
+    "gold_sql": "select t2.toa_nha from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien group by t1.nguoi_huong_dan order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT T1.toa_nha , COUNT ( * ) FROM giang_vien AS T1 JOIN khoa_hoc AS T2 ON T1.id_giang_vien = T2.nguoi_huong_dan GROUP BY T1.id_giang_vien ORDER BY COUNT ( * ) DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 55085
+  },
+  {
+    "id": 94,
+    "db_id": "college_3",
+    "question": "Toà nhà nào là nơi làm việc của người hướng dẫn đã giảng dạy nhiều khoá học nhất ?",
+    "gold_sql": "select t2.toa_nha from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien group by t1.nguoi_huong_dan order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT T1.toa_nha FROM giang_vien AS T1 JOIN khoa_hoc AS T2 ON T1.id_giang_vien = T2.nguoi_huong_dan GROUP BY T1.id_giang_vien ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 48709
+  },
+  {
+    "id": 95,
+    "db_id": "college_3",
+    "question": "Cho biết tên của các khoá học đã nhận được ít nhất 5 lượt đăng ký .",
+    "gold_sql": "select t1.ten_khoa_hoc from khoa_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.id_khoa_hoc = t2.ma_khoa_hoc group by t2.ma_khoa_hoc having count ( * ) >= 5",
+    "generated_sql": "SELECT T1.ten_khoa_hoc FROM khoa_hoc AS T1 JOIN dang_ky_khoa_hoc AS T2 ON T1.id_khoa_hoc = T2.ma_khoa_hoc GROUP BY T1.id_khoa_hoc HAVING COUNT(*) >= 5",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 37134
+  },
+  {
+    "id": 96,
+    "db_id": "college_3",
+    "question": "Những khoá học nào đã nhận được ít nhất 5 lượt đăng ký ? Cho biết tên của những khoá học này .",
+    "gold_sql": "select t1.ten_khoa_hoc from khoa_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.id_khoa_hoc = t2.ma_khoa_hoc group by t2.ma_khoa_hoc having count ( * ) >= 5",
+    "generated_sql": "SELECT T1.ten_khoa_hoc FROM khoa_hoc AS T1 JOIN dang_ky_khoa_hoc AS T2 ON T1.id_khoa_hoc = T2.ma_khoa_hoc GROUP BY T1.id_khoa_hoc HAVING COUNT(*) >= 5",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 41819
+  },
+  {
+    "id": 97,
+    "db_id": "college_3",
+    "question": "Khoá học có tiêu đề là ' Kỹ năng máy tính ' đã được giảng dạy bởi những người hướng dẫn nào ? Cho biết tên và họ của những người hướng dẫn này .",
+    "gold_sql": "select t2.ten , t2.ho from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien where t1.ten_khoa_hoc = \"COMPUTER LITERACY\"",
+    "generated_sql": "SELECT T2.ho, T2.ten FROM khoa_hoc AS T1 JOIN giang_vien AS T2 ON T1.nguoi_huong_dan = T2.id_giang_vien WHERE T1.ten_khoa_hoc = ' Kỹ năng máy tính '",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 41977
+  },
+  {
+    "id": 98,
+    "db_id": "college_3",
+    "question": "Cho biết tên đầy đủ của những người hướng dẫn đã trực tiếp giảng dạy khoá học có tiêu đề là ' Kỹ năng máy tính ' .",
+    "gold_sql": "select t2.ten , t2.ho from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien where t1.ten_khoa_hoc = \"COMPUTER LITERACY\"",
+    "generated_sql": "SELECT T2.ho , T2.ten FROM khoa_hoc AS T1 JOIN giang_vien AS T2 ON T1.nguoi_huong_dan = T2.id_giang_vien WHERE T1.ten_khoa_hoc = 'Kỹ năng máy tính'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 47178
+  },
+  {
+    "id": 99,
+    "db_id": "college_3",
+    "question": "Khoá học ' Giới thiệu về khoa học máy tính ' được dạy bởi khoa nào và tại phòng học nào ?",
+    "gold_sql": "select t2.ten_khoa , t2.phong from khoa_hoc as t1 join khoa as t2 on t1.ma_so_khoa = t2.ma_so_khoa where t1.ten_khoa_hoc = \"INTRODUCTION TO COMPUTER SCIENCE\"",
+    "generated_sql": "SELECT ten_khoa_hoc, ten_khoa, phong FROM khoa_hoc JOIN khoa ON khoa_hoc.ma_so_khoa = khoa.ma_so_khoa WHERE ten_khoa_hoc = 'Giới thiệu về khoa học máy tính'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 32102
+  }
+]

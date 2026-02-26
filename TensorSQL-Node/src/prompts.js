@@ -81,6 +81,10 @@ DATABASE SCHEMA
 ⚠️ CRITICAL: Read column descriptions - action verbs show WHO did WHAT
 - "đã GHI LẠI" = RECORDED | "đã LIÊN LẠC" = CONTACTED | "đã CUNG CẤP" = PROVIDED
 
+⚠️ SCHEMA LINKING: If SCHEMA LINKING section is present, use it to identify the correct tables and columns.
+- The linking maps Vietnamese phrases from the question to exact schema elements.
+- TRUST the linking: if it says a column belongs to table X, query from table X. Do NOT add unnecessary JOINs.
+
 CURRENT DATETIME: {{current_datetime}}
 USER QUESTION: "{{question}}"
 
@@ -93,7 +97,8 @@ C) GLOBAL_AGGREGATION - COUNT/SUM/AVG entire table (no "mỗi"/"từng")
 D) ENTITY_AGGREGATION - "mỗi"/"từng" + aggregation + GROUP BY
 E) ORDERED_RESULT - Has "sắp xếp"/"xếp theo", no aggregation
 F) EXTREME_VALUE - "nhất"/"đầu tiên"/"cuối cùng" → ORDER BY + LIMIT 1
-G) SET_OPERATION - "nhưng không"→EXCEPT | "hoặc"+diff agg→UNION | "và"→INTERSECT
+G) SET_OPERATION - "nhưng không"/"chưa"→EXCEPT | "vừa...vừa"/"cả...và"→INTERSECT
+H) UNION_OPERATION - "A hoặc B nhưng C" where C applies only to B → SELECT...WHERE A UNION SELECT...WHERE B AND C
 
 JOIN RULES:
 - Question names entity → That table in FROM
@@ -107,13 +112,13 @@ INTENT_TYPE: <A-G>
 MAIN_ENTITY: <table>
 JOINED_TABLES: <tables> | NONE
 JOIN_CONDITIONS: <T1.col=T2.col> | NONE
-SELECT_COLUMNS: <columns>
+SELECT_COLUMNS: <ONLY columns asked in question, nothing extra>
 FILTER_CONDITIONS: <conditions> | NONE
 AGGREGATION:
 - TYPE: NONE|GLOBAL|ENTITY
 - FUNCTION: COUNT|SUM|AVG|MIN|MAX|NONE
 - TARGET_COLUMN: <col|*>
-- GROUP_BY: <PK only> | NONE
+- GROUP_BY: <use joined/child table alias: T2.col or T1.FK_col> | NONE
 - HAVING: <condition> | NONE
 ORDERING:
 - ORDER_BY: <expr> | NONE
@@ -126,21 +131,21 @@ SET_OPERATION: NONE|EXCEPT|UNION|INTERSECT
 ==================================================
 EXAMPLES (use as templates):
 
-Ex1: "Mỗi hợp đồng có bao nhiêu tài sản?"
+Ex1: "Mỗi hợp đồng có bao nhiêu tài sản?" → asks for: id + count
 INTENT_TYPE: ENTITY_AGGREGATION
 MAIN_ENTITY: hop_dong_bao_tri
 JOINED_TABLES: tai_san
 JOIN_CONDITIONS: T1.id_hop_dong_bao_tri = T2.id_hop_dong_bao_tri
-SELECT_COLUMNS: T1.id_hop_dong_bao_tri, COUNT(*)
+SELECT_COLUMNS: T1.id_hop_dong_bao_tri, COUNT(*) ← ONLY these 2, nothing extra
 AGGREGATION: TYPE: ENTITY | FUNCTION: COUNT | TARGET_COLUMN: * | GROUP_BY: T1.id_hop_dong_bao_tri
 FILTER_CONDITIONS: NONE | ORDERING: NONE | SET_OPERATION: NONE
 
-Ex2: "Kỹ sư nào đến nhiều lần nhất?"
+Ex2: "Kỹ sư nào đến nhiều lần nhất?" → asks for: id, ten, ho (NO COUNT in SELECT)
 INTENT_TYPE: EXTREME_VALUE
 MAIN_ENTITY: ky_su_bao_tri
 JOINED_TABLES: chuyen_tham_cua_ky_su
 JOIN_CONDITIONS: T1.id_ky_su = T2.id_ky_su
-SELECT_COLUMNS: T1.id_ky_su, T1.ten, T1.ho
+SELECT_COLUMNS: T1.id_ky_su, T1.ten, T1.ho ← NO COUNT(*) here, only in ORDER BY
 AGGREGATION: TYPE: ENTITY | FUNCTION: COUNT | TARGET_COLUMN: * | GROUP_BY: T1.id_ky_su
 ORDERING: ORDER_BY: COUNT(*) | DIRECTION: DESC | LIMIT: 1
 SET_OPERATION: NONE
@@ -149,18 +154,61 @@ Ex3: "Nhân viên ghi lỗi nhưng chưa liên hệ kỹ sư"
 INTENT_TYPE: SET_OPERATION
 MAIN_ENTITY: nhan_vien
 SET_OPERATION: EXCEPT
-LEFT_QUERY: Employees in fault log
-RIGHT_QUERY: Employees in engineer visits
-(LEFT: JOIN nhat_ky_loi T2 ON T1.id_nhan_vien=T2.duoc_ghi_lai_boi_nhan_vien_co_id)
-(RIGHT: JOIN chuyen_tham_cua_ky_su T2 ON T1.id_nhan_vien=T2.id_nhan_vien_lien_lac)
+LEFT_QUERY: Employees in fault log (JOIN nhat_ky_loi AS T2 ON T1.id_nhan_vien=T2.duoc_ghi_lai_boi_nhan_vien_co_id)
+RIGHT_QUERY: Employees in engineer visits (JOIN chuyen_tham_cua_ky_su AS T2 ON T1.id_nhan_vien=T2.id_nhan_vien_lien_lac)
+
+Ex4: "Khách hàng nào chưa có tài khoản?"
+INTENT_TYPE: FILTERED_SELECT
+MAIN_ENTITY: khach_hang
+FILTER_CONDITIONS: id_khach_hang NOT IN (SELECT id_khach_hang FROM tai_khoan)
+→ Use NOT IN subquery, NEVER LEFT JOIN IS NULL
 
 ==================================================
 RULES:
 - "mỗi"/"từng" → ENTITY_AGGREGATION
 - "nhất" → EXTREME_VALUE (ORDER BY+LIMIT, not MIN/MAX in WHERE)
-- "nhưng không" → EXCEPT
-- Literals: copy EXACTLY (no translation)
-- GROUP BY: PK only (not name columns)
+- "hoặc ... hoặc" with 2-3 values on same column → Use OR, not IN
+- Range comparison → Use BETWEEN, not >= AND <=
+- "từ X trở lên"/"ít nhất X"/"tối thiểu X" → >= (not >)
+- "hơn X"/"nhiều hơn X" → > (not >=)
+
+⚠️ SINGLE TABLE RULE (CRITICAL - #1 error source):
+- If ALL columns the question asks for exist in ONE single table → query that table ONLY. ⛔ NEVER add JOINs.
+- Before adding a JOIN, CHECK: does the column ACTUALLY exist in the table you're querying? If yes → no JOIN needed.
+- Example: "số lượng phát hành" exists in table sach → SELECT so_luong_phat_hanh FROM sach. ⛔ Do NOT JOIN an_pham.
+- Example: "vị trí" exists in table tran_dau_trong_mua_giai → query it directly. ⛔ Do NOT JOIN cau_thu.
+
+⚠️ EXCLUSION RULES ("chưa có"/"không có"/"ngoại trừ"):
+- Simple exclusion (entity NOT IN another table) → Use NOT IN subquery:
+  Example: "giáo viên chưa dạy" → WHERE id NOT IN (SELECT id FROM ...)
+- Two separate entity sets compared → Use EXCEPT:
+  Example: "ghi lỗi nhưng chưa liên hệ kỹ sư" → SELECT...EXCEPT SELECT...
+- ⛔ NEVER use LEFT JOIN...IS NULL for exclusion.
+
+⚠️ SET OPERATION RULES:
+- "vừa...vừa" / "cả A lẫn B" → INTERSECT (two full SELECT queries)
+- "A hoặc B nhưng C" where C only applies to B → UNION (SELECT...WHERE A UNION SELECT...WHERE B AND C)
+
+⚠️ VALUE RULES (CRITICAL):
+- String values: Copy EXACTLY from schema/data in ENGLISH. ⛔ NEVER translate to Vietnamese.
+  Example: "American" stays "American", NOT "Mỹ". "Order" stays "Order", NOT "Đặt hàng".
+- Number values: No quotes. Compare as numbers, not strings.
+
+⚠️ SELECT RULES (CRITICAL - #2 error source):
+- SELECT: ONLY columns the question EXPLICITLY asks for. ⛔ NEVER add extra columns like id, count, etc.
+- "tên" alone → SELECT ten ONLY. NOT ho, ten. NOT ho || ten.
+- "tên đầy đủ"/"họ và tên" → SELECT ho, ten (two separate columns). NEVER || or CONCAT.
+- "liệt kê *" or "cho biết tất cả" about a table → SELECT * or list all columns from THAT table only.
+- EXTREME_VALUE: Put COUNT/SUM in ORDER BY only. ⛔ NEVER add COUNT/SUM to SELECT.
+- If question says "bao nhiêu" → SELECT COUNT(*). Don't add other columns unless asked.
+
+⚠️ GROUP BY RULES:
+- GROUP BY the column that appears in SELECT (not the aggregate). 
+- If SELECT has T1.ten_bo_phan, COUNT(*) → GROUP BY T1.ten_bo_phan (not T1.id_bo_phan).
+- When question says "mỗi X" and you SELECT X.name → GROUP BY X.name.
+- COUNT: Always COUNT(*), never COUNT(column)
+- "số lượng" / "bao nhiêu loại" → COUNT(DISTINCT col), not GROUP BY + COUNT
+- "một vài"/"một số"/"các" → SIMPLE_SELECT with DISTINCT (not GROUP BY HAVING)
 
 OUTPUT PLAN ONLY. NO EXPLANATION.
 `;
@@ -181,35 +229,83 @@ PLAN
 CURRENT DATETIME: {{current_datetime}}
 
 ==================================================
-RULES:
+⚠️ STRICT SQL STYLE RULES (MUST FOLLOW ALL):
 
-1) SELECT: Use plan's SELECT_COLUMNS exactly (T1.col, T2.col format)
-2) FROM: MAIN_ENTITY as T1, then JOIN per JOINED_TABLES
-3) WHERE: Use FILTER_CONDITIONS (NONE→no WHERE). Literals: keep exact, strings='single quotes', numbers=no quotes
-4) GROUP BY: If TYPE=ENTITY→GROUP BY PK only (NOT name cols). Ex: T1.id_cong_ty (not T1.id_cong_ty,T1.ten_cong_ty)
-5) HAVING: Use if in plan, else skip
-6) ORDER BY: Use expression not alias. Match direction (ASC/DESC)
-7) LIMIT: Use if in plan
-8) SET OPS: If EXCEPT/UNION→(SELECT...)OPERATOR(SELECT...)
-9) EXTREME_VALUE: Must have ORDER BY+LIMIT 1 (never WHERE col=(SELECT MIN...))
-10) SQLite only: No dbo. prefix, single quotes, no backticks
+1) SELECT: EXACTLY plan columns, EXACTLY plan order. ⛔ NEVER add extra columns. ⛔ NEVER use column aliases (AS name).
+   - "tên" → SELECT ten only. NOT ho, ten.
+   - "tên đầy đủ" → SELECT ho, ten (two columns). ⛔ NEVER ho || ' ' || ten or CONCAT.
+   - EXTREME_VALUE → Do NOT add COUNT(*)/SUM() to SELECT. Use only in ORDER BY.
+   - If plan says SELECT T2.ten, COUNT(*) → output in EXACTLY that order.
+2) FROM: table AS T1. Always "AS" keyword. ⛔ NEVER INNER JOIN, LEFT JOIN. Only plain "JOIN".
+3) WHERE: ⛔⛔⛔ String values MUST be in ENGLISH as stored in database. NEVER translate to Vietnamese.
+   - "American" stays 'American', NOT 'Mỹ'. "Order" stays 'Order', NOT 'Đặt hàng'.
+   - "Spring" stays 'Spring', NOT 'Mùa xuân'. "Cargo" stays 'Cargo', NOT 'Vận chuyển hàng hoá'.
+   - 2-3 values: Use OR (col='a' OR col='b'), NOT IN(...)
+   - Ranges: Use BETWEEN, NOT col>=a AND col<=b
+   - "từ X trở lên" → >= (not >). "hơn X" → > (not >=).
+4) GROUP BY: Match plan alias EXACTLY. If plan says GROUP BY T2.col → T2.col, not T1.col.
+   - When aggregating over joined table, GROUP BY the FK/joined column.
+   - ⛔ Common mistake: GROUP BY T1.id instead of GROUP BY T2.id or T1.FK_col. Follow plan.
+5) HAVING: Use if in plan, else skip.
+6) ORDER BY: Use expression directly (COUNT(*)). ⛔ NEVER use alias names.
+7) LIMIT: Use if in plan.
+8) SET OPS: EXCEPT/UNION/INTERSECT → full SELECT...FROM... OPERATOR SELECT...FROM...
+   - UNION: Each side is a complete query. "A hoặc B nhưng C" → SELECT...WHERE A UNION SELECT...WHERE B AND C
+   - EXCEPT: "chưa có"/"không có" → SELECT...EXCEPT SELECT...(with JOIN)
+   - ⛔ NEVER replace EXCEPT with NOT IN or NOT EXISTS. NEVER replace INTERSECT with AND/EXISTS.
+9) EXCLUSION: PREFER EXCEPT. If NOT IN, use subquery. ⛔ NEVER LEFT JOIN...IS NULL or NOT EXISTS.
+10) COUNT: Always COUNT(*). ⛔ NEVER COUNT(column_name).
+11) No dbo., no backticks, no semicolons, no newlines. Single line output.
+12) DISTINCT: Use if plan says DISTINCT. ⛔ Do NOT replace DISTINCT with GROUP BY HAVING.
+13) SINGLE TABLE: If plan has no JOINs, do NOT add unnecessary JOINs. Query ONE table directly.
+    - Example: "count distinct X from table_a" → select count ( distinct x ) from table_a. ⛔ NOT join another table.
 
 ==================================================
 EXAMPLES:
 
-Plan: ENTITY_AGGREGATION, cong_ty→tai_san, T1.id=T2.id_cty_cung_cap, GROUP BY T1.id
-SQL: SELECT T1.id_cong_ty, COUNT(*) FROM cong_ty_ben_thu_ba T1 JOIN tai_san T2 ON T1.id_cong_ty=T2.id_cong_ty_cung_cap GROUP BY T1.id_cong_ty
+Plan: ENTITY_AGGREGATION, cong_ty→tai_san, GROUP BY T1.id
+SQL: select count ( * ) , t1.id_cong_ty from cong_ty_ben_thu_ba as t1 join tai_san as t2 on t1.id_cong_ty = t2.id_cong_ty_cung_cap group by t1.id_cong_ty
 
-Plan: EXTREME_VALUE, ky_su→visits, ORDER BY COUNT(*) DESC, LIMIT 1
-SQL: SELECT T1.id_ky_su, T1.ten, T1.ho FROM ky_su_bao_tri T1 JOIN chuyen_tham_cua_ky_su T2 ON T1.id_ky_su=T2.id_ky_su GROUP BY T1.id_ky_su ORDER BY COUNT(*) DESC LIMIT 1
+Plan: EXTREME_VALUE, ky_su→visits, SELECT T1.id, T1.ten, T1.ho (NO COUNT in SELECT)
+SQL: select t1.id_ky_su , t1.ten , t1.ho from ky_su_bao_tri as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_ky_su = t2.id_ky_su group by t1.id_ky_su order by count ( * ) desc limit 1
 
 Plan: EXCEPT, nhan_vien (fault log vs visits)
-SQL: SELECT T1.ten_nhan_vien, T1.id_nhan_vien FROM nhan_vien T1 JOIN nhat_ky_loi T2 ON T1.id_nhan_vien=T2.duoc_ghi_lai_boi_nhan_vien_co_id EXCEPT SELECT T1.ten_nhan_vien, T1.id_nhan_vien FROM nhan_vien T1 JOIN chuyen_tham_cua_ky_su T2 ON T1.id_nhan_vien=T2.id_nhan_vien_lien_lac
+SQL: select t1.ten_nhan_vien , t1.id_nhan_vien from nhan_vien as t1 join nhat_ky_loi as t2 on t1.id_nhan_vien = t2.duoc_ghi_lai_boi_nhan_vien_co_id except select t1.ten_nhan_vien , t1.id_nhan_vien from nhan_vien as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_nhan_vien = t2.id_nhan_vien_lien_lac
+
+Plan: FILTERED, khach_hang not in tai_khoan
+SQL: select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from tai_khoan )
+
+Plan: FILTERED, 2 values with OR (English values!)
+SQL: select gia_ban from an_pham where nha_xuat_ban = 'Person' or nha_xuat_ban = 'Wiley'
+
+Plan: SIMPLE_SELECT with DISTINCT
+SQL: select distinct dia_diem from rap_chieu_phim
+
+Plan: INTERSECT (two full queries)
+SQL: select dia_diem from rap_chieu_phim where nam_mo_cua = 2010 intersect select dia_diem from rap_chieu_phim where nam_mo_cua = 2011
+
+Plan: UNION, "3 tín chỉ hoặc 1 tín chỉ nhưng 4 giờ"
+SQL: select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 3 union select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 1 and gio = 4
+
+Plan: GLOBAL_AGGREGATION, single table, no JOIN needed
+SQL: select count ( distinct id_khach_hang ) from tai_khoan
+
+Plan: SINGLE TABLE count/group (no JOIN!)
+SQL: select id_khach_hang , count ( * ) from the_khach_hang group by id_khach_hang
+
+Plan: EXCEPT, khach_hang not having credit cards
+SQL: select id_khach_hang , ten_cua_khach_hang from khach_hang except select t1.id_khach_hang , t2.ten_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where ma_loai_the = 'Credit'
 
 ==================================================
-BEFORE OUTPUT: Verify tables/columns exist in schema, no dbo., single quotes for strings
+FINAL CHECK:
+1. Count SELECT columns. If more than plan → REMOVE extras.
+2. Check column ORDER matches plan.
+3. Verify JOIN is plain (no INNER/LEFT).
+4. Verify WHERE values are in ENGLISH (not Vietnamese).
+5. If plan says EXCEPT/UNION/INTERSECT → verify you used that operator (not NOT IN/OR/AND).
+6. No semicolons.
 
-OUTPUT: Raw SQL only. No markdown, no explanation.
+OUTPUT: Raw SQL on single line. No markdown, no explanation.
 `;
 
 // ============================================================================
@@ -226,24 +322,34 @@ SQL: {{generated_sql}}
 ==================================================
 CHECK (mark ✓ or ✗):
 
-1) SELECT: Matches plan columns? Correct aliases?
-2) FROM+JOIN: MAIN_ENTITY as T1? All joins present? Conditions correct?
-3) WHERE: If plan=NONE→no WHERE? All conditions present? Literals exact?
-4) GROUP BY: If TYPE=ENTITY→has GROUP BY? PK only (not names)?
-5) HAVING: Matches plan?
-6) ORDER BY: If plan=NONE→no ORDER? Expression+direction correct?
-7) LIMIT: Matches plan?
-8) SET OPS: Operator correct? Both parts same columns?
-9) EXTREME_VALUE: Has ORDER BY+LIMIT 1? (not WHERE col=SELECT MIN)
-10) SYNTAX: No dbo.? Single quotes? Valid SQLite?
+1) SELECT: EXACTLY plan columns? No extra cols? No column aliases (AS name)? Column ORDER matches plan?
+2) JOIN: Plain "JOIN" only? (INNER/LEFT → rewrite to plain JOIN or remove)
+3) WHERE values: Are string values in ENGLISH (as stored in DB)? ⛔ Vietnamese values like 'Mỹ', 'Đặt hàng', 'Mùa xuân' = WRONG. Must be 'American', 'Order', 'Spring'.
+4) WHERE operators: ">" vs ">=" correct? "từ X trở lên" = >=. "hơn X" = >.
+5) GROUP BY: Correct table alias per plan? FK/joined column?
+6) ORDER BY: Expression not alias? Direction correct? LIMIT correct?
+7) SET OPS: If plan says EXCEPT → SQL uses EXCEPT? (NOT "NOT IN" or "NOT EXISTS")
+   If plan says INTERSECT → SQL uses INTERSECT? (NOT "AND" or "EXISTS")
+   If plan says UNION → SQL uses UNION? (NOT "OR")
+8) SINGLE TABLE: If plan has no JOINs, are there unnecessary JOINs in SQL? Remove them.
+9) COUNT(*) only? No || or CONCAT? No newlines? Single line?
 
 ==================================================
+COMMON FIXES:
+- INNER JOIN → JOIN | LEFT JOIN IS NULL → NOT IN subquery or EXCEPT
+- SELECT col AS name → remove AS name
+- ho || ' ' || ten → ho, ten (separate columns)
+- Extra COUNT(*) in SELECT → remove if not in plan
+- GROUP BY T1.col → T2.col (match plan)
+- Unnecessary JOIN → remove if single table query
+- Vietnamese values → English values (check schema for originals)
+- NOT IN/NOT EXISTS → rewrite as EXCEPT if plan says EXCEPT
+
 DECISION:
-
 All ✓ → Output: VALID
-Any ✗ → Rewrite SQL from plan (follow plan step by step, don't patch)
+Any ✗ → Rewrite complete SQL. Single line.
 
-OUTPUT: "VALID" or complete rewritten SQL. Nothing else.
+OUTPUT: "VALID" or corrected SQL. Nothing else.
 `;
 
 // ============================================================================
@@ -310,6 +416,30 @@ OUTPUT: Corrected SQL only. No markdown, no explanation.
 
 
 // ============================================================================
+// 6. SCHEMA SELECTION PROMPT - AI-powered table relevance filtering
+// ============================================================================
+
+const SCHEMA_SELECTION_PROMPT = `You are a schema selector for Text-to-SQL. Given a Vietnamese question and database tables, select ONLY the relevant tables needed to answer the question.
+
+DATABASE TABLES:
+{{table_list}}
+
+{{schema_linking_hints}}
+
+QUESTION: "{{question}}"
+
+RULES:
+- Select ONLY tables needed to answer the question (max 10)
+- Include junction/bridge tables needed for M:N relationships
+- Include tables connected by foreign keys if needed for JOINs
+- Do NOT include tables unrelated to the question
+- If unsure, include the table (better to have extra than miss one)
+
+Respond with ONLY a JSON array of table names, nothing else.
+Example: ["table1", "table2", "table3"]
+`;
+
+// ============================================================================
 // EXPORTS
 // ============================================================================
 
@@ -319,7 +449,8 @@ module.exports = {
    PLANNING_PROMPT_TEMPLATE,
    GENERATE_SQL_PROMPT_TEMPLATE,
    SQL_SELF_CHECK_PROMPT,
-   SQL_EXECUTION_ERROR_PROMPT
+   SQL_EXECUTION_ERROR_PROMPT,
+   SCHEMA_SELECTION_PROMPT
 };
 
 

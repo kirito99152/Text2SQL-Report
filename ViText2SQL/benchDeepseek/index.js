@@ -20,8 +20,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 const DATA_DIR = path.resolve(__dirname, '../data/syllable-level');
 const SQLITE_DB_DIR = path.resolve(__dirname, '../data/syllable-level/databases');
 const TABLES_FILE = path.join(DATA_DIR, 'tables.json');
-const TEST_FILE = path.join(DATA_DIR, 'test.json');
-const TEST_GOLD_FILE = path.join(DATA_DIR, 'test_gold.sql');
+const TEST_FILE = path.join(DATA_DIR, 'dev.json');
+
 const LOG_FILE = path.join(__dirname, 'logs', 'benchmark_results.json');
 const TEXT_LOG_FILE = path.join(__dirname, 'logs', 'benchmark.log');
 
@@ -138,7 +138,7 @@ function evaluateExecution(genSql, goldSql, dbId, rawSchema = null) {
 console.log(`[DeepSeek Bench] Loading data...`);
 const tablesData = JSON.parse(fs.readFileSync(TABLES_FILE, 'utf8'));
 const testData = JSON.parse(fs.readFileSync(TEST_FILE, 'utf8'));
-const goldData = fs.readFileSync(TEST_GOLD_FILE, 'utf8').split('\n').filter(line => line.trim());
+// const goldData = fs.readFileSync(TEST_GOLD_FILE, 'utf8').split('\n').filter(line => line.trim());
 
 const schemasMap = {};
 tablesData.forEach(schema => { schemasMap[schema.db_id] = schema; });
@@ -205,7 +205,8 @@ async function processTests(customStartIndex, customEndIndex, enableAI = true, c
         const rawSchema = schemasMap[dbId];
         if (!rawSchema) return;
 
-        const goldSQL = (goldData[i] || "").split('\t')[0];
+        const goldSQL = testCase.query; // Extract gold SQL directly from dev.json
+
         const schemaContext = getPromptSchemaContext(rawSchema);
 
         // Pre-check Gold SQL

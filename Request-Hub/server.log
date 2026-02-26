@@ -1,0 +1,30 @@
+nohup: ignoring input
+[System] Loaded 7 endpoints from /root/Text2SQL-Report/Request-Hub/endpoints.json
+[HealthCheck] Running periodic health checks for 7 endpoints...
+[Server] Request-Hub listening on http://localhost:4000
+[System] Endpoints re-sorted.
+[System] Endpoints saved to /root/Text2SQL-Report/Request-Hub/endpoints.json
+[HealthCheck] Health checks completed.
+[HealthCheck] Running periodic health checks for 7 endpoints...
+[System] Endpoints re-sorted.
+[System] Endpoints saved to /root/Text2SQL-Report/Request-Hub/endpoints.json
+[HealthCheck] Health checks completed.
+[HealthCheck] Running periodic health checks for 7 endpoints...
+[HealthCheck] http://94.101.98.245/generate_output is unreachable or timed out: timeout of 5000ms exceeded
+[HealthCheck] http://94.101.98.250/generate_output is unreachable or timed out: timeout of 5000ms exceeded
+[HealthCheck] http://149.36.1.173/generate_output is unreachable or timed out: timeout of 5000ms exceeded
+[HealthCheck] http://94.101.98.244/generate_output is unreachable or timed out: timeout of 5000ms exceeded
+[System] Endpoints re-sorted.
+[System] Endpoints saved to /root/Text2SQL-Report/Request-Hub/endpoints.json
+[HealthCheck] Health checks completed.
+[HealthCheck] Running periodic health checks for 7 endpoints...
+[HealthCheck] http://94.101.98.209/generate_output is unreachable or timed out: timeout of 5000ms exceeded
+[HealthCheck] http://149.36.0.219/generate_output is unreachable or timed out: timeout of 5000ms exceeded
+[HealthCheck] http://94.101.98.245/generate_output is unreachable or timed out: timeout of 5000ms exceeded
+[HealthCheck] http://94.101.98.244/generate_output is unreachable or timed out: timeout of 5000ms exceeded
+[System] Endpoints re-sorted.
+[System] Endpoints saved to /root/Text2SQL-Report/Request-Hub/endpoints.json
+[HealthCheck] Health checks completed.
+[HealthCheck] Running periodic health checks for 7 endpoints...
+[HealthCheck] http://94.101.98.21/generate_output is unreachable or timed out: timeout of 5000ms exceeded
+[HealthCheck] http://94.101.98.250/generate_output is unreachable or timed out: timeout of 5000ms exceeded

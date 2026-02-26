@@ -56,7 +56,11 @@ process.on('uncaughtException', (err) => {
     process.exit(1);
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     console.log(`Endpoint: http://localhost:${PORT}/api/text2sql/generate`);
 });
+
+// Disable default 2-minute timeout (AI requests can take 5+ minutes via Request-Hub queue)
+server.timeout = 0;
+server.keepAliveTimeout = 0;

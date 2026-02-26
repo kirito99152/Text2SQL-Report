@@ -1,5 +1,7 @@
 
 const schemaService = require('../services/schemaService');
+const schemaLinkingService = require('../services/schemaLinkingService');
+const schemaSelectionService = require('../services/schemaSelectionService');
 const planningService = require('../services/planningService');
 const sqlService = require('../services/sqlService');
 const selfCheckService = require('../services/selfCheckService');
@@ -19,6 +21,20 @@ exports.generate = async (req, res) => {
         let schemaContext = "";
         let enrichedSchema = null;
 
+        // Schema Linking: token match → get hints + pre-filtered tables
+        const dbId = req.body.dbId || null;
+        let linkingText = "";
+        let tokenMatchedTables = null;
+
+        if (dbId) {
+            const linkingResult = schemaLinkingService.generateLinkingWithRelevantTables(question, dbId);
+            linkingText = linkingResult.linkingText;
+            tokenMatchedTables = linkingResult.relevantTables;
+            if (linkingText) {
+                console.log(`[Controller] ${workerPrefix}Schema linking: ${linkingText.split('\n').length - 1} matches`);
+            }
+        }
+
         if (req.body.schema) {
             // 1a. Direct Schema provided (Bootstrap mode)
             console.log("[Controller] Schema provided in request body.");
@@ -27,12 +43,20 @@ exports.generate = async (req, res) => {
             // Enrich schema (using Cache if available)
             enrichedSchema = await schemaService.enrichSchema(enrichedSchema, workerId);
 
-            // Build text context for Planning
-            schemaContext = schemaService.buildSchemaContext(enrichedSchema);
+            // AI Schema Selection: token match → AI refine → cap 10
+            const relevantTables = await schemaSelectionService.selectRelevantTables(
+                question, enrichedSchema, linkingText, tokenMatchedTables
+            );
+
+            // Build FILTERED context (used for ALL steps — small context window)
+            schemaContext = schemaService.buildFilteredSchemaContext(enrichedSchema, relevantTables, linkingText);
 
         } else if (req.body.schemaContext) {
             // Legacy/Test mode where text is provided directly
             schemaContext = req.body.schemaContext;
+            if (linkingText) {
+                schemaContext += "\n" + linkingText + "\n";
+            }
         } else if (req.body.connectionString) {
             // 1b. Reverse Engineer from DB
             console.log("[Controller] Reverse engineering schema from connection string...");
@@ -42,8 +66,13 @@ exports.generate = async (req, res) => {
             // Enrich
             enrichedSchema = await schemaService.enrichSchema(enrichedSchema, workerId);
 
-            // Build text context
-            schemaContext = schemaService.buildSchemaContext(enrichedSchema);
+            // AI Schema Selection
+            const relevantTables = await schemaSelectionService.selectRelevantTables(
+                question, enrichedSchema, linkingText, tokenMatchedTables
+            );
+
+            // Build filtered context
+            schemaContext = schemaService.buildFilteredSchemaContext(enrichedSchema, relevantTables, linkingText);
         } else {
             return res.status(400).json({ status: "error", message: "Missing connectionString, schema, or schemaContext" });
         }
@@ -58,27 +87,17 @@ exports.generate = async (req, res) => {
             });
         }
 
-        // 3. Generate Query Plan (Text-based optimization for Qwen3-8B)
+        // 3. Generate Query Plan (filtered schema)
         const plan = await planningService.generatePlan(question, schemaContext);
 
-        // Note: With text-based plan, we skip the structured confidence check for now.
-        // We rely on the model to ask for clarification if needed, though that logic 
-        // would need to be parsed from the text if we wanted to handle it explicitly.
-
-        // 4. Generate SQL
-        // The SQL service prompt now expects {{query_plan}} which can be text.
+        // 4. Generate SQL (filtered schema)
         let sql = await sqlService.generateSql(plan, schemaContext);
 
-        // 4b. Self-Correction (Thinking enabled)
+        // 4b. Self-Correction (filtered schema)
         sql = await selfCheckService.verifyAndCorrectSql(plan, schemaContext, sql);
 
-        // 5. Execution-Based Correction (New Step)
+        // 5. Execution-Based Correction
         let executionResult = null;
-
-        // If dbId is provided, we can validate the SQL by executing it.
-        // If it fails, we ask the AI to fix it based on the error message.
-        // 5. Execution-Based Correction (Separated Service)
-        // If dbId is provided, we can validate the SQL by executing it.
         if (req.body.dbId) {
             const executionCorrectionService = require('../services/executionCorrectionService');
             sql = await executionCorrectionService.executeAndCorrect(
@@ -89,7 +108,6 @@ exports.generate = async (req, res) => {
                 plan
             );
         }
-
 
         // 6. Return success
         return res.status(200).json({

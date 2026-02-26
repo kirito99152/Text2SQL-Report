@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  request-hub:
+    build: ./Request-Hub
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./Request-Hub/endpoints.json:/app/endpoints.json
+    environment:
+      - PORT=5001
+    networks:
+      - text2sql-network
+
+  tensorsql-node:
+    build: ./TensorSQL-Node
+    ports:
+      - "5002:5002"
+    volumes:
+      - ./TensorSQL-Node/data:/app/data
+    environment:
+      - PORT=5002
+      - LLM_ENDPOINT_URL=http://request-hub:5001/generate_output
+    depends_on:
+      - request-hub
+    networks:
+      - text2sql-network
+
+  track:
+    build: ./Track
+    ports:
+      - "5003:5003"
+    volumes:
+      - ./ViText2SQL/benchmark_tensor_logs:/data/logs:ro
+    environment:
+      - PORT=5003
+      - RESULTS_PATH=/data/logs/benchmark_results.json
+    depends_on:
+      - tensorsql-node
+    networks:
+      - text2sql-network
+
+  bootstrap:
+    build:
+      context: ./ViText2SQL
+      dockerfile: Dockerfile
+    ports:
+      - "5004:5004"
+    volumes:
+      - ./ViText2SQL/data:/app/data
+      - ./ViText2SQL/benchmark_tensor_logs:/root/repo/Text2SQL-Report/ViText2SQL/benchmark_tensor_logs
+    environment:
+      - TENSOR_SQL_ENDPOINT=http://tensorsql-node:5002/api/text2sql/generate
+    depends_on:
+      - tensorsql-node
+    networks:
+      - text2sql-network
+
+networks:
+  text2sql-network:
+    name: text2sql-network
+    driver: bridge

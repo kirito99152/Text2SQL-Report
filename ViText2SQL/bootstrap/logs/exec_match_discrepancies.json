@@ -1,0 +1,1356 @@
+[
+  {
+    "id": 9,
+    "db_id": "assets_maintenance",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_bo_phan , count ( * ) from bo_phan as t1 join bo_phan_cua_tai_san as t2 on t1.id_bo_phan = t2.id_bo_phan group by t1.ten_bo_phan",
+    "gen_sql": "SELECT T1.ten_bo_phan, COUNT(*) FROM bo_phan T1 JOIN bo_phan_cua_tai_san T2 ON T1.id_bo_phan = T2.id_bo_phan GROUP BY T1.id_bo_phan",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 3,
+    "db_id": "assets_maintenance",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.id_cong_ty , t1.ten_cong_ty from cong_ty_ben_thu_ba as t1 join ky_su_bao_tri as t2 on t1.id_cong_ty = t2.id_cong_ty group by t1.id_cong_ty having count ( * ) >= 2 union select t3.id_cong_ty , t3.ten_cong_ty from cong_ty_ben_thu_ba as t3 join hop_dong_bao_tri as t4 on t3.id_cong_ty = t4.id_hop_dong_bao_tri_cua_cong_ty group by t3.id_cong_ty having count ( * ) >= 2",
+    "gen_sql": "SELECT T1.id_cong_ty, T1.ten_cong_ty  \nFROM cong_ty_ben_thu_ba T1  \nJOIN ky_su_bao_tri T2 ON T1.id_cong_ty = T2.id_cong_ty  \nGROUP BY T1.id_cong_ty  \nHAVING COUNT(T2.id_ky_su) >= 2  \nUNION  \nSELECT T1.id_cong_ty, T1.ten_cong_ty  \nFROM cong_ty_ben_thu_ba T1  \nJOIN hop_dong_bao_tri T3 ON T1.id_cong_ty = T3.id_hop_dong_bao_tri_cua_cong_ty  \nGROUP BY T1.id_cong_ty  \nHAVING COUNT(T3.id_hop_dong_bao_tri) >= 2;",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 30,
+    "db_id": "assets_maintenance",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select mau_ma_tai_san from tai_san where id_tai_san not in (select id_tai_san from nhat_ky_loi)",
+    "gen_sql": "SELECT T1.mau_ma_tai_san FROM tai_san T1 LEFT JOIN nhat_ky_loi T2 ON T1.id_tai_san = T2.id_tai_san WHERE T2.id_muc_nhap_cua_nhat_ky_loi IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 29,
+    "db_id": "assets_maintenance",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_nhan_vien , count ( * ) from nhan_vien as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_nhan_vien = t2.id_nhan_vien_lien_lac group by t1.ten_nhan_vien",
+    "gen_sql": "SELECT T1.ten_nhan_vien, COUNT(*) AS so_ky_su FROM nhan_vien T1 JOIN chuyen_tham_cua_ky_su T2 ON T1.id_nhan_vien = T2.id_nhan_vien_lien_lac GROUP BY T1.id_nhan_vien",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 51,
+    "db_id": "book_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select gia_ban from an_pham where nha_xuat_ban = 'Person' or nha_xuat_ban = 'Wiley'",
+    "gen_sql": "SELECT gia_ban FROM an_pham WHERE nha_xuat_ban IN ('Person', 'Wiley')",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 48,
+    "db_id": "book_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select nha_xuat_ban from an_pham where gia_ban > 10000000 intersect select nha_xuat_ban from an_pham where gia_ban < 5000000",
+    "gen_sql": "SELECT DISTINCT T1.nha_xuat_ban FROM an_pham T1 JOIN an_pham T2 ON T1.nha_xuat_ban = T2.nha_xuat_ban WHERE T1.gia_ban > 10000000 AND T2.gia_ban < 5000000",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 53,
+    "db_id": "company_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten_nguoi_phu_thuoc from nguoi_phu_thuoc where moi_quan_he = 'Spouse'",
+    "gen_sql": "SELECT ten_nguoi_phu_thuoc FROM nguoi_phu_thuoc WHERE moi_quan_he IN ('vợ', 'chồng')",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 87,
+    "db_id": "course_teach",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten from giao_vien where id_giao_vien not in ( select id_giao_vien from sap_xep_khoa_hoc )",
+    "gen_sql": "SELECT T1.ten FROM giao_vien T1 LEFT JOIN sap_xep_khoa_hoc T2 ON T1.id_giao_vien = T2.id_giao_vien WHERE T2.id_giao_vien IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 88,
+    "db_id": "course_teach",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten from giao_vien where id_giao_vien not in ( select id_giao_vien from sap_xep_khoa_hoc )",
+    "gen_sql": "SELECT T1.ten FROM giao_vien T1 LEFT JOIN sap_xep_khoa_hoc T2 ON T1.id_giao_vien = T2.id_giao_vien WHERE T2.id_giao_vien IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 47,
+    "db_id": "book_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select tieu_de from sach where id_sach not in ( select id_sach from an_pham )",
+    "gen_sql": "SELECT T1.tieu_de FROM sach T1 LEFT JOIN an_pham T2 ON T1.id_sach = T2.id_sach WHERE T2.id_an_pham IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 103,
+    "db_id": "decoration_competition",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten from thanh_vien where id_thanh_vien not in ( select id_thanh_vien from vong )",
+    "gen_sql": "SELECT ten FROM thanh_vien EXCEPT SELECT T1.ten FROM thanh_vien T1 JOIN vong T2 ON T1.id_thanh_vien = T2.id_thanh_vien",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 118,
+    "db_id": "election_representative",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select dang , count ( * ) from dai_dien group by dang order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT dang, COUNT(*) AS count FROM dai_dien GROUP BY dang ORDER BY count DESC LIMIT 1;",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 150,
+    "db_id": "match_season",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ngon_ngu_ban_dia_chinh_thuc from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.truong_dai_hoc = 'Maryland' or t2.truong_dai_hoc = 'Duke'",
+    "gen_sql": "SELECT quoc_gia.ngon_ngu_ban_dia_chinh_thuc  \nFROM quoc_gia  \nJOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia  \nWHERE tran_dau_trong_mua_giai.truong_dai_hoc IN ('Maryland', 'Duke')",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 179,
+    "db_id": "match_season",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = 'Forward' intersect select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = 'Defender'",
+    "gen_sql": "SELECT T1.ten_quoc_gia FROM quoc_gia T1 JOIN tran_dau_trong_mua_giai T2 ON T1.id_quoc_gia = T2.quoc_gia GROUP BY T1.id_quoc_gia HAVING COUNT(CASE WHEN T2.vi_tri = 'tiền đạo' THEN 1 END) > 0 AND COUNT(CASE WHEN T2.vi_tri = 'hậu vệ' THEN 1 END) > 0",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 176,
+    "db_id": "match_season",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten from doi where id_doi not in ( select doi from tran_dau_trong_mua_giai )",
+    "gen_sql": "SELECT ten FROM doi EXCEPT SELECT T2.ten FROM tran_dau_trong_mua_giai T1 JOIN doi T2 ON T1.doi = T2.id_doi",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 178,
+    "db_id": "match_season",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = 'Forward' intersect select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = 'Defender'",
+    "gen_sql": "SELECT quoc_gia.ten_quoc_gia  \nFROM quoc_gia  \nJOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia  \nGROUP BY quoc_gia.id_quoc_gia  \nHAVING COUNT(CASE WHEN vi_tri = 'tiền đạo' THEN 1 END) > 0  \n   AND COUNT(CASE WHEN vi_tri = 'hậu vệ' THEN 1 END) > 0;",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 177,
+    "db_id": "match_season",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten from doi where id_doi not in ( select doi from tran_dau_trong_mua_giai )",
+    "gen_sql": "SELECT ten FROM doi EXCEPT SELECT T2.doi FROM tran_dau_trong_mua_giai T2",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 202,
+    "db_id": "perpetrator",
+    "status": "EXEC_NO_MATCH",
+    "gold_sql": "select max ( nam ) from toi_pham",
+    "gen_sql": "SELECT nam FROM toi_pham ORDER BY ngay DESC LIMIT 1;",
+    "gold_row_count": 1,
+    "gen_row_count": 0
+  },
+  {
+    "id": 216,
+    "db_id": "station_weather",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.id , t2.chinh_quyen_dia_phuong from thoi_tiet_hang_tuan as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id group by t1.id_nha_ga having max ( t1.luong_mua ) > 50",
+    "gen_sql": "SELECT T1.id, T1.chinh_quyen_dia_phuong\nFROM nha_ga T1\nJOIN thoi_tiet_hang_tuan T2 ON T1.id = T2.id_nha_ga\nGROUP BY T1.id\nHAVING MAX(T2.luong_mua) > 50",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 215,
+    "db_id": "station_weather",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.id , t2.chinh_quyen_dia_phuong from thoi_tiet_hang_tuan as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id group by t1.id_nha_ga order by avg ( nhiet_do_cao ) desc limit 1",
+    "gen_sql": "SELECT nha_ga.id, nha_ga.chinh_quyen_dia_phuong FROM nha_ga JOIN thoi_tiet_hang_tuan ON nha_ga.id = thoi_tiet_hang_tuan.id_nha_ga GROUP BY nha_ga.id ORDER BY AVG(thoi_tiet_hang_tuan.nhiet_do_cao) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 244,
+    "db_id": "activity_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select distinct toa_nha from giang_vien",
+    "gen_sql": "SELECT DISTINCT toa_nha FROM giang_vien WHERE toa_nha IS NOT NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 236,
+    "db_id": "wedding",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t4.ten from le_cuoi as t1 join ca_nhan as t2 on t1.id_nam = t2.id_ca_nhan join ca_nhan as t3 on t1.id_nu = t3.id_ca_nhan join nha_tho as t4 on t4.id_nha_tho = t1.id_nha_tho where t2.tuoi > 30 or t3.tuoi > 30",
+    "gen_sql": "SELECT nha_tho.ten FROM nha_tho JOIN le_cuoi ON nha_tho.id_nha_tho = le_cuoi.id_nha_tho JOIN ca_nhan ON le_cuoi.id_nam = ca_nhan.id_ca_nhan WHERE ca_nhan.tuoi > 30 UNION SELECT nha_tho.ten FROM nha_tho JOIN le_cuoi ON nha_tho.id_nha_tho = le_cuoi.id_nha_tho JOIN ca_nhan ON le_cuoi.id_nu = ca_nhan.id_ca_nhan WHERE ca_nhan.tuoi > 30 ORDER BY nha_tho.ten;",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 288,
+    "db_id": "activity_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select id_giang_vien from giang_vien except select co_van from sinh_vien",
+    "gen_sql": "SELECT giang_vien.id_giang_vien FROM giang_vien LEFT JOIN sinh_vien ON giang_vien.id_giang_vien = sinh_vien.co_van WHERE sinh_vien.co_van IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 287,
+    "db_id": "activity_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select id_giang_vien from giang_vien except select co_van from sinh_vien",
+    "gen_sql": "SELECT T1.id_giang_vien FROM giang_vien T1 LEFT JOIN sinh_vien T2 ON T1.id_giang_vien = T2.co_van WHERE T2.co_van IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 305,
+    "db_id": "activity_1",
+    "status": "GEN_ERROR",
+    "error": "no such table: dbo.hoat_dong",
+    "gold_sql": "select t1.ten_hoat_dong , count ( * ) from hoat_dong as t1 join giang_vien_tham_gia_vao as t2 on t1.id_hoat_dong = t2.id_hoat_dong group by t1.id_hoat_dong",
+    "gen_sql": "SELECT T1.ten_hoat_dong, COUNT(*) FROM dbo.hoat_dong T1 JOIN dbo.giang_vien_tham_gia_vao T2 ON T1.id_hoat_dong = T2.id_hoat_dong GROUP BY T1.id_hoat_dong"
+  },
+  {
+    "id": 331,
+    "db_id": "body_builder",
+    "status": "EXEC_NO_MATCH",
+    "gold_sql": "select cu_day from nguoi_luyen_the_hinh order by tong desc limit 1",
+    "gen_sql": "SELECT MAX(tong) FROM nguoi_luyen_the_hinh",
+    "gold_row_count": 0,
+    "gen_row_count": 1
+  },
+  {
+    "id": 374,
+    "db_id": "candidate_poll",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten , t1.gioi_tinh , min ( ty_le_phan_doi ) from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ca_nhan group by t1.gioi_tinh",
+    "gen_sql": "SELECT ca_nhan.ten, ca_nhan.gioi_tinh, MIN(ung_cu_vien.ty_le_phan_doi) AS min_ty_le_phan_doi\nFROM ca_nhan\nJOIN ung_cu_vien ON ca_nhan.id_ca_nhan = ung_cu_vien.id_ca_nhan\nGROUP BY ca_nhan.gioi_tinh\nORDER BY min_ty_le_phan_doi ASC;",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 399,
+    "db_id": "city_record",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t3.dia_diem from thanh_pho as t1 join thanh_pho_chu_nha as t2 on t1.id_thanh_pho = t2.thanh_pho_chu_nha join tran_dau as t3 on t2.id_tran_dau = t3.id_tran_dau where t1.thanh_pho = 'Nanjing ( Jiangsu )' and t3.giai_dau = '1994 FIFA World Cup qualification'",
+    "gen_sql": "SELECT T1.dia_diem FROM tran_dau T1 JOIN thanh_pho_chu_nha T2 ON T1.id_tran_dau = T2.id_tran_dau WHERE T1.giai_dau = ' Vòng loại FIFA World Cup 1994 ' AND T2.thanh_pho_chu_nha = ' Nam Kinh ( Giang Tô ) '",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 400,
+    "db_id": "city_record",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t3.dia_diem from thanh_pho as t1 join thanh_pho_chu_nha as t2 on t1.id_thanh_pho = t2.thanh_pho_chu_nha join tran_dau as t3 on t2.id_tran_dau = t3.id_tran_dau where t1.thanh_pho = 'Nanjing ( Jiangsu )' and t3.giai_dau = '1994 FIFA World Cup qualification'",
+    "gen_sql": "SELECT T1.dia_diem FROM tran_dau T1 JOIN thanh_pho_chu_nha T2 ON T1.id_tran_dau = T2.id_tran_dau WHERE T1.giai_dau = 'Vòng loại FIFA World Cup 1994' AND T2.thanh_pho_chu_nha = 'Nam Kinh (Giang Tô)'",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 415,
+    "db_id": "city_record",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t2.thang_ba < t2.thang_muoi_hai except select t3.thanh_pho from thanh_pho as t3 join thanh_pho_chu_nha as t4 on t3.id_thanh_pho = t4.thanh_pho_chu_nha",
+    "gen_sql": "SELECT thanh_pho.thanh_pho\nFROM thanh_pho\nJOIN nhiet_do ON thanh_pho.id_thanh_pho = nhiet_do.id_thanh_pho\nLEFT JOIN thanh_pho_chu_nha ON thanh_pho.thanh_pho = thanh_pho_chu_nha.thanh_pho_chu_nha\nWHERE nhiet_do.thang_ba < nhiet_do.thang_muoi_hai\nAND thanh_pho_chu_nha.thanh_pho_chu_nha IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 439,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su where t1.ho_cua_nhan_vien = 'Graztevski'",
+    "gen_sql": "SELECT COUNT(*) FROM lop_hoc JOIN giao_su ON lop_hoc.ma_so_nhan_vien_cua_giao_su = giao_su.ma_so_nhan_vien JOIN nhan_vien ON giao_su.ma_so_nhan_vien = nhan_vien.ma_so_nhan_vien WHERE nhan_vien.ho_cua_nhan_vien = 'Graztevski'",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 440,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su where t1.ho_cua_nhan_vien = 'Graztevski'",
+    "gen_sql": "SELECT COUNT(*) FROM lop_hoc JOIN giao_su ON lop_hoc.ma_so_nhan_vien_cua_giao_su = giao_su.ma_so_nhan_vien JOIN nhan_vien ON giao_su.ma_so_nhan_vien = nhan_vien.ma_so_nhan_vien WHERE nhan_vien.ho_cua_nhan_vien = 'Graztevski'",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 474,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) , ma_khoa from giao_su where bang_cap_cao_nhat = 'Ph.D.' group by ma_khoa",
+    "gen_sql": "SELECT khoa.ma_khoa, COUNT(*) FROM khoa JOIN giao_su ON khoa.ma_khoa = giao_su.ma_khoa WHERE giao_su.bang_cap_cao_nhat = 'Tiến sĩ' GROUP BY khoa.ma_khoa",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 482,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_khoa , avg ( t1.gpa_cua_sinh_vien ) from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by avg ( t1.gpa_cua_sinh_vien ) desc limit 1",
+    "gen_sql": "SELECT khoa.ten_khoa, AVG(sinh_vien.gpa_cua_sinh_vien) AS average_gpa FROM khoa JOIN sinh_vien ON khoa.ma_khoa = sinh_vien.ma_khoa GROUP BY khoa.ma_khoa ORDER BY average_gpa DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 481,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_khoa , avg ( t1.gpa_cua_sinh_vien ) from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by avg ( t1.gpa_cua_sinh_vien ) desc limit 1",
+    "gen_sql": "SELECT khoa.ten_khoa, AVG(sinh_vien.gpa_cua_sinh_vien) AS avg_gpa FROM khoa JOIN sinh_vien ON khoa.ma_khoa = sinh_vien.ma_khoa GROUP BY khoa.ma_khoa ORDER BY avg_gpa DESC LIMIT 1;",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 499,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop where t1.ma_khoa_hoc = 'ACCT-211'",
+    "gen_sql": "SELECT COUNT(*) FROM dang_ky_khoa_hoc T1 JOIN lop_hoc T2 ON T1.ma_lop = T2.ma_lop_hoc JOIN khoa_hoc T3 ON T2.ma_khoa_hoc = T3.ma_khoa_hoc WHERE T3.ma_khoa_hoc = 'ACCT-211'",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 494,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( distinct lop_hoc_phan ) from lop_hoc where ma_khoa_hoc = 'ACCT-211'",
+    "gen_sql": "SELECT COUNT(DISTINCT lop_hoc.lop_hoc_phan) FROM lop_hoc JOIN khoa_hoc ON lop_hoc.ma_khoa_hoc = khoa_hoc.ma_khoa_hoc WHERE khoa_hoc.ma_khoa_hoc = 'ACCT-211'",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 492,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from khoa as t1 join khoa_hoc as t2 on t1.ma_khoa = t2.ma_khoa where ten_khoa = 'Computer Info. Systems'",
+    "gen_sql": "SELECT COUNT(*) FROM khoa_hoc WHERE ma_khoa = (SELECT ma_khoa FROM khoa WHERE ten_khoa = 'Hệ thống thông tin máy tính')",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 527,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_khoa from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by count ( * ) limit 1",
+    "gen_sql": "SELECT khoa.ten_khoa FROM khoa JOIN giao_su ON khoa.ma_khoa = giao_su.ma_khoa GROUP BY khoa.ma_khoa ORDER BY COUNT(*) ASC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 529,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_khoa , t1.ma_khoa from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa where t1.bang_cap_cao_nhat = 'Ph.D.' group by t1.ma_khoa order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT khoa.ma_khoa, khoa.ten_khoa, COUNT(*) AS so_giao_su FROM khoa JOIN giao_su ON khoa.ma_khoa = giao_su.ma_khoa WHERE giao_su.bang_cap_cao_nhat = 'tiến sĩ' GROUP BY khoa.ma_khoa ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 534,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_cua_nhan_vien from nhan_vien as t1 join giao_su as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t2.ma_khoa = t3.ma_khoa where t3.ten_khoa = 'History' except select t4.ten_cua_nhan_vien from nhan_vien as t4 join lop_hoc as t5 on t4.ma_so_nhan_vien = t5.ma_so_nhan_vien_cua_giao_su",
+    "gen_sql": "SELECT nhan_vien.ho_cua_nhan_vien, nhan_vien.ten_cua_nhan_vien FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa JOIN nhan_vien ON giao_su.ma_so_nhan_vien = nhan_vien.ma_so_nhan_vien WHERE khoa.ten_khoa = 'Lịch sử' AND NOT EXISTS (SELECT 1 FROM lop_hoc WHERE lop_hoc.ma_so_nhan_vien_cua_giao_su = giao_su.ma_so_nhan_vien)",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 530,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_khoa , t1.ma_khoa from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa where t1.bang_cap_cao_nhat = 'Ph.D.' group by t1.ma_khoa order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT T1.ten_khoa, COUNT(*) AS so_giao_su_tien_si FROM khoa T1 JOIN giao_su T2 ON T1.ma_khoa = T2.ma_khoa WHERE T2.bang_cap_cao_nhat = 'tiến sĩ' GROUP BY T1.ma_khoa ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 548,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa where t2.ten_khoa = 'Accounting' or t2.ten_khoa = 'Biology'",
+    "gen_sql": "SELECT COUNT(*) FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa IN ('Kế toán', 'Sinh học')",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 561,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_khoa , t2.dia_chi_khoa from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT T1.ten_khoa, T1.dia_chi_khoa FROM khoa T1 JOIN sinh_vien T2 ON T1.ma_khoa = T2.ma_khoa GROUP BY T1.ma_khoa ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 554,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select avg ( t2.gpa_cua_sinh_vien ) from dang_ky_khoa_hoc as t1 join sinh_vien as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien join lop_hoc as t3 on t1.ma_lop = t3.ma_lop_hoc where t3.ma_khoa_hoc = 'ACCT-211'",
+    "gen_sql": "SELECT AVG(sinh_vien.gpa_cua_sinh_vien) FROM sinh_vien INNER JOIN dang_ky_khoa_hoc ON sinh_vien.ma_so_sinh_vien = dang_ky_khoa_hoc.ma_so_sinh_vien INNER JOIN lop_hoc ON dang_ky_khoa_hoc.ma_lop = lop_hoc.ma_lop_hoc INNER JOIN khoa_hoc ON lop_hoc.ma_khoa_hoc = khoa_hoc.ma_khoa_hoc WHERE khoa_hoc.ma_khoa_hoc = 'ACCT-211'",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 562,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_khoa , t2.dia_chi_khoa from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT T1.ten_khoa, T1.dia_chi_khoa FROM khoa T1 JOIN sinh_vien T2 ON T1.ma_khoa = T2.ma_khoa GROUP BY T1.ma_khoa ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 563,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_khoa , t2.dia_chi_khoa , count ( * ) from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by count ( * ) desc limit 3",
+    "gen_sql": "SELECT T1.ten_khoa, T1.dia_chi_khoa, COUNT(T2.ma_so_sinh_vien) FROM khoa T1 JOIN sinh_vien T2 ON T1.ma_khoa = T2.ma_khoa GROUP BY T1.ma_khoa ORDER BY COUNT(T2.ma_so_sinh_vien) DESC LIMIT 3",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 564,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_khoa , t2.dia_chi_khoa , count ( * ) from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by count ( * ) desc limit 3",
+    "gen_sql": "SELECT T1.ten_khoa, T1.dia_chi_khoa, COUNT(*) AS so_luong_sinh_vien FROM khoa T1 JOIN sinh_vien T2 ON T1.ma_khoa = T2.ma_khoa GROUP BY T1.ma_khoa ORDER BY COUNT(*) DESC LIMIT 3",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 566,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_cua_nhan_vien , t2.van_phong_giao_su from nhan_vien as t1 join giao_su as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t3.ma_khoa = t2.ma_khoa where t3.ten_khoa = 'History' and t2.bang_cap_cao_nhat = 'Ph.D.'",
+    "gen_sql": "SELECT T2.ho_cua_nhan_vien, T2.ten_cua_nhan_vien, T1.van_phong_giao_su FROM giao_su T1 JOIN nhan_vien T2 ON T1.ma_so_nhan_vien = T2.ma_so_nhan_vien JOIN khoa T3 ON T1.ma_khoa = T3.ma_khoa WHERE T3.ten_khoa = 'Lịch sử' AND T1.bang_cap_cao_nhat = 'Tiến sĩ'",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 577,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_cua_sinh_vien , t1.ho_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien where t2.diem_so = 'C' or t2.diem_so = 'A'",
+    "gen_sql": "SELECT sinh_vien.ho_cua_sinh_vien, sinh_vien.ten_cua_sinh_vien FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.ma_so_sinh_vien = dang_ky_khoa_hoc.ma_so_sinh_vien WHERE dang_ky_khoa_hoc.diem_so IN ('A', 'C')",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 578,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_cua_sinh_vien , t1.ho_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien where t2.diem_so = 'C' or t2.diem_so = 'A'",
+    "gen_sql": "SELECT T1.ho_cua_sinh_vien, T1.ten_cua_sinh_vien FROM sinh_vien T1 JOIN dang_ky_khoa_hoc T2 ON T1.ma_so_sinh_vien = T2.ma_so_sinh_vien WHERE T2.diem_so IN ('A', 'C')",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 579,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_cua_nhan_vien , t1.phong_hoc from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join giao_su as t3 on t2.ma_so_nhan_vien = t3.ma_so_nhan_vien join khoa as t4 on t4.ma_khoa = t3.ma_khoa where t4.ten_khoa = 'Accounting'",
+    "gen_sql": "SELECT nhan_vien.ho_cua_nhan_vien, nhan_vien.ten_cua_nhan_vien, lop_hoc.phong_hoc FROM giao_su INNER JOIN nhan_vien ON giao_su.ma_so_nhan_vien = nhan_vien.ma_so_nhan_vien INNER JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa INNER JOIN lop_hoc ON lop_hoc.ma_so_nhan_vien_cua_giao_su = giao_su.ma_so_nhan_vien WHERE khoa.ten_khoa = 'Kế toán'",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 580,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_cua_nhan_vien , t1.phong_hoc from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join giao_su as t3 on t2.ma_so_nhan_vien = t3.ma_so_nhan_vien join khoa as t4 on t4.ma_khoa = t3.ma_khoa where t4.ten_khoa = 'Accounting'",
+    "gen_sql": "SELECT T3.ho_cua_nhan_vien, T3.ten_cua_nhan_vien, T4.phong_hoc FROM giao_su T1 JOIN khoa T2 ON T1.ma_khoa = T2.ma_khoa JOIN nhan_vien T3 ON T1.ma_so_nhan_vien = T3.ma_so_nhan_vien JOIN lop_hoc T4 ON T4.ma_so_nhan_vien_cua_giao_su = T1.ma_so_nhan_vien WHERE T2.ten_khoa = 'Kế toán'",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 581,
+    "db_id": "college_1",
+    "status": "GEN_ERROR",
+    "error": "no such column: T1.ma_so_nhan_vien_cua_giao_su",
+    "gold_sql": "select distinct t2.ten_cua_nhan_vien , t3.bang_cap_cao_nhat from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join giao_su as t3 on t2.ma_so_nhan_vien = t3.ma_so_nhan_vien join khoa as t4 on t4.ma_khoa = t3.ma_khoa where t4.ten_khoa = 'Computer Info. Systems'",
+    "gen_sql": "SELECT T5.ho_cua_nhan_vien, T5.ten_cua_nhan_vien, T1.bang_cap_cao_nhat FROM giao_su T1 JOIN lop_hoc T2 ON T1.ma_so_nhan_vien_cua_giao_su = T2.ma_so_nhan_vien_cua_giao_su JOIN khoa_hoc T3 ON T2.ma_khoa_hoc = T3.ma_khoa_hoc JOIN khoa T4 ON T3.ma_khoa = T4.ma_khoa JOIN nhan_vien T5 ON T1.ma_so_nhan_vien = T5.ma_so_nhan_vien WHERE T4.ten_khoa = 'Hệ thống Thông tin Máy tính'"
+  },
+  {
+    "id": 586,
+    "db_id": "college_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_cua_nhan_vien , t1.van_phong_giao_su from giao_su as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t1.ma_khoa = t3.ma_khoa where t3.ten_khoa = 'History' and t1.bang_cap_cao_nhat != 'Ph.D.'",
+    "gen_sql": "SELECT T2.ho_cua_nhan_vien, T2.ten_cua_nhan_vien, T1.van_phong_giao_su FROM giao_su T1 JOIN nhan_vien T2 ON T1.ma_so_nhan_vien = T2.ma_so_nhan_vien JOIN khoa T3 ON T1.ma_khoa = T3.ma_khoa WHERE T3.ten_khoa = 'Lịch sử' AND T1.bang_cap_cao_nhat != 'Tiến sĩ'",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 606,
+    "db_id": "cre_Doc_Control_Systems",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.mo_ta_ve_vai_tro , t2.ma_vai_tro , count ( * ) from vai_tro as t1 join nhan_vien as t2 on t1.ma_vai_tro = t2.ma_vai_tro group by t2.ma_vai_tro",
+    "gen_sql": "SELECT T1.ma_vai_tro, T1.mo_ta_ve_vai_tro, COUNT(*) AS so_nhan_vien FROM vai_tro T1 JOIN nhan_vien T2 ON T1.ma_vai_tro = T2.ma_vai_tro GROUP BY T1.ma_vai_tro",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 607,
+    "db_id": "cre_Doc_Control_Systems",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select vai_tro.mo_ta_ve_vai_tro , count ( nhan_vien.id_nhan_vien ) from vai_tro join nhan_vien on nhan_vien.ma_vai_tro = vai_tro.ma_vai_tro group by nhan_vien.ma_vai_tro having count ( nhan_vien.id_nhan_vien ) > 1",
+    "gen_sql": "SELECT T1.mo_ta_ve_vai_tro, COUNT(*) AS so_luong_nhan_vien FROM vai_tro T1 JOIN nhan_vien T2 ON T1.ma_vai_tro = T2.ma_vai_tro GROUP BY T1.ma_vai_tro HAVING COUNT(*) > 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 614,
+    "db_id": "cre_Doc_Control_Systems",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select dai_ly_van_chuyen_tai_lieu.ten_dai_ly_van_chuyen , count ( tai_lieu.id_tai_lieu ) from dai_ly_van_chuyen_tai_lieu join tai_lieu on tai_lieu.ma_dai_ly_van_chuyen = dai_ly_van_chuyen_tai_lieu.ma_dai_ly_van_chuyen group by dai_ly_van_chuyen_tai_lieu.ma_dai_ly_van_chuyen order by count ( tai_lieu.id_tai_lieu ) desc limit 1",
+    "gen_sql": "SELECT T1.ten_dai_ly_van_chuyen, COUNT(*) AS so_luong FROM dai_ly_van_chuyen_tai_lieu T1 JOIN tai_lieu T2 ON T1.ma_dai_ly_van_chuyen = T2.ma_dai_ly_van_chuyen GROUP BY T1.ma_dai_ly_van_chuyen ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 618,
+    "db_id": "cre_Doc_Control_Systems",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select id_tai_lieu from tai_lieu where ma_trang_thai_tai_lieu = 'done' and ma_loai_tai_lieu = 'Paper' except select id_tai_lieu from tai_lieu join dai_ly_van_chuyen_tai_lieu on tai_lieu.ma_dai_ly_van_chuyen = dai_ly_van_chuyen_tai_lieu.ma_dai_ly_van_chuyen where dai_ly_van_chuyen_tai_lieu.ten_dai_ly_van_chuyen = 'USPS'",
+    "gen_sql": "SELECT T1.id_tai_lieu FROM tai_lieu T1 JOIN trang_thai_cua_tai_lieu T2 ON T1.ma_trang_thai_tai_lieu = T2.ma_trang_thai_tai_lieu JOIN loai_tai_lieu T3 ON T1.ma_loai_tai_lieu = T3.ma_loai_tai_lieu JOIN dai_ly_van_chuyen_tai_lieu T4 ON T1.ma_dai_ly_van_chuyen = T4.ma_dai_ly_van_chuyen WHERE T2.mo_ta_ve_trang_thai_tai_lieu = ' Đã được hoàn thành ' AND T3.mo_ta_ve_loai_tai_lieu = ' Giấy ' AND T4.ten_dai_ly_van_chuyen != 'USPS'",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 666,
+    "db_id": "cre_Drama_Workshop_Groups",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.mo_ta_ve_loai_dich_vu , t2.ma_loai_dich_vu , count ( * ) from loai_dich_vu as t1 join dich_vu as t2 on t1.ma_loai_dich_vu = t2.ma_loai_dich_vu group by t2.ma_loai_dich_vu",
+    "gen_sql": "SELECT T1.ma_loai_dich_vu, T1.mo_ta_ve_loai_dich_vu, COUNT(*) AS so_luong FROM loai_dich_vu T1 JOIN dich_vu T2 ON T1.ma_loai_dich_vu = T2.ma_loai_dich_vu GROUP BY T1.ma_loai_dich_vu",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 667,
+    "db_id": "cre_Drama_Workshop_Groups",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.mo_ta_ve_loai_dich_vu , t2.ma_loai_dich_vu , count ( * ) from loai_dich_vu as t1 join dich_vu as t2 on t1.ma_loai_dich_vu = t2.ma_loai_dich_vu group by t2.ma_loai_dich_vu",
+    "gen_sql": "SELECT T1.ma_loai_dich_vu, T1.mo_ta_ve_loai_dich_vu, COUNT(*) AS so_luong FROM loai_dich_vu T1 JOIN dich_vu T2 ON T1.ma_loai_dich_vu = T2.ma_loai_dich_vu GROUP BY T1.ma_loai_dich_vu",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 675,
+    "db_id": "cre_Drama_Workshop_Groups",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten_san_pham , avg ( gia_san_pham ) from cac_san_pham group by ten_san_pham",
+    "gen_sql": "SELECT ten_san_pham, AVG(gia_san_pham) FROM cac_san_pham GROUP BY id_san_pham",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 674,
+    "db_id": "cre_Drama_Workshop_Groups",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten_san_pham , avg ( gia_san_pham ) from cac_san_pham group by ten_san_pham",
+    "gen_sql": "SELECT ten_san_pham, AVG(gia_san_pham) FROM cac_san_pham GROUP BY id_san_pham",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 694,
+    "db_id": "cre_Drama_Workshop_Groups",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ma_khu_vuc_tiep_thi from nhom_hoi_thao_kich group by ma_khu_vuc_tiep_thi order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT T1.ma_khu_vuc_tiep_thi FROM nhom_hoi_thao_kich T1 JOIN khu_vuc_tiep_thi T2 ON T1.ma_khu_vuc_tiep_thi = T2.ma_khu_vuc_tiep_thi GROUP BY T1.ma_khu_vuc_tiep_thi ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 700,
+    "db_id": "cre_Drama_Workshop_Groups",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_cua_hang from luot_dat_hang as t1 join nhom_hoi_thao_kich as t2 on t1.id_nhom_hoi_thao_kich = t2.id_nhom_hoi_thao_kich where t1.ma_trang_thai = 'stop'",
+    "gen_sql": "SELECT T1.ten_cua_hang \nFROM nhom_hoi_thao_kich T1 \nJOIN luot_dat_hang T2 ON T1.id_nhom_hoi_thao_kich = CAST(T2.id_nhom_hoi_thao_kich AS INTEGER) \nWHERE T2.ma_trang_thai = 'dừng'",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 708,
+    "db_id": "cre_Drama_Workshop_Groups",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.mo_ta_ve_loai_dich_vu from loai_dich_vu as t1 join dich_vu as t2 on t1.ma_loai_dich_vu = t2.ma_loai_dich_vu where t2.ten_san_pham = 'photo' intersect select t1.mo_ta_ve_loai_dich_vu from loai_dich_vu as t1 join dich_vu as t2 on t1.ma_loai_dich_vu = t2.ma_loai_dich_vu where t2.ten_san_pham = 'film'",
+    "gen_sql": "SELECT T1.mo_ta_ve_loai_dich_vu  \nFROM loai_dich_vu T1  \nJOIN dich_vu T2 ON T1.ma_loai_dich_vu = T2.ma_loai_dich_vu  \nWHERE T2.ten_san_pham IN ('ảnh', 'phim')  \nGROUP BY T1.ma_loai_dich_vu  \nHAVING COUNT(DISTINCT T2.ten_san_pham) >= 2;",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 722,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from tai_khoan )",
+    "gen_sql": "SELECT COUNT(*) FROM khach_hang LEFT JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang WHERE tai_khoan.id_khach_hang IS NULL",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 723,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from tai_khoan )",
+    "gen_sql": "SELECT COUNT(*) FROM khach_hang T1 LEFT JOIN tai_khoan T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T2.id_tai_khoan IS NULL",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 726,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select id_khach_hang from khach_hang except select id_khach_hang from tai_khoan",
+    "gen_sql": "SELECT T1.id_khach_hang FROM khach_hang T1 LEFT JOIN tai_khoan T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T2.id_khach_hang IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 727,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select id_khach_hang from khach_hang except select id_khach_hang from tai_khoan",
+    "gen_sql": "SELECT T1.id_khach_hang FROM khach_hang T1 LEFT JOIN tai_khoan T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T2.id_khach_hang IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 730,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.id_khach_hang , t2.ten_khach_hang , t2.ho_cua_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT khach_hang.id_khach_hang, khach_hang.ten_khach_hang, khach_hang.ho_cua_khach_hang FROM khach_hang JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang GROUP BY khach_hang.id_khach_hang ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 735,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_khach_hang , t1.id_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang having count ( * ) >= 2",
+    "gen_sql": "SELECT T1.id_khach_hang, T1.ten_khach_hang FROM khach_hang T1 JOIN tai_khoan T2 ON T1.id_khach_hang = T2.id_khach_hang GROUP BY T1.id_khach_hang HAVING COUNT(T2.id_tai_khoan) >= 2",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 734,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_khach_hang , t1.id_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang having count ( * ) >= 2",
+    "gen_sql": "SELECT T1.id_khach_hang, T1.ten_khach_hang FROM khach_hang T1 JOIN tai_khoan T2 ON T1.id_khach_hang = T2.id_khach_hang GROUP BY T1.id_khach_hang HAVING COUNT(*) >= 2",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 752,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_tai_khoan , t1.id_tai_khoan , count ( * ) from giao_dich_tai_chinh as t1 join tai_khoan as t2 on t1.id_tai_khoan = t2.id_tai_khoan group by t1.id_tai_khoan",
+    "gen_sql": "SELECT T1.ten_tai_khoan, T1.id_tai_khoan, COUNT(*) FROM tai_khoan T1 JOIN giao_dich_tai_chinh T2 ON T1.id_tai_khoan = T2.id_tai_khoan GROUP BY T1.id_tai_khoan",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 753,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten_tai_khoan , t1.id_tai_khoan , count ( * ) from giao_dich_tai_chinh as t1 join tai_khoan as t2 on t1.id_tai_khoan = t2.id_tai_khoan group by t1.id_tai_khoan",
+    "gen_sql": "SELECT T1.id_tai_khoan, T1.ten_tai_khoan, COUNT(*) FROM tai_khoan T1 JOIN giao_dich_tai_chinh T2 ON T1.id_tai_khoan = T2.id_tai_khoan GROUP BY T1.id_tai_khoan",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 756,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.id_tai_khoan , t2.ten_tai_khoan from giao_dich_tai_chinh as t1 join tai_khoan as t2 on t1.id_tai_khoan = t2.id_tai_khoan group by t1.id_tai_khoan having count ( * ) >= 4",
+    "gen_sql": "SELECT tai_khoan.id_tai_khoan, tai_khoan.ten_tai_khoan FROM tai_khoan JOIN giao_dich_tai_chinh ON tai_khoan.id_tai_khoan = giao_dich_tai_chinh.id_tai_khoan GROUP BY tai_khoan.id_tai_khoan HAVING COUNT(*) >= 4",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 774,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ho_cua_khach_hang , t1.id_khach_hang , t2.so_dien_thoai from don_dat_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT khach_hang.id_khach_hang, khach_hang.ho_cua_khach_hang, khach_hang.so_dien_thoai FROM khach_hang JOIN don_dat_hang ON khach_hang.id_khach_hang = don_dat_hang.id_khach_hang GROUP BY khach_hang.id_khach_hang ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 775,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ho_cua_khach_hang , t1.id_khach_hang , t2.so_dien_thoai from don_dat_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT T1.id_khach_hang, T1.ho_cua_khach_hang, T1.so_dien_thoai FROM khach_hang T1 JOIN don_dat_hang T2 ON T1.id_khach_hang = T2.id_khach_hang GROUP BY T1.id_khach_hang ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 776,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten_san_pham from san_pham except select t1.ten_san_pham from san_pham as t1 join mat_hang_duoc_dat as t2 on t1.id_san_pham = t2.id_san_pham",
+    "gen_sql": "SELECT T1.ten_san_pham FROM san_pham T1 LEFT JOIN mat_hang_duoc_dat T2 ON T1.id_san_pham = T2.id_san_pham WHERE T2.id_mat_hang_duoc_dat IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 777,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten_san_pham from san_pham except select t1.ten_san_pham from san_pham as t1 join mat_hang_duoc_dat as t2 on t1.id_san_pham = t2.id_san_pham",
+    "gen_sql": "SELECT T1.ten_san_pham FROM san_pham T1 LEFT JOIN mat_hang_duoc_dat T2 ON T1.id_san_pham = T2.id_san_pham WHERE T2.id_mat_hang_duoc_dat IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 791,
+    "db_id": "customers_and_invoices",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from san_pham where id_san_pham not in ( select id_san_pham from mat_hang_duoc_dat )",
+    "gen_sql": "SELECT COUNT(*) FROM (SELECT id_san_pham FROM san_pham EXCEPT SELECT id_san_pham FROM mat_hang_duoc_dat) AS never_ordered_products",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 820,
+    "db_id": "department_management",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t3.sinh_ra_o_tieu_bang from cac_bo as t1 join su_quan_ly as t2 on t1.id_cac_bo = t2.id_cac_bo join bo_truong as t3 on t2.id_nguoi_dung_dau = t3.id_nguoi_dung_dau where t1.ten = 'Treasury' intersect select t3.sinh_ra_o_tieu_bang from cac_bo as t1 join su_quan_ly as t2 on t1.id_cac_bo = t2.id_cac_bo join bo_truong as t3 on t2.id_nguoi_dung_dau = t3.id_nguoi_dung_dau where t1.ten = 'Homeland Security'",
+    "gen_sql": "SELECT T1.sinh_ra_o_tieu_bang FROM bo_truong T1 JOIN su_quan_ly T2 ON T1.id_nguoi_dung_dau = T2.id_nguoi_dung_dau JOIN cac_bo T3 ON T2.id_cac_bo = T3.id_cac_bo WHERE T3.ten = 'Bộ tài chính' AND (SELECT T4.sinh_ra_o_tieu_bang FROM bo_truong T4 JOIN su_quan_ly T5 ON T4.id_nguoi_dung_dau = T5.id_nguoi_dung_dau JOIN cac_bo T6 ON T5.id_cac_bo = T6.id_cac_bo WHERE T6.ten = 'Bộ An ninh nội địa') = T1.sinh_ra_o_tieu_bang",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 882,
+    "db_id": "driving_school",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten , ho from khach_hang where so_tien_con_thieu between 1000 and 3000",
+    "gen_sql": "SELECT ten, ho FROM khach_hang WHERE so_tien_con_thieu >= 1000 AND so_tien_con_thieu <= 3000",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 893,
+    "db_id": "driving_school",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from khoan_thanh_toan_cua_khach_hang )",
+    "gen_sql": "SELECT COUNT(*) FROM khach_hang T1 LEFT JOIN khoan_thanh_toan_cua_khach_hang T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T2.id_khach_hang IS NULL",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 894,
+    "db_id": "driving_school",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from khoan_thanh_toan_cua_khach_hang )",
+    "gen_sql": "SELECT COUNT(*) FROM khach_hang LEFT JOIN khoan_thanh_toan_cua_khach_hang ON khach_hang.id_khach_hang = khoan_thanh_toan_cua_khach_hang.id_khach_hang WHERE khoan_thanh_toan_cua_khach_hang.id_khach_hang IS NULL",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 911,
+    "db_id": "driving_school",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ho from khach_hang intersect select ho from nhan_vien",
+    "gen_sql": "SELECT ho FROM nhan_vien INTERSECT SELECT ho FROM khach_hang",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 928,
+    "db_id": "employee_hire_evaluation",
+    "status": "GEN_ERROR",
+    "error": "ORDER BY clause should come after UNION not before",
+    "gold_sql": "select min ( so_luong_san_pham ) , max ( so_luong_san_pham ) from cua_hang",
+    "gen_sql": "SELECT so_luong_san_pham FROM cua_hang ORDER BY so_luong_san_pham DESC LIMIT 1 UNION SELECT so_luong_san_pham FROM cua_hang ORDER BY so_luong_san_pham ASC LIMIT 1"
+  },
+  {
+    "id": 935,
+    "db_id": "employee_hire_evaluation",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten from nhan_vien as t1 join danh_gia as t2 on t1.id_nhan_vien = t2.id_nhan_vien group by t2.id_nhan_vien order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT T1.ten, COUNT(*) AS num_evaluations FROM nhan_vien T1 JOIN danh_gia T2 ON T1.id_nhan_vien = T2.id_nhan_vien GROUP BY T1.id_nhan_vien ORDER BY num_evaluations DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 938,
+    "db_id": "employee_hire_evaluation",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten from nhan_vien where id_nhan_vien not in ( select id_nhan_vien from danh_gia )",
+    "gen_sql": "SELECT ten FROM nhan_vien LEFT JOIN danh_gia ON CAST(nhan_vien.id_nhan_vien AS TEXT) = danh_gia.id_nhan_vien WHERE danh_gia.id_nhan_vien IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 939,
+    "db_id": "employee_hire_evaluation",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten from nhan_vien where id_nhan_vien not in ( select id_nhan_vien from danh_gia )",
+    "gen_sql": "SELECT ten FROM nhan_vien LEFT JOIN danh_gia ON nhan_vien.id_nhan_vien = danh_gia.id_nhan_vien WHERE danh_gia.id_nhan_vien IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 942,
+    "db_id": "employee_hire_evaluation",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten from cua_hang where id_cua_hang not in ( select id_cua_hang from tuyen_dung )",
+    "gen_sql": "SELECT T1.ten FROM cua_hang T1 EXCEPT SELECT T2.ten FROM tuyen_dung T1 JOIN cua_hang T2 ON T1.id_cua_hang = T2.id_cua_hang",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 943,
+    "db_id": "employee_hire_evaluation",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten from cua_hang where id_cua_hang not in ( select id_cua_hang from tuyen_dung )",
+    "gen_sql": "SELECT T1.ten FROM cua_hang T1 LEFT JOIN tuyen_dung T2 ON T1.id_cua_hang = T2.id_cua_hang WHERE T2.id_nhan_vien IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 950,
+    "db_id": "employee_hire_evaluation",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select quan from cua_hang where so_luong_san_pham < 3000 intersect select quan from cua_hang where so_luong_san_pham > 10000",
+    "gen_sql": "SELECT quan FROM cua_hang GROUP BY quan HAVING SUM(CASE WHEN so_luong_san_pham < 3000 THEN 1 ELSE 0 END) > 0 AND SUM(CASE WHEN so_luong_san_pham > 10000 THEN 1 ELSE 0 END) > 0",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 992,
+    "db_id": "flight_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from hang_hang_khong as t1 join chuyen_bay as t2 on t2.hang_hang_khong = t1.id_hang_hang_khong where t1.ten_hang_hang_khong = 'United Airlines' and t2.san_bay_khoi_hanh = 'AHD'",
+    "gen_sql": "SELECT COUNT(*) FROM chuyen_bay T1 JOIN hang_hang_khong T2 ON T1.hang_hang_khong = T2.id_hang_hang_khong JOIN san_bay T3 ON T1.san_bay_khoi_hanh = T3.ma_san_bay WHERE T2.ten_hang_hang_khong = ' United Airlines ' AND T3.ma_san_bay = 'AHD'",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 993,
+    "db_id": "flight_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from hang_hang_khong as t1 join chuyen_bay as t2 on t2.hang_hang_khong = t1.id_hang_hang_khong where t1.ten_hang_hang_khong = 'United Airlines' and t2.san_bay_khoi_hanh = 'AHD'",
+    "gen_sql": "SELECT COUNT(*) FROM chuyen_bay JOIN hang_hang_khong ON chuyen_bay.hang_hang_khong = hang_hang_khong.id_hang_hang_khong JOIN san_bay ON chuyen_bay.san_bay_khoi_hanh = san_bay.ma_san_bay WHERE hang_hang_khong.ten_hang_hang_khong = 'United Airlines' AND san_bay.ma_san_bay = 'AHD'",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 998,
+    "db_id": "flight_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.thanh_pho from san_bay as t1 join chuyen_bay as t2 on t1.ma_san_bay = t2.san_bay_khoi_hanh group by t1.thanh_pho order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT T2.thanh_pho, COUNT(*) AS so_luong FROM chuyen_bay T1 JOIN san_bay T2 ON T1.san_bay_khoi_hanh = T2.ma_san_bay GROUP BY T2.thanh_pho ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1005,
+    "db_id": "flight_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong group by t1.ten_hang_hang_khong order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT T1.ten_hang_hang_khong, COUNT(*) FROM hang_hang_khong T1 JOIN chuyen_bay T2 ON T1.id_hang_hang_khong = T2.hang_hang_khong GROUP BY T1.id_hang_hang_khong ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1004,
+    "db_id": "flight_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong group by t1.ten_hang_hang_khong order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT T1.id_hang_hang_khong, T1.ten_hang_hang_khong FROM hang_hang_khong T1 JOIN chuyen_bay T2 ON T1.id_hang_hang_khong = T2.hang_hang_khong GROUP BY T1.id_hang_hang_khong ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1008,
+    "db_id": "flight_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = 'AHD'",
+    "gen_sql": "SELECT hang_hang_khong.id_hang_hang_khong, hang_hang_khong.ten_hang_hang_khong FROM hang_hang_khong INNER JOIN chuyen_bay ON hang_hang_khong.id_hang_hang_khong = chuyen_bay.hang_hang_khong WHERE chuyen_bay.san_bay_khoi_hanh = 'AHD'",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1011,
+    "db_id": "flight_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_dich = 'AHD'",
+    "gen_sql": "SELECT hang_hang_khong.id_hang_hang_khong, hang_hang_khong.ten_hang_hang_khong FROM hang_hang_khong INNER JOIN chuyen_bay ON hang_hang_khong.id_hang_hang_khong = chuyen_bay.hang_hang_khong WHERE chuyen_bay.san_bay_dich = 'AHD'",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1012,
+    "db_id": "flight_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = 'APG' intersect select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = 'CVO'",
+    "gen_sql": "SELECT hang_hang_khong.id_hang_hang_khong, hang_hang_khong.ten_hang_hang_khong  \nFROM hang_hang_khong  \nJOIN chuyen_bay ON hang_hang_khong.id_hang_hang_khong = chuyen_bay.hang_hang_khong  \nWHERE chuyen_bay.san_bay_khoi_hanh IN ('APG', 'CVO')  \nGROUP BY hang_hang_khong.id_hang_hang_khong, hang_hang_khong.ten_hang_hang_khong  \nHAVING COUNT(DISTINCT chuyen_bay.san_bay_khoi_hanh) = 2",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1013,
+    "db_id": "flight_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = 'APG' intersect select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = 'CVO'",
+    "gen_sql": "SELECT hang_hang_khong.id_hang_hang_khong, hang_hang_khong.ten_hang_hang_khong\nFROM hang_hang_khong\nJOIN chuyen_bay ON hang_hang_khong.id_hang_hang_khong = chuyen_bay.hang_hang_khong\nWHERE chuyen_bay.san_bay_khoi_hanh IN ('APG', 'CVO')\nGROUP BY hang_hang_khong.id_hang_hang_khong\nHAVING COUNT(DISTINCT CASE WHEN chuyen_bay.san_bay_khoi_hanh = 'APG' THEN 1 END) > 0\nAND COUNT(DISTINCT CASE WHEN chuyen_bay.san_bay_khoi_hanh = 'CVO' THEN 1 END) > 0",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1014,
+    "db_id": "flight_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = 'CVO' except select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = 'APG'",
+    "gen_sql": "SELECT T1.ten_hang_hang_khong FROM hang_hang_khong T1 JOIN chuyen_bay T2 ON T1.id_hang_hang_khong = T2.hang_hang_khong WHERE T2.san_bay_khoi_hanh = 'CVO' GROUP BY T1.id_hang_hang_khong EXCEPT SELECT T1.ten_hang_hang_khong FROM hang_hang_khong T1 JOIN chuyen_bay T2 ON T1.id_hang_hang_khong = T2.hang_hang_khong WHERE T2.san_bay_khoi_hanh = 'APG' GROUP BY T1.id_hang_hang_khong",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1018,
+    "db_id": "flight_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong group by t1.ten_hang_hang_khong having count ( * ) < 200",
+    "gen_sql": "SELECT T1.id_hang_hang_khong, T1.ten_hang_hang_khong FROM hang_hang_khong T1 JOIN chuyen_bay T2 ON T1.id_hang_hang_khong = T2.hang_hang_khong GROUP BY T1.id_hang_hang_khong HAVING COUNT(*) < 200",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1019,
+    "db_id": "flight_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong group by t1.ten_hang_hang_khong having count ( * ) < 200",
+    "gen_sql": "SELECT T1.id_hang_hang_khong, T1.ten_hang_hang_khong, COUNT(*) AS so_chuyen_bay FROM hang_hang_khong T1 JOIN chuyen_bay T2 ON T1.id_hang_hang_khong = T2.hang_hang_khong GROUP BY T1.id_hang_hang_khong HAVING COUNT(*) < 200",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1030,
+    "db_id": "flight_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_dich = t2.ma_san_bay where t2.thanh_pho = 'Aberdeen' or t2.thanh_pho = 'Abilene'",
+    "gen_sql": "SELECT COUNT(*) FROM chuyen_bay JOIN san_bay ON chuyen_bay.san_bay_dich = san_bay.ma_san_bay WHERE san_bay.thanh_pho IN ('Aberdeen', 'Abilene')",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 1031,
+    "db_id": "flight_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_dich = t2.ma_san_bay where t2.thanh_pho = 'Aberdeen' or t2.thanh_pho = 'Abilene'",
+    "gen_sql": "SELECT COUNT(*) FROM chuyen_bay JOIN san_bay ON chuyen_bay.san_bay_dich = san_bay.ma_san_bay WHERE san_bay.thanh_pho IN ('Aberdeen', 'Abilene')",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 1044,
+    "db_id": "game_injury",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.mua_giai , t2.ten from tran_dau as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id join chan_thuong as t3 on t1.id = t3.id_tran_dau where t3.chan_thuong = 'Foot injury' or t3.chan_thuong = 'Knee problem'",
+    "gen_sql": "SELECT T2.mua_giai, T3.ten FROM chan_thuong T1 JOIN tran_dau T2 ON T1.id_tran_dau = T2.id JOIN san_van_dong T3 ON T2.id_san_van_dong = T3.id WHERE T1.chan_thuong LIKE '%chân%' OR T1.chan_thuong LIKE '%đầu gối%'",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1046,
+    "db_id": "game_injury",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from tran_dau where id not in ( select id_tran_dau from chan_thuong )",
+    "gen_sql": "SELECT COUNT(*) FROM tran_dau LEFT JOIN chan_thuong ON tran_dau.id = chan_thuong.id_tran_dau WHERE chan_thuong.id IS NULL",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 1148,
+    "db_id": "imdb",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( distinct t1.ten ) from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t1.quoc_tich = 'China' and t3.tieu_de = 'Rush Hour 3'",
+    "gen_sql": "SELECT COUNT(DISTINCT dien_vien.id_dien_vien) FROM dien_vien JOIN phan_vai ON dien_vien.id_dien_vien = phan_vai.id_dien_vien JOIN bo_phim ON phan_vai.id_se_ri_phim = bo_phim.id_bo_phim WHERE bo_phim.tieu_de = 'Giờ cao điểm 3' AND dien_vien.quoc_tich = 'Trung Quốc'",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 1149,
+    "db_id": "imdb",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t4.tieu_de from phan_vai as t5 join dien_vien as t1 on t5.id_dien_vien = t1.id_dien_vien join bo_phim as t4 on t4.id_bo_phim = t5.id_se_ri_phim join phan_vai as t3 on t4.id_bo_phim = t3.id_se_ri_phim join dien_vien as t2 on t3.id_dien_vien = t2.id_dien_vien where t1.ten = 'Woody Strode' and t2.ten = 'Jason Robards'",
+    "gen_sql": "SELECT b.tieu_de\nFROM bo_phim b\nWHERE b.id_bo_phim IN (\n    SELECT p.id_se_ri_phim\n    FROM phan_vai p\n    JOIN dien_vien d ON p.id_dien_vien = d.id_dien_vien\n    WHERE d.ten = 'Woody Strode'\n    INTERSECT\n    SELECT p.id_se_ri_phim\n    FROM phan_vai p\n    JOIN dien_vien d ON p.id_dien_vien = d.id_dien_vien\n    WHERE d.ten = 'Jason Robards'\n)",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1152,
+    "db_id": "imdb",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t4.tieu_de from phan_vai as t5 join dien_vien as t1 on t5.id_dien_vien = t1.id_dien_vien join bo_phim as t4 on t4.id_bo_phim = t5.id_se_ri_phim join phan_vai as t3 on t4.id_bo_phim = t3.id_se_ri_phim join dien_vien as t2 on t3.id_dien_vien = t2.id_dien_vien where t1.ten = 'Woody Strode' and t2.ten = 'Jason Robards'",
+    "gen_sql": "SELECT bo_phim.tieu_de\nFROM bo_phim\nJOIN phan_vai ON bo_phim.id_bo_phim = phan_vai.id_se_ri_phim\nJOIN dien_vien ON phan_vai.id_dien_vien = dien_vien.id_dien_vien\nWHERE dien_vien.ten = 'Woody Strode'\nINTERSECT\nSELECT bo_phim.tieu_de\nFROM bo_phim\nJOIN phan_vai ON bo_phim.id_bo_phim = phan_vai.id_se_ri_phim\nJOIN dien_vien ON phan_vai.id_dien_vien = dien_vien.id_dien_vien\nWHERE dien_vien.ten = 'Jason Robards'",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1154,
+    "db_id": "imdb",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t3.tieu_de from dao_dien as t5 join dao_dien_boi as t2 on t5.id_dao_dien = t2.id_dao_dien join dao_dien_boi as t1 on t5.id_dao_dien = t1.id_dao_dien join bo_phim as t4 on t4.id_bo_phim = t2.id_se_ri_phim join bo_phim as t3 on t3.id_bo_phim = t1.id_se_ri_phim where t4.tieu_de = 'Revolutionary Road'",
+    "gen_sql": "SELECT T1.tieu_de FROM bo_phim T1 JOIN dao_dien_boi T2 ON T1.id_bo_phim = T2.id_se_ri_phim WHERE T2.id_dao_dien = (SELECT T3.id_dao_dien FROM bo_phim T4 JOIN dao_dien_boi T3 ON T4.id_bo_phim = T3.id_se_ri_phim WHERE T4.tieu_de = 'Con đường cách mạng')",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1178,
+    "db_id": "insurance_and_eClaims",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select chi_tiet_khach_hang from khach_hang except select t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang",
+    "gen_sql": "SELECT T1.chi_tiet_khach_hang FROM khach_hang T1 LEFT JOIN chinh_sach T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T2.id_chinh_sach IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1177,
+    "db_id": "insurance_and_eClaims",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t3.chi_tiet_khach_hang from tieu_de_cua_yeu_cau as t1 join chinh_sach as t2 on t1.id_chinh_sach = t2.id_chinh_sach join khach_hang as t3 on t2.id_khach_hang = t3.id_khach_hang where t1.so_tien_duoc_tra = ( select min ( so_tien_duoc_tra ) from tieu_de_cua_yeu_cau )",
+    "gen_sql": "SELECT khach_hang.id_khach_hang, khach_hang.chi_tiet_khach_hang FROM khach_hang INNER JOIN chinh_sach ON khach_hang.id_khach_hang = chinh_sach.id_khach_hang INNER JOIN tieu_de_cua_yeu_cau ON chinh_sach.id_chinh_sach = tieu_de_cua_yeu_cau.id_chinh_sach ORDER BY tieu_de_cua_yeu_cau.so_tien_duoc_tra ASC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1179,
+    "db_id": "insurance_and_eClaims",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select chi_tiet_khach_hang from khach_hang except select t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang",
+    "gen_sql": "SELECT T1.chi_tiet_khach_hang FROM khach_hang T1 LEFT JOIN chinh_sach T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T2.id_chinh_sach IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1187,
+    "db_id": "insurance_and_eClaims",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select distinct t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ma_loai_chinh_sach = 'Deputy'",
+    "gen_sql": "SELECT T1.id_khach_hang, T1.chi_tiet_khach_hang FROM khach_hang T1 JOIN chinh_sach T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T2.ma_loai_chinh_sach = 'Uỷ quyền'",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1197,
+    "db_id": "insurance_and_eClaims",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select mo_ta_ve_tinh_trang_yeu_cau from giai_doan_xu_ly_yeu_cau where ten_tinh_trang_yeu_cau = 'Open'",
+    "gen_sql": "SELECT giai_doan_xu_ly_yeu_cau.mo_ta_ve_tinh_trang_yeu_cau  \nFROM tieu_de_cua_yeu_cau  \nJOIN giai_doan_xu_ly_yeu_cau ON tieu_de_cua_yeu_cau.ma_tinh_trang_yeu_cau = giai_doan_xu_ly_yeu_cau.ten_tinh_trang_yeu_cau  \nWHERE tieu_de_cua_yeu_cau.ma_tinh_trang_yeu_cau = 'Mở'",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1202,
+    "db_id": "local_govt_in_alabama",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.chi_tiet_su_kien from su_kien as t1 join dich_vu as t2 on t1.id_dich_vu = t2.id_dich_vu where t2.ma_loai_dich_vu = 'Marriage'",
+    "gen_sql": "SELECT T1.id_su_kien, T1.chi_tiet_su_kien FROM su_kien T1 JOIN dich_vu T2 ON T1.id_dich_vu = T2.id_dich_vu WHERE T2.ma_loai_dich_vu = ' Đám cưới '",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1213,
+    "db_id": "local_govt_in_alabama",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select id_su_kien from su_kien except select t1.id_su_kien from nguoi_tham_gia_su_kien as t1 join nguoi_tham_gia as t2 on t1.id_nguoi_tham_gia = t2.id_nguoi_tham_gia where chi_tiet_nguoi_tham_gia = 'Kenyatta Kuhn'",
+    "gen_sql": "SELECT T1.id_su_kien FROM su_kien T1 WHERE NOT EXISTS (SELECT 1 FROM nguoi_tham_gia_su_kien T2 JOIN nguoi_tham_gia T3 ON T2.id_nguoi_tham_gia = T3.id_nguoi_tham_gia WHERE T1.id_su_kien = T2.id_su_kien AND T3.chi_tiet_nguoi_tham_gia = 'Kenyatta Kuhn')",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1215,
+    "db_id": "local_govt_in_alabama",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from su_kien where id_su_kien not in ( select id_su_kien from nguoi_tham_gia_su_kien )",
+    "gen_sql": "SELECT COUNT(*) FROM su_kien LEFT JOIN nguoi_tham_gia_su_kien ON su_kien.id_su_kien = nguoi_tham_gia_su_kien.id_su_kien WHERE nguoi_tham_gia_su_kien.id_nguoi_tham_gia IS NULL",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 1244,
+    "db_id": "machine_repair",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten from ky_thuat_vien where id_ky_thuat_vien not in ( select id_ky_thuat_vien from phan_cong_sua_chua )",
+    "gen_sql": "SELECT ten FROM ky_thuat_vien EXCEPT SELECT T1.ten FROM ky_thuat_vien T1 JOIN phan_cong_sua_chua T2 ON T1.id_ky_thuat_vien = T2.id_ky_thuat_vien",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1254,
+    "db_id": "mountain_photos",
+    "status": "GEN_ERROR",
+    "error": "no such table: dbo.nui",
+    "gold_sql": "select t1.id , t1.ten from nui as t1 join anh as t2 on t1.id = t2.id_nui group by t1.id having count ( * ) >= 2",
+    "gen_sql": "SELECT T1.id, T1.ten FROM dbo.nui T1 JOIN dbo.anh T2 ON T1.id = T2.id_nui GROUP BY T1.id HAVING COUNT(*) >= 2"
+  },
+  {
+    "id": 1256,
+    "db_id": "mountain_photos",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten from ong_kinh_may_anh as t1 join anh as t2 on t2.id_ong_kinh_may_anh = t1.id where t1.nhan_hieu = 'Sigma' or t1.nhan_hieu = 'Olympus'",
+    "gen_sql": "SELECT anh.ten FROM anh JOIN ong_kinh_may_anh ON anh.id_ong_kinh_may_anh = ong_kinh_may_anh.id WHERE ong_kinh_may_anh.nhan_hieu IN ('Sigma', 'Olympus')",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1259,
+    "db_id": "mountain_photos",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( distinct t2.id_ong_kinh_may_anh ) from nui as t1 join anh as t2 on t1.id = t2.id_nui where t1.quoc_gia = 'Ethiopia'",
+    "gen_sql": "SELECT COUNT(DISTINCT T1.id_ong_kinh_may_anh) FROM anh T1 JOIN nui T2 ON T1.id_nui = T2.id JOIN ong_kinh_may_anh T3 ON T1.id_ong_kinh_may_anh = T3.id WHERE T2.quoc_gia = 'Ethiopia'",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 1258,
+    "db_id": "mountain_photos",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from ong_kinh_may_anh where id not in ( select id_ong_kinh_may_anh from anh )",
+    "gen_sql": "SELECT COUNT(*) FROM ong_kinh_may_anh LEFT JOIN anh ON ong_kinh_may_anh.id = anh.id_ong_kinh_may_anh WHERE anh.id IS NULL",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 1261,
+    "db_id": "mountain_photos",
+    "status": "GEN_ERROR",
+    "error": "no such table: dbo.nui",
+    "gold_sql": "select ten , do_noi from nui except select t1.ten , t1.do_noi from nui as t1 join anh as t2 on t1.id = t2.id_nui join ong_kinh_may_anh as t3 on t2.id_ong_kinh_may_anh = t3.id where t3.nhan_hieu = 'Sigma'",
+    "gen_sql": "SELECT T1.ten, T1.do_noi FROM dbo.nui T1 WHERE NOT EXISTS (SELECT 1 FROM dbo.anh T2 JOIN dbo.ong_kinh_may_anh T3 ON T2.id_ong_kinh_may_anh = T3.id WHERE T1.id = T2.id_nui AND T3.nhan_hieu = 'Sigma')"
+  },
+  {
+    "id": 1263,
+    "db_id": "mountain_photos",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t1.ten , count ( * ) from ong_kinh_may_anh as t1 join anh as t2 on t1.id = t2.id_ong_kinh_may_anh group by t1.id order by count ( * )",
+    "gen_sql": "SELECT T1.ten, COUNT(*) AS so_luong_anh FROM ong_kinh_may_anh T1 JOIN anh T2 ON T1.id = T2.id_ong_kinh_may_anh GROUP BY T1.id ORDER BY COUNT(*) DESC",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1290,
+    "db_id": "music_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where vi_tri_tren_san_khau = 'back' group by ho order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT T1.ho FROM ban_nhac T1 JOIN buoi_bieu_dien T2 ON T1.id = T2.nghe_si_trong_ban_nhac WHERE T2.vi_tri_tren_san_khau = 'hậu trường' GROUP BY T1.id ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1291,
+    "db_id": "music_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where vi_tri_tren_san_khau = 'back' group by ho order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT T1.ho FROM ban_nhac T1 JOIN buoi_bieu_dien T2 ON T1.id = T2.nghe_si_trong_ban_nhac WHERE T2.vi_tri_tren_san_khau = 'hậu trường' GROUP BY T1.id ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1327,
+    "db_id": "music_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select distinct loai from giong_hat",
+    "gen_sql": "SELECT loai FROM giong_hat GROUP BY loai;",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1347,
+    "db_id": "music_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select loai from giong_hat as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where ten = 'Solveig' group by loai order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT T2.loai, COUNT(*) AS count FROM ban_nhac T1 JOIN giong_hat T2 ON T1.id = T2.nghe_si_trong_ban_nhac WHERE T1.ten = 'Solveig' GROUP BY T2.loai ORDER BY count DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1352,
+    "db_id": "music_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select loai from giong_hat as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where ten = 'Marianne' group by loai order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT T2.loai, COUNT(*) AS count FROM ban_nhac T1 JOIN giong_hat T2 ON T1.id = T2.nghe_si_trong_ban_nhac WHERE T1.ten = 'Marianne' GROUP BY T2.loai ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1354,
+    "db_id": "music_2",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten , t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t3.tieu_de = 'Der Kapitan' and t1.vi_tri_tren_san_khau = 'back'",
+    "gen_sql": "SELECT T1.ten, T1.ho FROM ban_nhac T1 JOIN buoi_bieu_dien T2 ON T1.id = T2.nghe_si_trong_ban_nhac WHERE T2.vi_tri_tren_san_khau = 'hậu trường' AND T2.id_bai_hat = (SELECT id_bai_hat FROM bai_hat WHERE tieu_de = 'Der Kapitan')",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1378,
+    "db_id": "products_for_hire",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from san_pham_cho_thue where id_san_pham not in ( select id_san_pham from san_pham_duoc_dat where so_tien_da_dat > 200 )",
+    "gen_sql": "SELECT COUNT(*) FROM san_pham_cho_thue T1 LEFT JOIN san_pham_duoc_dat T2 ON T1.id_san_pham = T2.id_san_pham WHERE T2.so_tien_da_dat <= 200 OR T2.so_tien_da_dat IS NULL;",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 1394,
+    "db_id": "restaurant_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select chuyen_nganh , count ( * ) from sinh_vien group by chuyen_nganh order by count ( chuyen_nganh ) asc limit 1",
+    "gen_sql": "SELECT chuyen_nganh, COUNT(*) AS so_luong FROM sinh_vien GROUP BY chuyen_nganh ORDER BY so_luong ASC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1393,
+    "db_id": "restaurant_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select co_van , count ( * ) from sinh_vien group by co_van order by count ( co_van ) desc limit 1",
+    "gen_sql": "SELECT co_van, COUNT(*) AS so_luong FROM sinh_vien GROUP BY co_van ORDER BY COUNT(*) DESC LIMIT 1;",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1395,
+    "db_id": "restaurant_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select chuyen_nganh , count ( * ) from sinh_vien group by chuyen_nganh having count ( chuyen_nganh ) between 2 and 30",
+    "gen_sql": "SELECT chuyen_nganh, COUNT(*) AS so_luong_sinh_vien FROM sinh_vien GROUP BY chuyen_nganh HAVING COUNT(*) BETWEEN 2 AND 30;",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1402,
+    "db_id": "restaurant_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select nha_hang.ten_nha_hang , sum ( luot_ghe_tham_nha_hang.thoi_gian_danh_ra ) from luot_ghe_tham_nha_hang join nha_hang on luot_ghe_tham_nha_hang.id_nha_hang = nha_hang.id_nha_hang group by nha_hang.id_nha_hang order by sum ( luot_ghe_tham_nha_hang.thoi_gian_danh_ra ) asc limit 1",
+    "gen_sql": "SELECT T2.ten_nha_hang, SUM(T1.thoi_gian_danh_ra) AS total_time FROM luot_ghe_tham_nha_hang T1 JOIN nha_hang T2 ON T1.id_nha_hang = T2.id_nha_hang GROUP BY T1.id_nha_hang ORDER BY total_time ASC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1414,
+    "db_id": "sakila_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.thanh_pho , count ( * ) , t1.id_thanh_pho from dia_chi as t1 join thanh_pho as t2 on t1.id_thanh_pho = t2.id_thanh_pho group by t1.id_thanh_pho order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT thanh_pho.thanh_pho, thanh_pho.id_thanh_pho, COUNT(*) FROM thanh_pho JOIN dia_chi ON thanh_pho.id_thanh_pho = dia_chi.id_thanh_pho GROUP BY thanh_pho.id_thanh_pho ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1415,
+    "db_id": "sakila_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.thanh_pho , count ( * ) , t1.id_thanh_pho from dia_chi as t1 join thanh_pho as t2 on t1.id_thanh_pho = t2.id_thanh_pho group by t1.id_thanh_pho order by count ( * ) desc limit 1",
+    "gen_sql": "SELECT T1.id_thanh_pho, T1.thanh_pho, COUNT(*) AS so_dia_chi FROM thanh_pho T1 JOIN dia_chi T2 ON T1.id_thanh_pho = T2.id_thanh_pho GROUP BY T1.id_thanh_pho ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1418,
+    "db_id": "sakila_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select tieu_de , id_phim from phim where gia_cho_thue = 0.99 intersect select t1.tieu_de , t1.id_phim from phim as t1 join hang_ton_kho as t2 on t1.id_phim = t2.id_phim group by t1.id_phim having count ( * ) < 3",
+    "gen_sql": "SELECT phim.id_phim, phim.tieu_de FROM phim JOIN hang_ton_kho ON phim.id_phim = hang_ton_kho.id_phim WHERE phim.gia_cho_thue = 0.99 GROUP BY phim.id_phim HAVING COUNT(*) < 3",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1419,
+    "db_id": "sakila_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select tieu_de , id_phim from phim where gia_cho_thue = 0.99 intersect select t1.tieu_de , t1.id_phim from phim as t1 join hang_ton_kho as t2 on t1.id_phim = t2.id_phim group by t1.id_phim having count ( * ) < 3",
+    "gen_sql": "SELECT phim.id_phim, phim.tieu_de  \nFROM phim  \nJOIN hang_ton_kho ON phim.id_phim = hang_ton_kho.id_phim  \nWHERE phim.gia_cho_thue = 0.99  \nGROUP BY phim.id_phim, phim.tieu_de  \nHAVING COUNT(*) < 3;",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1425,
+    "db_id": "sakila_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ngay_thanh_toan from khoan_thanh_toan where so_tien > 10 union select t1.ngay_thanh_toan from khoan_thanh_toan as t1 join nhan_vien as t2 on t1.id_nhan_vien = t2.id_nhan_vien where t2.ten = 'Elsa'",
+    "gen_sql": "SELECT T1.ngay_thanh_toan FROM khoan_thanh_toan T1 JOIN nhan_vien T2 ON T1.id_nhan_vien = T2.id_nhan_vien WHERE (T1.so_tien > 10) OR (T2.ten = 'Elsa')",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1427,
+    "db_id": "sakila_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select count ( * ) from khach_hang where co_hoat_dong_khong = '1'",
+    "gen_sql": "SELECT COUNT(*) FROM khach_hang WHERE co_hoat_dong_khong = true",
+    "gold_row_count": 1,
+    "gen_row_count": 1
+  },
+  {
+    "id": 1444,
+    "db_id": "sakila_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten , t1.id_danh_muc , count ( * ) from danh_muc_phim as t1 join danh_muc as t2 on t1.id_danh_muc = t2.id_danh_muc group by t1.id_danh_muc",
+    "gen_sql": "SELECT T1.id_danh_muc, T1.ten, COUNT(*) AS so_luong FROM danh_muc T1 JOIN danh_muc_phim T2 ON T1.id_danh_muc = T2.id_danh_muc GROUP BY T1.id_danh_muc",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1445,
+    "db_id": "sakila_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.ten , t1.id_danh_muc , count ( * ) from danh_muc_phim as t1 join danh_muc as t2 on t1.id_danh_muc = t2.id_danh_muc group by t1.id_danh_muc",
+    "gen_sql": "SELECT T1.id_danh_muc, T1.ten, COUNT(T2.id_phim) AS so_phim\nFROM danh_muc T1\nJOIN danh_muc_phim T2 ON T1.id_danh_muc = T2.id_danh_muc\nGROUP BY T1.id_danh_muc",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1470,
+    "db_id": "sakila_1",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select t2.dia_chi , t1.email from khach_hang as t1 join dia_chi as t2 on t2.id_dia_chi = t1.id_dia_chi where t1.ten = 'LINDA'",
+    "gen_sql": "SELECT khach_hang.email, dia_chi.dia_chi, dia_chi.dia_chi_2, dia_chi.quan FROM khach_hang JOIN dia_chi ON khach_hang.id_dia_chi = dia_chi.id_dia_chi WHERE khach_hang.ten = 'Linda'",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1481,
+    "db_id": "sakila_1",
+    "status": "EXEC_NO_MATCH",
+    "gold_sql": "select so_tien from khoan_thanh_toan order by so_tien desc limit 1",
+    "gen_sql": "SELECT MAX(so_tien) FROM khoan_thanh_toan",
+    "gold_row_count": 0,
+    "gen_row_count": 1
+  },
+  {
+    "id": 1495,
+    "db_id": "school_bus",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select ten from tai_xe where id_tai_xe not in ( select id_tai_xe from xe_buyt_cua_truong_hoc )",
+    "gen_sql": "SELECT T1.ten FROM tai_xe T1 LEFT JOIN xe_buyt_cua_truong_hoc T2 ON T1.id_tai_xe = T2.id_tai_xe WHERE T2.id_tai_xe IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  },
+  {
+    "id": 1499,
+    "db_id": "school_bus",
+    "status": "EXEC_MATCH",
+    "gold_sql": "select truong_hoc , loai_hinh from truong_hoc where id_truong_hoc not in ( select id_truong_hoc from xe_buyt_cua_truong_hoc )",
+    "gen_sql": "SELECT T1.truong_hoc, T1.loai_hinh FROM truong_hoc T1 LEFT JOIN xe_buyt_cua_truong_hoc T2 ON T1.id_truong_hoc = T2.id_truong_hoc WHERE T2.id_truong_hoc IS NULL",
+    "gold_row_count": 0,
+    "gen_row_count": 0
+  }
+]

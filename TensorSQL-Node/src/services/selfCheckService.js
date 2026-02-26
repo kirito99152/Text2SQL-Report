@@ -2,6 +2,7 @@
 
 const aiService = require('./aiService');
 const prompts = require('../prompts');
+const promptsRetry = require('../prompts_retry');
 
 class SelfCheckService {
 
@@ -15,39 +16,61 @@ class SelfCheckService {
     async verifyAndCorrectSql(plan, schemaContext, generatedSql) {
         const planString = typeof plan === 'string' ? plan : JSON.stringify(plan, null, 2);
 
-        let prompt = prompts.SQL_SELF_CHECK_PROMPT;
-        prompt = prompt.replace('{{schema_context}}', schemaContext);
-        prompt = prompt.replace('{{query_plan}}', planString);
-        prompt = prompt.replace('{{generated_sql}}', generatedSql);
-
-        const messages = [
-            { role: 'system', content: 'You are a strict SQL validator. Output VALID or the corrected SQL only.' },
-            { role: 'user', content: prompt }
-        ];
-
+        // --- Attempt 1: Original prompt ---
         try {
-            console.log("[SelfCheckService] Verifying SQL...");
-            // Enable thinking for Self Check as requested
-            const response = await aiService.generateJson(messages, true);
+            let prompt = prompts.SQL_SELF_CHECK_PROMPT;
+            prompt = prompt.replace('{{schema_context}}', schemaContext);
+            prompt = prompt.replace('{{query_plan}}', planString);
+            prompt = prompt.replace('{{generated_sql}}', generatedSql);
 
-            // Clean up response
+            const messages = [
+                { role: 'system', content: 'You are a strict SQL validator. Output VALID or the corrected SQL only.' },
+                { role: 'user', content: prompt }
+            ];
+
+            console.log("[SelfCheckService] Verifying SQL...");
+            const response = await aiService.generateJson(messages, true);
             let cleaned = this.cleanResponse(response);
 
-            // Check if the model returned "VALID" (case-insensitive check for robustness)
             if (cleaned.trim().toUpperCase() === 'VALID') {
                 console.log("[SelfCheckService] SQL verified as VALID.");
                 return generatedSql;
             } else {
                 console.log("[SelfCheckService] SQL corrected by model.");
-                // If the model returns a correction, it might include "VALID" or other text if it hallucinates, 
-                // but the prompt says "Output ONLY raw SQL" for corrections.
-                // We assume 'cleaned' is the SQL.
                 return cleaned;
             }
 
         } catch (error) {
-            console.error("[SelfCheckService] Error verifying SQL:", error);
-            // Fallback: return the original SQL if the check fails
+            console.warn("[SelfCheckService] Original prompt failed, retrying with compact prompt...", error.message);
+        }
+
+        // --- Attempt 2: Retry with compact prompt ---
+        try {
+            let prompt = promptsRetry.SQL_SELF_CHECK_PROMPT;
+            prompt = prompt.replace('{{schema_context}}', schemaContext);
+            prompt = prompt.replace('{{query_plan}}', planString);
+            prompt = prompt.replace('{{generated_sql}}', generatedSql);
+
+            const messages = [
+                { role: 'system', content: 'You are a strict SQL validator. Be concise. Output VALID or corrected SQL only.' },
+                { role: 'user', content: prompt }
+            ];
+
+            console.log("[SelfCheckService] RETRY: Verifying SQL with compact prompt...");
+            const response = await aiService.generateJson(messages, true);
+            let cleaned = this.cleanResponse(response);
+
+            if (cleaned.trim().toUpperCase() === 'VALID') {
+                console.log("[SelfCheckService] RETRY: SQL verified as VALID.");
+                return generatedSql;
+            } else {
+                console.log("[SelfCheckService] RETRY: SQL corrected by model.");
+                return cleaned;
+            }
+
+        } catch (retryError) {
+            console.error("[SelfCheckService] Retry also failed:", retryError.message);
+            // Fallback: return the original SQL if both attempts fail
             return generatedSql;
         }
     }
@@ -70,11 +93,11 @@ class SelfCheckService {
         const match = cleaned.match(/SELECT[\s\S]*?;/i);
 
         if (match) {
-            return match[0];
+            return match[0].replace(/\s+/g, ' ').trim();
         }
 
         // Fallback: return the cleaned text if no SELECT...; pattern found
-        return cleaned;
+        return cleaned.replace(/\s+/g, ' ').trim();
     }
 }
 
