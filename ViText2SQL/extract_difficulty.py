@@ -5,7 +5,7 @@ import sys
 BASE_DIR = '/root/Text2SQL-Report/ViText2SQL'
 sys.path.append(os.path.join(BASE_DIR, 'spiderEval'))
 
-from evaluation import Evaluator, rebuild_sql_val, rebuild_sql_col, build_valid_col_units, build_foreign_key_map_from_json, eval_hardness
+from evaluation import Evaluator, rebuild_sql_val, rebuild_sql_col, build_valid_col_units, build_foreign_key_map_from_json
 from process_sql import get_schema, Schema, get_sql
 
 DB_DIR = os.path.join(BASE_DIR, 'data', 'syllable-level', 'databases')
@@ -18,6 +18,7 @@ def main():
         bench = json.load(f)
 
     print(f"Loaded {len(bench)} queries.")
+    evaluator = Evaluator()
     
     for i, row in enumerate(bench):
         db_id = row['db_id']
@@ -37,7 +38,7 @@ def main():
             gold_sql_str = gold_sql_str.replace('ddanh_gia_xep_hang', 'danh_gia_xep_hang').replace('so_luong_ddanh_gia', 'so_luong_danh_gia')
             
             g_sql = get_sql(schema, gold_sql_str)
-            hardness = eval_hardness(g_sql)
+            hardness = evaluator.eval_hardness(g_sql)
             row['difficulty'] = hardness
         except Exception as e:
             row['difficulty'] = 'unknown'
