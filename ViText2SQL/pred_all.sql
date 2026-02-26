@@ -1793,8 +1793,6 @@ SELECT luot_nop_bai.tac_gia FROM luot_nop_bai JOIN chap_thuan ON luot_nop_bai.id
 SELECT tac_gia , COUNT(*) FROM luot_nop_bai JOIN chap_thuan ON luot_nop_bai.id_luot_nop_bai = chap_thuan.id_luot_nop_bai GROUP BY tac_gia ORDER BY COUNT(*) DESC LIMIT 10
 SELECT ngay, dia_diem FROM hoi_thao ORDER BY dia_diem ASC
 SELECT ngay, dia_diem FROM hoi_thao ORDER BY dia_diem ASC
-SELECT 1
-SELECT 1
 SELECT ten FROM doanh_nghiep WHERE danh_gia_xep_hang > 4.5
 SELECT ten FROM doanh_nghiep WHERE danh_gia_xep_hang = 3.5
 SELECT id_nguoi_tieu_dung FROM nguoi_tieu_dung WHERE ten = 'Michelle'

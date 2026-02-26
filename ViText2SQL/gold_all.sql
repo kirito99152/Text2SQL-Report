@@ -1624,26 +1624,26 @@ select ten_khu_vuc from khu_vuc where id_khu_vuc not in ( select id_khu_vuc from
 select ten_khu_vuc from khu_vuc where id_khu_vuc not in ( select id_khu_vuc from khu_vuc_bi_anh_huong )	storm_record
 select t1.ten_khu_vuc , count ( * ) from khu_vuc as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_khu_vuc = t2.id_khu_vuc group by t1.id_khu_vuc	storm_record
 select t1.ten_khu_vuc , count ( * ) from khu_vuc as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_khu_vuc = t2.id_khu_vuc group by t1.id_khu_vuc	storm_record
-select t1.ten , count ( * ) from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao	storm_record
-select t1.ten , count ( * ) from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao	storm_record
-select t1.ten , t1.toc_do_toi_da from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao order by count ( * ) desc limit 1	storm_record
-select t1.ten , t1.toc_do_toi_da from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao order by count ( * ) desc limit 1	storm_record
-select ten from bao where id_bao not in ( select id_bao from khu_vuc_bi_anh_huong )	storm_record
-select ten from bao where id_bao not in ( select id_bao from khu_vuc_bi_anh_huong )	storm_record
-select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao having count ( * ) >= 2 intersect select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao having sum ( t2.so_thanh_pho_bi_anh_huong ) >= 10	storm_record
-select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao having count ( * ) >= 2 intersect select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao having sum ( t2.so_thanh_pho_bi_anh_huong ) >= 10	storm_record
-select ten from bao except select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao having count ( * ) >= 2	storm_record
-select ten from bao except select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_bao = t2.id_bao group by t1.id_bao having count ( * ) >= 2	storm_record
-select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t3.so_luong_nguoi_chet >= 10	storm_record
-select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t3.so_luong_nguoi_chet >= 10	storm_record
-select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t2.ten_khu_vuc = "denmark"	storm_record
-select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t2.ten_khu_vuc = "denmark"	storm_record
+select t1.ten , count ( * ) from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_con_bao = t2.id_bao group by t1.id_con_bao	storm_record
+select t1.ten , count ( * ) from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_con_bao = t2.id_bao group by t1.id_con_bao	storm_record
+select t1.ten , t1.toc_do_toi_da from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_con_bao = t2.id_bao group by t1.id_con_bao order by count ( * ) desc limit 1	storm_record
+select t1.ten , t1.toc_do_toi_da from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_con_bao = t2.id_bao group by t1.id_con_bao order by count ( * ) desc limit 1	storm_record
+select ten from bao where id_con_bao not in ( select id_bao from khu_vuc_bi_anh_huong )	storm_record
+select ten from bao where id_con_bao not in ( select id_bao from khu_vuc_bi_anh_huong )	storm_record
+select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_con_bao = t2.id_bao group by t1.id_con_bao having count ( * ) >= 2 intersect select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_con_bao = t2.id_bao group by t1.id_con_bao having sum ( t2.so_thanh_pho_bi_anh_huong ) >= 10	storm_record
+select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_con_bao = t2.id_bao group by t1.id_con_bao having count ( * ) >= 2 intersect select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_con_bao = t2.id_bao group by t1.id_con_bao having sum ( t2.so_thanh_pho_bi_anh_huong ) >= 10	storm_record
+select ten from bao except select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_con_bao = t2.id_bao group by t1.id_con_bao having count ( * ) >= 2	storm_record
+select ten from bao except select t1.ten from bao as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_con_bao = t2.id_bao group by t1.id_con_bao having count ( * ) >= 2	storm_record
+select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_con_bao where t3.so_luong_nguoi_chet >= 10	storm_record
+select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_con_bao where t3.so_luong_nguoi_chet >= 10	storm_record
+select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_con_bao where t2.ten_khu_vuc = "denmark"	storm_record
+select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_con_bao where t2.ten_khu_vuc = "denmark"	storm_record
 select t1.ten_khu_vuc from khu_vuc as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_khu_vuc = t2.id_khu_vuc group by t1.id_khu_vuc having count ( * ) >= 2	storm_record
 select t1.ten_khu_vuc from khu_vuc as t1 join khu_vuc_bi_anh_huong as t2 on t1.id_khu_vuc = t2.id_khu_vuc group by t1.id_khu_vuc having count ( * ) >= 2	storm_record
-select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao order by t3.so_luong_nguoi_chet desc limit 1	storm_record
-select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao order by t3.so_luong_nguoi_chet desc limit 1	storm_record
-select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t2.ten_khu_vuc = "afghanistan" intersect select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t2.ten_khu_vuc = "albania"	storm_record
-select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t2.ten_khu_vuc = "afghanistan" intersect select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_bao where t2.ten_khu_vuc = "albania"	storm_record
+select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_con_bao order by t3.so_luong_nguoi_chet desc limit 1	storm_record
+select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_con_bao order by t3.so_luong_nguoi_chet desc limit 1	storm_record
+select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_con_bao where t2.ten_khu_vuc = "afghanistan" intersect select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_con_bao where t2.ten_khu_vuc = "albania"	storm_record
+select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_con_bao where t2.ten_khu_vuc = "afghanistan" intersect select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_bao = t3.id_con_bao where t2.ten_khu_vuc = "albania"	storm_record
 select count ( * ) from danh_sach	student_1
 select count ( * ) from danh_sach	student_1
 select ho from danh_sach where phong_hoc = 111	student_1
@@ -1793,8 +1793,6 @@ select t2.tac_gia from chap_thuan as t1 join luot_nop_bai as t2 on t1.id_luot_no
 select t2.tac_gia from chap_thuan as t1 join luot_nop_bai as t2 on t1.id_luot_nop_bai = t2.id_luot_nop_bai group by t2.tac_gia having count ( distinct t1.id_hoi_thao ) > 1	workshop_paper
 select ngay , dia_diem from hoi_thao order by dia_diem	workshop_paper
 select ngay , dia_diem from hoi_thao order by dia_diem	workshop_paper
-select tac_gia from luot_nop_bai where id_luot_nop_bai not in ( select id_luot_nop_bai from chap_thuan )	workshop_paper
-select tac_gia from luot_nop_bai where id_luot_nop_bai not in ( select id_luot_nop_bai from chap_thuan )	workshop_paper
 select ten from doanh_nghiep where danh_gia_xep_hang > 4.5	yelp
 select ten from doanh_nghiep where danh_gia_xep_hang = 3.5	yelp
 select id_nguoi_tieu_dung from nguoi_tieu_dung where ten = "michelle"	yelp
@@ -1851,13 +1849,13 @@ select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on
 select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "madison" and t2.ten_loai_hinh = "escape games"	yelp
 select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "madison" and t2.ten_loai_hinh = "escape games"	yelp
 select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.danh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "restaurant"	yelp
-select sum ( t4.so_luong ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join luot_dang_ky as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "restaurant" and t3.ten_loai_hinh = "moroccan"	yelp
-select sum ( t4.so_luong ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join luot_dang_ky as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "moroccan" and t3.ten_loai_hinh = "restaurant" and t4.ngay = "friday"	yelp
-select t4.ngay , sum ( t4.so_luong ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join luot_dang_ky as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "moroccan" and t3.ten_loai_hinh = "restaurant" group by t4.ngay	yelp
-select t1.tieu_bang , sum ( t4.so_luong ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join luot_dang_ky as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep where t2.ten_loai_hinh = "italian" and t3.ten_loai_hinh = "delis" and t4.ngay = "sunday" group by t1.tieu_bang	yelp
+select sum ( t4.so_luong ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join luot_ang_ky as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "restaurant" and t3.ten_loai_hinh = "moroccan"	yelp
+select sum ( t4.so_luong ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join luot_ang_ky as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "moroccan" and t3.ten_loai_hinh = "restaurant" and t4.ngay = "friday"	yelp
+select t4.ngay , sum ( t4.so_luong ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join luot_ang_ky as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "moroccan" and t3.ten_loai_hinh = "restaurant" group by t4.ngay	yelp
+select t1.tieu_bang , sum ( t4.so_luong ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join luot_ang_ky as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep where t2.ten_loai_hinh = "italian" and t3.ten_loai_hinh = "delis" and t4.ngay = "sunday" group by t1.tieu_bang	yelp
 select count ( distinct t1.van_ban ) from nguoi_tieu_dung as t2 join danh_gia as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t1.nam = 2015 and t2.ten = "niloofar"	yelp
 select avg ( t1.danh_gia_xep_hang ) from nguoi_tieu_dung as t2 join danh_gia as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t2.ten = "michelle"	yelp
-select t2.so_luong from luot_dang_ky as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "cafe zinho" and t2.ngay = "friday"	yelp
+select t2.so_luong from luot_ang_ky as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "cafe zinho" and t2.ngay = "friday"	yelp
 select count ( distinct t3.ten ) from danh_gia as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t3 on t3.id_nguoi_tieu_dung = t2.id_nguoi_tieu_dung where t1.thanh_pho = "pittsburgh" and t1.ten = "sushi too"	yelp
 select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "pittsburgh" and t1.danh_gia_xep_hang = 4.5 and t2.ten_loai_hinh = "restaurant"	yelp
 select count ( distinct van_ban ) from khoan_tien_boa where nam = 2015	yelp
@@ -1875,7 +1873,7 @@ select count ( distinct t3.ten ) from danh_gia as t2 join doanh_nghiep as t1 on 
 select count ( distinct t1.ten ) from loai_hinh as t3 join doanh_nghiep as t1 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join khu_vuc_lan_can as t2 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t3.ten_loai_hinh = "restaurant" and t2.ten_khu_pho_lan_can = "hazelwood"	yelp
 select count ( distinct id_doanh_nghiep ) from doanh_nghiep where thanh_pho = "dallas" and ten = "starbucks" and tieu_bang = "texas"	yelp
 select so_luong_danh_gia from doanh_nghiep where ten = "acacia cafe"	yelp
-select avg ( t3.so_luong ) , t3.ngay from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join luot_dang_ky as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "barrio cafe" and t2.ten_loai_hinh = "restaurant" group by t3.ngay	yelp
+select avg ( t3.so_luong ) , t3.ngay from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join luot_ang_ky as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.ten = "barrio cafe" and t2.ten_loai_hinh = "restaurant" group by t3.ngay	yelp
 select count ( distinct t1.ten ) from khu_vuc_lan_can as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "madison" and t2.ten_khu_pho_lan_can = "stone meadows"	yelp
 select count ( distinct t1.van_ban ) from nguoi_tieu_dung as t2 join danh_gia as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t2.ten = "adrienne"	yelp
 select count ( distinct t1.van_ban ) from nguoi_tieu_dung as t2 join danh_gia as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t1.thang = "march" and t1.nam = 2014 and t2.ten = "michelle"	yelp
@@ -1890,12 +1888,12 @@ select count ( distinct ten ) from nguoi_tieu_dung where ten = "michelle"	yelp
 select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t2.ten_loai_hinh = "restaurant"	yelp
 select count ( distinct thanh_pho ) from doanh_nghiep where ten = "panda express"	yelp
 select count ( distinct t1.van_ban ) from nguoi_tieu_dung as t2 join khoan_tien_boa as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t2.ten = "michelle"	yelp
-select sum ( t3.so_luong ) from luot_dang_ky as t3 join doanh_nghiep as t1 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join khu_vuc_lan_can as t2 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t2.ten_khu_pho_lan_can = "brighton heights"	yelp
+select sum ( t3.so_luong ) from luot_ang_ky as t3 join doanh_nghiep as t1 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join khu_vuc_lan_can as t2 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t2.ten_khu_pho_lan_can = "brighton heights"	yelp
 select count ( distinct van_ban ) from danh_gia where thang = "march"	yelp
 select count ( distinct van_ban ) , thang from khoan_tien_boa group by thang	yelp
 select count ( distinct t1.ten_khu_pho_lan_can ) from khu_vuc_lan_can as t1 join doanh_nghiep as t2 on t1.id_doanh_nghiep = t2.id_doanh_nghiep where t2.thanh_pho = "madison" and t2.danh_gia_xep_hang = 5	yelp
 select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.tieu_bang = "texas" and t2.ten_loai_hinh = "moroccan" and t3.ten_loai_hinh = "restaurant"	yelp
-select t1.ten from luot_dang_ky as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep group by t1.ten order by sum ( t2.so_luong ) desc limit 1	yelp
+select t1.ten from luot_ang_ky as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep group by t1.ten order by sum ( t2.so_luong ) desc limit 1	yelp
 select t1.ten_khu_pho_lan_can from khu_vuc_lan_can as t1 join doanh_nghiep as t2 on t1.id_doanh_nghiep = t2.id_doanh_nghiep where t2.thanh_pho = "madison" group by t1.ten_khu_pho_lan_can order by count ( distinct t2.ten ) desc limit 1	yelp
 select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t1.danh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "mexican" and t3.ten_loai_hinh = "restaurant"	yelp
 select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t1.danh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "mexican" and t3.ten_loai_hinh = "restaurant"	yelp
