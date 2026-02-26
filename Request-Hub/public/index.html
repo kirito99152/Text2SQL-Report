@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Request Hub Monitor</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg-color: #0d1117;
             --surface: #161b22;
             --text: #c9d1d9;
+            --text-muted: #8b949e;
             --border: #30363d;
             --primary: #2f81f7;
+            --primary-hover: #58a6ff;
             --success: #238636;
+            --success-glow: rgba(35, 134, 54, 0.4);
             --danger: #da3633;
-            --busy: #d29922;
+            --danger-glow: rgba(218, 54, 51, 0.4);
+            --warning: #d29922;
+            --glass: rgba(22, 27, 34, 0.8);
         }
-        
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -23,15 +32,16 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text);
             padding: 2rem;
             line-height: 1.5;
+            background-image: radial-gradient(circle at top right, rgba(47, 129, 247, 0.05), transparent 400px);
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
@@ -39,85 +49,199 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
             border-bottom: 1px solid var(--border);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #3fb950;
+            box-shadow: 0 0 0 rgba(63, 185, 80, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(63, 185, 80, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(63, 185, 80, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(63, 185, 80, 0);
+            }
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
         }
 
         .stat-card {
             background-color: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 6px;
+            border-radius: 12px;
             padding: 1.5rem;
-            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
         }
 
         .stat-card h3 {
-            font-size: 0.875rem;
-            color: #8b949e;
-            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
 
         .stat-card .value {
-            font-size: 2.5rem;
-            font-weight: 600;
+            font-size: 2.25rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            opacity: 0.3;
         }
 
         .endpoints-section {
             background-color: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 1.5rem;
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
         }
 
         .add-endpoint {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            border: 1px dashed var(--border);
         }
 
         input[type="url"] {
             flex: 1;
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1rem;
             background-color: var(--bg-color);
             border: 1px solid var(--border);
             color: var(--text);
-            border-radius: 6px;
-            font-size: 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.2s;
         }
 
         input[type="url"]:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(47, 129, 247, 0.3);
+            box-shadow: 0 0 0 3px rgba(47, 129, 247, 0.2);
         }
 
         button {
-            background-color: var(--success);
+            background-color: var(--primary);
             color: white;
-            border: 1px solid rgba(240, 246, 252, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
             font-weight: 600;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: 0.2s ease;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.btn-success {
+            background-color: var(--success);
+        }
+
+        button.btn-success:hover {
             background-color: #2ea043;
         }
 
+        button.btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        button.btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--text-muted);
+        }
+
         button.btn-danger {
-            background-color: var(--surface);
+            background-color: transparent;
             color: var(--danger);
             border-color: var(--border);
         }
@@ -129,76 +253,223 @@
 
         table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        th, td {
-            padding: 0.75rem 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 0.5rem;
         }
 
         th {
-            background-color: rgba(255,255,255,0.02);
-            font-size: 0.875rem;
+            text-align: left;
+            padding: 1rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--border);
             font-weight: 600;
         }
 
-        tr:last-child td {
-            border-bottom: none;
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background-color: rgba(255, 255, 255, 0.02);
         }
 
         .status-badge {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 6px;
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
         }
 
-        .status-idle {
-            background-color: rgba(35, 134, 54, 0.15);
+        .health-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .healthy {
             color: #3fb950;
-            border: 1px solid rgba(46, 160, 67, 0.4);
+            background: rgba(63, 185, 80, 0.1);
+            border: 1px solid rgba(63, 185, 80, 0.2);
+        }
+
+        .healthy .health-indicator {
+            background: #3fb950;
+            box-shadow: 0 0 6px var(--success-glow);
+        }
+
+        .unhealthy {
+            color: #f85149;
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid rgba(248, 81, 73, 0.2);
+        }
+
+        .unhealthy .health-indicator {
+            background: #f85149;
+            box-shadow: 0 0 6px var(--danger-glow);
+        }
+
+        .status-idle {
+            color: var(--primary);
         }
 
         .status-busy {
-            background-color: rgba(210, 153, 34, 0.15);
-            color: #d29922;
-            border: 1px solid rgba(210, 153, 34, 0.4);
+            color: var(--warning);
+        }
+
+        .status-down {
+            color: var(--danger);
+        }
+
+        .slots-container {
+            display: flex;
+            gap: 4px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+
+        .slot {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .slot:hover::after {
+            content: attr(data-time);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            white-space: nowrap;
+            z-index: 10;
+            margin-bottom: 4px;
+            pointer-events: none;
+        }
+
+        .slot.has-time::after {
+            content: attr(data-short-time);
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .slot.filled {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 4px rgba(47, 129, 247, 0.4);
+        }
+
+        .slot.busy-filled {
+            background-color: var(--warning);
+            border-color: var(--warning);
+            box-shadow: 0 0 4px rgba(210, 153, 34, 0.4);
+        }
+
+        .time-counter {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
         }
 
         .empty-state {
             text-align: center;
-            padding: 2rem;
-            color: #8b949e;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+            font-style: italic;
         }
 
-        .time-counter {
-            font-family: monospace;
-            color: #8b949e;
+        .refresh-btn {
+            position: relative;
+        }
+
+        .loading .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1000;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
             <h1>AI Request Hub Monitor</h1>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <div style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--success); box-shadow: 0 0 8px var(--success);"></div>
-                <span style="font-size: 0.875rem; color: #8b949e;">Live</span>
+            <div class="header-actions">
+                <button id="refresh-health-btn" class="btn-outline">
+                    <span class="spinner" style="display: none;"></span>
+                    Refresh Health
+                </button>
+                <div class="live-indicator">
+                    <div class="pulse"></div>
+                    <span>System Live</span>
+                </div>
             </div>
         </header>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <h3>Requests in Queue</h3>
+                <h3>Queue Load</h3>
                 <div class="value" id="queue-length">0</div>
             </div>
             <div class="stat-card">
-                <h3>Active Endpoints</h3>
+                <h3>Model Workers</h3>
                 <div class="value" id="active-endpoints">0</div>
             </div>
             <div class="stat-card">
@@ -208,27 +479,33 @@
         </div>
 
         <div class="endpoints-section">
-            <h2>Worker Endpoints</h2>
-            <br>
+            <div class="section-header">
+                <h2>Model Endpoints</h2>
+            </div>
+
             <form id="add-endpoint-form" class="add-endpoint">
-                <input type="url" id="endpoint-url" placeholder="http://192.168.1.100:8000/generate_output" required>
-                <button type="submit">Add Worker</button>
+                <input type="url" id="endpoint-url"
+                    placeholder="Enter endpoint URL (e.g. http://host:port/generate_output)" required>
+                <input type="number" id="endpoint-max-concurrent" placeholder="Max" value="1" min="1"
+                    style="width: 80px; padding: 0.6rem; background: var(--bg-color); border: 1px solid var(--border); color: var(--text); border-radius: 8px;">
+                <button type="submit" class="btn-success">Add Worker</button>
             </form>
 
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
-                            <th>Endpoint URL</th>
-                            <th>Status</th>
-                            <th>Tasks Completed</th>
-                            <th>Current Run Time</th>
+                            <th>URL & Identity</th>
+                            <th>Health State</th>
+                            <th>Activity</th>
+                            <th>Workload</th>
+                            <th>Last Check</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="endpoints-table">
                         <tr>
-                            <td colspan="5" class="empty-state">No workers added yet. Add an endpoint to start processing the queue.</td>
+                            <td colspan="6" class="empty-state">Synchronizing with system...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -236,88 +513,172 @@
         </div>
     </div>
 
+    <div id="toast" class="toast"></div>
+
     <script>
-        function formatTime(ms) {
-            if (ms === 0) return "-";
+        function formatRelativeTime(timestamp) {
+            if (!timestamp) return "-";
+            const diff = Date.now() - timestamp;
+            const seconds = Math.floor(diff / 1000);
+            if (seconds < 5) return "Just now";
+            if (seconds < 60) return `${seconds}s ago`;
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+            return `${Math.floor(seconds / 3600)}h ago`;
+        }
+
+        function formatDuration(ms) {
+            if (!ms || ms === 0) return "-";
             const seconds = Math.floor(ms / 1000);
+            if (seconds < 60) return `${seconds}s`;
             const m = Math.floor(seconds / 60);
             const s = seconds % 60;
             return `${m}m ${s}s`;
+        }
+
+        function formatDurationShort(ms) {
+            if (!ms || ms === 0) return "";
+            const seconds = Math.floor(ms / 1000);
+            if (seconds < 60) return `${seconds}s`;
+            return `${Math.floor(seconds / 60)}m`;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
         }
 
         async function fetchStatus() {
             try {
                 const response = await fetch('/api/status');
                 const data = await response.json();
-                
+
                 document.getElementById('queue-length').textContent = data.queueLength;
                 document.getElementById('active-endpoints').textContent = data.endpoints.length;
-                
+
                 const totalProcessed = data.endpoints.reduce((sum, e) => sum + e.completed, 0);
                 document.getElementById('total-processed').textContent = totalProcessed;
 
                 const tbody = document.getElementById('endpoints-table');
-                
+
                 if (data.endpoints.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No workers added yet. Add an endpoint to start processing the queue.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No workers registered. Primary queue is paused.</td></tr>';
                     return;
                 }
 
-                tbody.innerHTML = data.endpoints.map(e => `
+                tbody.innerHTML = data.endpoints.map(e => {
+                    const slots = [];
+                    const activeReqs = e.activeRequests || [];
+
+                    for (let i = 0; i < e.maxConcurrent; i++) {
+                        const req = activeReqs[i];
+                        const isFilled = !!req;
+                        const duration = isFilled ? (Date.now() - req.startTime) : 0;
+                        const shortTime = isFilled ? formatDurationShort(duration) : "";
+                        const fullTime = isFilled ? formatDuration(duration) : "";
+
+                        slots.push(`
+                            <div class="slot ${isFilled ? (e.isHealthy ? 'filled' : 'busy-filled') : ''} ${isFilled ? 'has-time' : ''}" 
+                                 data-time="${fullTime}" 
+                                 data-short-time="${shortTime}">
+                            </div>`);
+                    }
+
+                    return `
                     <tr>
-                        <td style="font-family: monospace;">${e.url}</td>
+                        <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;">${e.url}</td>
                         <td>
-                            <span class="status-badge status-${e.status}">${e.status}</span>
+                            <div class="status-badge ${e.isHealthy ? 'healthy' : 'unhealthy'}">
+                                <span class="health-indicator"></span>
+                                ${e.isHealthy ? 'Online' : 'Offline'}
+                            </div>
                         </td>
-                        <td>${e.completed}</td>
-                        <td class="time-counter">${formatTime(e.busyTime)}</td>
                         <td>
-                            <button class="btn-danger" onclick="removeWorker('${e.url}')">Remove</button>
+                            <div style="display: flex; flex-direction: column;">
+                                <span class="status-badge status-${e.currentRequests > 0 ? 'busy' : 'idle'}" style="font-weight: 500; padding: 0; background: none; border: none;">
+                                    ${e.currentRequests > 0 ? 'Busy' : 'Idle'}
+                                    <span style="margin-left: 5px; opacity: 0.7; font-size: 0.8rem;">(${e.currentRequests}/${e.maxConcurrent})</span>
+                                </span>
+                                <div class="slots-container">
+                                    ${slots.join('')}
+                                </div>
+                            </div>
+                        </td>
+                        <td class="time-counter">${e.completed} reqs</td>
+                        <td class="time-counter">${formatRelativeTime(e.lastHealthCheck)}</td>
+                        <td>
+                            <button class="btn-danger" style="padding: 4px 10px; font-size: 0.75rem;" onclick="removeWorker('${e.url}')">Remove</button>
                         </td>
                     </tr>
-                `).join('');
+                `}).join('');
 
             } catch (error) {
                 console.error("Failed to fetch status", error);
             }
         }
 
+        document.getElementById('refresh-health-btn').addEventListener('click', async function () {
+            const btn = this;
+            const spinner = btn.querySelector('.spinner');
+            btn.classList.add('loading');
+            spinner.style.display = 'inline-block';
+
+            try {
+                const response = await fetch('/api/healthcheck', { method: 'POST' });
+                const data = await response.json();
+                showToast("System health synchronization complete.");
+                fetchStatus();
+            } catch (error) {
+                showToast("Health synchronization failed.");
+            } finally {
+                btn.classList.remove('loading');
+                spinner.style.display = 'none';
+            }
+        });
+
         document.getElementById('add-endpoint-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const urlInput = document.getElementById('endpoint-url');
+            const maxConcurrentInput = document.getElementById('endpoint-max-concurrent');
             const url = urlInput.value.trim();
+            const maxConcurrent = parseInt(maxConcurrentInput.value) || 1;
             if (!url) return;
 
             try {
-                await fetch('/api/endpoints', {
+                const res = await fetch('/api/endpoints', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url })
+                    body: JSON.stringify({ url, maxConcurrent })
                 });
+                const data = await res.json();
                 urlInput.value = '';
+                showToast(data.message || "Endpoint added.");
                 fetchStatus();
             } catch (error) {
-                alert("Failed to add endpoint.");
+                showToast("Connection error.");
             }
         });
 
         async function removeWorker(url) {
-            if (!confirm(`Are you sure you want to remove worker: ${url}?`)) return;
+            if (!confirm(`Mark worker for deletion: ${url}?`)) return;
             try {
                 await fetch('/api/endpoints', {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url })
                 });
+                showToast("Worker retired.");
                 fetchStatus();
             } catch (error) {
-                alert("Failed to remove endpoint.");
+                showToast("Failed to remove worker.");
             }
         }
 
         // Initialize and poll
         fetchStatus();
-        setInterval(fetchStatus, 1000);
+        setInterval(fetchStatus, 2000);
     </script>
 </body>
+
 </html>

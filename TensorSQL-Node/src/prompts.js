@@ -81,6 +81,10 @@ DATABASE SCHEMA
 ⚠️ CRITICAL: Read column descriptions - action verbs show WHO did WHAT
 - "đã GHI LẠI" = RECORDED | "đã LIÊN LẠC" = CONTACTED | "đã CUNG CẤP" = PROVIDED
 
+⚠️ SCHEMA LINKING: If SCHEMA LINKING section is present, use it to identify the correct tables and columns.
+- The linking maps Vietnamese phrases from the question to exact schema elements.
+- TRUST the linking: if it says a column belongs to table X, query from table X. Do NOT add unnecessary JOINs.
+
 CURRENT DATETIME: {{current_datetime}}
 USER QUESTION: "{{question}}"
 
@@ -163,15 +167,29 @@ FILTER_CONDITIONS: id_khach_hang NOT IN (SELECT id_khach_hang FROM tai_khoan)
 RULES:
 - "mỗi"/"từng" → ENTITY_AGGREGATION
 - "nhất" → EXTREME_VALUE (ORDER BY+LIMIT, not MIN/MAX in WHERE)
-- "nhưng không"/"chưa"/"không có" → PREFER EXCEPT over NOT IN. NEVER LEFT JOIN IS NULL.
-- "vừa...vừa"/"cả...và" with separate sets → INTERSECT (full SELECT...INTERSECT SELECT...)
-- "A hoặc B nhưng C" where C only applies to B → UNION (SELECT...WHERE A UNION SELECT...WHERE B AND C)
 - "hoặc ... hoặc" with 2-3 values on same column → Use OR, not IN
 - Range comparison → Use BETWEEN, not >= AND <=
 - "từ X trở lên"/"ít nhất X"/"tối thiểu X" → >= (not >)
 - "hơn X"/"nhiều hơn X" → > (not >=)
 
-⚠️ VALUE RULES (CRITICAL - #1 error source):
+⚠️ SINGLE TABLE RULE (CRITICAL - #1 error source):
+- If ALL columns the question asks for exist in ONE single table → query that table ONLY. ⛔ NEVER add JOINs.
+- Before adding a JOIN, CHECK: does the column ACTUALLY exist in the table you're querying? If yes → no JOIN needed.
+- Example: "số lượng phát hành" exists in table sach → SELECT so_luong_phat_hanh FROM sach. ⛔ Do NOT JOIN an_pham.
+- Example: "vị trí" exists in table tran_dau_trong_mua_giai → query it directly. ⛔ Do NOT JOIN cau_thu.
+
+⚠️ EXCLUSION RULES ("chưa có"/"không có"/"ngoại trừ"):
+- Simple exclusion (entity NOT IN another table) → Use NOT IN subquery:
+  Example: "giáo viên chưa dạy" → WHERE id NOT IN (SELECT id FROM ...)
+- Two separate entity sets compared → Use EXCEPT:
+  Example: "ghi lỗi nhưng chưa liên hệ kỹ sư" → SELECT...EXCEPT SELECT...
+- ⛔ NEVER use LEFT JOIN...IS NULL for exclusion.
+
+⚠️ SET OPERATION RULES:
+- "vừa...vừa" / "cả A lẫn B" → INTERSECT (two full SELECT queries)
+- "A hoặc B nhưng C" where C only applies to B → UNION (SELECT...WHERE A UNION SELECT...WHERE B AND C)
+
+⚠️ VALUE RULES (CRITICAL):
 - String values: Copy EXACTLY from schema/data in ENGLISH. ⛔ NEVER translate to Vietnamese.
   Example: "American" stays "American", NOT "Mỹ". "Order" stays "Order", NOT "Đặt hàng".
 - Number values: No quotes. Compare as numbers, not strings.
@@ -184,16 +202,13 @@ RULES:
 - EXTREME_VALUE: Put COUNT/SUM in ORDER BY only. ⛔ NEVER add COUNT/SUM to SELECT.
 - If question says "bao nhiêu" → SELECT COUNT(*). Don't add other columns unless asked.
 
-⚠️ SET OPERATION RULES:
-- PREFER EXCEPT/UNION/INTERSECT over NOT IN/OR/AND when question implies set difference/union/intersection.
-- "chưa có"/"không có"/"ngoại trừ" → EXCEPT (two full SELECT queries)
-- "vừa...vừa" / "cả A lẫn B" → INTERSECT (two full SELECT queries)
-
-- GROUP BY: Use the JOINED/CHILD table's column (T2.col) when aggregating over a junction.
+⚠️ GROUP BY RULES:
+- GROUP BY the column that appears in SELECT (not the aggregate). 
+- If SELECT has T1.ten_bo_phan, COUNT(*) → GROUP BY T1.ten_bo_phan (not T1.id_bo_phan).
+- When question says "mỗi X" and you SELECT X.name → GROUP BY X.name.
 - COUNT: Always COUNT(*), never COUNT(column)
-- "một vài"/"một số"/"các" → SIMPLE_SELECT with DISTINCT (not GROUP BY HAVING)
-- If query needs only 1 table → Do NOT add unnecessary JOINs. Query the table directly.
 - "số lượng" / "bao nhiêu loại" → COUNT(DISTINCT col), not GROUP BY + COUNT
+- "một vài"/"một số"/"các" → SIMPLE_SELECT with DISTINCT (not GROUP BY HAVING)
 
 OUTPUT PLAN ONLY. NO EXPLANATION.
 `;
@@ -401,6 +416,30 @@ OUTPUT: Corrected SQL only. No markdown, no explanation.
 
 
 // ============================================================================
+// 6. SCHEMA SELECTION PROMPT - AI-powered table relevance filtering
+// ============================================================================
+
+const SCHEMA_SELECTION_PROMPT = `You are a schema selector for Text-to-SQL. Given a Vietnamese question and database tables, select ONLY the relevant tables needed to answer the question.
+
+DATABASE TABLES:
+{{table_list}}
+
+{{schema_linking_hints}}
+
+QUESTION: "{{question}}"
+
+RULES:
+- Select ONLY tables needed to answer the question (max 10)
+- Include junction/bridge tables needed for M:N relationships
+- Include tables connected by foreign keys if needed for JOINs
+- Do NOT include tables unrelated to the question
+- If unsure, include the table (better to have extra than miss one)
+
+Respond with ONLY a JSON array of table names, nothing else.
+Example: ["table1", "table2", "table3"]
+`;
+
+// ============================================================================
 // EXPORTS
 // ============================================================================
 
@@ -410,7 +449,8 @@ module.exports = {
    PLANNING_PROMPT_TEMPLATE,
    GENERATE_SQL_PROMPT_TEMPLATE,
    SQL_SELF_CHECK_PROMPT,
-   SQL_EXECUTION_ERROR_PROMPT
+   SQL_EXECUTION_ERROR_PROMPT,
+   SCHEMA_SELECTION_PROMPT
 };
 
 

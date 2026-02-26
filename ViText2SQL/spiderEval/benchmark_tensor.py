@@ -7,23 +7,23 @@ import requests
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# Add spiderEval to path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'spiderEval'))
+# Add current directory to path (where evaluation.py and process_sql.py are)
+sys.path.append(os.path.dirname(__file__))
 from evaluation import Evaluator, rebuild_sql_val, rebuild_sql_col, build_valid_col_units, build_foreign_key_map_from_json
 from process_sql import get_schema, Schema, get_sql
 
 # ============================================================================
 # CONFIG
 # ============================================================================
-BASE_DIR = os.path.dirname(__file__)
+# BASE_DIR is now the project root (one level up from spiderEval)
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DATA_DIR = os.path.join(BASE_DIR, 'data', 'syllable-level')
 TABLES_FILE = os.path.join(DATA_DIR, 'tables.json')
 DEV_FILE = os.path.join(DATA_DIR, 'dev.json')
 TEST_FILE = os.path.join(DATA_DIR, 'test.json')
 DB_DIR = os.path.join(DATA_DIR, 'databases')
-DB_DIR = os.path.join(DATA_DIR, 'databases')
 
-TENSOR_API = "http://localhost:5002/api/text2sql/generate"
+TENSOR_API = "http://host.docker.internal:5002/api/text2sql/generate"
 
 OUTPUT_DIR = os.path.join(BASE_DIR, 'benchmark_tensor_logs')
 RESULTS_FILE = os.path.join(OUTPUT_DIR, 'benchmark_results.json')
@@ -51,6 +51,90 @@ def build_schema_context(raw_schema):
             tgt_table = raw_schema['table_names'][tgt_table_idx]
             context += f"  - {src_table}.{src_col_name} = {tgt_table}.{tgt_col_name}\n"
     return context
+
+
+def schema_linking(question, raw_schema):
+    """Match Vietnamese question tokens against schema elements using column_names_original and table_names_original.
+    Returns a text section with linking hints for the model."""
+    import re
+    
+    # Normalize question: lowercase, remove punctuation except Vietnamese chars
+    q_lower = question.lower().strip()
+    # Remove punctuation but keep Vietnamese characters
+    q_clean = re.sub(r'[.,;:!?\(\)\[\]\{\}\"\'`]', ' ', q_lower)
+    q_tokens = q_clean.split()
+    
+    # Build lookup from original names (Vietnamese syllable-level) to schema names
+    table_originals = raw_schema.get('table_names_original', [])
+    table_names = raw_schema.get('table_names', [])
+    col_originals = raw_schema.get('column_names_original', [])
+    col_names = raw_schema.get('column_names', [])
+    
+    matched = []
+    matched_set = set()  # avoid duplicates
+    
+    # Match table names: try longest match first
+    table_phrases = []
+    for tIdx, orig in enumerate(table_originals):
+        if orig and orig != '*':
+            orig_lower = orig.lower()
+            table_phrases.append((orig_lower, tIdx, table_names[tIdx]))
+    # Sort by length descending for greedy matching
+    table_phrases.sort(key=lambda x: -len(x[0]))
+    
+    for orig_lower, tIdx, tname in table_phrases:
+        if orig_lower in q_clean:
+            key = f"table:{tname}"
+            if key not in matched_set:
+                matched.append(f'- "{orig_lower}" → {tname} (bảng)')
+                matched_set.add(key)
+    
+    # Match column names: try longest match first
+    col_phrases = []
+    for cIdx, orig_pair in enumerate(col_originals):
+        if orig_pair[0] == -1:
+            continue
+        orig_name = orig_pair[1]
+        if orig_name and orig_name != '*':
+            orig_lower = orig_name.lower()
+            tIdx = orig_pair[0]
+            col_sql_name = col_names[cIdx][1] if cIdx < len(col_names) else orig_name
+            t_sql_name = table_names[tIdx] if tIdx < len(table_names) else '?'
+            col_phrases.append((orig_lower, t_sql_name, col_sql_name, cIdx))
+    # Sort by token count then length descending for greedy matching
+    col_phrases.sort(key=lambda x: (-len(x[0].split()), -len(x[0])))
+    
+    for orig_lower, t_sql_name, col_sql_name, cIdx in col_phrases:
+        # Only match multi-word or distinctive column names (skip generic ones like "id", "tên")
+        orig_tokens = orig_lower.split()
+        if len(orig_tokens) < 2 and orig_lower in ('id', 'tên', 'năm', 'ngày', 'số'):
+            continue
+        
+        if orig_lower in q_clean:
+            key = f"col:{t_sql_name}.{col_sql_name}"
+            if key not in matched_set:
+                # Check if PK/FK
+                pk_keys = set(raw_schema.get('primary_keys', []))
+                fk_map = {pair[0]: pair[1] for pair in raw_schema.get('foreign_keys', [])}
+                
+                suffix = ""
+                if cIdx in pk_keys:
+                    suffix = " [PK]"
+                elif cIdx in fk_map:
+                    target_idx = fk_map[cIdx]
+                    if target_idx < len(col_names):
+                        target_t_idx = col_names[target_idx][0]
+                        target_col = col_names[target_idx][1]
+                        target_table = table_names[target_t_idx] if target_t_idx < len(table_names) else '?'
+                        suffix = f" [FK→{target_table}.{target_col}]"
+                
+                matched.append(f'- "{orig_lower}" → {t_sql_name}.{col_sql_name}{suffix}')
+                matched_set.add(key)
+    
+    if not matched:
+        return ""
+    
+    return "SCHEMA LINKING (matched question tokens → schema):\n" + "\n".join(matched)
 
 
 def convert_to_tensor_schema(raw_schema):

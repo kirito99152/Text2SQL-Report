@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const DEEPSEEK_API_KEY = 'sk-ebb998207ef747faad709dd7491e2351';
+const DEEPSEEK_API_KEY = 'sk-fd04a1340f9449568f3b6f5c33a2d7aa';
 const DEEPSEEK_ENDPOINT = 'https://api.deepseek.com/chat/completions';
 
 async function evaluateSQL(generatedSQL, goldSQL) {

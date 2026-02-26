@@ -228,8 +228,9 @@ class SchemaService {
     /**
      * Converts the schema object into the text format required by the Planning prompt.
      * @param {Object} schema 
+     * @param {string} [schemaLinking] - Optional schema linking text from question token matching
      */
-    buildSchemaContext(schema) {
+    buildSchemaContext(schema, schemaLinking) {
         let sb = "";
         for (const table of schema.tables) {
             const schemaPrefix = table.schema || "dbo";
@@ -260,6 +261,74 @@ class SchemaService {
                 // Format: - fkTable.fkCol -> pkTable.pkCol
                 sb += `- ${rel.fkTable}.${rel.fkColumn} -> ${rel.pkTable}.${rel.pkColumn}\n`;
             }
+            sb += "\n";
+        }
+
+        // Add schema linking if provided (maps question tokens to schema elements)
+        if (schemaLinking) {
+            sb += schemaLinking + "\n";
+        }
+
+        return sb;
+    }
+
+    /**
+     * Builds a filtered schema context containing only relevant tables.
+     * Falls back to full schema if relevantTables is null.
+     * 
+     * @param {Object} schema - The enriched schema object
+     * @param {Set<string>|null} relevantTables - Set of relevant table names, or null for full
+     * @param {string} [schemaLinking] - Optional schema linking text
+     * @returns {string} - The filtered schema context
+     */
+    buildFilteredSchemaContext(schema, relevantTables, schemaLinking) {
+        // Fallback to full schema if no relevant tables identified
+        if (!relevantTables || relevantTables.size === 0) {
+            return this.buildSchemaContext(schema, schemaLinking);
+        }
+
+        let sb = "";
+        const includedTables = new Set();
+
+        for (const table of schema.tables) {
+            if (!relevantTables.has(table.name)) continue;
+
+            includedTables.add(table.name);
+            const schemaPrefix = table.schema || "dbo";
+            sb += `### ${schemaPrefix}.${table.name}\n`;
+            if (table.description) {
+                sb += `Description: ${table.description}\n`;
+            }
+
+            for (const col of table.columns) {
+                let line = `- ${col.name} (${col.dataType || 'nvarchar'})`;
+                if (col.isPrimaryKey) line += " [PK]";
+                if (col.isForeignKey) line += " [FK]";
+                if (col.description) {
+                    line += `: ${col.description}`;
+                }
+                sb += line + "\n";
+            }
+            sb += "\n";
+        }
+
+        // Add relationships where at least one side is in included tables
+        if (schema.relationships && schema.relationships.length > 0) {
+            const relevantRels = schema.relationships.filter(rel =>
+                includedTables.has(rel.fkTable) || includedTables.has(rel.pkTable)
+            );
+            if (relevantRels.length > 0) {
+                sb += "### Relationships\n";
+                for (const rel of relevantRels) {
+                    sb += `- ${rel.fkTable}.${rel.fkColumn} -> ${rel.pkTable}.${rel.pkColumn}\n`;
+                }
+                sb += "\n";
+            }
+        }
+
+        // Add schema linking
+        if (schemaLinking) {
+            sb += schemaLinking + "\n";
         }
 
         return sb;

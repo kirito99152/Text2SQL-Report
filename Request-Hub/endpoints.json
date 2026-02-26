@@ -1,50 +1,58 @@
 [
   {
-    "url": "http://94.101.98.250/generate_output",
-    "status": "idle",
-    "completed": 91,
-    "currentTaskTime": null
-  },
-  {
-    "url": "http://94.101.98.209/generate_output",
-    "status": "idle",
-    "completed": 75,
-    "currentTaskTime": null
-  },
-  {
-    "url": "http://94.101.98.245/generate_output",
-    "status": "idle",
-    "completed": 78,
-    "currentTaskTime": null
+    "url": "http://149.36.1.173/generate_output",
+    "status": "busy",
+    "completed": 163,
+    "activeRequests": [],
+    "isHealthy": true,
+    "maxConcurrent": 4
   },
   {
     "url": "http://94.101.98.21/generate_output",
-    "status": "idle",
-    "completed": 76,
-    "currentTaskTime": null
-  },
-  {
-    "url": "http://94.101.98.244/generate_output",
-    "status": "idle",
-    "completed": 90,
-    "currentTaskTime": null
+    "status": "busy",
+    "completed": 179,
+    "activeRequests": [],
+    "isHealthy": true,
+    "maxConcurrent": 1
   },
   {
     "url": "http://149.36.0.219/generate_output",
-    "status": "idle",
-    "completed": 86,
-    "currentTaskTime": null
+    "status": "busy",
+    "completed": 1363,
+    "activeRequests": [],
+    "isHealthy": true,
+    "maxConcurrent": 1
   },
   {
-    "url": "http://149.36.0.126/generate_output",
-    "status": "idle",
-    "completed": 1,
-    "currentTaskTime": null
+    "url": "http://94.101.98.250/generate_output",
+    "status": "down",
+    "completed": 133,
+    "activeRequests": [],
+    "isHealthy": false,
+    "maxConcurrent": 1
   },
   {
-    "url": "http://149.36.1.173/generate_output",
-    "status": "idle",
-    "completed": 0,
-    "currentTaskTime": null
+    "url": "http://94.101.98.245/generate_output",
+    "status": "down",
+    "completed": 163,
+    "activeRequests": [],
+    "isHealthy": false,
+    "maxConcurrent": 1
+  },
+  {
+    "url": "http://94.101.98.209/generate_output",
+    "status": "down",
+    "completed": 215,
+    "activeRequests": [],
+    "isHealthy": false,
+    "maxConcurrent": 1
+  },
+  {
+    "url": "http://94.101.98.244/generate_output",
+    "status": "down",
+    "completed": 1497,
+    "activeRequests": [],
+    "isHealthy": false,
+    "maxConcurrent": 1
   }
 ]
