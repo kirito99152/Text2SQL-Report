@@ -9,6 +9,8 @@ services:
       - ./Request-Hub/endpoints.json:/app/endpoints.json
     environment:
       - PORT=5001
+    networks:
+      - text2sql-network
 
   tensorsql-node:
     build: ./TensorSQL-Node
@@ -21,6 +23,8 @@ services:
       - LLM_ENDPOINT_URL=http://request-hub:5001/generate_output
     depends_on:
       - request-hub
+    networks:
+      - text2sql-network
 
   track:
     build: ./Track
@@ -33,6 +37,8 @@ services:
       - RESULTS_PATH=/data/logs/benchmark_results.json
     depends_on:
       - tensorsql-node
+    networks:
+      - text2sql-network
 
   bootstrap:
     build:
@@ -47,3 +53,10 @@ services:
       - TENSOR_SQL_ENDPOINT=http://tensorsql-node:5002/api/text2sql/generate
     depends_on:
       - tensorsql-node
+    networks:
+      - text2sql-network
+
+networks:
+  text2sql-network:
+    name: text2sql-network
+    driver: bridge

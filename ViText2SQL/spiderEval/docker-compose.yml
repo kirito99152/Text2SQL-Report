@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  benchmark:
+    build:
+      context: ..
+      dockerfile: spiderEval/Dockerfile
+    volumes:
+      - ..:/app
+    networks:
+      - text2sql-network
+    working_dir: /app/spiderEval
+    command: python3 -u benchmark_tensor.py --dataset test --workers 10 --start 0 --end 2000
+
+networks:
+  text2sql-network:
+    external: true
+    name: text2sql-network

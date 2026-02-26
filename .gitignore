@@ -3,3 +3,4 @@ env/
 spider-data/
 node_modules/
 python/
+__pycache__/

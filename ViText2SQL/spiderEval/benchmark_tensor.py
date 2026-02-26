@@ -23,7 +23,7 @@ DEV_FILE = os.path.join(DATA_DIR, 'dev.json')
 TEST_FILE = os.path.join(DATA_DIR, 'test.json')
 DB_DIR = os.path.join(DATA_DIR, 'databases')
 
-TENSOR_API = "http://host.docker.internal:5002/api/text2sql/generate"
+TENSOR_API = "http://tensorsql-node:5002/api/text2sql/generate"
 
 OUTPUT_DIR = os.path.join(BASE_DIR, 'benchmark_tensor_logs')
 RESULTS_FILE = os.path.join(OUTPUT_DIR, 'benchmark_results.json')

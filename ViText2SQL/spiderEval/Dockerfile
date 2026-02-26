@@ -6,8 +6,8 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y sqlite3 && rm -rf /var/lib/apt/lists/*
 
 # Install python dependencies
-RUN pip install --no-cache-dir requests
+RUN pip install --no-cache-dir requests nltk
+RUN python -m nltk.downloader punkt
 
 # Final script runs from spiderEval directory but needs access to parent data
-# Command will be overridden in docker-compose or run manually
-CMD ["python3", "spiderEval/benchmark_tensor.py"]
+CMD ["python3", "-u", "benchmark_tensor.py"]
