@@ -1,6 +1,7 @@
 
 const aiService = require('./aiService');
 const prompts = require('../prompts');
+const promptsRetry = require('../prompts_retry');
 
 const MAX_TABLES = 10;
 
@@ -33,60 +34,89 @@ class SchemaSelectionService {
             tableList += `- ${table.name} (${cols})${desc}\n`;
         }
 
-        // Build prompt
-        let prompt = prompts.SCHEMA_SELECTION_PROMPT;
-        prompt = prompt.replace('{{table_list}}', tableList);
-        prompt = prompt.replace('{{question}}', question);
-        prompt = prompt.replace('{{schema_linking_hints}}', linkingText
+        const linkingHints = linkingText
             ? `SCHEMA LINKING HINTS (token matching):\n${linkingText}`
-            : '');
+            : '';
 
-        const messages = [
-            { role: 'system', content: 'You are a precise schema selector. Output ONLY a JSON array.' },
-            { role: 'user', content: prompt }
-        ];
-
+        // --- Attempt 1: Original prompt ---
         try {
+            let prompt = prompts.SCHEMA_SELECTION_PROMPT;
+            prompt = prompt.replace('{{table_list}}', tableList);
+            prompt = prompt.replace('{{question}}', question);
+            prompt = prompt.replace('{{schema_linking_hints}}', linkingHints);
+
+            const messages = [
+                { role: 'system', content: 'You are a precise schema selector. Output ONLY a JSON array.' },
+                { role: 'user', content: prompt }
+            ];
+
             console.log(`[SchemaSelection] Asking AI to select from ${allTableNames.length} tables...`);
-            // Thinking disabled for speed
             const response = await aiService.generateJson(messages, false);
-
-            // Parse JSON array from response
-            const selectedTables = this._parseTableList(response, allTableNames);
-
-            if (selectedTables.size === 0) {
-                // AI returned nothing useful, fall back to token matching
-                console.warn('[SchemaSelection] AI returned empty list, falling back to token matching.');
-                return tokenMatchedTables || new Set(allTableNames);
-            }
-
-            // Merge with token-matched tables (ensure we don't lose direct matches)
-            if (tokenMatchedTables) {
-                for (const t of tokenMatchedTables) {
-                    selectedTables.add(t);
-                }
-            }
-
-            // Cap at MAX_TABLES (prioritize AI-selected first, then token-matched)
-            if (selectedTables.size > MAX_TABLES) {
-                const capped = new Set();
-                // First add AI-selected (they're already in selectedTables)
-                for (const t of selectedTables) {
-                    if (capped.size >= MAX_TABLES) break;
-                    capped.add(t);
-                }
-                console.log(`[SchemaSelection] Capped from ${selectedTables.size} to ${MAX_TABLES} tables: [${[...capped].join(', ')}]`);
-                return capped;
-            }
-
-            console.log(`[SchemaSelection] Selected ${selectedTables.size} tables: [${[...selectedTables].join(', ')}]`);
-            return selectedTables;
+            const result = this._processSelectionResult(response, allTableNames, tokenMatchedTables);
+            if (result) return result;
 
         } catch (error) {
-            console.error('[SchemaSelection] AI selection failed:', error.message);
-            // Fallback to token matching or all tables
-            return tokenMatchedTables || new Set(allTableNames.slice(0, MAX_TABLES));
+            console.warn('[SchemaSelection] Original prompt failed, retrying with compact prompt...', error.message);
         }
+
+        // --- Attempt 2: Retry with compact prompt ---
+        try {
+            let prompt = promptsRetry.SCHEMA_SELECTION_PROMPT;
+            prompt = prompt.replace('{{table_list}}', tableList);
+            prompt = prompt.replace('{{question}}', question);
+            prompt = prompt.replace('{{schema_linking_hints}}', linkingHints);
+
+            const messages = [
+                { role: 'system', content: 'You are a precise schema selector. Output ONLY a JSON array.' },
+                { role: 'user', content: prompt }
+            ];
+
+            console.log(`[SchemaSelection] RETRY: Asking AI with compact prompt...`);
+            const response = await aiService.generateJson(messages, false);
+            const result = this._processSelectionResult(response, allTableNames, tokenMatchedTables);
+            if (result) return result;
+
+        } catch (retryError) {
+            console.error('[SchemaSelection] Retry also failed:', retryError.message);
+        }
+
+        // Fallback to token matching or all tables
+        console.warn('[SchemaSelection] Both attempts failed, falling back to token matching.');
+        return tokenMatchedTables || new Set(allTableNames.slice(0, MAX_TABLES));
+    }
+
+    /**
+     * Process AI selection response into final table set.
+     * @returns {Set<string>|null} - Result set or null if AI returned nothing useful
+     */
+    _processSelectionResult(response, allTableNames, tokenMatchedTables) {
+        const selectedTables = this._parseTableList(response, allTableNames);
+
+        if (selectedTables.size === 0) {
+            console.warn('[SchemaSelection] AI returned empty list.');
+            return null;
+        }
+
+        // Merge with token-matched tables
+        if (tokenMatchedTables) {
+            for (const t of tokenMatchedTables) {
+                selectedTables.add(t);
+            }
+        }
+
+        // Cap at MAX_TABLES
+        if (selectedTables.size > MAX_TABLES) {
+            const capped = new Set();
+            for (const t of selectedTables) {
+                if (capped.size >= MAX_TABLES) break;
+                capped.add(t);
+            }
+            console.log(`[SchemaSelection] Capped from ${selectedTables.size} to ${MAX_TABLES} tables: [${[...capped].join(', ')}]`);
+            return capped;
+        }
+
+        console.log(`[SchemaSelection] Selected ${selectedTables.size} tables: [${[...selectedTables].join(', ')}]`);
+        return selectedTables;
     }
 
     /**

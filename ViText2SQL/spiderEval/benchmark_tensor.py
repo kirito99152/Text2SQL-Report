@@ -29,6 +29,7 @@ OUTPUT_DIR = os.path.join(BASE_DIR, 'benchmark_tensor_logs')
 RESULTS_FILE = os.path.join(OUTPUT_DIR, 'benchmark_results.json')
 PRED_FILE = os.path.join(OUTPUT_DIR, 'pred.sql')
 GOLD_FILE = os.path.join(OUTPUT_DIR, 'gold.sql')
+ENRICHED_CACHE_FILE = os.path.join(OUTPUT_DIR, 'enriched_schemas_cache.json')
 
 
 def build_schema_context(raw_schema):
@@ -180,12 +181,34 @@ def convert_to_tensor_schema(raw_schema):
 
 def pre_enrich_schemas(schemas_map, api_url, num_workers=1):
     """Pre-enrich all unique schemas by calling the API with onlyEnrich=true.
-    This generates and caches descriptions for all tables before the benchmark."""
+    Using a persistent cache to skip already enriched schemas."""
     enriched_schemas = {}
+    
+    # Load cache if it exists
+    if os.path.exists(ENRICHED_CACHE_FILE):
+        try:
+            with open(ENRICHED_CACHE_FILE, 'r', encoding='utf-8') as f:
+                enriched_schemas = json.load(f)
+            print(f"[Benchmark] Loaded {len(enriched_schemas)} enriched schemas from cache.")
+        except Exception as e:
+            print(f"[Benchmark] Warning: Could not load enriched cache: {e}")
+            enriched_schemas = {}
+
     lock = threading.Lock()
     unique_db_ids = list(schemas_map.keys())
-    total = len(unique_db_ids)
-    print(f"[Benchmark] Pre-enriching {total} schemas with {num_workers} workers...")
+    
+    # Filter only those not in cache
+    to_enrich = []
+    for db_id in unique_db_ids:
+        if db_id not in enriched_schemas:
+            to_enrich.append(db_id)
+    
+    if not to_enrich:
+        print(f"[Benchmark] All {len(unique_db_ids)} schemas are already enriched in cache.")
+        return enriched_schemas
+
+    total = len(to_enrich)
+    print(f"[Benchmark] Pre-enriching {total} new schemas with {num_workers} workers...")
     
     def enrich_one(idx_dbid):
         idx, db_id = idx_dbid
@@ -212,10 +235,18 @@ def pre_enrich_schemas(schemas_map, api_url, num_workers=1):
         
         with lock:
             enriched_schemas[db_id] = result
-    
+
     with ThreadPoolExecutor(max_workers=num_workers) as executor:
-        executor.map(enrich_one, enumerate(unique_db_ids))
+        executor.map(enrich_one, enumerate(to_enrich))
     
+    # Save cache back to file
+    try:
+        with open(ENRICHED_CACHE_FILE, 'w', encoding='utf-8') as f:
+            json.dump(enriched_schemas, f, ensure_ascii=False, indent=2)
+        print(f"[Benchmark] Saved {len(enriched_schemas)} enriched schemas to cache.")
+    except Exception as e:
+        print(f"[Benchmark] Warning: Could not save enriched cache: {e}")
+        
     print(f"[Benchmark] Pre-enrichment complete. {len(enriched_schemas)} schemas ready.")
     return enriched_schemas
 
@@ -458,7 +489,18 @@ def main():
     work_items = [i for i in range(args.start, effective_end) if i not in stats.processed_ids]
     
     print(f"[Benchmark] Processing range {args.start} to {effective_end - 1} ({total} total)")
-    print(f"[Benchmark] Queue size (including re-runs): {len(work_items)}")
+    
+    skipped = total - len(work_items)
+    retries = sum(1 for i in work_items if i in stats.results_map)
+    new_items = len(work_items) - retries
+    
+    if skipped > 0:
+        print(f"[Benchmark] RESUME: Skipping {skipped} already processed items.")
+    if retries > 0:
+        print(f"[Benchmark] RETRY: Re-running {retries} failed/incomplete items.")
+    print(f"[Benchmark] NEW: Processing {new_items} fresh items.")
+    
+    print(f"[Benchmark] Total Work Queue: {len(work_items)}")
     print(f"[Benchmark] API: {api_url}")
     print(f"[Benchmark] Workers: {args.workers}")
     print()
