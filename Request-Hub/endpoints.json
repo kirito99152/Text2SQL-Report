@@ -1,11 +1,11 @@
 [
   {
-    "url": "http://149.36.1.173/generate_output",
+    "url": "http://94.101.98.250/generate_output",
     "status": "idle",
-    "completed": 164,
+    "completed": 159,
     "activeRequests": [],
     "isHealthy": true,
-    "maxConcurrent": 4
+    "maxConcurrent": 1
   },
   {
     "url": "http://94.101.98.21/generate_output",
@@ -32,12 +32,12 @@
     "maxConcurrent": 1
   },
   {
-    "url": "http://94.101.98.250/generate_output",
+    "url": "http://149.36.1.173/generate_output",
     "status": "busy",
-    "completed": 158,
+    "completed": 164,
     "activeRequests": [],
     "isHealthy": true,
-    "maxConcurrent": 1
+    "maxConcurrent": 4
   },
   {
     "url": "http://94.101.98.245/generate_output",
