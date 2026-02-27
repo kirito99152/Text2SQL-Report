@@ -48,15 +48,9 @@ exports.generate = async (req, res) => {
             // Enrich schema (using Cache if available)
             enrichedSchema = await schemaService.enrichSchema(enrichedSchema, workerId);
 
-            // AI Schema Selection: cap 10
-            let relevantTables = null;
-            if (pipeline !== 'ablation1') {
-                logStep(pipeline, question, "Schema Selection", "EXECUTED");
-                relevantTables = await schemaSelectionService.selectRelevantTables(question, enrichedSchema);
-            } else {
-                logStep(pipeline, question, "Schema Selection", "SKIPPED (ablation1)");
-                relevantTables = new Set(enrichedSchema.tables.map(t => t.name));
-            }
+            // AI Schema Selection skipped - using all tables
+            logStep(pipeline, question, "Schema Selection", "SKIPPED");
+            const relevantTables = new Set(enrichedSchema.tables.map(t => t.name));
 
             // Build FILTERED context (used for ALL steps — small context window)
             schemaContext = schemaService.buildFilteredSchemaContext(enrichedSchema, relevantTables);
@@ -73,13 +67,8 @@ exports.generate = async (req, res) => {
             // Enrich
             enrichedSchema = await schemaService.enrichSchema(enrichedSchema, workerId);
 
-            // AI Schema Selection
-            let relevantTables = null;
-            if (pipeline !== 'ablation1') {
-                relevantTables = await schemaSelectionService.selectRelevantTables(question, enrichedSchema);
-            } else {
-                relevantTables = new Set(enrichedSchema.tables.map(t => t.name));
-            }
+            // AI Schema Selection skipped
+            const relevantTables = new Set(enrichedSchema.tables.map(t => t.name));
 
             // Build filtered context
             schemaContext = schemaService.buildFilteredSchemaContext(enrichedSchema, relevantTables);
@@ -99,11 +88,11 @@ exports.generate = async (req, res) => {
 
         // 3. Generate Query Plan (filtered schema)
         let plan = null;
-        if (pipeline !== 'ablation2') {
+        if (pipeline !== 'ablation1') {
             logStep(pipeline, question, "Planning", "EXECUTED");
             plan = await planningService.generatePlan(question, schemaContext, pipeline);
         } else {
-            logStep(pipeline, question, "Planning", "SKIPPED (ablation2)");
+            logStep(pipeline, question, "Planning", "SKIPPED (ablation1)");
         }
 
         // 4. Generate SQL (filtered schema)
@@ -111,16 +100,16 @@ exports.generate = async (req, res) => {
         let sql = await sqlService.generateSql(plan, schemaContext, question, pipeline);
 
         // 4b. Self-Correction (filtered schema)
-        if (pipeline !== 'ablation3') {
+        if (pipeline !== 'ablation2') {
             logStep(pipeline, question, "Self-Check", "EXECUTED");
             sql = await selfCheckService.verifyAndCorrectSql(plan, schemaContext, sql, pipeline);
         } else {
-            logStep(pipeline, question, "Self-Check", "SKIPPED (ablation3)");
+            logStep(pipeline, question, "Self-Check", "SKIPPED (ablation2)");
         }
 
         // 5. Execution-Based Correction
         let executionResult = null;
-        if (req.body.dbId && pipeline !== 'ablation3') {
+        if (req.body.dbId && pipeline !== 'ablation2') {
             logStep(pipeline, question, "Execution-Correction", "EXECUTED");
             const executionCorrectionService = require('../services/executionCorrectionService');
             sql = await executionCorrectionService.executeAndCorrect(
@@ -132,7 +121,7 @@ exports.generate = async (req, res) => {
                 pipeline
             );
         } else if (req.body.dbId) {
-            logStep(pipeline, question, "Execution-Correction", "SKIPPED (ablation3)");
+            logStep(pipeline, question, "Execution-Correction", "SKIPPED (ablation2)");
         }
 
         // 6. Return success

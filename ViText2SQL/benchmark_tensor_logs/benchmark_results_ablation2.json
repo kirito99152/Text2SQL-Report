@@ -7,7 +7,7 @@
     "generated_sql": "SELECT T2.ten_cua_nhan_vien FROM lop_hoc AS T1 JOIN nhan_vien AS T2 ON T1.ma_so_nhan_vien_cua_giao_su = T2.ma_so_nhan_vien WHERE T1.ma_khoa_hoc = 'CIS-220' OR T1.ma_khoa_hoc = 'QM-261'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 48449
+    "duration_ms": 105547
   },
   {
     "id": 1,
@@ -17,7 +17,7 @@
     "generated_sql": "SELECT COUNT(DISTINCT ma_tien_te) FROM nhom_hoi_thao_kich",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 67291
+    "duration_ms": 112595
   },
   {
     "id": 2,
@@ -27,7 +27,7 @@
     "generated_sql": "SELECT chuyen_bay.san_bay_dich, chuyen_bay.so_hieu_chuyen_bay FROM chuyen_bay GROUP BY chuyen_bay.san_bay_dich, chuyen_bay.so_hieu_chuyen_bay HAVING COUNT(*) = (SELECT COUNT(*) FROM chuyen_bay GROUP BY san_bay_dich ORDER BY COUNT(*) DESC LIMIT 1)",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 65982
+    "duration_ms": 109937
   },
   {
     "id": 3,
@@ -37,7 +37,7 @@
     "generated_sql": "SELECT ten FROM dbo.danh_sach WHERE phong_hoc = 107",
     "exact_match": false,
     "eval_error": "'dbo.danh_sach'",
-    "duration_ms": 38619
+    "duration_ms": 96497
   },
   {
     "id": 4,
@@ -47,17 +47,17 @@
     "generated_sql": "SELECT T1.ten || ' ' || T1.ho FROM nhan_vien AS T1 JOIN luot_cho_thue AS T2 ON T1.id_nhan_vien = T2.id_nhan_vien JOIN khach_hang AS T3 ON T2.id_khach_hang = T3.id_khach_hang WHERE T3.ten = 'April' AND T3.ho = 'Burns'",
     "exact_match": false,
     "eval_error": "Error col: ||",
-    "duration_ms": 49944
+    "duration_ms": 130076
   },
   {
     "id": 5,
     "db_id": "match_season",
     "question": "Những cầu thủ đến từ các trường đại học UCLA hoặc Duke chơi ở các vị trí khác nhau nào ?",
     "gold_sql": "select distinct vi_tri from tran_dau_trong_mua_giai where truong_dai_hoc = \"ucla\" or truong_dai_hoc = \"duke\"",
-    "generated_sql": "SELECT vi_tri FROM tran_dau_trong_mua_giai WHERE truong_dai_hoc IN ('UCLA', 'Duke') GROUP BY vi_tri",
+    "generated_sql": "SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.doi = tran_dau_trong_mua_giai.doi WHERE tran_dau_trong_mua_giai.truong_dai_hoc IN ('UCLA', 'Duke') GROUP BY cau_thu.cau_thu HAVING COUNT(DISTINCT tran_dau_trong_mua_giai.vi_tri) > 1",
     "exact_match": false,
     "eval_error": "",
-    "duration_ms": 40812
+    "duration_ms": 142673
   },
   {
     "id": 6,
@@ -67,7 +67,7 @@
     "generated_sql": "SELECT mat_hang_duoc_dat.id_san_pham FROM mat_hang_duoc_dat GROUP BY mat_hang_duoc_dat.id_san_pham ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 58047
+    "duration_ms": 126060
   },
   {
     "id": 7,
@@ -77,7 +77,7 @@
     "generated_sql": "SELECT ban_nhac.ho FROM ban_nhac JOIN nhac_cu ON ban_nhac.id = nhac_cu.id_nghe_si_trong_ban_nhac GROUP BY ban_nhac.id ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 29802
+    "duration_ms": 94555
   },
   {
     "id": 8,
@@ -87,7 +87,7 @@
     "generated_sql": "SELECT COUNT(*) FROM khach_hang UNION SELECT COUNT(*) FROM khach_hang_1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 28016
+    "duration_ms": 113873
   },
   {
     "id": 9,
@@ -97,17 +97,17 @@
     "generated_sql": "SELECT ten_khu_pho_lan_can FROM khu_vuc_lan_can JOIN doanh_nghiep ON khu_vuc_lan_can.id_doanh_nghiep = doanh_nghiep.id_doanh_nghiep WHERE thanh_pho = 'Madison' GROUP BY ten_khu_pho_lan_can ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 208437
+    "duration_ms": 275391
   },
   {
     "id": 10,
     "db_id": "store_product",
     "question": "Tìm tổng số lượng dân cư ở các quận có diện tích thành phố tương ứng lớn hơn diện tích trung bình của tất cả các thành phố .",
     "gold_sql": "select sum ( dan_so_thanh_pho ) from quan where dien_tich_cua_cac_thanh_pho > ( select avg ( dien_tich_cua_cac_thanh_pho ) from quan )",
-    "generated_sql": "SELECT SUM(dan_so_thanh_pho) FROM quan JOIN quan_cua_cua_hang ON quan.id_quan = quan_cua_cua_hang.id_quan JOIN cua_hang ON quan_cua_cua_hang.id_cua_hang = cua_hang.id_cua_hang JOIN san_pham_cua_cua_hang ON cua_hang.id_cua_hang = san_pham_cua_cua_hang.id_cua_hang JOIN san_pham ON san_pham_cua_cua_hang.id_san_pham = san_pham.id_san_pham WHERE dien_tich_cua_cac_thanh_pho > (SELECT AVG(dien_tich_cua_cac_thanh_pho) FROM quan)",
+    "generated_sql": "SELECT SUM(quan.dan_so_thanh_pho) FROM quan JOIN quan_cua_cua_hang ON quan.id_quan = quan_cua_cua_hang.id_quan WHERE quan.dien_tich_cua_cac_thanh_pho > (SELECT AVG(dien_tich) FROM quan)",
     "exact_match": false,
-    "eval_error": null,
-    "duration_ms": 73595
+    "eval_error": "Error col: dien_tich",
+    "duration_ms": 98711
   },
   {
     "id": 11,
@@ -117,7 +117,7 @@
     "generated_sql": "SELECT COUNT(*) FROM hang_ton_kho WHERE id_cua_hang = 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 57522
+    "duration_ms": 98955
   },
   {
     "id": 12,
@@ -127,7 +127,7 @@
     "generated_sql": "SELECT T1.ten FROM nha_tho AS T1 JOIN le_cuoi AS T2 ON T1.id_nha_tho = T2.id_nha_tho JOIN ca_nhan AS T3 ON T2.id_nam = T3.id_ca_nhan WHERE T3.tuoi > 30 UNION SELECT T1.ten FROM nha_tho AS T1 JOIN le_cuoi AS T2 ON T1.id_nha_tho = T2.id_nha_tho JOIN ca_nhan AS T3 ON T2.id_nu = T3.id_ca_nhan WHERE T3.tuoi > 30 ORDER BY T1.ten",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 64139
+    "duration_ms": 92573
   },
   {
     "id": 13,
@@ -137,7 +137,7 @@
     "generated_sql": "SELECT T1.ten FROM dbo.ung_cu_vien AS T1 JOIN dbo.ca_nhan AS T2 ON T1.id_ca_nhan = T2.id_ca_nhan WHERE T2.gioi_tinh = 'Nữ' ORDER BY T1.ten",
     "exact_match": false,
     "eval_error": "'dbo.ung_cu_vien'",
-    "duration_ms": 69233
+    "duration_ms": 92896
   },
   {
     "id": 14,
@@ -147,7 +147,7 @@
     "generated_sql": "SELECT ten_viet_tat FROM hang_hang_khong WHERE ten_hang_hang_khong = 'Jetblue Airways'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 40912
+    "duration_ms": 80493
   },
   {
     "id": 15,
@@ -157,7 +157,7 @@
     "generated_sql": "SELECT hang_thu_am FROM album",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 42013
+    "duration_ms": 80213
   },
   {
     "id": 16,
@@ -167,7 +167,7 @@
     "generated_sql": "SELECT T1.ten AS ten FROM nha_tho AS T1 WHERE T1.id_nha_tho NOT IN (SELECT le_cuoi.id_nha_tho FROM le_cuoi WHERE le_cuoi.ngay_mo_cua >= 2015)",
     "exact_match": false,
     "eval_error": "Error col: as",
-    "duration_ms": 64955
+    "duration_ms": 74471
   },
   {
     "id": 17,
@@ -177,7 +177,7 @@
     "generated_sql": "SELECT ten FROM dai_dien WHERE dang != 'Đảng Cộng hoà'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 36828
+    "duration_ms": 75004
   },
   {
     "id": 18,
@@ -187,7 +187,7 @@
     "generated_sql": "SELECT id_sinh_vien FROM lan_tham_du_khoa_hoc_cua_sinh_vien WHERE id_khoa_hoc = '301' ORDER BY ngay_tham_du DESC LIMIT 10",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 56094
+    "duration_ms": 136775
   },
   {
     "id": 19,
@@ -197,7 +197,7 @@
     "generated_sql": "SELECT ten_nguoi_quan_ly, quan FROM cua_hang WHERE id_cua_hang = (SELECT id_cua_hang FROM cua_hang ORDER BY so_luong_san_pham DESC LIMIT 1)",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 45932
+    "duration_ms": 79181
   },
   {
     "id": 20,
@@ -207,7 +207,7 @@
     "generated_sql": "SELECT COUNT(DISTINCT T1.ngay_xuat_ban) FROM an_pham AS T1 JOIN sach AS T2 ON T1.id_sach = T2.id_sach",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 227647
+    "duration_ms": 247320
   },
   {
     "id": 21,
@@ -217,7 +217,7 @@
     "generated_sql": "SELECT ten, quoc_gia FROM ca_nhan WHERE tuoi < (SELECT AVG(tuoi) FROM ca_nhan)",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 29544
+    "duration_ms": 82862
   },
   {
     "id": 22,
@@ -227,7 +227,7 @@
     "generated_sql": "SELECT COUNT(*) FROM quoc_gia",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 39106
+    "duration_ms": 85127
   },
   {
     "id": 23,
@@ -237,7 +237,7 @@
     "generated_sql": "SELECT COUNT(*) FROM nhan_vien",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 38213
+    "duration_ms": 113212
   },
   {
     "id": 24,
@@ -247,7 +247,7 @@
     "generated_sql": "SELECT danh_sach.ho || ' ' || danh_sach.ten FROM dbo.danh_sach JOIN dbo.giao_vien ON danh_sach.phong_hoc = giao_vien.phong_hoc WHERE giao_vien.ho = 'MARROTTE' AND giao_vien.ten = 'KIRK'",
     "exact_match": false,
     "eval_error": "'dbo.danh_sach'",
-    "duration_ms": 206196
+    "duration_ms": 247295
   },
   {
     "id": 25,
@@ -257,7 +257,7 @@
     "generated_sql": "SELECT tieu_de FROM album WHERE nam = 2010",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 64311
+    "duration_ms": 85792
   },
   {
     "id": 26,
@@ -267,7 +267,7 @@
     "generated_sql": "SELECT khach_hang.id_khach_hang, khach_hang.chi_tiet_khach_hang FROM khach_hang JOIN chinh_sach ON khach_hang.id_khach_hang = chinh_sach.id_khach_hang JOIN tieu_de_cua_yeu_cau ON chinh_sach.id_chinh_sach = tieu_de_cua_yeu_cau.id_chinh_sach JOIN xu_ly_yeu_cau ON tieu_de_cua_yeu_cau.id_tieu_de_cua_yeu_cau = xu_ly_yeu_cau.id_yeu_cau WHERE xu_ly_yeu_cau.so_tien_duoc_tra = (SELECT MIN(so_tien_duoc_tra) FROM xu_ly_yeu_cau) ORDER BY khach_hang.id_khach_hang LIMIT 1",
     "exact_match": false,
     "eval_error": "'xu_ly_yeu_cau.so_tien_duoc_tra'",
-    "duration_ms": 45785
+    "duration_ms": 112373
   },
   {
     "id": 27,
@@ -277,7 +277,7 @@
     "generated_sql": "SELECT COUNT(*) FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa = 'Kế toán' OR khoa.ten_khoa = 'Sinh học'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 69107
+    "duration_ms": 114550
   },
   {
     "id": 28,
@@ -287,7 +287,7 @@
     "generated_sql": "SELECT COUNT(*) FROM giao_su WHERE bang_cap_cao_nhat = 'Tiến sĩ'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 46548
+    "duration_ms": 101509
   },
   {
     "id": 29,
@@ -297,7 +297,7 @@
     "generated_sql": "SELECT COUNT(*) FROM tau_hoa WHERE ten LIKE '%Tốc hành%'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 216957
+    "duration_ms": 250126
   },
   {
     "id": 30,
@@ -307,7 +307,7 @@
     "generated_sql": "SELECT nam_bat_dau FROM ky_thuat_vien WHERE doi = 'CLE' INTERSECT SELECT nam_bat_dau FROM ky_thuat_vien WHERE doi = 'CWS'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 52494
+    "duration_ms": 101890
   },
   {
     "id": 31,
@@ -317,7 +317,7 @@
     "generated_sql": "SELECT vi_tri, COUNT(*) FROM tran_dau_trong_mua_giai GROUP BY vi_tri ORDER BY COUNT(*) DESC",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 50596
+    "duration_ms": 97096
   },
   {
     "id": 32,
@@ -327,7 +327,7 @@
     "generated_sql": "SELECT T1.id_ca_nhan, T1.ten, T1.ten_dem, T1.ho, COUNT(*) AS so_khoa_hoc_dang_ky FROM ca_nhan AS T1 JOIN sinh_vien AS T3 ON T1.id_ca_nhan = T3.id_ca_nhan JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T3.id_sinh_vien = T2.id_sinh_vien GROUP BY T1.id_ca_nhan ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": "'sinh_vien.id_ca_nhan'",
-    "duration_ms": 61341
+    "duration_ms": 106570
   },
   {
     "id": 33,
@@ -337,7 +337,7 @@
     "generated_sql": "SELECT san_bay.thanh_pho FROM chuyen_bay JOIN san_bay ON chuyen_bay.san_bay_dich = san_bay.ma_san_bay GROUP BY san_bay.ma_san_bay, san_bay.thanh_pho ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 39320
+    "duration_ms": 101697
   },
   {
     "id": 34,
@@ -347,7 +347,7 @@
     "generated_sql": "SELECT sinh_vien.ten_cua_sinh_vien FROM sinh_vien JOIN lop_hoc ON sinh_vien.lop_cua_sinh_vien = lop_hoc.ma_lop_hoc JOIN khoa_hoc ON lop_hoc.ma_khoa_hoc = khoa_hoc.ma_khoa_hoc WHERE sinh_vien.ho_cua_sinh_vien LIKE 'S%' AND khoa_hoc.ma_khoa_hoc = 'ACCT-211'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 48251
+    "duration_ms": 104852
   },
   {
     "id": 35,
@@ -357,7 +357,7 @@
     "generated_sql": "SELECT loai_dich_vu.ma_loai_dich_vu, loai_dich_vu.mo_ta_ve_loai_dich_vu FROM dich_vu JOIN loai_dich_vu ON dich_vu.ma_loai_dich_vu = loai_dich_vu.ma_loai_dich_vu GROUP BY loai_dich_vu.ma_loai_dich_vu ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 35126
+    "duration_ms": 94085
   },
   {
     "id": 36,
@@ -367,7 +367,7 @@
     "generated_sql": "SELECT ten FROM dbo.doanh_nghiep WHERE danh_gia_xep_hang = 3.5",
     "exact_match": false,
     "eval_error": "Error col: anh_gia_xep_hang",
-    "duration_ms": 28934
+    "duration_ms": 64202
   },
   {
     "id": 37,
@@ -377,17 +377,17 @@
     "generated_sql": "SELECT chi_tiet_khach_hang FROM khach_hang WHERE chi_tiet_khach_hang LIKE '%Diana%'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 33697
+    "duration_ms": 69490
   },
   {
     "id": 38,
     "db_id": "imdb",
     "question": "Cho biết tiêu đề của các bộ phim có sự tham gia của cả ' Woody Strode ' và ' Jason Robards ' .",
     "gold_sql": "select t4.tieu_de from phan_vai as t5 join dien_vien as t1 on t5.id_dien_vien = t1.id_dien_vien join bo_phim as t4 on t4.id_bo_phim = t5.id_se_ri_phim join phan_vai as t3 on t4.id_bo_phim = t3.id_se_ri_phim join dien_vien as t2 on t3.id_dien_vien = t2.id_dien_vien where t1.ten = \"woody strode\" and t2.ten = \"jason robards\"",
-    "generated_sql": "SELECT T1.tieu_de FROM bo_phim AS T1 JOIN phan_vai AS T2 ON T1.id_bo_phim = T2.id_se_ri_phim JOIN dien_vien AS T3 ON T2.id_dien_vien = T3.id_dien_vien WHERE T3.ten = 'Woody Strode' INTERSECT SELECT T1.tieu_de FROM bo_phim AS T1 JOIN phan_vai AS T2 ON T1.id_bo_phim = T2.id_se_ri_phim JOIN dien_vien AS T3 ON T2.id_dien_vien = T3.id_dien_vien WHERE T3.ten = 'Jason Robards'",
+    "generated_sql": "SELECT bo_phim.tieu_de FROM bo_phim JOIN phan_vai ON bo_phim.id_bo_phim = phan_vai.id_se_ri_phim JOIN dien_vien ON phan_vai.id_dien_vien = dien_vien.id_dien_vien WHERE dien_vien.ten = 'Woody Strode' INTERSECT SELECT bo_phim.tieu_de FROM bo_phim JOIN phan_vai ON bo_phim.id_bo_phim = phan_vai.id_se_ri_phim JOIN dien_vien ON phan_vai.id_dien_vien = dien_vien.id_dien_vien WHERE dien_vien.ten = 'Jason Robards'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 79581
+    "duration_ms": 144861
   },
   {
     "id": 39,
@@ -397,7 +397,7 @@
     "generated_sql": "SELECT dao_dien.ten FROM dao_dien JOIN dao_dien_boi ON dao_dien_boi.id_dao_dien = dao_dien.id_dao_dien JOIN bo_phim ON dao_dien_boi.id_se_ri_phim = bo_phim.id_bo_phim WHERE bo_phim.tieu_de LIKE '%Vũ khí hạt nhân%'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 85557
+    "duration_ms": 129603
   },
   {
     "id": 40,
@@ -407,7 +407,7 @@
     "generated_sql": "SELECT khach_hang.ten_khach_hang, khach_hang.dien_thoai_khach_hang FROM khach_hang JOIN luot_dat_hang_cua_khach_hang ON khach_hang.id_khach_hang = luot_dat_hang_cua_khach_hang.id_khach_hang JOIN mat_hang_duoc_dat ON luot_dat_hang_cua_khach_hang.id_don_hang = mat_hang_duoc_dat.id_don_hang GROUP BY khach_hang.id_khach_hang ORDER BY SUM(CAST(so_luong_dat_hang AS INTEGER)) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": "Error col: cast",
-    "duration_ms": 34948
+    "duration_ms": 82396
   },
   {
     "id": 41,
@@ -417,7 +417,7 @@
     "generated_sql": "SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai WHERE vi_tri = 'tiền vệ' INTERSECT SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai WHERE vi_tri = 'hậu vệ'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 28105
+    "duration_ms": 87295
   },
   {
     "id": 42,
@@ -427,7 +427,7 @@
     "generated_sql": "SELECT o.nhan_hieu FROM nui AS n JOIN anh AS a ON n.id = a.id_nui JOIN ong_kinh_may_anh AS o ON a.id_ong_kinh_may_anh = o.id ORDER BY n.chieu_cao DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 52663
+    "duration_ms": 96222
   },
   {
     "id": 43,
@@ -437,17 +437,17 @@
     "generated_sql": "SELECT ho FROM dbo.danh_sach WHERE khoi_lop = 1 AND phong_hoc NOT IN (SELECT phong_hoc FROM dbo.giao_vien WHERE ho = 'OTHA' AND ten = 'MOYER')",
     "exact_match": false,
     "eval_error": "'dbo.danh_sach'",
-    "duration_ms": 26960
+    "duration_ms": 79358
   },
   {
     "id": 44,
     "db_id": "city_record",
     "question": "Thành phố nào có nhiệt độ cao nhất vào tháng 2 ?",
     "gold_sql": "select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho order by t2.thang_hai desc limit 1",
-    "generated_sql": "SELECT t.thanh_pho FROM nhiet_do n JOIN thanh_pho t ON n.id_thanh_pho = t.id_thanh_pho ORDER BY n.thang_hai DESC LIMIT 1",
-    "exact_match": false,
-    "eval_error": "'n'",
-    "duration_ms": 43046
+    "generated_sql": "SELECT thanh_pho FROM nhiet_do JOIN thanh_pho ON nhiet_do.id_thanh_pho = thanh_pho.id_thanh_pho ORDER BY thang_hai DESC LIMIT 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 74571
   },
   {
     "id": 45,
@@ -457,7 +457,7 @@
     "generated_sql": "SELECT nhan_vien.ho_cua_nhan_vien, nhan_vien.ten_cua_nhan_vien FROM nhan_vien JOIN giao_su ON nhan_vien.ma_so_nhan_vien = giao_su.ma_so_nhan_vien JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa = 'Sinh học'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 58074
+    "duration_ms": 75119
   },
   {
     "id": 46,
@@ -467,7 +467,7 @@
     "generated_sql": "SELECT tieu_de FROM phim WHERE (thoi_luong_phim > 100 OR danh_gia_xep_hang = 'PG') AND gia_thay_the <= 200",
     "exact_match": false,
     "eval_error": "",
-    "duration_ms": 41116
+    "duration_ms": 100011
   },
   {
     "id": 47,
@@ -477,7 +477,7 @@
     "generated_sql": "SELECT khach_hang.id_khach_hang, khach_hang.ho, khach_hang.ten FROM khach_hang JOIN khoan_thanh_toan ON khach_hang.id_khach_hang = khoan_thanh_toan.id_khach_hang GROUP BY khach_hang.id_khach_hang ORDER BY SUM(khoan_thanh_toan.so_tien) ASC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 45390
+    "duration_ms": 89493
   },
   {
     "id": 48,
@@ -487,7 +487,7 @@
     "generated_sql": "SELECT ten FROM giao_vien WHERE id_giao_vien NOT IN (SELECT id_giao_vien FROM sap_xep_khoa_hoc)",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 23609
+    "duration_ms": 59383
   },
   {
     "id": 49,
@@ -497,7 +497,7 @@
     "generated_sql": "SELECT T1.ten_khoa FROM khoa AS T1 JOIN sinh_vien AS T2 ON T1.ma_khoa = T2.ma_khoa GROUP BY T1.ma_khoa ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 29428
+    "duration_ms": 64621
   },
   {
     "id": 50,
@@ -507,7 +507,7 @@
     "generated_sql": "SELECT mua_giai FROM tran_dau JOIN chan_thuong ON tran_dau.id = chan_thuong.id_tran_dau WHERE cau_thu = 'Walter Samuel'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 26324
+    "duration_ms": 61034
   },
   {
     "id": 51,
@@ -517,7 +517,7 @@
     "generated_sql": "SELECT giao_vien.ho, giao_vien.ten FROM giao_vien JOIN danh_sach ON giao_vien.phong_hoc = danh_sach.phong_hoc GROUP BY giao_vien.ho, giao_vien.ten ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 69891
+    "duration_ms": 115792
   },
   {
     "id": 52,
@@ -527,7 +527,7 @@
     "generated_sql": "SELECT id_cua_hang FROM hang_ton_kho GROUP BY id_cua_hang ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 29441
+    "duration_ms": 75110
   },
   {
     "id": 53,
@@ -537,7 +537,7 @@
     "generated_sql": "SELECT ban_nhac.ho FROM buoi_bieu_dien JOIN ban_nhac ON buoi_bieu_dien.nghe_si_trong_ban_nhac = ban_nhac.id GROUP BY ban_nhac.id ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 22877
+    "duration_ms": 66307
   },
   {
     "id": 54,
@@ -547,7 +547,7 @@
     "generated_sql": "SELECT ho || ' ' || ten AS ten_dien_vien FROM dien_vien JOIN dien_vien_dien_anh ON dien_vien.id_dien_vien = dien_vien_dien_anh.id_dien_vien GROUP BY dien_vien.id_dien_vien HAVING COUNT(DISTINCT dien_vien_dien_anh.id_phim) > 30 ORDER BY COUNT(DISTINCT dien_vien_dien_anh.id_phim) DESC",
     "exact_match": false,
     "eval_error": "Error col: ||",
-    "duration_ms": 56401
+    "duration_ms": 106466
   },
   {
     "id": 55,
@@ -557,7 +557,7 @@
     "generated_sql": "SELECT COUNT(*) FROM danh_gia WHERE id_doanh_nghiep = (SELECT id_doanh_nghiep FROM doanh_nghiep WHERE ten = 'Bistro Di Napoli') AND nam = 2015",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 28623
+    "duration_ms": 77766
   },
   {
     "id": 56,
@@ -567,7 +567,7 @@
     "generated_sql": "SELECT COUNT(*) FROM sinh_vien JOIN giang_vien_tham_gia_vao ON sinh_vien.co_van = giang_vien_tham_gia_vao.id_giang_vien JOIN giang_vien ON giang_vien_tham_gia_vao.id_giang_vien = giang_vien.id_giang_vien GROUP BY giang_vien.ngach",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 38879
+    "duration_ms": 89836
   },
   {
     "id": 57,
@@ -577,7 +577,7 @@
     "generated_sql": "SELECT ten_loai_nha_hang FROM loai_nha_hang",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 53623
+    "duration_ms": 94844
   },
   {
     "id": 58,
@@ -587,7 +587,7 @@
     "generated_sql": "SELECT ten_dai_ly_van_chuyen FROM dai_ly_van_chuyen_tai_lieu",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 28945
+    "duration_ms": 100239
   },
   {
     "id": 59,
@@ -597,7 +597,7 @@
     "generated_sql": "SELECT so_luong_nguoi_tham_du_trung_binh FROM san_van_dong WHERE phan_tram_suc_chua > 100 ORDER BY so_luong_nguoi_tham_du_trung_binh DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 49414
+    "duration_ms": 80527
   },
   {
     "id": 60,
@@ -607,7 +607,7 @@
     "generated_sql": "SELECT COUNT(*) FROM chuyen_bay JOIN san_bay AS T1 ON chuyen_bay.san_bay_khoi_hanh = T1.ma_san_bay WHERE hang_hang_khong = (SELECT id_hang_hang_khong FROM hang_hang_khong WHERE ten_hang_hang_khong = 'United Airlines') AND T1.ma_san_bay = 'AHD'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 37292
+    "duration_ms": 82714
   },
   {
     "id": 61,
@@ -617,7 +617,7 @@
     "generated_sql": "SELECT van_phong_giao_su, nhan_vien.ten_cua_nhan_vien FROM giao_su JOIN nhan_vien ON giao_su.ma_so_nhan_vien = nhan_vien.ma_so_nhan_vien WHERE giao_su.ma_khoa = 'Lịch sử' AND giao_su.bang_cap_cao_nhat = 'Tiến sĩ'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 61975
+    "duration_ms": 110322
   },
   {
     "id": 62,
@@ -627,7 +627,7 @@
     "generated_sql": "SELECT ban_sao.id_tai_lieu, COUNT(ban_sao.so_luong_ban_sao) AS so_luong_ban_sao FROM ban_sao GROUP BY ban_sao.id_tai_lieu ORDER BY so_luong_ban_sao DESC LIMIT 1",
     "exact_match": false,
     "eval_error": "Error col: as",
-    "duration_ms": 79058
+    "duration_ms": 155345
   },
   {
     "id": 63,
@@ -637,7 +637,7 @@
     "generated_sql": "SELECT ten FROM dbo.doanh_nghiep WHERE danh_gia_xep_hang > 3.5",
     "exact_match": false,
     "eval_error": "'doanh_nghiep.anh_gia_xep_hang'",
-    "duration_ms": 30086
+    "duration_ms": 81355
   },
   {
     "id": 64,
@@ -647,7 +647,7 @@
     "generated_sql": "SELECT id FROM cau_thu WHERE chan_thuan = 'Left' AND chieu_cao BETWEEN 180 AND 190",
     "exact_match": false,
     "eval_error": "Error col: chan_thuan",
-    "duration_ms": 24230
+    "duration_ms": 81379
   },
   {
     "id": 65,
@@ -657,7 +657,7 @@
     "generated_sql": "SELECT T1.thanh_pho_chu_nha FROM thanh_pho_chu_nha AS T1 GROUP BY T1.thanh_pho_chu_nha ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 42929
+    "duration_ms": 100878
   },
   {
     "id": 66,
@@ -667,7 +667,7 @@
     "generated_sql": "SELECT loai FROM giong_hat JOIN ban_nhac ON giong_hat.nghe_si_trong_ban_nhac = ban_nhac.id WHERE ban_nhac.ho = 'Hello'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 21611
+    "duration_ms": 80545
   },
   {
     "id": 67,
@@ -677,7 +677,7 @@
     "generated_sql": "SELECT ho, ten FROM sinh_vien WHERE id_sinh_vien = (SELECT co_van FROM sinh_vien WHERE ho = 'Goodrich' AND ten = 'Micheal')",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 57394
+    "duration_ms": 102831
   },
   {
     "id": 68,
@@ -687,7 +687,7 @@
     "generated_sql": "SELECT khach_hang.id_khach_hang, khach_hang.ten_khach_hang, khach_hang.ho_cua_khach_hang FROM khach_hang JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang GROUP BY khach_hang.id_khach_hang ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 56078
+    "duration_ms": 104821
   },
   {
     "id": 69,
@@ -697,7 +697,7 @@
     "generated_sql": "SELECT san_pham FROM dbo.san_pham WHERE kich_thuoc_trang_toi_da = 'A 4' AND so_trang_mau_tren_tung_phut < 5",
     "exact_match": false,
     "eval_error": "'dbo.san_pham'",
-    "duration_ms": 30523
+    "duration_ms": 90309
   },
   {
     "id": 70,
@@ -707,7 +707,7 @@
     "generated_sql": "SELECT ten_khoa_hoc FROM khoa_hoc ORDER BY ten_khoa_hoc ASC",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 26137
+    "duration_ms": 77743
   },
   {
     "id": 71,
@@ -717,7 +717,7 @@
     "generated_sql": "SELECT COUNT(*) FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa = 'Kế toán' OR khoa.ten_khoa = 'Sinh học'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 59174
+    "duration_ms": 115711
   },
   {
     "id": 72,
@@ -734,7 +734,7 @@
     "generated_sql": "SELECT COUNT(DISTINCT nha_hang.id_nha_hang) FROM nha_hang JOIN loai_cua_nha_hang ON nha_hang.id_nha_hang = loai_cua_nha_hang.id_nha_hang JOIN loai_nha_hang ON loai_cua_nha_hang.id_loai_nha_hang = loai_nha_hang.id_loai_nha_hang WHERE loai_nha_hang.ten_loai_nha_hang = 'Sandwich'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 41110
+    "duration_ms": 89910
   },
   {
     "id": 74,
@@ -744,7 +744,7 @@
     "generated_sql": "SELECT nhac_cu.nhac_cu FROM nhac_cu JOIN ban_nhac ON nhac_cu.id_nghe_si_trong_ban_nhac = ban_nhac.id WHERE ban_nhac.ho = 'Heilo' AND nhac_cu.id_bai_hat = (SELECT id_bai_hat FROM bai_hat WHERE tieu_de = 'Le Pop')",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 46384
+    "duration_ms": 83576
   },
   {
     "id": 75,
@@ -754,7 +754,7 @@
     "generated_sql": "SELECT sinh_vien.id_sinh_vien, sinh_vien.chi_tiet_sinh_vien, luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc, luot_dang_ky_khoa_hoc_cua_sinh_vien.ngay_dang_ki FROM sinh_vien JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON sinh_vien.id_sinh_vien = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien ORDER BY luot_dang_ky_khoa_hoc_cua_sinh_vien.ngay_dang_ki DESC LIMIT 10",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 38661
+    "duration_ms": 75527
   },
   {
     "id": 76,
@@ -764,17 +764,17 @@
     "generated_sql": "SELECT so_dien_thoai, ma_buu_dien FROM dia_chi WHERE id_dia_chi = 1031",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 63263
+    "duration_ms": 113578
   },
   {
     "id": 77,
     "db_id": "music_2",
     "question": "Cho biết tên và họ của những nghệ sĩ đã đảm nhiệm ví trí ' hậu trường ' trong các buổi biểu diễn của bài hát ' Badlands ' .",
     "gold_sql": "select t2.ten , t2.ho from buoi_bieu_dien as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id join bai_hat as t3 on t3.id_bai_hat = t1.id_bai_hat where t3.tieu_de = \"badlands\" and t1.vi_tri_tren_san_khau = \"back\"",
-    "generated_sql": "SELECT ten, ho FROM ban_nhac JOIN buoi_bieu_dien ON ban_nhac.id = buoi_bieu_dien.nghe_si_trong_ban_nhac WHERE buoi_bieu_dien.vi_tri_tren_san_khau = 'hau_truong' AND buoi_bieu_dien.id_bai_hat = (SELECT id_bai_hat FROM bai_hat WHERE tieu_de = 'Badlands')",
+    "generated_sql": "SELECT ten, ho FROM ban_nhac JOIN buoi_bieu_dien ON ban_nhac.id = buoi_bieu_dien.nghe_si_trong_ban_nhac WHERE buoi_bieu_dien.vi_tri_tren_san_khau = 'hậu trường' AND buoi_bieu_dien.id_bai_hat = (SELECT id_bai_hat FROM bai_hat WHERE tieu_de = 'Badlands')",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 70590
+    "duration_ms": 61277
   },
   {
     "id": 78,
@@ -784,7 +784,7 @@
     "generated_sql": "SELECT ngach FROM giang_vien GROUP BY ngach ORDER BY COUNT(*) ASC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 37945
+    "duration_ms": 70996
   },
   {
     "id": 79,
@@ -794,17 +794,17 @@
     "generated_sql": "SELECT mo_ta_ve_khoa_hoc, so_luong_tin_chi_cua_khoa_hoc FROM khoa_hoc WHERE ma_khoa_hoc = 'CIS-220'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 29993
+    "duration_ms": 79801
   },
   {
     "id": 80,
     "db_id": "perpetrator",
     "question": "Liệt kê ngày bị bắt của kẻ tội phạm theo thứ tự giảm dần về số người bị hắn giết .",
     "gold_sql": "select ngay from toi_pham order by so_nguoi_bi_giet desc",
-    "generated_sql": "SELECT toi_pham.id_ca_nhan, toi_pham.so_nguoi_bi_giet FROM toi_pham JOIN ca_nhan ON toi_pham.id_ca_nhan = ca_nhan.id_ca_nhan ORDER BY toi_pham.so_nguoi_bi_giet DESC",
+    "generated_sql": "SELECT toi_pham.id_ca_nhan, so_nguoi_bi_giet FROM toi_pham ORDER BY so_nguoi_bi_giet DESC",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 35595
+    "duration_ms": 75124
   },
   {
     "id": 81,
@@ -814,7 +814,7 @@
     "generated_sql": "SELECT kich_thuoc_san_pham FROM san_pham WHERE kich_thuoc_san_pham IS NOT NULL GROUP BY kich_thuoc_san_pham ORDER BY kich_thuoc_san_pham ASC",
     "exact_match": false,
     "eval_error": "Error col: not",
-    "duration_ms": 32495
+    "duration_ms": 59034
   },
   {
     "id": 82,
@@ -824,7 +824,7 @@
     "generated_sql": "SELECT SUM(dan_so_thanh_pho) FROM quan ORDER BY dien_tich_cua_cac_thanh_pho DESC LIMIT 3",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 32493
+    "duration_ms": 62845
   },
   {
     "id": 83,
@@ -834,7 +834,7 @@
     "generated_sql": "SELECT T1.id_bai_giang FROM bai_giang AS T1 JOIN nhan_vien AS T2 ON T1.id_nhan_vien = T2.id_nhan_vien WHERE T2.ten = 'Janessa' AND T2.ho = 'Sawayn' AND T2.biet_danh LIKE '%s%'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 28586
+    "duration_ms": 56256
   },
   {
     "id": 84,
@@ -844,7 +844,7 @@
     "generated_sql": "SELECT T1.id_ky_su, T1.ten, T1.ho FROM ky_su_bao_tri AS T1 JOIN chuyen_tham_cua_ky_su AS T2 ON T1.id_ky_su = T2.id_ky_su GROUP BY T1.id_ky_su ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 51240
+    "duration_ms": 93268
   },
   {
     "id": 85,
@@ -854,7 +854,7 @@
     "generated_sql": "SELECT COUNT(DISTINCT dia_diem) FROM cua_hang",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 34028
+    "duration_ms": 61871
   },
   {
     "id": 86,
@@ -864,7 +864,7 @@
     "generated_sql": "SELECT doi FROM cau_thu ORDER BY doi ASC",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 41747
+    "duration_ms": 46426
   },
   {
     "id": 87,
@@ -874,7 +874,7 @@
     "generated_sql": "SELECT giang_vien.ten FROM giang_vien JOIN giang_vien_tham_gia_vao ON giang_vien.id_giang_vien = giang_vien_tham_gia_vao.id_giang_vien JOIN hoat_dong ON giang_vien_tham_gia_vao.id_hoat_dong = hoat_dong.id_hoat_dong WHERE hoat_dong.ten_hoat_dong = 'Bơi xuồng' OR hoat_dong.ten_hoat_dong = 'Chèo thuyền Kayak'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 34411
+    "duration_ms": 68010
   },
   {
     "id": 88,
@@ -884,7 +884,7 @@
     "generated_sql": "SELECT ten FROM dien_vien JOIN phan_vai ON dien_vien.id_dien_vien = phan_vai.id_dien_vien JOIN bo_phim ON phan_vai.id_se_ri_phim = bo_phim.id_bo_phim WHERE bo_phim.nam_phat_hanh = (SELECT MAX(nam_phat_hanh) FROM bo_phim) AND bo_phim.tieu_de = 'Quentin Tarantino'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 80172
+    "duration_ms": 112502
   },
   {
     "id": 89,
@@ -894,7 +894,7 @@
     "generated_sql": "SELECT san_van_dong.ten FROM san_van_dong JOIN tran_dau ON san_van_dong.id = tran_dau.id_san_van_dong JOIN chan_thuong ON tran_dau.id = chan_thuong.id_tran_dau WHERE cau_thu = 'Walter Samuel' OR cau_thu = 'Thiago Motta' GROUP BY san_van_dong.id HAVING COUNT(DISTINCT cau_thu) = 2",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 43678
+    "duration_ms": 76633
   },
   {
     "id": 90,
@@ -904,7 +904,7 @@
     "generated_sql": "SELECT ten, ngay_mo_cua FROM nha_tho ORDER BY ngay_mo_cua DESC LIMIT 3",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 25267
+    "duration_ms": 60608
   },
   {
     "id": 91,
@@ -914,7 +914,7 @@
     "generated_sql": "SELECT SUM(khoan_tien_boa.so_luot_thich) FROM khoan_tien_boa JOIN danh_gia ON khoan_tien_boa.id_danh_gia = danh_gia.id_danh_gia JOIN nguoi_tieu_dung ON danh_gia.id_nguoi_tieu_dung = nguoi_tieu_dung.id_nguoi_tieu_dung WHERE nguoi_tieu_dung.ten = 'Niloofar'",
     "exact_match": false,
     "eval_error": "'khoan_tien_boa.id_danh_gia'",
-    "duration_ms": 45442
+    "duration_ms": 79708
   },
   {
     "id": 92,
@@ -924,7 +924,7 @@
     "generated_sql": "SELECT hang_thu_am FROM album WHERE tieu_de IN ('Album 1', 'Album 2', 'Album 3') UNION SELECT hang_thu_am FROM danh_sach_bai_hat JOIN album ON danh_sach_bai_hat.id_album = album.id_album WHERE album.tieu_de IN ('Album 1', 'Album 2', 'Album 3') UNION SELECT hang_thu_am FROM bai_hat JOIN danh_sach_bai_hat ON bai_hat.id_bai_hat = danh_sach_bai_hat.id_bai_hat JOIN album ON danh_sach_bai_hat.id_album = album.id_album WHERE album.tieu_de IN ('Album 1', 'Album 2', 'Album 3') UNION SELECT hang_thu_am FROM bai_hat JOIN nhac_cu ON bai_hat.id_bai_hat = nhac_cu.id_bai_hat JOIN ban_nhac ON nhac_cu.id_nghe_si_trong_ban_nhac = ban_nhac.id WHERE ban_nhac.ten IN ('Artist 1', 'Artist 2', 'Artist 3') UNION SELECT hang_thu_am FROM bai_hat JOIN giong_hat ON bai_hat.id_bai_hat = giong_hat.id_bai_hat JOIN ban_nhac ON giong_hat.nghe_si_trong_ban_nhac = ban_nhac.id WHERE ban_nhac.ten IN ('Artist 1', 'Artist 2', 'Artist 3') UNION SELECT hang_thu_am FROM bai_hat JOIN buoi_bieu_dien ON bai_hat.id_bai_hat = buoi_bieu_dien.id_bai_hat JOIN ban_nhac ON buoi_bieu_dien.nghe_si_trong_ban_nhac = ban_nhac.id WHERE ban_nhac.ten IN ('Artist 1', 'Artist 2', 'Artist 3') UNION SELECT hang_thu_am FROM album WHERE tieu_de NOT IN ('Album 1', 'Album 2', 'Album 3') EXCEPT SELECT hang_thu_am FROM danh_sach_bai_hat JOIN album ON danh_sach_bai_hat.id_album = album.id_album WHERE album.tieu_de NOT IN ('Album 1', 'Album 2', 'Album 3') EXCEPT SELECT hang_thu_am FROM bai_hat JOIN danh_sach_bai_hat ON bai_hat.id_bai_hat = danh_sach_bai_hat.id_bai_hat JOIN album ON danh_sach_bai_hat.id_album = album.id_album WHERE album.tieu_de NOT IN ('Album 1', 'Album 2', 'Album 3') EXCEPT SELECT hang_thu_am FROM bai_hat JOIN nhac_cu ON bai_hat.id_bai_hat = nhac_cu.id_bai_hat JOIN ban_nhac ON nhac_cu.id_nghe_si_trong_ban_nhac = ban_nhac.id WHERE ban_nhac.ten NOT IN ('Artist 1', 'Artist 2', 'Artist 3') EXCEPT SELECT hang_thu_am FROM bai_hat JOIN giong_hat ON bai_hat.id_bai_hat = giong_hat.id_bai_hat JOIN ban_nhac ON giong_hat.nghe_si_trong_ban_nhac = ban_nhac.id WHERE ban_nhac.ten NOT IN ('Artist 1', 'Artist 2', 'Artist 3') EXCEPT SELECT hang_thu_am FROM bai_hat JOIN buoi_bieu_dien ON bai_hat.id_bai_hat = buoi_bieu_dien.id_bai_hat JOIN ban_nhac ON buoi_bieu_dien.nghe_si_trong_ban_nhac = ban_nhac.id WHERE ban_nhac.ten NOT IN ('Artist 1', 'Artist 2', 'Artist 3')",
     "exact_match": false,
     "eval_error": "",
-    "duration_ms": 233999
+    "duration_ms": 281031
   },
   {
     "id": 93,
@@ -934,7 +934,7 @@
     "generated_sql": "SELECT SUM(CAST(so_luong_dat_hang AS INTEGER)) / COUNT(*) FROM hoa_don JOIN phuong_thuc_thanh_toan ON hoa_don.ma_phuong_thuc_thanh_toan = phuong_thuc_thanh_toan.ma_phuong_thuc_thanh_toan WHERE phuong_thuc_thanh_toan.mo_ta_ve_phuong_thuc_thanh_toan = 'Mastercard'",
     "exact_match": false,
     "eval_error": "Error col: cast",
-    "duration_ms": 51562
+    "duration_ms": 104417
   },
   {
     "id": 94,
@@ -944,7 +944,7 @@
     "generated_sql": "SELECT chi_tiet_khach_hang FROM khach_hang WHERE id_khach_hang NOT IN (SELECT id_khach_hang FROM chinh_sach)",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 30625
+    "duration_ms": 72977
   },
   {
     "id": 95,
@@ -954,7 +954,7 @@
     "generated_sql": "SELECT so_tien_giam_gia FROM phieu_giam_gia WHERE id_phieu_giam_gia IN (SELECT id_phieu_giam_gia FROM khach_hang WHERE khach_hang_tot_hay_xau = 'tốt' UNION SELECT id_phieu_giam_gia FROM khach_hang WHERE khach_hang_tot_hay_xau = 'xấu')",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 68573
+    "duration_ms": 103063
   },
   {
     "id": 96,
@@ -964,7 +964,7 @@
     "generated_sql": "SELECT nam_bat_dau FROM ky_thuat_vien WHERE doi='CLE' INTERSECT SELECT nam_bat_dau FROM ky_thuat_vien WHERE doi='CWS' ORDER BY nam_bat_dau",
     "exact_match": false,
     "eval_error": "Error col: doi=__val_48_52__",
-    "duration_ms": 41247
+    "duration_ms": 75477
   },
   {
     "id": 97,
@@ -974,7 +974,7 @@
     "generated_sql": "SELECT ten FROM ca_nhan ORDER BY ten ASC",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 22044
+    "duration_ms": 59654
   },
   {
     "id": 98,
@@ -984,7 +984,7 @@
     "generated_sql": "SELECT khach_hang.id_khach_hang, khach_hang.chi_tiet_khach_hang FROM khach_hang JOIN chinh_sach ON khach_hang.id_khach_hang = chinh_sach.id_khach_hang WHERE chinh_sach.ma_loai_chinh_sach = 'Uỷ quyền' OR chinh_sach.ma_loai_chinh_sach = 'Thống nhất'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 75934
+    "duration_ms": 110110
   },
   {
     "id": 99,
@@ -994,17 +994,17 @@
     "generated_sql": "SELECT ten FROM doi WHERE id_doi NOT IN (SELECT DISTINCT doi FROM tran_dau_trong_mua_giai)",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 48237
+    "duration_ms": 63747
   },
   {
     "id": 100,
     "db_id": "student_1",
     "question": "Đối với mỗi phòng học , hãy cho biết mã số của phòng học và số lượng khối lớp đã sử dụng nó .",
     "gold_sql": "select phong_hoc , count ( distinct khoi_lop ) from danh_sach group by phong_hoc",
-    "generated_sql": "SELECT phong_hoc, COUNT(*) FROM danh_sach GROUP BY phong_hoc ORDER BY phong_hoc ASC",
+    "generated_sql": "SELECT phong_hoc, COUNT(*) FROM danh_sach GROUP BY phong_hoc ORDER BY COUNT(*) DESC",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 23778
+    "duration_ms": 60055
   },
   {
     "id": 101,
@@ -1014,7 +1014,7 @@
     "generated_sql": "SELECT T1.ten_khoa FROM sinh_vien AS T1 JOIN khoa AS T2 ON T1.ma_khoa = T2.ma_khoa ORDER BY T1.gpa_cua_sinh_vien ASC LIMIT 1",
     "exact_match": false,
     "eval_error": "'sinh_vien.ten_khoa'",
-    "duration_ms": 37331
+    "duration_ms": 58648
   },
   {
     "id": 102,
@@ -1024,7 +1024,7 @@
     "generated_sql": "SELECT T1.ten FROM ca_nhan AS T1 WHERE T1.id_ca_nhan NOT IN (SELECT id_ca_nhan FROM ung_cu_vien)",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 22854
+    "duration_ms": 65184
   },
   {
     "id": 103,
@@ -1034,7 +1034,7 @@
     "generated_sql": "SELECT san_pham_duoc_dat.id_san_pham FROM san_pham_duoc_dat JOIN luot_dat_mua ON san_pham_duoc_dat.id_dat_mua = luot_dat_mua.id_dat_mua GROUP BY san_pham_duoc_dat.id_san_pham HAVING COUNT(*) >= 3",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 32478
+    "duration_ms": 72601
   },
   {
     "id": 104,
@@ -1051,7 +1051,7 @@
     "generated_sql": "SELECT COUNT(DISTINCT sinh_vien.id_sinh_vien) FROM sinh_vien JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON sinh_vien.id_sinh_vien = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien JOIN khoa_hoc ON luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc = khoa_hoc.id_khoa_hoc WHERE ten_khoa_hoc = 'tieng Anh' AND ngay_dang_ki <= '2026-02-27'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 66217
+    "duration_ms": 93875
   },
   {
     "id": 106,
@@ -1061,17 +1061,17 @@
     "generated_sql": "SELECT so_dien_thoai_khach_hang FROM nguoi_bieu_dien WHERE ten_khach_hang = 'Ashley'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 48326
+    "duration_ms": 108343
   },
   {
     "id": 107,
     "db_id": "college_1",
     "question": "Khoa nào cung cấp nhiều tín chỉ nhất ?",
     "gold_sql": "select t3.ten_khoa from khoa_hoc as t1 join lop_hoc as t2 on t1.ma_khoa_hoc = t2.ma_khoa_hoc join khoa as t3 on t1.ma_khoa = t3.ma_khoa group by t1.ma_khoa order by sum ( t1.so_luong_tin_chi_cua_khoa_hoc ) desc limit 1",
-    "generated_sql": "SELECT T1.ten_khoa FROM khoa AS T1 JOIN khoa_hoc AS T2 ON T1.ma_khoa = T2.ma_khoa GROUP BY T1.ma_khoa ORDER BY SUM(T2.so_luong_tin_chi_cua_khoa_hoc) DESC LIMIT 1",
+    "generated_sql": "SELECT khoa.ma_khoa, SUM(khoa_hoc.so_luong_tin_chi_cua_khoa_hoc) AS tong_tin_chi FROM khoa JOIN khoa_hoc ON khoa.ma_khoa = khoa_hoc.ma_khoa GROUP BY khoa.ma_khoa ORDER BY tong_tin_chi DESC LIMIT 1",
     "exact_match": false,
-    "eval_error": null,
-    "duration_ms": 56472
+    "eval_error": "Error col: as",
+    "duration_ms": 100291
   },
   {
     "id": 108,
@@ -1081,7 +1081,7 @@
     "generated_sql": "SELECT ten FROM nguoi_tieu_dung WHERE id_nguoi_tieu_dung IN (SELECT id_nguoi_tieu_dung FROM danh_gia WHERE nam = 2010)",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 27326
+    "duration_ms": 80075
   },
   {
     "id": 109,
@@ -1091,7 +1091,7 @@
     "generated_sql": "SELECT ten FROM doi",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 39938
+    "duration_ms": 73315
   },
   {
     "id": 110,
@@ -1101,7 +1101,7 @@
     "generated_sql": "SELECT COUNT(*) FROM danh_gia WHERE id_doanh_nghiep = (SELECT id_doanh_nghiep FROM doanh_nghiep WHERE ten = 'Cafe Zinho' AND thanh_pho = 'Texas')",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 200260
+    "duration_ms": 255309
   },
   {
     "id": 111,
@@ -1111,7 +1111,7 @@
     "generated_sql": "SELECT khach_hang.id_khach_hang, khach_hang.chi_tiet_khach_hang FROM khach_hang JOIN chinh_sach ON khach_hang.id_khach_hang = chinh_sach.id_khach_hang JOIN tieu_de_cua_yeu_cau ON chinh_sach.id_chinh_sach = tieu_de_cua_yeu_cau.id_chinh_sach ORDER BY tieu_de_cua_yeu_cau.so_tien_duoc_yeu_cau DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 47509
+    "duration_ms": 88247
   },
   {
     "id": 112,
@@ -1121,7 +1121,7 @@
     "generated_sql": "SELECT ho, ten FROM khach_hang JOIN luot_cho_thue ON khach_hang.id_khach_hang = luot_cho_thue.id_khach_hang ORDER BY ngay_cho_thue ASC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 64793
+    "duration_ms": 103974
   },
   {
     "id": 113,
@@ -1131,7 +1131,7 @@
     "generated_sql": "SELECT doi FROM ky_thuat_vien GROUP BY doi ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 30611
+    "duration_ms": 84039
   },
   {
     "id": 114,
@@ -1141,7 +1141,7 @@
     "generated_sql": "SELECT COUNT(*) FROM nhan_vien",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 51404
+    "duration_ms": 87808
   },
   {
     "id": 115,
@@ -1151,7 +1151,7 @@
     "generated_sql": "SELECT chi_tiet_khach_hang FROM khach_hang WHERE id_khach_hang IN (SELECT id_khach_hang FROM chinh_sach WHERE ma_loai_chinh_sach IN ('Uỷ quyền', 'Thống nhất'))",
     "exact_match": false,
     "eval_error": "",
-    "duration_ms": 55429
+    "duration_ms": 99060
   },
   {
     "id": 116,
@@ -1161,7 +1161,7 @@
     "generated_sql": "SELECT T1.tieu_de FROM bai_hat AS T1 JOIN buoi_bieu_dien AS T2 ON T1.id_bai_hat = T2.id_bai_hat JOIN ban_nhac AS T3 ON T2.nghe_si_trong_ban_nhac = T3.id WHERE T3.ho = 'Hello'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 32057
+    "duration_ms": 93108
   },
   {
     "id": 117,
@@ -1171,7 +1171,7 @@
     "generated_sql": "SELECT DISTINCT mau_san_pham FROM san_pham ORDER BY mau_san_pham",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 32861
+    "duration_ms": 80934
   },
   {
     "id": 118,
@@ -1181,7 +1181,7 @@
     "generated_sql": "SELECT ma_cong_viec_cua_nhan_vien, COUNT(*) AS so_luong_nhan_vien FROM nhan_vien GROUP BY ma_cong_viec_cua_nhan_vien ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": "Error col: as",
-    "duration_ms": 21665
+    "duration_ms": 97920
   },
   {
     "id": 119,
@@ -1191,17 +1191,17 @@
     "generated_sql": "SELECT T1.ten_quoc_gia FROM quoc_gia AS T1 JOIN tran_dau_trong_mua_giai AS T2 ON T1.id_quoc_gia = T2.quoc_gia WHERE T2.vi_tri = 'tiền đạo' INTERSECT SELECT T1.ten_quoc_gia FROM quoc_gia AS T1 JOIN tran_dau_trong_mua_giai AS T2 ON T1.id_quoc_gia = T2.quoc_gia WHERE T2.vi_tri = 'hậu vệ'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 40109
+    "duration_ms": 63176
   },
   {
     "id": 120,
     "db_id": "storm_record",
     "question": "Đếm số lượng các khu vực khác nhau bị ảnh hưởng bởi bão .",
     "gold_sql": "select count ( distinct id_khu_vuc ) from khu_vuc_bi_anh_huong",
-    "generated_sql": "SELECT COUNT(DISTINCT khu_vuc_bi_anh_huong.id_khu_vuc) FROM khu_vuc_bi_anh_huong JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc JOIN bao ON khu_vuc_bi_anh_huong.id_bao = bao.id_con_bao",
+    "generated_sql": "SELECT COUNT(DISTINCT khu_vuc_bi_anh_huong.id_khu_vuc) FROM khu_vuc_bi_anh_huong JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc JOIN bao ON khu_vuc_bi_anh_huong.id_bao = bao.id_con_bao WHERE bao.ngay_hoat_dong BETWEEN '2026-01-01' AND '2026-12-31'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 27371
+    "duration_ms": 55686
   },
   {
     "id": 121,
@@ -1211,7 +1211,7 @@
     "generated_sql": "SELECT COUNT(DISTINCT dia_chi_khoa) FROM khoa WHERE ma_khoa = 'BUS'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 25746
+    "duration_ms": 66087
   },
   {
     "id": 122,
@@ -1221,7 +1221,7 @@
     "generated_sql": "SELECT COUNT(*) FROM nha_tho WHERE ngay_mo_cua < 1850",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 12613
+    "duration_ms": 61277
   },
   {
     "id": 123,
@@ -1231,7 +1231,7 @@
     "generated_sql": "SELECT sinh_vien.id_sinh_vien FROM sinh_vien JOIN tham_gia_vao ON sinh_vien.id_sinh_vien = tham_gia_vao.id_sinh_vien WHERE sinh_vien.tuoi < 20 GROUP BY sinh_vien.id_sinh_vien HAVING COUNT(DISTINCT tham_gia_vao.id_hoat_dong) > 0",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 27702
+    "duration_ms": 78205
   },
   {
     "id": 124,
@@ -1241,7 +1241,7 @@
     "generated_sql": "SELECT danh_sach.ten, danh_sach.ho FROM dbo.danh_sach JOIN dbo.giao_vien ON danh_sach.phong_hoc = giao_vien.phong_hoc WHERE giao_vien.ho = 'OTHA' AND giao_vien.ten = 'MOYER'",
     "exact_match": false,
     "eval_error": "'dbo.danh_sach'",
-    "duration_ms": 26075
+    "duration_ms": 85167
   },
   {
     "id": 125,
@@ -1251,7 +1251,7 @@
     "generated_sql": "SELECT dia_diem FROM truong_hoc WHERE id_truong NOT IN (SELECT id_truong FROM cau_thu)",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 36778
+    "duration_ms": 81709
   },
   {
     "id": 126,
@@ -1261,7 +1261,7 @@
     "generated_sql": "SELECT T1.ten FROM bao AS T1 JOIN khu_vuc_bi_anh_huong AS T2 ON T1.id_con_bao = T2.id_bao JOIN khu_vuc AS T3 ON T2.id_khu_vuc = T3.id_khu_vuc WHERE T3.ma_khu_vuc = 'Afghanistan' AND T3.ma_khu_vuc = 'Albania' GROUP BY T1.id_con_bao HAVING COUNT(DISTINCT T3.ma_khu_vuc) = 2",
     "exact_match": false,
     "eval_error": "'khu_vuc_bi_anh_huong.id_con_bao'",
-    "duration_ms": 54958
+    "duration_ms": 95122
   },
   {
     "id": 127,
@@ -1271,7 +1271,7 @@
     "generated_sql": "SELECT T1.ma_truong FROM khoa AS T1 JOIN giao_su AS T2 ON T1.ma_khoa = T2.ma_khoa GROUP BY T1.ma_khoa ORDER BY COUNT(*) ASC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 45404
+    "duration_ms": 93271
   },
   {
     "id": 128,
@@ -1281,7 +1281,7 @@
     "generated_sql": "SELECT id_giang_vien FROM giang_vien EXCEPT SELECT id_giang_vien FROM giang_vien_tham_gia_vao",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 25088
+    "duration_ms": 82327
   },
   {
     "id": 129,
@@ -1291,7 +1291,7 @@
     "generated_sql": "SELECT truong_dai_hoc, COUNT(*) AS so_luong_cau_thu FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc ORDER BY so_luong_cau_thu DESC LIMIT 3",
     "exact_match": false,
     "eval_error": "Error col: as",
-    "duration_ms": 44511
+    "duration_ms": 93057
   },
   {
     "id": 130,
@@ -1301,7 +1301,7 @@
     "generated_sql": "SELECT COUNT(*) FROM giang_vien WHERE gioi_tinh='Nữ' AND ngach='Giáo sư'",
     "exact_match": false,
     "eval_error": "Error col: gioi_tinh=__val_48_51__",
-    "duration_ms": 28001
+    "duration_ms": 57934
   },
   {
     "id": 131,
@@ -1311,7 +1311,7 @@
     "generated_sql": "SELECT mau_ma_tai_san FROM tai_san GROUP BY mau_ma_tai_san ORDER BY mau_ma_tai_san ASC",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 36097
+    "duration_ms": 67471
   },
   {
     "id": 132,
@@ -1321,7 +1321,7 @@
     "generated_sql": "SELECT truong_hoc.ton_giao FROM truong_hoc JOIN cau_thu ON truong_hoc.id_truong = cau_thu.id_truong GROUP BY truong_hoc.id_truong ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 34497
+    "duration_ms": 61302
   },
   {
     "id": 133,
@@ -1331,7 +1331,7 @@
     "generated_sql": "SELECT T1.id_sinh_vien FROM lan_tham_du_khoa_hoc_cua_sinh_vien AS T1 JOIN khoa_hoc AS T2 ON T1.id_khoa_hoc = T2.id_khoa_hoc WHERE T2.ten_khoa_hoc = 'thong ke' ORDER BY T1.ngay_tham_du ASC",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 61307
+    "duration_ms": 70653
   },
   {
     "id": 134,
@@ -1341,7 +1341,7 @@
     "generated_sql": "SELECT COUNT(*) FROM hoat_dong",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 118001
+    "duration_ms": 45099
   },
   {
     "id": 135,
@@ -1351,7 +1351,7 @@
     "generated_sql": "SELECT dia_chi.thanh_pho_thi_tran FROM cua_hang JOIN dia_chi ON cua_hang.id_dia_chi = dia_chi.id_dia_chi WHERE cua_hang.ten_cua_hang = 'FJA Filming'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 54977
+    "duration_ms": 48906
   },
   {
     "id": 136,
@@ -1361,7 +1361,7 @@
     "generated_sql": "SELECT SUM(so_luong_nguoi_chet) AS SUM_SO_LUONG_NGUOI_CHET, SUM(thiet_hai_theo_trieu_usd) AS SUM_THIET_HAI_THEO_TRIEU_USD FROM bao WHERE toc_do_toi_da > (SELECT AVG(toc_do_toi_da) FROM bao)",
     "exact_match": false,
     "eval_error": "Error col: as",
-    "duration_ms": 45798
+    "duration_ms": 51996
   },
   {
     "id": 137,
@@ -1371,7 +1371,7 @@
     "generated_sql": "SELECT thanh_pho, quoc_gia FROM san_bay WHERE ten_san_bay = 'Alton'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 29917
+    "duration_ms": 43565
   },
   {
     "id": 138,
@@ -1381,7 +1381,7 @@
     "generated_sql": "SELECT khoa.ten_khoa, khoa.dia_chi_khoa FROM khoa JOIN sinh_vien ON khoa.ma_khoa = sinh_vien.ma_khoa GROUP BY khoa.ma_khoa ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 44578
+    "duration_ms": 44431
   },
   {
     "id": 139,
@@ -1391,7 +1391,7 @@
     "generated_sql": "SELECT truong_dai_hoc, COUNT(*) AS so_luong_cau_thu FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc ORDER BY COUNT(*) DESC LIMIT 3",
     "exact_match": false,
     "eval_error": "Error col: as",
-    "duration_ms": 38685
+    "duration_ms": 54623
   },
   {
     "id": 140,
@@ -1401,7 +1401,7 @@
     "generated_sql": "SELECT ten FROM ca_nhan WHERE id_ca_nhan NOT IN (SELECT id_ca_nhan FROM toi_pham)",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 18476
+    "duration_ms": 40335
   },
   {
     "id": 141,
@@ -1411,27 +1411,27 @@
     "generated_sql": "SELECT ho, ten FROM dbo.danh_sach",
     "exact_match": false,
     "eval_error": "'dbo.danh_sach'",
-    "duration_ms": 33756
+    "duration_ms": 43410
   },
   {
     "id": 142,
     "db_id": "activity_1",
     "question": "Cho biết tên của các toà nhà và số lượng giảng viên làm việc trong từng toà nhà .",
     "gold_sql": "select toa_nha , count ( * ) from giang_vien group by toa_nha",
-    "generated_sql": "SELECT toa_nha, COUNT(*) FROM giang_vien GROUP BY toa_nha ORDER BY COUNT(*) DESC",
+    "generated_sql": "SELECT toa_nha AS ten_toa_nha, COUNT(*) AS so_luong_giang_vien FROM giang_vien GROUP BY toa_nha ORDER BY COUNT(*) DESC",
     "exact_match": false,
-    "eval_error": null,
-    "duration_ms": 30168
+    "eval_error": "Error col: as",
+    "duration_ms": 36245
   },
   {
     "id": 143,
     "db_id": "election_representative",
     "question": "Tên của các đại diện và ngày bầu cử mà họ đã tham gia ?",
     "gold_sql": "select t2.ten , t1.ngay from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien",
-    "generated_sql": "SELECT T1.ten, T2.ngay FROM dai_dien AS T1 JOIN cuoc_bau_cu AS T2 ON T1.id_dai_dien = T2.id_dai_dien",
+    "generated_sql": "SELECT dai_dien.ten, cuoc_bau_cu.ngay FROM cuoc_bau_cu JOIN dai_dien ON cuoc_bau_cu.id_dai_dien = dai_dien.id_dai_dien",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 30348
+    "duration_ms": 38182
   },
   {
     "id": 144,
@@ -1441,7 +1441,7 @@
     "generated_sql": "SELECT id_sinh_vien, COUNT(*) AS so_khoa_hoc_dang_ky FROM luot_dang_ky_khoa_hoc_cua_sinh_vien GROUP BY id_sinh_vien HAVING COUNT(*) > 0 ORDER BY COUNT(*) DESC",
     "exact_match": false,
     "eval_error": "Error col: as",
-    "duration_ms": 40259
+    "duration_ms": 44432
   },
   {
     "id": 145,
@@ -1451,7 +1451,7 @@
     "generated_sql": "SELECT truong_dai_hoc.ten_lanh_dao FROM truong_dai_hoc JOIN thanh_vien ON truong_dai_hoc.id_dai_hoc = thanh_vien.id_dai_hoc WHERE thanh_vien.quoc_gia = 'Canada'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 33147
+    "duration_ms": 43303
   },
   {
     "id": 146,
@@ -1461,7 +1461,7 @@
     "generated_sql": "SELECT ma_loai_dich_vu FROM dich_vu WHERE id_dich_vu IN (SELECT id_dich_vu FROM su_kien WHERE chi_tiet_su_kien IN ('Thành công', 'Thất bại'))",
     "exact_match": false,
     "eval_error": "",
-    "duration_ms": 28267
+    "duration_ms": 39648
   },
   {
     "id": 147,
@@ -1471,7 +1471,7 @@
     "generated_sql": "SELECT COUNT(*) FROM ban_nhac",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 30593
+    "duration_ms": 42476
   },
   {
     "id": 148,
@@ -1481,7 +1481,7 @@
     "generated_sql": "SELECT COUNT(*) FROM lop_hoc JOIN khoa_hoc ON lop_hoc.ma_khoa_hoc = khoa_hoc.ma_khoa_hoc JOIN khoa ON khoa_hoc.ma_khoa = khoa.ma_khoa GROUP BY khoa.ma_truong",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 43903
+    "duration_ms": 39296
   },
   {
     "id": 149,
@@ -1491,7 +1491,7 @@
     "generated_sql": "SELECT dia_chi.thanh_pho, COUNT(nhan_vien.id_nhan_vien) AS so_luong_nhan_vien FROM nhan_vien JOIN dia_chi ON nhan_vien.id_dia_chi_nhan_vien = dia_chi.id_dia_chi GROUP BY dia_chi.thanh_pho ORDER BY so_luong_nhan_vien DESC LIMIT 1",
     "exact_match": false,
     "eval_error": "Error col: as",
-    "duration_ms": 112106
+    "duration_ms": 37807
   },
   {
     "id": 150,
@@ -1501,7 +1501,7 @@
     "generated_sql": "SELECT T1.ten FROM dbo.ung_cu_vien AS T1 JOIN dbo.ca_nhan AS T2 ON T1.id_ca_nhan = T2.id_ca_nhan WHERE T2.gioi_tinh = 'F' ORDER BY T1.ten ASC",
     "exact_match": false,
     "eval_error": "'dbo.ung_cu_vien'",
-    "duration_ms": 51725
+    "duration_ms": 38539
   },
   {
     "id": 151,
@@ -1511,7 +1511,7 @@
     "generated_sql": "SELECT danh_sach.ten, danh_sach.ho FROM dbo.danh_sach JOIN dbo.giao_vien ON danh_sach.phong_hoc = giao_vien.phong_hoc WHERE giao_vien.ho = 'MOYER' AND giao_vien.ten = 'OTHA'",
     "exact_match": false,
     "eval_error": "'dbo.danh_sach'",
-    "duration_ms": 46302
+    "duration_ms": 36890
   },
   {
     "id": 152,
@@ -1521,7 +1521,7 @@
     "generated_sql": "SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc HAVING COUNT(*) >= 2",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 20841
+    "duration_ms": 37828
   },
   {
     "id": 153,
@@ -1531,7 +1531,7 @@
     "generated_sql": "SELECT ten FROM bao WHERE id_con_bao NOT IN (SELECT id_bao FROM khu_vuc_bi_anh_huong)",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 39059
+    "duration_ms": 54754
   },
   {
     "id": 154,
@@ -1541,7 +1541,7 @@
     "generated_sql": "SELECT T1.ten_tai_khoan, T1.chi_tiet_khac_ve_tai_khoan FROM tai_khoan AS T1 JOIN khach_hang AS T2 ON T1.id_khach_hang = T2.id_khach_hang WHERE T2.ten_khach_hang = 'Mea Afghanistan' AND T2.ho_cua_khach_hang = 'Keeling'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 204309
+    "duration_ms": 213416
   },
   {
     "id": 155,
@@ -1551,7 +1551,7 @@
     "generated_sql": "SELECT ten FROM cau_thu JOIN dac_diem_cua_cau_thu ON cau_thu.id_cau_thu_api = dac_diem_cua_cau_thu.id_cau_thu_api AND cau_thu.id_cau_thu_api_cua_fifa = dac_diem_cua_cau_thu.id_cau_thu_api_cua_fifa WHERE chan_thuan = 'Left' AND danh_gia_tong_the BETWEEN 85 AND 90",
     "exact_match": false,
     "eval_error": "Error col: ten",
-    "duration_ms": 67875
+    "duration_ms": 75637
   },
   {
     "id": 156,
@@ -1561,7 +1561,7 @@
     "generated_sql": "SELECT thanh_pho FROM thanh_pho WHERE dan_so_khu_vuc > 8000000 OR dan_so_khu_vuc < 5000000",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 28759
+    "duration_ms": 41892
   },
   {
     "id": 157,
@@ -1571,7 +1571,7 @@
     "generated_sql": "SELECT tai_khoan.id_tai_khoan AS id, COUNT(*) AS so_luong_tai_khoan FROM tai_khoan GROUP BY tai_khoan.id_tai_khoan ORDER BY so_luong_tai_khoan DESC LIMIT 1",
     "exact_match": false,
     "eval_error": "Error col: as",
-    "duration_ms": 205259
+    "duration_ms": 206984
   },
   {
     "id": 158,
@@ -1581,17 +1581,17 @@
     "generated_sql": "SELECT khu_vuc_tiep_thi.ma_khu_vuc_tiep_thi FROM nhom_hoi_thao_kich JOIN khu_vuc_tiep_thi ON nhom_hoi_thao_kich.ma_khu_vuc_tiep_thi = khu_vuc_tiep_thi.ma_khu_vuc_tiep_thi GROUP BY nhom_hoi_thao_kich.ma_khu_vuc_tiep_thi ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 44857
+    "duration_ms": 48995
   },
   {
     "id": 159,
     "db_id": "insurance_and_eClaims",
     "question": "Cho biết chi tiết về những khách hàng đang sử dụng chính sách ' Uỷ quyền ' .",
     "gold_sql": "select distinct t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ma_loai_chinh_sach = \"deputy\"",
-    "generated_sql": "SELECT khach_hang.id_khach_hang, khach_hang.chi_tiet_khach_hang FROM khach_hang JOIN chinh_sach ON khach_hang.id_khach_hang = chinh_sach.id_khach_hang WHERE chinh_sach.ma_loai_chinh_sach = 'Uỷ quyền'",
+    "generated_sql": "SELECT khach_hang.id_khach_hang, khach_hang.chi_tiet_khach_hang FROM chinh_sach JOIN khach_hang ON chinh_sach.id_khach_hang = khach_hang.id_khach_hang WHERE chinh_sach.ma_loai_chinh_sach = 'Uỷ quyền'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 198072
+    "duration_ms": 85647
   },
   {
     "id": 160,
@@ -1601,7 +1601,7 @@
     "generated_sql": "SELECT ten FROM ky_thuat_vien WHERE tuoi BETWEEN 36 AND 37",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 25410
+    "duration_ms": 31559
   },
   {
     "id": 161,
@@ -1611,7 +1611,7 @@
     "generated_sql": "SELECT DISTINCT toa_nha FROM giang_vien WHERE ngach LIKE '%Khoa%'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 210909
+    "duration_ms": 198601
   },
   {
     "id": 162,
@@ -1621,7 +1621,7 @@
     "generated_sql": "SELECT dac_diem_cua_cau_thu.id FROM dac_diem_cua_cau_thu JOIN cau_thu ON dac_diem_cua_cau_thu.id_cau_thu_api = cau_thu.id_cau_thu_api WHERE cau_thu.chieu_cao >= 180 AND dac_diem_cua_cau_thu.danh_gia_tong_the > 85",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 54676
+    "duration_ms": 54481
   },
   {
     "id": 163,
@@ -1631,7 +1631,7 @@
     "generated_sql": "SELECT gioi_tinh FROM nhan_vien GROUP BY gioi_tinh ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 37307
+    "duration_ms": 50212
   },
   {
     "id": 164,
@@ -1641,7 +1641,7 @@
     "generated_sql": "SELECT COUNT(DISTINCT danh_gia_xep_hang) FROM phim",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 43427
+    "duration_ms": 55346
   },
   {
     "id": 165,
@@ -1651,7 +1651,7 @@
     "generated_sql": "SELECT T1.thanh_pho FROM san_bay AS T1 JOIN chuyen_bay AS T2 ON T1.ma_san_bay = T2.san_bay_khoi_hanh GROUP BY T1.ma_san_bay, T1.thanh_pho ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 40176
+    "duration_ms": 46853
   },
   {
     "id": 166,
@@ -1661,7 +1661,7 @@
     "generated_sql": "SELECT T1.ho, T1.ten FROM sinh_vien AS T1 JOIN tham_gia_vao AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien GROUP BY T1.id_sinh_vien ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 39029
+    "duration_ms": 53589
   },
   {
     "id": 167,
@@ -1671,7 +1671,7 @@
     "generated_sql": "SELECT ma_trang_thai_khach_hang, so_dien_thoai_di_dong, dia_chi_email FROM khach_hang WHERE ho='Kohler' OR ten='Marina'",
     "exact_match": false,
     "eval_error": "Error col: ho=__val_95_102__",
-    "duration_ms": 24270
+    "duration_ms": 30887
   },
   {
     "id": 168,
@@ -1681,17 +1681,17 @@
     "generated_sql": "SELECT ban_nhac.ho FROM ban_nhac JOIN nhac_cu ON ban_nhac.id = nhac_cu.id_nghe_si_trong_ban_nhac GROUP BY ban_nhac.id ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 29606
+    "duration_ms": 29334
   },
   {
     "id": 169,
     "db_id": "activity_1",
     "question": "Cho biết id của những giảng viên đã không tư vấn cho bất kỳ sinh viên nào .",
     "gold_sql": "select id_giang_vien from giang_vien except select co_van from sinh_vien",
-    "generated_sql": "SELECT id_giang_vien FROM giang_vien WHERE id_giang_vien NOT IN (SELECT id_giang_vien FROM giang_vien_tham_gia_vao)",
+    "generated_sql": "SELECT id_giang_vien FROM giang_vien WHERE id_giang_vien NOT IN (SELECT co_van FROM sinh_vien)",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 30068
+    "duration_ms": 30377
   },
   {
     "id": 170,
@@ -1701,7 +1701,7 @@
     "generated_sql": "SELECT phim.id_phim, phim.tieu_de, phim.mo_ta FROM phim JOIN dien_vien_dien_anh ON phim.id_phim = dien_vien_dien_anh.id_phim GROUP BY phim.id_phim ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 41327
+    "duration_ms": 53825
   },
   {
     "id": 171,
@@ -1711,7 +1711,7 @@
     "generated_sql": "SELECT ma_loai_san_pham, ten_san_pham FROM san_pham WHERE gia_san_pham > 1000 OR gia_san_pham < 500",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 107543
+    "duration_ms": 110418
   },
   {
     "id": 172,
@@ -1721,7 +1721,7 @@
     "generated_sql": "SELECT dia_diem FROM truong_hoc WHERE id_truong IN (SELECT id_truong FROM cau_thu GROUP BY id_truong HAVING COUNT(*) > 1)",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 31656
+    "duration_ms": 47525
   },
   {
     "id": 173,
@@ -1731,7 +1731,7 @@
     "generated_sql": "SELECT ten FROM dbo.doanh_nghiep JOIN dbo.loai_hinh ON dbo.doanh_nghiep.id_doanh_nghiep = dbo.loai_hinh.id_doanh_nghiep WHERE dbo.loai_hinh.ten_loai_hinh = 'hải sản' AND dbo.doanh_nghiep.thanh_pho = 'Los Angeles'",
     "exact_match": false,
     "eval_error": "'dbo.doanh_nghiep'",
-    "duration_ms": 33484
+    "duration_ms": 58027
   },
   {
     "id": 174,
@@ -1741,7 +1741,7 @@
     "generated_sql": "SELECT tieu_de FROM phim WHERE danh_gia_xep_hang = 'R'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 45237
+    "duration_ms": 73894
   },
   {
     "id": 175,
@@ -1751,7 +1751,7 @@
     "generated_sql": "SELECT id_sinh_vien FROM sinh_vien UNION SELECT id_sinh_vien FROM luot_dang_ky_khoa_hoc_cua_sinh_vien UNION SELECT id_sinh_vien FROM lan_tham_du_khoa_hoc_cua_sinh_vien",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 51168
+    "duration_ms": 73386
   },
   {
     "id": 176,
@@ -1761,7 +1761,7 @@
     "generated_sql": "SELECT COUNT(*) FROM danh_gia WHERE id_nguoi_tieu_dung='Niloofar' AND nam=2015",
     "exact_match": false,
     "eval_error": "Error col: id_nguoi_tieu_dung=__val_55_64__",
-    "duration_ms": 43457
+    "duration_ms": 51355
   },
   {
     "id": 177,
@@ -1771,7 +1771,7 @@
     "generated_sql": "SELECT T1.tieu_de FROM bo_phim AS T1 JOIN phan_vai AS T2 ON T1.id_bo_phim = T2.id_se_ri_phim JOIN dien_vien AS T3 ON T2.id_dien_vien = T3.id_dien_vien WHERE T3.ten = 'Gabriele Ferzetti' ORDER BY T1.nam_phat_hanh DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 53094
+    "duration_ms": 66577
   },
   {
     "id": 178,
@@ -1781,17 +1781,17 @@
     "generated_sql": "SELECT id_sinh_vien FROM sinh_vien WHERE id_sinh_vien NOT IN (SELECT id_sinh_vien FROM lan_tham_du_khoa_hoc_cua_sinh_vien)",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 25641
+    "duration_ms": 47354
   },
   {
     "id": 179,
     "db_id": "employee_hire_evaluation",
     "question": "Những của hàng nào có số lượng sản phẩm nhiều hơn mức trung bình ? Cho biết tên của những cửa hàng này .",
     "gold_sql": "select ten from cua_hang where so_luong_san_pham > ( select avg ( so_luong_san_pham ) from cua_hang )",
-    "generated_sql": "SELECT ten FROM cua_hang WHERE so_luong_san_pham > (SELECT AVG(so_luong_san_pham) FROM cua_hang)",
-    "exact_match": true,
-    "eval_error": null,
-    "duration_ms": 53897
+    "generated_sql": "SELECT ten AS ten_cua_hang FROM cua_hang WHERE so_luong_san_pham > (SELECT AVG(so_luong_san_pham) FROM cua_hang)",
+    "exact_match": false,
+    "eval_error": "Error col: as",
+    "duration_ms": 36670
   },
   {
     "id": 180,
@@ -1801,7 +1801,7 @@
     "generated_sql": "SELECT mo_ta_ve_khu_vuc_tiep_thi FROM khu_vuc_tiep_thi WHERE ten_khu_vuc_tiep_thi='Trung Quốc'",
     "exact_match": false,
     "eval_error": "Error col: ten_khu_vuc_tiep_thi=__val_82_93__",
-    "duration_ms": 46027
+    "duration_ms": 46374
   },
   {
     "id": 181,
@@ -1811,7 +1811,7 @@
     "generated_sql": "SELECT ngay_mua_tai_san FROM tai_san ORDER BY ngay_mua_tai_san LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 47038
+    "duration_ms": 50674
   },
   {
     "id": 182,
@@ -1821,7 +1821,7 @@
     "generated_sql": "SELECT hang_hang_khong.id_hang_hang_khong FROM chuyen_bay JOIN san_bay ON chuyen_bay.san_bay_dich = san_bay.ma_san_bay WHERE san_bay.ten_san_bay = 'AHD' GROUP BY hang_hang_khong.id_hang_hang_khong",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 51519
+    "duration_ms": 63070
   },
   {
     "id": 183,
@@ -1831,7 +1831,7 @@
     "generated_sql": "SELECT chi_tiet_khach_hang FROM khach_hang ORDER BY chi_tiet_khach_hang ASC",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 36933
+    "duration_ms": 39122
   },
   {
     "id": 184,
@@ -1841,7 +1841,7 @@
     "generated_sql": "SELECT id_sinh_vien FROM sinh_vien EXCEPT SELECT id_sinh_vien FROM tham_gia_vao",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 30303
+    "duration_ms": 31637
   },
   {
     "id": 185,
@@ -1851,7 +1851,7 @@
     "generated_sql": "SELECT id_khoa_hoc FROM luot_dang_ky_khoa_hoc_cua_sinh_vien WHERE id_sinh_vien = 121 UNION SELECT id_khoa_hoc FROM lan_tham_du_khoa_hoc_cua_sinh_vien WHERE id_sinh_vien = 121",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 29979
+    "duration_ms": 36625
   },
   {
     "id": 186,
@@ -1861,17 +1861,17 @@
     "generated_sql": "SELECT bai_hat.tieu_de FROM bai_hat JOIN giong_hat ON bai_hat.id_bai_hat = giong_hat.id_bai_hat GROUP BY bai_hat.id_bai_hat ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 32643
+    "duration_ms": 38026
   },
   {
     "id": 187,
     "db_id": "imdb",
     "question": "Tìm diễn viên đã đóng vai ' Alan Turing ' trong bộ phim ' Trò chơi bắt chước ' .",
     "gold_sql": "select t1.ten from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t2.vai_dien = \"alan turing\" and t3.tieu_de = \"the imitation game\"",
-    "generated_sql": "SELECT ten FROM dien_vien JOIN phan_vai ON dien_vien.id_dien_vien = phan_vai.id_dien_vien JOIN bo_phim ON phan_vai.id_se_ri_phim = bo_phim.id_bo_phim WHERE bo_phim.tieu_de = 'Trò chơi bắt chước' AND phan_vai.vai_dien = 'Alan Turing'",
-    "exact_match": true,
+    "generated_sql": "SELECT ten FROM dien_vien JOIN phan_vai ON dien_vien.id_dien_vien = phan_vai.id_dien_vien WHERE vai_dien = 'Alan Turing' AND phan_vai.id_se_ri_phim = (SELECT id_bo_phim FROM bo_phim WHERE tieu_de = 'Trò chơi bắt chước')",
+    "exact_match": false,
     "eval_error": null,
-    "duration_ms": 75638
+    "duration_ms": 72904
   },
   {
     "id": 188,
@@ -1881,7 +1881,7 @@
     "generated_sql": "SELECT ngay_thanh_toan FROM khoan_thanh_toan JOIN nhan_vien ON khoan_thanh_toan.id_nhan_vien = nhan_vien.id_nhan_vien WHERE so_tien > 10 AND nhan_vien.ten = 'Elsa'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 41932
+    "duration_ms": 42052
   },
   {
     "id": 189,
@@ -1891,7 +1891,7 @@
     "generated_sql": "SELECT giang_vien.id_giang_vien, COUNT(sinh_vien.id_sinh_vien) FROM giang_vien JOIN sinh_vien ON giang_vien.id_giang_vien = sinh_vien.co_van GROUP BY giang_vien.id_giang_vien ORDER BY COUNT(sinh_vien.id_sinh_vien) DESC",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 42336
+    "duration_ms": 51844
   },
   {
     "id": 190,
@@ -1901,7 +1901,7 @@
     "generated_sql": "SELECT tai_san.id_tai_san, tai_san.chi_tiet_tai_san FROM tai_san JOIN bo_phan_cua_tai_san ON tai_san.id_tai_san = bo_phan_cua_tai_san.id_tai_san LEFT JOIN nhat_ky_loi ON tai_san.id_tai_san = nhat_ky_loi.id_tai_san WHERE tai_san.ngay_thanh_ly_tai_san IS NULL GROUP BY tai_san.id_tai_san HAVING COUNT(DISTINCT bo_phan_cua_tai_san.id_bo_phan) = 2 AND COUNT(nhat_ky_loi.id_muc_nhap_cua_nhat_ky_loi) < 2 ORDER BY tai_san.id_tai_san LIMIT 1000",
     "exact_match": false,
     "eval_error": "Error col: null",
-    "duration_ms": 77156
+    "duration_ms": 86960
   },
   {
     "id": 191,
@@ -1911,7 +1911,7 @@
     "generated_sql": "SELECT id FROM xe",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 46172
+    "duration_ms": 47404
   },
   {
     "id": 192,
@@ -1921,7 +1921,7 @@
     "generated_sql": "SELECT ngay_xuat_ban FROM an_pham ORDER BY gia_ban ASC LIMIT 3",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 23018
+    "duration_ms": 29179
   },
   {
     "id": 193,
@@ -1931,7 +1931,7 @@
     "generated_sql": "SELECT T1.ten, T1.toc_do_toi_da FROM bao AS T1 JOIN khu_vuc_bi_anh_huong AS T2 ON T1.id_con_bao = T2.id_bao GROUP BY T1.id_con_bao ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 39751
+    "duration_ms": 37300
   },
   {
     "id": 194,
@@ -1941,7 +1941,7 @@
     "generated_sql": "SELECT COUNT(*) FROM chuyen_bay JOIN san_bay AS T1 ON chuyen_bay.san_bay_dich = T1.ma_san_bay WHERE T1.thanh_pho = 'Aberdeen' OR T1.thanh_pho = 'Abilene'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 50341
+    "duration_ms": 57257
   },
   {
     "id": 195,
@@ -1951,7 +1951,7 @@
     "generated_sql": "SELECT COUNT(DISTINCT dia_diem) FROM toi_pham",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 36912
+    "duration_ms": 46377
   },
   {
     "id": 196,
@@ -1961,7 +1961,7 @@
     "generated_sql": "SELECT quoc_gia, thanh_pho FROM khach_hang JOIN dia_chi ON khach_hang.id_dia_chi_khach_hang = dia_chi.id_dia_chi WHERE khach_hang.ten = 'Sawayn' AND khach_hang.ho = 'Janessa'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 35564
+    "duration_ms": 42702
   },
   {
     "id": 197,
@@ -1971,7 +1971,7 @@
     "generated_sql": "SELECT COUNT(*) FROM danh_gia WHERE id_nguoi_tieu_dung = (SELECT id_nguoi_tieu_dung FROM nguoi_tieu_dung WHERE ten = 'Adrienne')",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 34972
+    "duration_ms": 47356
   },
   {
     "id": 198,
@@ -1981,17 +1981,17 @@
     "generated_sql": "SELECT ton_giao FROM truong_hoc GROUP BY ton_giao HAVING COUNT(*) > 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 25809
+    "duration_ms": 30339
   },
   {
     "id": 199,
     "db_id": "sakila_1",
     "question": "Nhân viên có tên Elsa sống ở đâu ?",
     "gold_sql": "select t2.dia_chi from nhan_vien as t1 join dia_chi as t2 on t1.id_dia_chi = t2.id_dia_chi where t1.ten = \"elsa\"",
-    "generated_sql": "SELECT T1.ten, T2.dia_chi, T2.quan, T2.id_thanh_pho FROM nhan_vien AS T1 JOIN dia_chi AS T2 ON T1.id_dia_chi = T2.id_dia_chi WHERE T1.ten = 'Elsa' ORDER BY T2.dia_chi ASC LIMIT 1",
+    "generated_sql": "SELECT nhan_vien.ten, dia_chi.dia_chi, dia_chi.quan, thanh_pho.ten_thanh_pho FROM nhan_vien JOIN dia_chi ON nhan_vien.id_dia_chi = dia_chi.id_dia_chi JOIN thanh_pho ON dia_chi.id_thanh_pho = thanh_pho.id_thanh_pho WHERE nhan_vien.ten = 'Elsa'",
     "exact_match": false,
-    "eval_error": null,
-    "duration_ms": 48213
+    "eval_error": "'thanh_pho.ten_thanh_pho'",
+    "duration_ms": 57638
   },
   {
     "id": 200,
@@ -2001,7 +2001,7 @@
     "generated_sql": "SELECT khach_hang.id_khach_hang, khach_hang.chi_tiet_khach_hang FROM chinh_sach JOIN khach_hang ON chinh_sach.id_khach_hang = khach_hang.id_khach_hang GROUP BY khach_hang.id_khach_hang ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 23986
+    "duration_ms": 32290
   },
   {
     "id": 201,
@@ -2011,7 +2011,7 @@
     "generated_sql": "SELECT truong_dai_hoc FROM luot_nop_bai WHERE so_diem > 90 INTERSECT SELECT truong_dai_hoc FROM luot_nop_bai WHERE so_diem < 80",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 36788
+    "duration_ms": 34909
   },
   {
     "id": 202,
@@ -2021,7 +2021,7 @@
     "generated_sql": "SELECT MIN(ti_le_phieu_bau) AS MIN_TIEU_LE_PHIEU_BAU FROM cuoc_bau_cu JOIN dai_dien ON cuoc_bau_cu.id_dai_dien = dai_dien.id_dai_dien WHERE dai_dien.dang = 'Communist Party' AND dai_dien.tuoi_tho BETWEEN 30 AND 60 UNION SELECT MAX(ti_le_phieu_bau) AS MAX_TIEU_LE_PHIEU_BAU FROM cuoc_bau_cu JOIN dai_dien ON cuoc_bau_cu.id_dai_dien = dai_dien.id_dai_dien WHERE dai_dien.dang = 'Communist Party' AND dai_dien.tuoi_tho BETWEEN 30 AND 60",
     "exact_match": false,
     "eval_error": "Error col: as",
-    "duration_ms": 98019
+    "duration_ms": 108464
   },
   {
     "id": 203,
@@ -2031,7 +2031,7 @@
     "generated_sql": "SELECT giao_su.ma_so_nhan_vien, giao_su.van_phong_giao_su, nhan_vien.ten_cua_nhan_vien FROM giao_su JOIN nhan_vien ON giao_su.ma_so_nhan_vien = nhan_vien.ma_so_nhan_vien JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa = 'Lịch sử' AND giao_su.bang_cap_cao_nhat != 'Tiến sĩ'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 67246
+    "duration_ms": 59424
   },
   {
     "id": 204,
@@ -2041,7 +2041,7 @@
     "generated_sql": "SELECT id_su_kien FROM nguoi_tham_gia_su_kien GROUP BY id_su_kien ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 39697
+    "duration_ms": 29547
   },
   {
     "id": 205,
@@ -2051,7 +2051,7 @@
     "generated_sql": "SELECT id_ung_cu_vien FROM danh_gia_ung_cu_vien WHERE ma_ket_qua_danh_gia = 'Đạt'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 39686
+    "duration_ms": 46006
   },
   {
     "id": 206,
@@ -2061,7 +2061,7 @@
     "generated_sql": "SELECT AVG(nhiet_do_cao) FROM thoi_tiet_hang_tuan GROUP BY ngay_trong_tuan HAVING COUNT(*) = 1 ORDER BY ngay_trong_tuan ASC LIMIT 7",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 48194
+    "duration_ms": 47266
   },
   {
     "id": 207,
@@ -2071,7 +2071,7 @@
     "generated_sql": "SELECT ten, dang FROM dai_dien",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 39816
+    "duration_ms": 32550
   },
   {
     "id": 208,
@@ -2081,7 +2081,7 @@
     "generated_sql": "SELECT AVG(so_luong_nhan_vien) FROM cac_bo WHERE xep_hang BETWEEN 10 AND 15",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 36249
+    "duration_ms": 29365
   },
   {
     "id": 209,
@@ -2091,7 +2091,7 @@
     "generated_sql": "SELECT T1.ten_khoa FROM khoa AS T1 JOIN giao_su AS T2 ON T1.ma_khoa = T2.ma_khoa GROUP BY T1.ma_khoa ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 26763
+    "duration_ms": 38913
   },
   {
     "id": 210,
@@ -2101,7 +2101,7 @@
     "generated_sql": "SELECT ma_loai_chinh_sach FROM chinh_sach GROUP BY ma_loai_chinh_sach ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 22446
+    "duration_ms": 35734
   },
   {
     "id": 211,
@@ -2111,7 +2111,7 @@
     "generated_sql": "SELECT ma_loai_chinh_sach FROM chinh_sach GROUP BY ma_loai_chinh_sach HAVING COUNT(DISTINCT id_khach_hang) > 2",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 23027
+    "duration_ms": 30327
   },
   {
     "id": 212,
@@ -2121,7 +2121,7 @@
     "generated_sql": "SELECT khoa.ma_khoa, giao_su.van_phong_giao_su FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa JOIN nhan_vien ON giao_su.ma_so_nhan_vien = nhan_vien.ma_so_nhan_vien WHERE nhan_vien.ho_cua_nhan_vien = 'Heffington'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 46955
+    "duration_ms": 49910
   },
   {
     "id": 213,
@@ -2131,7 +2131,7 @@
     "generated_sql": "SELECT ho, ten, id_dien_vien FROM dien_vien JOIN dien_vien_dien_anh ON dien_vien.id_dien_vien = dien_vien_dien_anh.id_dien_vien GROUP BY id_dien_vien ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 61306
+    "duration_ms": 62435
   },
   {
     "id": 214,
@@ -2141,7 +2141,7 @@
     "generated_sql": "SELECT dai_dien.dang, COUNT(*) AS count FROM dai_dien JOIN cuoc_bau_cu ON dai_dien.id_dai_dien = cuoc_bau_cu.id_dai_dien GROUP BY dai_dien.dang ORDER BY count DESC LIMIT 1",
     "exact_match": false,
     "eval_error": "Error col: as",
-    "duration_ms": 33931
+    "duration_ms": 34333
   },
   {
     "id": 215,
@@ -2151,7 +2151,7 @@
     "generated_sql": "SELECT dia_diem FROM toi_pham ORDER BY so_nguoi_bi_giet DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 53146
+    "duration_ms": 48439
   },
   {
     "id": 216,
@@ -2161,7 +2161,7 @@
     "generated_sql": "SELECT thanh_pho_thi_tran FROM dia_chi JOIN khach_hang ON dia_chi.id_dia_chi = khach_hang.id_dia_chi EXCEPT SELECT thanh_pho_thi_tran FROM dia_chi JOIN nguoi_bieu_dien ON dia_chi.id_dia_chi = nguoi_bieu_dien.id_dia_chi",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 58323
+    "duration_ms": 63095
   },
   {
     "id": 217,
@@ -2171,7 +2171,7 @@
     "generated_sql": "SELECT SUM(so_diem) / COUNT(*) FROM luot_nop_bai",
     "exact_match": false,
     "eval_error": "Error col: /",
-    "duration_ms": 31493
+    "duration_ms": 50874
   },
   {
     "id": 218,
@@ -2181,7 +2181,7 @@
     "generated_sql": "SELECT thanh_pho FROM dbo.doanh_nghiep WHERE ten = 'tiệc đứng sang trọng MGM' AND thanh_pho = 'Texas'",
     "exact_match": false,
     "eval_error": "'dbo.doanh_nghiep'",
-    "duration_ms": 194813
+    "duration_ms": 200207
   },
   {
     "id": 219,
@@ -2191,7 +2191,7 @@
     "generated_sql": "SELECT id_sinh_vien FROM tham_gia_vao WHERE id_hoat_dong = (SELECT id_hoat_dong FROM hoat_dong WHERE ten_hoat_dong = 'Bơi xuồng') INTERSECT SELECT id_sinh_vien FROM tham_gia_vao WHERE id_hoat_dong = (SELECT id_hoat_dong FROM hoat_dong WHERE ten_hoat_dong = 'Chèo thuyền Kayak')",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 54585
+    "duration_ms": 50643
   },
   {
     "id": 220,
@@ -2201,7 +2201,7 @@
     "generated_sql": "SELECT chi_tiet_khach_hang FROM khach_hang ORDER BY chi_tiet_khach_hang",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 47106
+    "duration_ms": 50673
   },
   {
     "id": 221,
@@ -2211,7 +2211,7 @@
     "generated_sql": "SELECT ten FROM nhan_vien WHERE id_nhan_vien NOT IN (SELECT id_nhan_vien FROM bai_giang)",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 38328
+    "duration_ms": 40161
   },
   {
     "id": 222,
@@ -2221,7 +2221,7 @@
     "generated_sql": "SELECT ten_cua_nhan_vien FROM nhan_vien JOIN giao_su ON nhan_vien.ma_so_nhan_vien = giao_su.ma_so_nhan_vien JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa = 'Lịch sử' EXCEPT SELECT ten_cua_nhan_vien FROM nhan_vien JOIN lop_hoc ON nhan_vien.ma_so_nhan_vien = lop_hoc.ma_so_nhan_vien_cua_giao_su",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 109999
+    "duration_ms": 110010
   },
   {
     "id": 223,
@@ -2231,7 +2231,7 @@
     "generated_sql": "SELECT giao_vien.ten, khoa_hoc.khoa_hoc FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien JOIN khoa_hoc ON sap_xep_khoa_hoc.id_khoa_hoc = khoa_hoc.id_khoa_hoc",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 36365
+    "duration_ms": 36461
   },
   {
     "id": 224,
@@ -2241,7 +2241,7 @@
     "generated_sql": "SELECT ho, ten FROM dbo.danh_sach WHERE khoi_lop = 1 AND phong_hoc NOT IN (SELECT phong_hoc FROM dbo.giao_vien WHERE ho = 'OTHA' AND ten = 'MOYER')",
     "exact_match": false,
     "eval_error": "'dbo.danh_sach'",
-    "duration_ms": 36965
+    "duration_ms": 32354
   },
   {
     "id": 225,
@@ -2251,7 +2251,7 @@
     "generated_sql": "SELECT ten FROM cua_hang WHERE so_luong_san_pham > (SELECT AVG(so_luong_san_pham) FROM cua_hang)",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 26799
+    "duration_ms": 36287
   },
   {
     "id": 226,
@@ -2261,17 +2261,17 @@
     "generated_sql": "SELECT COUNT(DISTINCT noi_sinh) FROM ca_nhan",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 25911
+    "duration_ms": 29600
   },
   {
     "id": 227,
     "db_id": "decoration_competition",
     "question": "Liêt kê tên của các thành viên và địa điểm của các trường đại học mà họ theo học theo thứ tự bảng chữ cái tăng dần của tên thành viên .",
     "gold_sql": "select t2.ten , t1.dia_diem_truong_dai_hoc from truong_dai_hoc as t1 join thanh_vien as t2 on t1.id_dai_hoc = t2.id_dai_hoc order by t2.ten asc",
-    "generated_sql": "SELECT thanh_vien.ten, truong_dai_hoc.dia_diem_truong_dai_hoc FROM thanh_vien JOIN truong_dai_hoc AS T1 ON thanh_vien.id_dai_hoc = T1.id_dai_hoc ORDER BY thanh_vien.ten ASC",
+    "generated_sql": "SELECT thanh_vien.ten, truong_dai_hoc.dia_diem_truong_dai_hoc FROM thanh_vien JOIN truong_dai_hoc ON thanh_vien.id_dai_hoc = truong_dai_hoc.id_dai_hoc ORDER BY thanh_vien.ten ASC",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 35470
+    "duration_ms": 41891
   },
   {
     "id": 228,
@@ -2281,7 +2281,7 @@
     "generated_sql": "SELECT id_khach_hang AS id_khach_hang, chi_tiet_khach_hang AS chi_tiet_khach_hang FROM khach_hang UNION SELECT id_nhan_vien AS id_nhan_vien, chi_tiet_nhan_vien AS chi_tiet_nhan_vien FROM nhan_vien",
     "exact_match": false,
     "eval_error": "Error col: as",
-    "duration_ms": 215412
+    "duration_ms": 200917
   },
   {
     "id": 229,
@@ -2291,7 +2291,7 @@
     "generated_sql": "SELECT COUNT(*) FROM lop_hoc JOIN khoa_hoc ON lop_hoc.ma_khoa_hoc = khoa_hoc.ma_khoa_hoc JOIN khoa ON khoa_hoc.ma_khoa = khoa.ma_khoa GROUP BY khoa.ma_truong",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 33134
+    "duration_ms": 34434
   },
   {
     "id": 230,
@@ -2301,7 +2301,7 @@
     "generated_sql": "SELECT ten FROM dien_vien GROUP BY ten ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 43229
+    "duration_ms": 34786
   },
   {
     "id": 231,
@@ -2311,7 +2311,7 @@
     "generated_sql": "SELECT giang_vien.ho, giang_vien.ten FROM giang_vien JOIN giang_vien_tham_gia_vao ON giang_vien.id_giang_vien = giang_vien_tham_gia_vao.id_giang_vien GROUP BY giang_vien.id_giang_vien ORDER BY COUNT(*) DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 33165
+    "duration_ms": 41830
   },
   {
     "id": 232,
@@ -2321,7 +2321,7 @@
     "generated_sql": "SELECT truong_dai_hoc, cau_thu FROM tran_dau_trong_mua_giai ORDER BY truong_dai_hoc ASC",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 39703
+    "duration_ms": 32318
   },
   {
     "id": 233,
@@ -2331,17 +2331,17 @@
     "generated_sql": "SELECT T1.ten_cua_nhan_vien, T4.phong_hoc FROM nhan_vien AS T1 JOIN giao_su AS T2 ON T1.ma_so_nhan_vien = T2.ma_so_nhan_vien JOIN khoa AS T3 ON T2.ma_khoa = T3.ma_khoa JOIN lop_hoc AS T4 ON T1.ma_so_nhan_vien = T4.ma_so_nhan_vien_cua_giao_su WHERE T3.ten_khoa = 'Kế toán' AND T1.ma_so_nhan_vien IN (SELECT ma_so_nhan_vien_cua_giao_su FROM lop_hoc)",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 105901
+    "duration_ms": 105616
   },
   {
     "id": 234,
     "db_id": "cre_Drama_Workshop_Groups",
     "question": "Cho biết trạng thái phổ biến nhất trong số các lượt đặt hàng .",
     "gold_sql": "select ma_trang_thai from luot_dat_hang group by ma_trang_thai order by count ( * ) desc limit 1",
-    "generated_sql": "SELECT ma_trang_thai, COUNT(*) FROM luot_dat_hang GROUP BY ma_trang_thai ORDER BY COUNT(*) DESC LIMIT 1",
+    "generated_sql": "SELECT ma_trang_thai, COUNT(*) AS so_luong FROM luot_dat_hang GROUP BY ma_trang_thai ORDER BY so_luong DESC LIMIT 1",
     "exact_match": false,
-    "eval_error": null,
-    "duration_ms": 56654
+    "eval_error": "Error col: as",
+    "duration_ms": 45270
   },
   {
     "id": 235,
@@ -2351,7 +2351,7 @@
     "generated_sql": "SELECT tieu_de FROM bai_hat WHERE id_bai_hat NOT IN (SELECT id_bai_hat FROM giong_hat WHERE loai = 'phu')",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 37681
+    "duration_ms": 46472
   },
   {
     "id": 236,
@@ -2361,7 +2361,7 @@
     "generated_sql": "SELECT san_bay.ma_san_bay FROM chuyen_bay JOIN san_bay ON chuyen_bay.san_bay_dich = san_bay.ma_san_bay GROUP BY san_bay.ma_san_bay ORDER BY COUNT(*) ASC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 48394
+    "duration_ms": 36807
   },
   {
     "id": 237,
@@ -2371,7 +2371,7 @@
     "generated_sql": "SELECT chinh_quyen_dia_phuong, dich_vu FROM nha_ga ORDER BY chinh_quyen_dia_phuong ASC",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 71132
+    "duration_ms": 88597
   },
   {
     "id": 238,
@@ -2381,7 +2381,7 @@
     "generated_sql": "SELECT COUNT(*) FROM giao_dich_tai_chinh",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 27501
+    "duration_ms": 36326
   },
   {
     "id": 239,
@@ -2391,7 +2391,7 @@
     "generated_sql": "SELECT ten FROM dao_dien WHERE quoc_tich = 'Afghanistan'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 40608
+    "duration_ms": 52280
   },
   {
     "id": 240,
@@ -2401,7 +2401,7 @@
     "generated_sql": "SELECT biet_danh FROM chi_tiet_truong_hoc WHERE phan_hang NOT IN ('1')",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 37999
+    "duration_ms": 48088
   },
   {
     "id": 241,
@@ -2411,7 +2411,7 @@
     "generated_sql": "SELECT khoan_tien_boa.van_ban FROM khoan_tien_boa JOIN doanh_nghiep ON khoan_tien_boa.id_doanh_nghiep = doanh_nghiep.id_doanh_nghiep WHERE doanh_nghiep.ten = 'Cafe Zinho' AND doanh_nghiep.thanh_pho = 'Texas'",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 26160
+    "duration_ms": 42649
   },
   {
     "id": 242,
@@ -2421,17 +2421,17 @@
     "generated_sql": "SELECT COUNT(*) FROM tran_dau WHERE mua_giai > 2007",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 24089
+    "duration_ms": 36648
   },
   {
     "id": 243,
     "db_id": "activity_1",
     "question": "Cho biết số lượng giảng viên đã tham gia một số hoạt động .",
     "gold_sql": "select count ( distinct id_giang_vien ) from giang_vien_tham_gia_vao",
-    "generated_sql": "SELECT COUNT(*) FROM giang_vien_tham_gia_vao JOIN hoat_dong ON giang_vien_tham_gia_vao.id_hoat_dong = hoat_dong.id_hoat_dong GROUP BY giang_vien_tham_gia_vao.id_hoat_dong HAVING COUNT(*) > 1",
+    "generated_sql": "SELECT COUNT(*) FROM giang_vien_tham_gia_vao JOIN giang_vien ON giang_vien_tham_gia_vao.id_giang_vien = giang_vien.id_giang_vien GROUP BY id_hoat_dong HAVING COUNT(*) > 1 ORDER BY COUNT(*) DESC LIMIT 10",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 29887
+    "duration_ms": 36735
   },
   {
     "id": 244,
@@ -2441,7 +2441,7 @@
     "generated_sql": "SELECT T1.ten_cong_ty FROM hop_dong_bao_tri AS T2 JOIN cong_ty_ben_thu_ba AS T1 ON T2.id_hop_dong_bao_tri_cua_cong_ty = T1.id_cong_ty ORDER BY T2.ngay_ket_thuc_hop_dong DESC LIMIT 1",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 29986
+    "duration_ms": 51704
   },
   {
     "id": 245,
@@ -2451,7 +2451,7 @@
     "generated_sql": "SELECT COUNT(DISTINCT ma_tien_te) FROM nhom_hoi_thao_kich",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 29127
+    "duration_ms": 32729
   },
   {
     "id": 246,
@@ -2461,7 +2461,7 @@
     "generated_sql": "SELECT COUNT(*) FROM dbo.luot_dang_ky JOIN dbo.doanh_nghiep ON dbo.luot_dang_ky.id_doanh_nghiep = dbo.doanh_nghiep.id_doanh_nghiep WHERE dbo.doanh_nghiep.ten LIKE '%Maroc%' AND dbo.doanh_nghiep.thanh_pho = 'Los Angeles' AND dbo.luot_dang_ky.ngay LIKE '%Friday%'",
     "exact_match": false,
     "eval_error": "'dbo.luot_dang_ky'",
-    "duration_ms": 36979
+    "duration_ms": 39863
   },
   {
     "id": 247,
@@ -2471,7 +2471,7 @@
     "generated_sql": "SELECT ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia WHERE ngon_ngu_ban_dia_chinh_thuc LIKE '% tiếng Anh %'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 30830
+    "duration_ms": 25932
   },
   {
     "id": 248,
@@ -2481,7 +2481,7 @@
     "generated_sql": "SELECT ten_san_pham FROM san_pham WHERE id_san_pham NOT IN (SELECT DISTINCT id_san_pham FROM mat_hang_duoc_dat)",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 36872
+    "duration_ms": 35163
   },
   {
     "id": 249,
@@ -2491,7 +2491,7 @@
     "generated_sql": "SELECT can_nang FROM nguoi_luyen_the_hinh JOIN ca_nhan ON nguoi_luyen_the_hinh.id_ca_nhan = ca_nhan.id_ca_nhan WHERE cu_giat > 140 OR ca_nhan.chieu_cao > 200",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 43578
+    "duration_ms": 48886
   },
   {
     "id": 250,
@@ -2501,7 +2501,7 @@
     "generated_sql": "SELECT ten_khach_hang, dien_thoai_khach_hang FROM khach_hang WHERE dia_chi_cua_khach_hang IS NULL",
     "exact_match": false,
     "eval_error": "Error col: null",
-    "duration_ms": 47207
+    "duration_ms": 55275
   },
   {
     "id": 251,
@@ -2511,7 +2511,7 @@
     "generated_sql": "SELECT id_ung_cu_vien FROM ung_cu_vien JOIN ca_nhan ON ung_cu_vien.id_ung_cu_vien = ca_nhan.id_ca_nhan WHERE ca_nhan.dia_chi_email = 'stanley.monahan@example.org'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 28782
+    "duration_ms": 41766
   },
   {
     "id": 252,
@@ -2521,7 +2521,7 @@
     "generated_sql": "SELECT COUNT(*) FROM nhan_vien",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 33586
+    "duration_ms": 42267
   },
   {
     "id": 253,
@@ -2531,7 +2531,7 @@
     "generated_sql": "SELECT ten_nhan_vien FROM nhan_vien EXCEPT SELECT T2.ten_nhan_vien FROM lich_su_luu_hanh T3 JOIN nhan_vien T2 ON T3.id_nhan_vien = T2.id_nhan_vien",
     "exact_match": false,
     "eval_error": "'t3'",
-    "duration_ms": 14641
+    "duration_ms": 62306
   },
   {
     "id": 254,
@@ -2541,7 +2541,7 @@
     "generated_sql": "SELECT tac_gia FROM sach ORDER BY tac_gia ASC",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 19020
+    "duration_ms": 33649
   },
   {
     "id": 255,
@@ -2551,7 +2551,7 @@
     "generated_sql": "SELECT tieu_de FROM dbo.bo_phim JOIN dbo.duoc_viet_boi ON dbo.bo_phim.id_bo_phim = dbo.duoc_viet_boi.id_se_ri_phim JOIN dbo.nha_viet_kich_ban ON dbo.duoc_viet_boi.id_nha_viet_kich_ban = dbo.nha_viet_kich_ban.id_nha_viet_kich_ban WHERE dbo.nha_viet_kich_ban.ten = 'Matt Damon'",
     "exact_match": false,
     "eval_error": "'dbo.bo_phim'",
-    "duration_ms": 35214
+    "duration_ms": 113352
   },
   {
     "id": 256,
@@ -2561,7 +2561,7 @@
     "generated_sql": "SELECT loai_hinh FROM truong_hoc GROUP BY loai_hinh HAVING COUNT(*) = 2",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 20018
+    "duration_ms": 27941
   },
   {
     "id": 257,
@@ -2571,7 +2571,7 @@
     "generated_sql": "SELECT ten FROM danh_sach WHERE phong_hoc = 107",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 40645
+    "duration_ms": 39420
   },
   {
     "id": 258,
@@ -2581,7 +2581,7 @@
     "generated_sql": "SELECT ten FROM dien_vien WHERE quoc_tich = 'Afghanistan'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 29134
+    "duration_ms": 39171
   },
   {
     "id": 259,
@@ -2591,7 +2591,7 @@
     "generated_sql": "SELECT khoa.ma_khoa, AVG(sinh_vien.gpa_cua_sinh_vien) AS trung_binh_gpa FROM sinh_vien JOIN khoa ON sinh_vien.ma_khoa = khoa.ma_khoa GROUP BY khoa.ma_khoa ORDER BY trung_binh_gpa DESC LIMIT 1",
     "exact_match": false,
     "eval_error": "Error col: as",
-    "duration_ms": 28513
+    "duration_ms": 38537
   },
   {
     "id": 260,
@@ -2601,7 +2601,7 @@
     "generated_sql": "SELECT ho, ten FROM giao_vien JOIN danh_sach ON giao_vien.phong_hoc = danh_sach.phong_hoc WHERE danh_sach.ho = 'EVELINA' AND danh_sach.ten = 'BROMLEY'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 43545
+    "duration_ms": 45869
   },
   {
     "id": 261,
@@ -2611,17 +2611,17 @@
     "generated_sql": "SELECT COUNT(DISTINCT dia_diem) FROM cua_hang",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 36672
+    "duration_ms": 36011
   },
   {
     "id": 262,
     "db_id": "station_weather",
     "question": "Tìm id và chính quyền địa phương của ga tàu có nhiệt độ cao trung bình cao nhất .",
     "gold_sql": "select t2.id , t2.chinh_quyen_dia_phuong from thoi_tiet_hang_tuan as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id group by t1.id_nha_ga order by avg ( nhiet_do_cao ) desc limit 1",
-    "generated_sql": "SELECT nha_ga.id, nha_ga.chinh_quyen_dia_phuong FROM nha_ga JOIN thoi_tiet_hang_tuan ON nha_ga.id = thoi_tiet_hang_tuan.id_nha_ga ORDER BY thoi_tiet_hang_tuan.nhiet_do_cao DESC LIMIT 1",
+    "generated_sql": "SELECT nha_ga.id, nha_ga.chinh_quyen_dia_phuong FROM nha_ga JOIN thoi_tiet_hang_tuan ON nha_ga.id = thoi_tiet_hang_tuan.id_nha_ga GROUP BY nha_ga.id ORDER BY AVG(thoi_tiet_hang_tuan.nhiet_do_cao) DESC LIMIT 1",
     "exact_match": false,
     "eval_error": null,
-    "duration_ms": 62934
+    "duration_ms": 94767
   },
   {
     "id": 263,
@@ -2631,7 +2631,7 @@
     "generated_sql": "SELECT ten_bo_phan FROM bo_phan JOIN dia_diem_cua_bo_phan ON bo_phan.ma_so_bo_phan = dia_diem_cua_bo_phan.ma_so_bo_phan WHERE dia_diem_cua_bo_phan.dia_diem_bo_phan = 'Houston'",
     "exact_match": true,
     "eval_error": null,
-    "duration_ms": 36968
+    "duration_ms": 45485
   },
   {
     "id": 264,
@@ -2641,6 +2641,356 @@
     "generated_sql": "SELECT COUNT(*) FROM dbo.ung_cu_vien",
     "exact_match": false,
     "eval_error": "'dbo.ung_cu_vien'",
-    "duration_ms": 26948
+    "duration_ms": 32711
+  },
+  {
+    "id": 265,
+    "db_id": "match_season",
+    "question": "Những cầu thủ nào đến từ UCLA ?",
+    "gold_sql": "select cau_thu from tran_dau_trong_mua_giai where truong_dai_hoc = \"ucla\"",
+    "generated_sql": "SELECT cau_thu.cau_thu FROM cau_thu JOIN doi ON cau_thu.doi = doi.id_doi JOIN tran_dau_trong_mua_giai ON cau_thu.doi = tran_dau_trong_mua_giai.doi WHERE tran_dau_trong_mua_giai.truong_dai_hoc = 'UCLA'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 62332
+  },
+  {
+    "id": 266,
+    "db_id": "candidate_poll",
+    "question": "Cho biết tất cả các thông tin về mọi người .",
+    "gold_sql": "select * from ca_nhan",
+    "generated_sql": "SELECT ca_nhan.id_ca_nhan, ca_nhan.gioi_tinh, ca_nhan.ten, ca_nhan.ngay_sinh, ca_nhan.chieu_cao, ca_nhan.can_nang FROM ca_nhan JOIN ung_cu_vien ON ca_nhan.id_ca_nhan = ung_cu_vien.id_ca_nhan UNION SELECT id_ca_nhan, gioi_tinh, ten, ngay_sinh, chieu_cao, can_nang FROM ca_nhan WHERE id_ca_nhan NOT IN (SELECT id_ca_nhan FROM ung_cu_vien)",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 29413
+  },
+  {
+    "id": 267,
+    "db_id": "driving_school",
+    "question": "Những họ nào được chia sẻ bởi cả khách hàng lẫn nhân viên ?",
+    "gold_sql": "select ho from khach_hang intersect select ho from nhan_vien",
+    "generated_sql": "SELECT ho FROM nhan_vien UNION SELECT ho FROM khach_hang ORDER BY ho ASC",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 41600
+  },
+  {
+    "id": 268,
+    "db_id": "sakila_1",
+    "question": "Cho biết tổng số tiền đã được thanh toán .",
+    "gold_sql": "select sum ( so_tien ) from khoan_thanh_toan",
+    "generated_sql": "SELECT SUM(so_tien) FROM khoan_thanh_toan",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 47827
+  },
+  {
+    "id": 269,
+    "db_id": "sakila_1",
+    "question": "Cửa hàng nào có nhiều khách hàng nhất ? Cho biết id của cửa hàng này .",
+    "gold_sql": "select id_cua_hang from khach_hang group by id_cua_hang order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT id_cua_hang FROM khach_hang GROUP BY id_cua_hang ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 42975
+  },
+  {
+    "id": 270,
+    "db_id": "customers_and_invoices",
+    "question": "Có bao nhiêu khách hàng khác nhau đã mở một số tài khoản ?",
+    "gold_sql": "select count ( distinct id_khach_hang ) from tai_khoan",
+    "generated_sql": "SELECT COUNT(DISTINCT tai_khoan.id_khach_hang) FROM tai_khoan JOIN khach_hang ON tai_khoan.id_khach_hang = khach_hang.id_khach_hang",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 37789
+  },
+  {
+    "id": 271,
+    "db_id": "activity_1",
+    "question": "Hiển thị id của những sinh viên có cố vấn là các ' Giáo sư ' .",
+    "gold_sql": "select t2.id_sinh_vien from giang_vien as t1 join sinh_vien as t2 on t1.id_giang_vien = t2.co_van where t1.ngach = \"professor\"",
+    "generated_sql": "SELECT id_sinh_vien FROM sinh_vien WHERE co_van IN (SELECT id_giang_vien FROM giang_vien WHERE ngach = 'Giáo sư')",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 30879
+  },
+  {
+    "id": 272,
+    "db_id": "customers_and_invoices",
+    "question": "Đếm số lượng khách hàng không có tài khoản .",
+    "gold_sql": "select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from tai_khoan )",
+    "generated_sql": "SELECT COUNT(*) FROM khach_hang WHERE id_khach_hang NOT IN (SELECT id_khach_hang FROM tai_khoan)",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 40724
+  },
+  {
+    "id": 273,
+    "db_id": "cre_Drama_Workshop_Groups",
+    "question": "Những sản phẩm nào có giá trung bình dưới 1000000 ? Cho biết tên của những sản phẩm này .",
+    "gold_sql": "select ten_san_pham from cac_san_pham group by ten_san_pham having avg ( gia_san_pham ) < 1000000",
+    "generated_sql": "SELECT ten_san_pham FROM cac_san_pham WHERE gia_san_pham < 1000000",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 44425
+  },
+  {
+    "id": 274,
+    "db_id": "storm_record",
+    "question": "Những khu vực bị ảnh hưởng bởi cơn bão gây ra nhiều ca tử vong nhất có tên là gì ?",
+    "gold_sql": "select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_con_bao = t3.id_con_bao order by t3.so_luong_nguoi_chet desc limit 1",
+    "generated_sql": "SELECT T1.ten_khu_vuc FROM khu_vuc AS T1 JOIN khu_vuc_bi_anh_huong AS T2 ON T1.id_khu_vuc = T2.id_khu_vuc JOIN bao AS T3 ON T2.id_bao = T3.id_con_bao ORDER BY T3.so_luong_nguoi_chet DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": "'khu_vuc_bi_anh_huong.id_con_bao'",
+    "duration_ms": 32719
+  },
+  {
+    "id": 275,
+    "db_id": "candidate_poll",
+    "question": "Tìm trọng lượng trung bình và tối thiểu của mỗi giới tính .",
+    "gold_sql": "select avg ( can_nang ) , min ( can_nang ) , gioi_tinh from ca_nhan group by gioi_tinh",
+    "generated_sql": "SELECT gioi_tinh, AVG(can_nang), MIN(can_nang) FROM ca_nhan GROUP BY gioi_tinh ORDER BY gioi_tinh ASC",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 52123
+  },
+  {
+    "id": 276,
+    "db_id": "college_1",
+    "question": "Những giáo sư không tham gia giảng dạy có tên là gì ?",
+    "gold_sql": "select ten_cua_nhan_vien from nhan_vien where ma_cong_viec_cua_nhan_vien = \"prof\" except select t1.ten_cua_nhan_vien from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su",
+    "generated_sql": "SELECT ten_cua_nhan_vien FROM nhan_vien WHERE ma_so_nhan_vien NOT IN (SELECT ma_so_nhan_vien_cua_giao_su FROM lop_hoc) AND ma_so_nhan_vien NOT IN (SELECT ma_so_nhan_vien FROM giao_su)",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 37180
+  },
+  {
+    "id": 277,
+    "db_id": "sakila_1",
+    "question": "Cho biết tiêu đề và id của bộ phim có mức phí cho thuê là 0,99 và có số lượng hàng tồn kho ít hơn 3 .",
+    "gold_sql": "select tieu_de , id_phim from phim where gia_cho_thue = 0.99 intersect select t1.tieu_de , t1.id_phim from phim as t1 join hang_ton_kho as t2 on t1.id_phim = t2.id_phim group by t1.id_phim having count ( * ) < 3",
+    "generated_sql": "SELECT phim.id_phim, phim.tieu_de FROM phim JOIN hang_ton_kho ON phim.id_phim = hang_ton_kho.id_phim WHERE phim.gia_cho_thue = 0.99 GROUP BY phim.id_phim HAVING COUNT(hang_ton_kho.id_hang_ton_kho) < 3",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 51684
+  },
+  {
+    "id": 278,
+    "db_id": "sakila_1",
+    "question": "Cho biết tên đầy đủ được sử dụng bởi nhiều diễn viên nhất .",
+    "gold_sql": "select ten , ho from dien_vien group by ten , ho order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT T1.ho, T1.ten FROM dien_vien AS T1 JOIN dien_vien_dien_anh ON T1.id_dien_vien = dien_vien_dien_anh.id_dien_vien GROUP BY T1.id_dien_vien ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 66207
+  },
+  {
+    "id": 279,
+    "db_id": "imdb",
+    "question": "Hiển thị quốc tịch của diễn viên ' Christoph Waltz ' .",
+    "gold_sql": "select quoc_tich from dien_vien where ten = \"christoph waltz\"",
+    "generated_sql": "SELECT quoc_tich FROM dien_vien WHERE ten = 'Christoph Waltz'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 43016
+  },
+  {
+    "id": 280,
+    "db_id": "music_2",
+    "question": "Loại giọng hát nào thường xuyên được xuất hiện nhất ?",
+    "gold_sql": "select loai from giong_hat group by loai order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT loai, COUNT(*) FROM giong_hat GROUP BY loai ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 45719
+  },
+  {
+    "id": 281,
+    "db_id": "cre_Doc_Control_Systems",
+    "question": "Tài liệu có id 2 có bao nhiêu bản sao dự thảo ?",
+    "gold_sql": "select count ( * ) from ban_sao where id_tai_lieu = 2",
+    "generated_sql": "SELECT COUNT(*) FROM ban_sao JOIN ban_du_thao_cua_tai_lieu ON ban_sao.id_tai_lieu = ban_du_thao_cua_tai_lieu.id_tai_lieu WHERE ban_du_thao_cua_tai_lieu.id_tai_lieu = 2",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 58057
+  },
+  {
+    "id": 282,
+    "db_id": "customers_and_invoices",
+    "question": "Hiển thị tên của tất cả các sản phẩm không được đặt hàng .",
+    "gold_sql": "select ten_san_pham from san_pham except select t1.ten_san_pham from san_pham as t1 join mat_hang_duoc_dat as t2 on t1.id_san_pham = t2.id_san_pham",
+    "generated_sql": "SELECT ten_san_pham FROM san_pham WHERE id_san_pham NOT IN (SELECT DISTINCT id_san_pham FROM mat_hang_duoc_dat)",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 32491
+  },
+  {
+    "id": 283,
+    "db_id": "college_1",
+    "question": "Khoa nào có đông sinh viên nhất ? Cho biết tên và địa chỉ của khoa này .",
+    "gold_sql": "select t2.ten_khoa , t2.dia_chi_khoa from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT T1.ten_khoa, T1.dia_chi_khoa FROM khoa AS T1 JOIN sinh_vien AS T2 ON T1.ma_khoa = T2.ma_khoa GROUP BY T1.ma_khoa ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 39404
+  },
+  {
+    "id": 284,
+    "db_id": "soccer_1",
+    "question": "Cho biết cân nặng của cầu thủ nặng nhất cũng như là cân nặng của cầu thủ nhẹ nhất .",
+    "gold_sql": "select max ( can_nang ) , min ( can_nang ) from cau_thu",
+    "generated_sql": "SELECT can_nang FROM cau_thu ORDER BY can_nang DESC LIMIT 1 UNION SELECT can_nang FROM cau_thu ORDER BY can_nang ASC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 51951
+  },
+  {
+    "id": 285,
+    "db_id": "match_season",
+    "question": "Có bao nhiêu đội khác nhau tham gia vào các trận đấu ?",
+    "gold_sql": "select count ( distinct doi ) from tran_dau_trong_mua_giai",
+    "generated_sql": "SELECT COUNT(DISTINCT tran_dau_trong_mua_giai.doi) FROM tran_dau_trong_mua_giai JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 30208
+  },
+  {
+    "id": 286,
+    "db_id": "local_govt_in_alabama",
+    "question": "Những sự kiện nào không có người tham dự với chi tiết là ' Kenyatta Kuhn ' ? Cho biết id của những sự kiện này .",
+    "gold_sql": "select id_su_kien from su_kien except select t1.id_su_kien from nguoi_tham_gia_su_kien as t1 join nguoi_tham_gia as t2 on t1.id_nguoi_tham_gia = t2.id_nguoi_tham_gia where chi_tiet_nguoi_tham_gia = \"kenyatta kuhn\"",
+    "generated_sql": "SELECT id_su_kien FROM su_kien EXCEPT SELECT nguoi_tham_gia_su_kien.id_su_kien FROM nguoi_tham_gia_su_kien JOIN nguoi_tham_gia ON nguoi_tham_gia_su_kien.id_nguoi_tham_gia = nguoi_tham_gia.id_nguoi_tham_gia WHERE nguoi_tham_gia.chi_tiet_nguoi_tham_gia = 'Kenyatta Kuhn'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 37678
+  },
+  {
+    "id": 287,
+    "db_id": "flight_2",
+    "question": "Thành phố ' Anthony ' có những sân bay nào ? Cho biết mã và tên của những sân bay này .",
+    "gold_sql": "select ma_san_bay , ten_san_bay from san_bay where thanh_pho = \"anthony\"",
+    "generated_sql": "SELECT ma_san_bay ten_san_bay FROM san_bay WHERE thanh_pho = 'Anthony'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 192256
+  },
+  {
+    "id": 288,
+    "db_id": "customers_and_invoices",
+    "question": "Đếm số lượng sản phẩm không bao giờ được đặt hàng .",
+    "gold_sql": "select count ( * ) from san_pham where id_san_pham not in ( select id_san_pham from mat_hang_duoc_dat )",
+    "generated_sql": "SELECT COUNT(*) FROM san_pham WHERE id_san_pham NOT IN (SELECT id_san_pham FROM mat_hang_duoc_dat)",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 30836
+  },
+  {
+    "id": 289,
+    "db_id": "music_2",
+    "question": "Loại giọng hát nào đax được sử dụng nhiều lần nhất bởi thành viên có tên là ' Solveig ' trong ban nhạc .",
+    "gold_sql": "select loai from giong_hat as t1 join ban_nhac as t2 on t1.nghe_si_trong_ban_nhac = t2.id where ten = \"solveig\" group by loai order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT loai FROM giong_hat JOIN ban_nhac ON giong_hat.nghe_si_trong_ban_nhac = ban_nhac.id WHERE ban_nhac.ten = 'Solveig' GROUP BY loai ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 41299
+  },
+  {
+    "id": 290,
+    "db_id": "game_injury",
+    "question": "Sân vận động nào có chứa chuỗi con ' ngân hàng ' trong tên ? Cho biết tên của sân vận động này .",
+    "gold_sql": "select ten from san_van_dong where ten like \"%bank%\"",
+    "generated_sql": "SELECT ten FROM san_van_dong WHERE ten LIKE '% ngân hàng %'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 59250
+  },
+  {
+    "id": 291,
+    "db_id": "student_1",
+    "question": "Mỗi phòng học có bao nhiêu học sinh , đồng thời cho biết mã số của các phòng học tương ứng .",
+    "gold_sql": "select phong_hoc , count ( * ) from danh_sach group by phong_hoc",
+    "generated_sql": "SELECT phong_hoc, COUNT(*) FROM danh_sach GROUP BY phong_hoc ORDER BY COUNT(*) DESC",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 34366
+  },
+  {
+    "id": 292,
+    "db_id": "insurance_and_eClaims",
+    "question": "Mô tả về tình trạng của các yêu cầu có tình trạng là ' Mở ' ?",
+    "gold_sql": "select mo_ta_ve_tinh_trang_yeu_cau from giai_doan_xu_ly_yeu_cau where ten_tinh_trang_yeu_cau = \"open\"",
+    "generated_sql": "SELECT mo_ta_ve_tinh_trang_yeu_cau FROM giai_doan_xu_ly_yeu_cau WHERE ten_tinh_trang_yeu_cau = 'Mở'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 51236
+  },
+  {
+    "id": 293,
+    "db_id": "college_1",
+    "question": "Cho biết mã của các khoá học mà sinh viên có họ là ' Smithson ' đã theo học .",
+    "gold_sql": "select t1.ma_khoa_hoc from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop join sinh_vien as t3 on t3.ma_so_sinh_vien = t2.ma_so_sinh_vien where t3.ho_cua_sinh_vien = \"smithson\"",
+    "generated_sql": "SELECT DISTINCT lop_hoc.ma_khoa_hoc FROM lop_hoc JOIN sinh_vien ON lop_hoc.ma_lop_hoc = sinh_vien.lop_cua_sinh_vien WHERE sinh_vien.ho_cua_sinh_vien = 'Smithson'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 94674
+  },
+  {
+    "id": 294,
+    "db_id": "game_injury",
+    "question": "Có bao nhiêu nguồn thông tin khác nhau liên quan đến các tai nạn thương tích ?",
+    "gold_sql": "select count ( distinct nguon_thong_tin ) from chan_thuong",
+    "generated_sql": "SELECT COUNT(DISTINCT nguon_thong_tin) FROM chan_thuong",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 26190
+  },
+  {
+    "id": 295,
+    "db_id": "assets_maintenance",
+    "question": "Cho biết tên và id của những nhân viên đã ghi lại nhật ký lỗi nhưng chưa liên hệ với bất kỳ kỹ sư nào .",
+    "gold_sql": "select t1.ten_nhan_vien , t1.id_nhan_vien from nhan_vien as t1 join nhat_ky_loi as t2 on t1.id_nhan_vien = t2.duoc_ghi_lai_boi_nhan_vien_co_id except select t3.ten_nhan_vien , t3.id_nhan_vien from nhan_vien as t3 join chuyen_tham_cua_ky_su as t4 on t3.id_nhan_vien = t4.id_nhan_vien_lien_lac",
+    "generated_sql": "SELECT ten_nhan_vien, id_nhan_vien FROM nhan_vien WHERE id_nhan_vien NOT IN (SELECT DISTINCT id_nhan_vien_lien_lac FROM chuyen_tham_cua_ky_su) AND id_nhan_vien IN (SELECT duoc_ghi_lai_boi_nhan_vien_co_id FROM nhat_ky_loi)",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 64318
+  },
+  {
+    "id": 296,
+    "db_id": "flight_2",
+    "question": "Cho biết tên của sân bay với mã là ' AKO '",
+    "gold_sql": "select ten_san_bay from san_bay where ma_san_bay = \"ako\"",
+    "generated_sql": "SELECT ten_san_bay FROM san_bay WHERE ma_san_bay = 'AKO'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 36461
+  },
+  {
+    "id": 297,
+    "db_id": "flight_2",
+    "question": "Cho biết tất cả các hãng hàng không có một số chuyến bay khởi hành từ sân bay ' CVO ' , nhưng không có chuyến bay nào khởi hành từ sân bay ' APG ' .",
+    "gold_sql": "select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = \"cvo\" except select t1.ten_hang_hang_khong from hang_hang_khong as t1 join chuyen_bay as t2 on t1.id_hang_hang_khong = t2.hang_hang_khong where t2.san_bay_khoi_hanh = \"apg\"",
+    "generated_sql": "SELECT ten_hang_hang_khong FROM hang_hang_khong WHERE id_hang_hang_khong IN (SELECT hang_hang_khong FROM chuyen_bay WHERE san_bay_khoi_hanh = 'CVO') EXCEPT SELECT ten_hang_hang_khong FROM hang_hang_khong WHERE id_hang_hang_khong IN (SELECT hang_hang_khong FROM chuyen_bay WHERE san_bay_khoi_hanh = 'APG')",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 58308
+  },
+  {
+    "id": 298,
+    "db_id": "customers_and_invoices",
+    "question": "Các giao dịch có số tiền giao dịch lớn hơn mức trung bình có id là gì ?",
+    "gold_sql": "select id_giao_dich from giao_dich_tai_chinh where so_tien_giao_dich > ( select avg ( so_tien_giao_dich ) from giao_dich_tai_chinh )",
+    "generated_sql": "SELECT id_giao_dich FROM giao_dich_tai_chinh WHERE so_tien_giao_dich > (SELECT AVG(so_tien_giao_dich) FROM giao_dich_tai_chinh)",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 32593
+  },
+  {
+    "id": 299,
+    "db_id": "imdb",
+    "question": "Bộ phim nào có nhiều diễn viên đến từ ' ​​Trung Quốc ' nhất ? Cho biết tiêu đề .",
+    "gold_sql": "select t2.tieu_de from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join bo_phim as t2 on t2.id_bo_phim = t3.id_se_ri_phim where t1.quoc_tich = \"china\" group by t2.tieu_de order by count ( distinct t1.ten ) desc limit 1",
+    "generated_sql": "SELECT T1.tieu_de FROM bo_phim AS T1 JOIN phan_vai AS T2 ON T1.id_bo_phim = T2.id_se_ri_phim JOIN dien_vien AS T3 ON T2.id_dien_vien = T3.id_dien_vien WHERE T3.quoc_tich = 'Trung Quốc' GROUP BY T1.id_bo_phim ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 53686
   }
 ]
