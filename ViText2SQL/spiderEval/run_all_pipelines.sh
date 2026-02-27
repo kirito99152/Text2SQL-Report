@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ARGS="--dataset dev --workers 3"
+ARGS="--dataset test_random_300 --workers 3"
 
 echo "Starting Base Pipeline..."
 python3 -u benchmark_tensor.py --pipeline base $ARGS > base.log 2>&1 &

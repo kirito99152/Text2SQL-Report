@@ -435,7 +435,7 @@ def main():
     parser.add_argument('--end', type=int, default=2000, help='End index')
     parser.add_argument('--workers', type=int, default=1, help='Number of concurrent workers')
     parser.add_argument('--api', type=str, default=TENSOR_API, help='TensorSQL-Node API URL')
-    parser.add_argument('--dataset', type=str, default='dev', choices=['dev', 'test'], help='Dataset to evaluate on (dev or test)')
+    parser.add_argument('--dataset', type=str, default='dev', help='Dataset to evaluate on (e.g., dev, test, test_random_300)')
     parser.add_argument('--pipeline', type=str, default='base', choices=['base', 'ablation1', 'ablation2', 'ablation3'], help='Pipeline mode to run')
     args = parser.parse_args()
     
@@ -449,7 +449,7 @@ def main():
     
     print(f"[Benchmark] Loading data...")
     tables_data = json.load(open(TABLES_FILE, encoding='utf-8'))
-    dataset_file = DEV_FILE if args.dataset == 'dev' else TEST_FILE
+    dataset_file = os.path.join(DATA_DIR, f"{args.dataset}.json")
     if not os.path.exists(dataset_file):
         print(f"[Benchmark] Error: Dataset file not found at {dataset_file}")
         sys.exit(1)

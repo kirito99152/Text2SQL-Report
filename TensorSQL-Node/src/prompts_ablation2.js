@@ -81,10 +81,6 @@ DATABASE SCHEMA
 ⚠️ CRITICAL: Read column descriptions - action verbs show WHO did WHAT
 - "đã GHI LẠI" = RECORDED | "đã LIÊN LẠC" = CONTACTED | "đã CUNG CẤP" = PROVIDED
 
-⚠️ SCHEMA LINKING: If SCHEMA LINKING section is present, use it to identify the correct tables and columns.
-- The linking maps Vietnamese phrases from the question to exact schema elements.
-- TRUST the linking: if it says a column belongs to table X, query from table X. Do NOT add unnecessary JOINs.
-
 CURRENT DATETIME: {{current_datetime}}
 USER QUESTION: "{{question}}"
 
@@ -375,12 +371,10 @@ const SCHEMA_SELECTION_PROMPT = `You are a schema selector for Text-to-SQL. Give
 DATABASE TABLES:
 {{table_list}}
 
-{{schema_linking_hints}}
-
 QUESTION: "{{question}}"
 
 RULES:
-- Select ONLY tables needed to answer the question (max 10)
+- Select ONLY tables needed to answer the question (max 15)
 - Include junction/bridge tables needed for M:N relationships
 - Include tables connected by foreign keys if needed for JOINs
 - Do NOT include tables unrelated to the question

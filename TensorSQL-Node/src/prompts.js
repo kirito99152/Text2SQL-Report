@@ -423,7 +423,7 @@ DATABASE TABLES:
 QUESTION: "{{question}}"
 
 RULES:
-- Select ONLY tables needed to answer the question (max 10)
+- Select ONLY tables needed to answer the question (max 15)
 - Include junction/bridge tables needed for M:N relationships
 - Include tables connected by foreign keys if needed for JOINs
 - Do NOT include tables unrelated to the question
