@@ -1,16 +1,16 @@
 [
   {
     "url": "http://94.101.98.245/generate_output",
-    "status": "down",
-    "completed": 733,
+    "status": "busy",
+    "completed": 2068,
     "activeRequests": [],
-    "isHealthy": false,
+    "isHealthy": true,
     "maxConcurrent": 1
   },
   {
     "url": "http://149.36.1.173/generate_output",
     "status": "down",
-    "completed": 4579,
+    "completed": 15537,
     "activeRequests": [],
     "isHealthy": false,
     "maxConcurrent": 8

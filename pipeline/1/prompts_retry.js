@@ -16,6 +16,8 @@ DATABASE SCHEMA
 ⚠️ Read column descriptions carefully - action verbs show WHO did WHAT:
 "đã GHI LẠI" = RECORDED | "đã LIÊN LẠC" = CONTACTED | "đã CUNG CẤP" = PROVIDED
 
+⚠️ If SCHEMA LINKING section is present, TRUST it for table/column mapping. Do NOT add unnecessary JOINs beyond what linking suggests.
+
 CURRENT DATETIME: {{current_datetime}}
 USER QUESTION: "{{question}}"
 
@@ -217,6 +219,8 @@ const SCHEMA_SELECTION_PROMPT = `You are a schema selector for Text-to-SQL. Sele
 DATABASE TABLES:
 {{table_list}}
 
+{{schema_linking_hints}}
+
 QUESTION: "{{question}}"
 
 RULES:
@@ -234,11 +238,11 @@ Example: ["table1", "table2"]
 // ============================================================================
 
 module.exports = {
-   PLANNING_PROMPT_TEMPLATE,
-   GENERATE_SQL_PROMPT_TEMPLATE,
-   SQL_SELF_CHECK_PROMPT,
-   SQL_EXECUTION_ERROR_PROMPT,
-   SCHEMA_SELECTION_PROMPT
+    PLANNING_PROMPT_TEMPLATE,
+    GENERATE_SQL_PROMPT_TEMPLATE,
+    SQL_SELF_CHECK_PROMPT,
+    SQL_EXECUTION_ERROR_PROMPT,
+    SCHEMA_SELECTION_PROMPT
 };
 
 

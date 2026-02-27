@@ -22,12 +22,13 @@ TABLES_FILE = os.path.join(DATA_DIR, 'tables.json')
 DEV_FILE = os.path.join(DATA_DIR, 'dev.json')
 TEST_FILE = os.path.join(DATA_DIR, 'test.json')
 DB_DIR = os.path.join(DATA_DIR, 'databases')
+
 TENSOR_API = "http://tensorsql-node:5002/api/text2sql/generate"
 
 OUTPUT_DIR = os.path.join(BASE_DIR, 'benchmark_tensor_logs')
-RESULTS_FILE = os.path.join(OUTPUT_DIR, 'benchmark_results_{pipeline}.json')
-PRED_FILE = os.path.join(OUTPUT_DIR, 'pred_{pipeline}.sql')
-GOLD_FILE = os.path.join(OUTPUT_DIR, 'gold_{pipeline}.sql')
+RESULTS_FILE = os.path.join(OUTPUT_DIR, 'benchmark_results.json')
+PRED_FILE = os.path.join(OUTPUT_DIR, 'pred.sql')
+GOLD_FILE = os.path.join(OUTPUT_DIR, 'gold.sql')
 ENRICHED_CACHE_FILE = os.path.join(OUTPUT_DIR, 'enriched_schemas_cache.json')
 
 
@@ -250,9 +251,9 @@ def pre_enrich_schemas(schemas_map, api_url, num_workers=1):
     return enriched_schemas
 
 
-def call_tensor_api(question, schema_context, api_url, db_id=None, timeout=1000, schema_obj=None, raw_schema=None, pipeline='base'):
+def call_tensor_api(question, schema_context, api_url, db_id=None, timeout=1000, schema_obj=None, raw_schema=None):
     """Call TensorSQL-Node API to generate SQL with retries on 500 errors."""
-    payload = {"question": question, "pipeline": pipeline}
+    payload = {"question": question}
     
     if schema_obj:
         payload["schema"] = schema_obj
@@ -375,7 +376,7 @@ class Stats:
             return sorted(self.results_map.values(), key=lambda x: x['id'])
 
 
-def process_single(i, dev_data, schemas_map, enriched_schemas, api_url, kmaps, stats, effective_end, pipeline='base'):
+def process_single(i, dev_data, schemas_map, enriched_schemas, api_url, kmaps, stats, effective_end):
     """Process a single benchmark entry (thread-safe)."""
     test_case = dev_data[i]
     db_id = test_case['db_id']
@@ -393,7 +394,7 @@ def process_single(i, dev_data, schemas_map, enriched_schemas, api_url, kmaps, s
     
     try:
         start_time = time.time()
-        gen_sql, plan = call_tensor_api(question, None, api_url, db_id, schema_obj=enriched, raw_schema=raw_schema, pipeline=pipeline)
+        gen_sql, plan = call_tensor_api(question, None, api_url, db_id, schema_obj=enriched, raw_schema=raw_schema)
         duration = int((time.time() - start_time) * 1000)
         
         gen_sql = gen_sql.strip().rstrip(';').strip()
@@ -436,16 +437,9 @@ def main():
     parser.add_argument('--workers', type=int, default=1, help='Number of concurrent workers')
     parser.add_argument('--api', type=str, default=TENSOR_API, help='TensorSQL-Node API URL')
     parser.add_argument('--dataset', type=str, default='dev', choices=['dev', 'test'], help='Dataset to evaluate on (dev or test)')
-    parser.add_argument('--pipeline', type=str, default='base', choices=['base', 'ablation1', 'ablation2', 'ablation3'], help='Pipeline mode to run')
     args = parser.parse_args()
     
     api_url = args.api
-    pipeline_mode = args.pipeline
-    
-    global RESULTS_FILE, PRED_FILE, GOLD_FILE
-    RESULTS_FILE = RESULTS_FILE.format(pipeline=pipeline_mode)
-    PRED_FILE = PRED_FILE.format(pipeline=pipeline_mode)
-    GOLD_FILE = GOLD_FILE.format(pipeline=pipeline_mode)
     
     print(f"[Benchmark] Loading data...")
     tables_data = json.load(open(TABLES_FILE, encoding='utf-8'))
@@ -540,7 +534,7 @@ def main():
     
     with ThreadPoolExecutor(max_workers=args.workers) as executor:
         futures = {
-            executor.submit(process_single, i, dev_data, schemas_map, enriched_schemas, api_url, kmaps, stats, effective_end, pipeline_mode): i
+            executor.submit(process_single, i, dev_data, schemas_map, enriched_schemas, api_url, kmaps, stats, effective_end): i
             for i in work_items
         }
         

@@ -13,9 +13,10 @@ class ExecutionCorrectionService {
      * @param {string} question - The user question
      * @param {string} schemaContext - The schema context
      * @param {string} plan - The query plan
+     * @param {string} pipeline - The pipeline mode
      * @returns {Promise<string>} - The valid (or corrected) SQL
      */
-    async executeAndCorrect(dbId, sql, question, schemaContext, plan) {
+    async executeAndCorrect(dbId, sql, question, schemaContext, plan, pipeline = 'base') {
         if (!dbId) return sql;
 
         console.log(`[ExecutionCorrection] Validating SQL execution for DB: ${dbId}...`);
@@ -36,20 +37,15 @@ class ExecutionCorrectionService {
                     console.log("[ExecutionCorrection] Attempting to fix SQL based on execution error...");
 
                     // --- Try original prompt first ---
+                    const prompts = require('../promptsResolver').getPrompts(pipeline);
                     let fixedSql = await this._tryFixWithPrompt(
                         prompts.SQL_EXECUTION_ERROR_PROMPT,
                         schemaContext, question, planString, sql, execError.message,
-                        "Original"
+                        "Original", pipeline
                     );
 
-                    // --- If original failed, retry with compact prompt ---
-                    if (!fixedSql) {
-                        fixedSql = await this._tryFixWithPrompt(
-                            promptsRetry.SQL_EXECUTION_ERROR_PROMPT,
-                            schemaContext, question, planString, sql, execError.message,
-                            "Retry (compact)"
-                        );
-                    }
+                    // --- If original failed, retry not applicable, just continue ---
+                    // Note: Retry prompts removed in favor of single prompt logic per ablation run
 
                     if (fixedSql) {
                         sql = fixedSql;
@@ -68,12 +64,14 @@ class ExecutionCorrectionService {
      * Attempt to fix SQL using a given prompt template.
      * @returns {string|null} - Fixed SQL or null if failed
      */
-    async _tryFixWithPrompt(promptTemplate, schemaContext, question, planString, sql, errorMessage, label) {
+    async _tryFixWithPrompt(promptTemplate, schemaContext, question, planString, sql, errorMessage, label, pipeline) {
         try {
             let prompt = promptTemplate;
             prompt = prompt.replace('{{schema_context}}', schemaContext);
             prompt = prompt.replace('{{question}}', question);
-            prompt = prompt.replace('{{query_plan}}', planString);
+            if (pipeline !== 'ablation2') {
+                prompt = prompt.replace('{{query_plan}}', planString);
+            }
             prompt = prompt.replace('{{generated_sql}}', sql);
             prompt = prompt.replace('{{error_message}}', errorMessage);
 

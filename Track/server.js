@@ -5,58 +5,47 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3005;
-const RESULTS_PATH = process.env.RESULTS_PATH || path.join(__dirname, '../ViText2SQL/benchmark_tensor_logs/benchmark_results.json');
+const LOGS_DIR = process.env.LOGS_DIR || path.join(__dirname, '../ViText2SQL/benchmark_tensor_logs');
 
 app.use(cors());
 app.use(express.json());
 
 app.get('/api/stats', (req, res) => {
     try {
-        if (!fs.existsSync(RESULTS_PATH)) {
-            return res.json({
-                total: 0,
-                correct: 0,
-                percentage: "0.00",
-                results: []
-            });
+        if (!fs.existsSync(LOGS_DIR)) {
+            return res.json({ pipelines: {} });
         }
 
-        const rawData = fs.readFileSync(RESULTS_PATH, 'utf8').trim();
-        if (!rawData) {
-            return res.json({
-                total: 0,
-                correct: 0,
-                percentage: "0.00",
-                results: []
-            });
-        }
+        const files = fs.readdirSync(LOGS_DIR).filter(f => f.startsWith('benchmark_results_') && f.endsWith('.json'));
+        const pipelines = {};
 
-        let data;
-        try {
-            data = JSON.parse(rawData);
-        } catch (e) {
-            console.error('JSON Parse error, returning empty stats:', e);
-            return res.json({
-                total: 0,
-                correct: 0,
-                percentage: "0.00",
-                results: []
-            });
-        }
+        files.forEach(file => {
+            const pipelineName = file.replace('benchmark_results_', '').replace('.json', '');
+            const filePath = path.join(LOGS_DIR, file);
 
-        const total = data.length;
-        const correct = data.filter(item => item.exact_match === true).length;
-        const percentage = total > 0 ? ((correct / total) * 100).toFixed(2) : "0.00";
+            try {
+                const rawData = fs.readFileSync(filePath, 'utf8').trim();
+                if (!rawData) return;
 
-        // Return stats and the last 10 results for the "recent" table
-        res.json({
-            total,
-            correct,
-            percentage,
-            results: data.slice(-10).reverse()
+                const data = JSON.parse(rawData);
+                const total = data.length;
+                const correct = data.filter(item => item.exact_match === true).length;
+                const percentage = total > 0 ? ((correct / total) * 100).toFixed(2) : "0.00";
+
+                pipelines[pipelineName] = {
+                    total,
+                    correct,
+                    percentage,
+                    results: data.slice(-10).reverse()
+                };
+            } catch (e) {
+                console.error(`Error parsing ${file}:`, e);
+            }
         });
+
+        res.json({ pipelines });
     } catch (error) {
-        console.error('Error reading results:', error);
+        console.error('Error reading logs directory:', error);
         res.status(500).json({ error: 'Failed to read benchmark results' });
     }
 });

@@ -81,6 +81,10 @@ DATABASE SCHEMA
 ⚠️ CRITICAL: Read column descriptions - action verbs show WHO did WHAT
 - "đã GHI LẠI" = RECORDED | "đã LIÊN LẠC" = CONTACTED | "đã CUNG CẤP" = PROVIDED
 
+⚠️ SCHEMA LINKING: If SCHEMA LINKING section is present, use it to identify the correct tables and columns.
+- The linking maps Vietnamese phrases from the question to exact schema elements.
+- TRUST the linking: if it says a column belongs to table X, query from table X. Do NOT add unnecessary JOINs.
+
 CURRENT DATETIME: {{current_datetime}}
 USER QUESTION: "{{question}}"
 
@@ -214,24 +218,22 @@ OUTPUT PLAN ONLY. NO EXPLANATION.
 // ============================================================================
 
 const GENERATE_SQL_PROMPT_TEMPLATE = `
-You are a SQLite SQL generator. Generate from PLAN strictly.
+You are a SQLite SQL generator. Generate SQL directly from the SCHEMA to answer the QUESTION. Do NOT output a plan.
 
 DATABASE SCHEMA
 {{schema_context}}
 
-PLAN
-{{query_plan}}
+USER QUESTION: "{{question}}"
 
 CURRENT DATETIME: {{current_datetime}}
 
 ==================================================
 ⚠️ STRICT SQL STYLE RULES (MUST FOLLOW ALL):
 
-1) SELECT: EXACTLY plan columns, EXACTLY plan order. ⛔ NEVER add extra columns. ⛔ NEVER use column aliases (AS name).
+1) SELECT: ONLY columns the question EXPLICITLY asks for. ⛔ NEVER add extra columns. ⛔ NEVER use column aliases (AS name).
    - "tên" → SELECT ten only. NOT ho, ten.
    - "tên đầy đủ" → SELECT ho, ten (two columns). ⛔ NEVER ho || ' ' || ten or CONCAT.
-   - EXTREME_VALUE → Do NOT add COUNT(*)/SUM() to SELECT. Use only in ORDER BY.
-   - If plan says SELECT T2.ten, COUNT(*) → output in EXACTLY that order.
+   - EXTREME_VALUE ("nhất"/"đầu tiên") → Do NOT add COUNT(*)/SUM() to SELECT. Use only in ORDER BY.
 2) FROM: table AS T1. Always "AS" keyword. ⛔ NEVER INNER JOIN, LEFT JOIN. Only plain "JOIN".
 3) WHERE: ⛔⛔⛔ String values MUST be in ENGLISH as stored in database. NEVER translate to Vietnamese.
    - "American" stays 'American', NOT 'Mỹ'. "Order" stays 'Order', NOT 'Đặt hàng'.
@@ -239,12 +241,11 @@ CURRENT DATETIME: {{current_datetime}}
    - 2-3 values: Use OR (col='a' OR col='b'), NOT IN(...)
    - Ranges: Use BETWEEN, NOT col>=a AND col<=b
    - "từ X trở lên" → >= (not >). "hơn X" → > (not >=).
-4) GROUP BY: Match plan alias EXACTLY. If plan says GROUP BY T2.col → T2.col, not T1.col.
+4) GROUP BY: If aggregating (COUNT/SUM) and also selecting a non-aggregate column, you MUST GROUP BY the non-aggregate column.
    - When aggregating over joined table, GROUP BY the FK/joined column.
-   - ⛔ Common mistake: GROUP BY T1.id instead of GROUP BY T2.id or T1.FK_col. Follow plan.
-5) HAVING: Use if in plan, else skip.
+5) HAVING: Use if grouping condition is required.
 6) ORDER BY: Use expression directly (COUNT(*)). ⛔ NEVER use alias names.
-7) LIMIT: Use if in plan.
+7) LIMIT: Use if question implies "nhất", "đầu tiên", "cuối cùng".
 8) SET OPS: EXCEPT/UNION/INTERSECT → full SELECT...FROM... OPERATOR SELECT...FROM...
    - UNION: Each side is a complete query. "A hoặc B nhưng C" → SELECT...WHERE A UNION SELECT...WHERE B AND C
    - EXCEPT: "chưa có"/"không có" → SELECT...EXCEPT SELECT...(with JOIN)
@@ -252,56 +253,16 @@ CURRENT DATETIME: {{current_datetime}}
 9) EXCLUSION: PREFER EXCEPT. If NOT IN, use subquery. ⛔ NEVER LEFT JOIN...IS NULL or NOT EXISTS.
 10) COUNT: Always COUNT(*). ⛔ NEVER COUNT(column_name).
 11) No dbo., no backticks, no semicolons, no newlines. Single line output.
-12) DISTINCT: Use if plan says DISTINCT. ⛔ Do NOT replace DISTINCT with GROUP BY HAVING.
-13) SINGLE TABLE: If plan has no JOINs, do NOT add unnecessary JOINs. Query ONE table directly.
-    - Example: "count distinct X from table_a" → select count ( distinct x ) from table_a. ⛔ NOT join another table.
-
-==================================================
-EXAMPLES:
-
-Plan: ENTITY_AGGREGATION, cong_ty→tai_san, GROUP BY T1.id
-SQL: select count ( * ) , t1.id_cong_ty from cong_ty_ben_thu_ba as t1 join tai_san as t2 on t1.id_cong_ty = t2.id_cong_ty_cung_cap group by t1.id_cong_ty
-
-Plan: EXTREME_VALUE, ky_su→visits, SELECT T1.id, T1.ten, T1.ho (NO COUNT in SELECT)
-SQL: select t1.id_ky_su , t1.ten , t1.ho from ky_su_bao_tri as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_ky_su = t2.id_ky_su group by t1.id_ky_su order by count ( * ) desc limit 1
-
-Plan: EXCEPT, nhan_vien (fault log vs visits)
-SQL: select t1.ten_nhan_vien , t1.id_nhan_vien from nhan_vien as t1 join nhat_ky_loi as t2 on t1.id_nhan_vien = t2.duoc_ghi_lai_boi_nhan_vien_co_id except select t1.ten_nhan_vien , t1.id_nhan_vien from nhan_vien as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_nhan_vien = t2.id_nhan_vien_lien_lac
-
-Plan: FILTERED, khach_hang not in tai_khoan
-SQL: select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from tai_khoan )
-
-Plan: FILTERED, 2 values with OR (English values!)
-SQL: select gia_ban from an_pham where nha_xuat_ban = 'Person' or nha_xuat_ban = 'Wiley'
-
-Plan: SIMPLE_SELECT with DISTINCT
-SQL: select distinct dia_diem from rap_chieu_phim
-
-Plan: INTERSECT (two full queries)
-SQL: select dia_diem from rap_chieu_phim where nam_mo_cua = 2010 intersect select dia_diem from rap_chieu_phim where nam_mo_cua = 2011
-
-Plan: UNION, "3 tín chỉ hoặc 1 tín chỉ nhưng 4 giờ"
-SQL: select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 3 union select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 1 and gio = 4
-
-Plan: GLOBAL_AGGREGATION, single table, no JOIN needed
-SQL: select count ( distinct id_khach_hang ) from tai_khoan
-
-Plan: SINGLE TABLE count/group (no JOIN!)
-SQL: select id_khach_hang , count ( * ) from the_khach_hang group by id_khach_hang
-
-Plan: EXCEPT, khach_hang not having credit cards
-SQL: select id_khach_hang , ten_cua_khach_hang from khach_hang except select t1.id_khach_hang , t2.ten_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where ma_loai_the = 'Credit'
+12) DISTINCT: Use if "một số", "những", "các" (unique). ⛔ Do NOT replace DISTINCT with GROUP BY HAVING.
+13) SINGLE TABLE: If all required columns exist in ONE single table, query that table directly. Do NOT add unnecessary JOINs.
 
 ==================================================
 FINAL CHECK:
-1. Count SELECT columns. If more than plan → REMOVE extras.
-2. Check column ORDER matches plan.
-3. Verify JOIN is plain (no INNER/LEFT).
-4. Verify WHERE values are in ENGLISH (not Vietnamese).
-5. If plan says EXCEPT/UNION/INTERSECT → verify you used that operator (not NOT IN/OR/AND).
-6. No semicolons.
+1. Are string values in English?
+2. Did you select EXACTLY what was asked?
+3. Is it a single line with no semicolons or backticks?
 
-OUTPUT: Raw SQL on single line. No markdown, no explanation.
+OUTPUT: Raw SQL on single line. No markdown, no explanation, no plan.
 `;
 
 // ============================================================================
@@ -309,21 +270,22 @@ OUTPUT: Raw SQL on single line. No markdown, no explanation.
 // ============================================================================
 
 const SQL_SELF_CHECK_PROMPT = `
-Validate GENERATED SQL vs PLAN and SCHEMA.
+Validate GENERATED SQL vs SCHEMA.
 
 SCHEMA: {{schema_context}}
-PLAN: {{query_plan}}
 SQL: {{generated_sql}}
 
 ==================================================
 CHECK (mark ✓ or ✗):
 
-1) SELECT: EXACTLY plan columns? No extra cols? No column aliases (AS name)? Column ORDER matches plan?
+1) SELECT: No extra cols? No column aliases (AS name)?
 2) JOIN: Plain "JOIN" only? (INNER/LEFT → rewrite to plain JOIN or remove)
 3) WHERE values: Are string values in ENGLISH (as stored in DB)? ⛔ Vietnamese values like 'Mỹ', 'Đặt hàng', 'Mùa xuân' = WRONG. Must be 'American', 'Order', 'Spring'.
 4) WHERE operators: ">" vs ">=" correct? "từ X trở lên" = >=. "hơn X" = >.
-5) GROUP BY: Correct table alias per plan? FK/joined column?
+5) GROUP BY: ForeignKey/joined column correct?
 6) ORDER BY: Expression not alias? Direction correct? LIMIT correct?
+7) SINGLE TABLE: If all columns are in ONE table, are there unnecessary JOINs in SQL? Remove them.
+8) COUNT(*) only? No || or CONCAT? No newlines? Single line?
 7) SET OPS: If plan says EXCEPT → SQL uses EXCEPT? (NOT "NOT IN" or "NOT EXISTS")
    If plan says INTERSECT → SQL uses INTERSECT? (NOT "AND" or "EXISTS")
    If plan says UNION → SQL uses UNION? (NOT "OR")
@@ -335,11 +297,8 @@ COMMON FIXES:
 - INNER JOIN → JOIN | LEFT JOIN IS NULL → NOT IN subquery or EXCEPT
 - SELECT col AS name → remove AS name
 - ho || ' ' || ten → ho, ten (separate columns)
-- Extra COUNT(*) in SELECT → remove if not in plan
-- GROUP BY T1.col → T2.col (match plan)
 - Unnecessary JOIN → remove if single table query
 - Vietnamese values → English values (check schema for originals)
-- NOT IN/NOT EXISTS → rewrite as EXCEPT if plan says EXCEPT
 
 DECISION:
 All ✓ → Output: VALID
@@ -359,9 +318,6 @@ DATABASE SCHEMA
 {{schema_context}}
 
 ORIGINAL QUESTION: "{{question}}"
-
-PLAN (for reference):
-{{query_plan}}
 
 GENERATED SQL (with error):
 {{generated_sql}}
@@ -389,7 +345,6 @@ FIXING STEPS:
 3. Ensure FROM/JOINs cover all columns used.
 4. If GROUP BY, ensure all non-aggregates are in GROUP BY.
 5. Check quotes and literals.
-6. Verify plan compliance.
 
 ==================================================
 EXAMPLES:
@@ -419,6 +374,8 @@ const SCHEMA_SELECTION_PROMPT = `You are a schema selector for Text-to-SQL. Give
 
 DATABASE TABLES:
 {{table_list}}
+
+{{schema_linking_hints}}
 
 QUESTION: "{{question}}"
 

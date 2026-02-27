@@ -17,7 +17,8 @@ services:
     ports:
       - "5002:5002"
     volumes:
-      - ./TensorSQL-Node/data:/app/data
+      - ./TensorSQL-Node:/app
+      - /app/node_modules
     environment:
       - PORT=5002
       - LLM_ENDPOINT_URL=http://request-hub:5001/generate_output
@@ -31,10 +32,10 @@ services:
     ports:
       - "5003:5003"
     volumes:
-      - ./ViText2SQL/benchmark_tensor_logs:/data/logs:ro
+      - ./ViText2SQL/benchmark_tensor_logs:/app/logs:ro
     environment:
       - PORT=5003
-      - RESULTS_PATH=/data/logs/benchmark_results.json
+      - LOGS_DIR=/app/logs
     depends_on:
       - tensorsql-node
     networks:

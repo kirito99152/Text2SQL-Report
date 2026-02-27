@@ -1,6 +1,5 @@
 
 const schemaService = require('../services/schemaService');
-const schemaLinkingService = require('../services/schemaLinkingService');
 const schemaSelectionService = require('../services/schemaSelectionService');
 const planningService = require('../services/planningService');
 const sqlService = require('../services/sqlService');
@@ -9,31 +8,21 @@ const selfCheckService = require('../services/selfCheckService');
 exports.generate = async (req, res) => {
     try {
         const { question, workerId } = req.body;
+        const pipeline = req.body.pipeline || 'base';
         const workerPrefix = workerId !== undefined ? `[Worker ${workerId}] ` : "";
 
         if (!question) {
             return res.status(400).json({ error: "Missing 'question' in request body." });
         }
 
-        console.log(`[Controller] ${workerPrefix}Received request: "${question}"`);
+        console.log(`[Controller] ${workerPrefix}Received request: "${question}" (pipeline: ${pipeline})`);
 
         // 1. Get Schema
         let schemaContext = "";
         let enrichedSchema = null;
 
-        // Schema Linking: token match → get hints + pre-filtered tables
+        // AI Schema Selection will handle table filtering
         const dbId = req.body.dbId || null;
-        let linkingText = "";
-        let tokenMatchedTables = null;
-
-        if (dbId) {
-            const linkingResult = schemaLinkingService.generateLinkingWithRelevantTables(question, dbId);
-            linkingText = linkingResult.linkingText;
-            tokenMatchedTables = linkingResult.relevantTables;
-            if (linkingText) {
-                console.log(`[Controller] ${workerPrefix}Schema linking: ${linkingText.split('\n').length - 1} matches`);
-            }
-        }
 
         if (req.body.schema) {
             // 1a. Direct Schema provided (Bootstrap mode)
@@ -43,20 +32,20 @@ exports.generate = async (req, res) => {
             // Enrich schema (using Cache if available)
             enrichedSchema = await schemaService.enrichSchema(enrichedSchema, workerId);
 
-            // AI Schema Selection: token match → AI refine → cap 10
-            const relevantTables = await schemaSelectionService.selectRelevantTables(
-                question, enrichedSchema, linkingText, tokenMatchedTables
-            );
+            // AI Schema Selection: cap 10
+            let relevantTables = null;
+            if (pipeline !== 'ablation1') {
+                relevantTables = await schemaSelectionService.selectRelevantTables(question, enrichedSchema);
+            } else {
+                relevantTables = new Set(enrichedSchema.tables.map(t => t.name));
+            }
 
             // Build FILTERED context (used for ALL steps — small context window)
-            schemaContext = schemaService.buildFilteredSchemaContext(enrichedSchema, relevantTables, linkingText);
+            schemaContext = schemaService.buildFilteredSchemaContext(enrichedSchema, relevantTables);
 
         } else if (req.body.schemaContext) {
             // Legacy/Test mode where text is provided directly
             schemaContext = req.body.schemaContext;
-            if (linkingText) {
-                schemaContext += "\n" + linkingText + "\n";
-            }
         } else if (req.body.connectionString) {
             // 1b. Reverse Engineer from DB
             console.log("[Controller] Reverse engineering schema from connection string...");
@@ -67,12 +56,15 @@ exports.generate = async (req, res) => {
             enrichedSchema = await schemaService.enrichSchema(enrichedSchema, workerId);
 
             // AI Schema Selection
-            const relevantTables = await schemaSelectionService.selectRelevantTables(
-                question, enrichedSchema, linkingText, tokenMatchedTables
-            );
+            let relevantTables = null;
+            if (pipeline !== 'ablation1') {
+                relevantTables = await schemaSelectionService.selectRelevantTables(question, enrichedSchema);
+            } else {
+                relevantTables = new Set(enrichedSchema.tables.map(t => t.name));
+            }
 
             // Build filtered context
-            schemaContext = schemaService.buildFilteredSchemaContext(enrichedSchema, relevantTables, linkingText);
+            schemaContext = schemaService.buildFilteredSchemaContext(enrichedSchema, relevantTables);
         } else {
             return res.status(400).json({ status: "error", message: "Missing connectionString, schema, or schemaContext" });
         }
@@ -88,24 +80,30 @@ exports.generate = async (req, res) => {
         }
 
         // 3. Generate Query Plan (filtered schema)
-        const plan = await planningService.generatePlan(question, schemaContext);
+        let plan = null;
+        if (pipeline !== 'ablation2') {
+            plan = await planningService.generatePlan(question, schemaContext, pipeline);
+        }
 
         // 4. Generate SQL (filtered schema)
-        let sql = await sqlService.generateSql(plan, schemaContext);
+        let sql = await sqlService.generateSql(plan, schemaContext, question, pipeline);
 
         // 4b. Self-Correction (filtered schema)
-        sql = await selfCheckService.verifyAndCorrectSql(plan, schemaContext, sql);
+        if (pipeline !== 'ablation3') {
+            sql = await selfCheckService.verifyAndCorrectSql(plan, schemaContext, sql, pipeline);
+        }
 
         // 5. Execution-Based Correction
         let executionResult = null;
-        if (req.body.dbId) {
+        if (req.body.dbId && pipeline !== 'ablation3') {
             const executionCorrectionService = require('../services/executionCorrectionService');
             sql = await executionCorrectionService.executeAndCorrect(
                 req.body.dbId,
                 sql,
                 question,
                 schemaContext,
-                plan
+                plan,
+                pipeline
             );
         }
 

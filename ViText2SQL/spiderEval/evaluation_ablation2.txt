@@ -1,0 +1,1650 @@
+medium pred: SELECT cau.id_kien_truc_su, cau.chieu_dai_theo_met, kien_truc_su.ten FROM cau JOIN kien_truc_su ON cau.id_kien_truc_su = kien_truc_su.id ORDER BY cau.chieu_dai_theo_met DESC LIMIT 1
+medium gold: select max ( t1.chieu_dai_theo_met ) , t2.ten from cau as t1 join kien_truc_su as t2 on t1.id_kien_truc_su = t2.id
+
+medium pred: SELECT T1.ten, T1.quoc_tich FROM kien_truc_su AS T1 JOIN nha_may AS T2 ON T1.id = T2.id_kien_truc_su GROUP BY T1.id HAVING COUNT(DISTINCT T2.id) > 0
+medium gold: select distinct t1.ten , t1.quoc_tich from kien_truc_su as t1 join nha_may as t2 on t1.id = t2.id_kien_truc_su
+
+hard pred: SELECT loai FROM nha_may JOIN kien_truc_su ON nha_may.id_kien_truc_su = kien_truc_su.id WHERE quoc_tich = 'Mỹ' OR quoc_tich = 'Canada' GROUP BY loai
+hard gold: select distinct t1.loai from nha_may as t1 join kien_truc_su as t2 on t1.id_kien_truc_su = t2.id where t2.quoc_tich = "American" or t2.quoc_tich = "Canadian"
+
+extra pred: SELECT kien_truc_su.id, kien_truc_su.ten, kien_truc_su.gioi_tinh FROM kien_truc_su JOIN cau ON kien_truc_su.id = cau.id_kien_truc_su LEFT JOIN nha_may ON kien_truc_su.id = nha_may.id_kien_truc_su GROUP BY kien_truc_su.id HAVING COUNT(DISTINCT cau.id) >= 2 OR COUNT(nha_may.id) >= 1
+extra gold: select t1.id , t1.ten , t1.gioi_tinh from kien_truc_su as t1 join cau as t2 on t1.id = t2.id_kien_truc_su group by t1.id having count ( * ) = 2 union select t1.id , t1.ten , t1.gioi_tinh from kien_truc_su as t1 join nha_may as t2 on t1.id = t2.id_kien_truc_su group by t1.id having count ( * ) = 1
+
+eval_err_num:1
+medium pred: SELECT dia_diem FROM cau WHERE ten='Cổng vòm Kolob' OR ten='Cầu cầu vồng'
+medium gold: select dia_diem from cau where ten = "Kolob Arch" or ten = "Rainbow Bridge"
+
+hard pred: SELECT nha_may.ten FROM nha_may JOIN kien_truc_su ON nha_may.id_kien_truc_su = kien_truc_su.id JOIN cau ON cau.id_kien_truc_su = kien_truc_su.id WHERE cau.chieu_dai_theo_met > 80 GROUP BY nha_may.id HAVING COUNT(DISTINCT cau.id) > 0
+hard gold: select distinct t1.ten from nha_may as t1 join kien_truc_su as t2 on t1.id_kien_truc_su = t2.id join cau as t3 on t3.id_kien_truc_su = t2.id where t3.chieu_dai_theo_met > 80
+
+hard pred: SELECT ten FROM cau JOIN kien_truc_su ON cau.id_kien_truc_su = kien_truc_su.id WHERE quoc_tich = 'Mỹ' ORDER BY chieu_dai_theo_met ASC
+hard gold: select t1.ten from cau as t1 join kien_truc_su as t2 on t1.id_kien_truc_su = t2.id where t2.quoc_tich = "American" order by t1.chieu_dai_theo_feet
+
+hard pred: SELECT dia_diem FROM rap_chieu_phim WHERE suc_chua > 800
+hard gold: select dia_diem from rap_chieu_phim except select dia_diem from rap_chieu_phim where suc_chua > 800
+
+hard pred: SELECT rap_chieu_phim.dia_diem FROM rap_chieu_phim WHERE rap_chieu_phim.nam_mo_cua BETWEEN 2010 AND 2011 GROUP BY rap_chieu_phim.dia_diem HAVING COUNT(*) > 1
+hard gold: select dia_diem from rap_chieu_phim where nam_mo_cua = 2010 intersect select dia_diem from rap_chieu_phim where nam_mo_cua = 2011
+
+eval_err_num:2
+extra pred: SELECT ten AS ten_rap_chieu_phim, dia_diem AS dia_diem_rap_chieu_phim FROM rap_chieu_phim WHERE suc_chua > (SELECT AVG(suc_chua) FROM rap_chieu_phim) ORDER BY suc_chua DESC LIMIT 10
+extra gold: select ten , dia_diem from rap_chieu_phim where suc_chua > ( select avg ( suc_chua ) from rap_chieu_phim )
+
+easy pred: SELECT rap_chieu_phim.dia_diem FROM rap_chieu_phim GROUP BY rap_chieu_phim.dia_diem HAVING COUNT(*) > 1
+easy gold: select distinct dia_diem from rap_chieu_phim
+
+easy pred: SELECT dia_diem FROM rap_chieu_phim GROUP BY dia_diem HAVING COUNT(DISTINCT id_rap_chieu_phim) > 1
+easy gold: select distinct dia_diem from rap_chieu_phim
+
+eval_err_num:3
+medium pred: SELECT ten AS ten_rap_chieu_phim, dia_diem AS dia_diem_rap_chieu_phim FROM rap_chieu_phim ORDER BY suc_chua DESC LIMIT 1
+medium gold: select ten , dia_diem from rap_chieu_phim order by suc_chua desc limit 1
+
+eval_err_num:4
+medium pred: SELECT AVG(suc_chua) AS suc_chua_trung_binh, MIN(suc_chua) AS suc_chua_tuoi_nhat, MAX(suc_chua) AS suc_chua_tuoi_nhat FROM rap_chieu_phim WHERE nam_mo_cua > 2011
+medium gold: select avg ( suc_chua ) , min ( suc_chua ) , max ( suc_chua ) from rap_chieu_phim where nam_mo_cua >= 2011
+
+eval_err_num:5
+medium pred: SELECT dia_diem, COUNT(*) AS so_luong_rap FROM rap_chieu_phim GROUP BY dia_diem ORDER BY COUNT(*) DESC
+medium gold: select dia_diem , count ( * ) from rap_chieu_phim group by dia_diem
+
+eval_err_num:6
+extra pred: SELECT rap_chieu_phim.dia_diem AS dia_diem FROM rap_chieu_phim WHERE rap_chieu_phim.nam_mo_cua >= 2010 GROUP BY rap_chieu_phim.dia_diem ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select dia_diem from rap_chieu_phim where nam_mo_cua >= 2010 group by dia_diem order by count ( * ) desc limit 1
+
+medium pred: SELECT rap_chieu_phim.dia_diem FROM rap_chieu_phim GROUP BY rap_chieu_phim.dia_diem HAVING COUNT(*) >= 2 AND SUM(rap_chieu_phim.suc_chua) > 600
+medium gold: select dia_diem from rap_chieu_phim where suc_chua > 300 group by dia_diem having count ( * ) >= 2
+
+medium pred: SELECT rap_chieu_phim.dia_diem FROM rap_chieu_phim GROUP BY rap_chieu_phim.dia_diem HAVING COUNT(*) >= 2 AND AVG(rap_chieu_phim.suc_chua) > 300 ORDER BY rap_chieu_phim.dia_diem
+medium gold: select dia_diem from rap_chieu_phim where suc_chua > 300 group by dia_diem having count ( * ) >= 2
+
+easy pred: SELECT duoc_dao_dien_boi FROM phim GROUP BY duoc_dao_dien_boi ORDER BY duoc_dao_dien_boi ASC LIMIT 1000
+easy gold: select distinct duoc_dao_dien_boi from phim
+
+medium pred: SELECT duoc_dao_dien_boi, COUNT(*) FROM phim GROUP BY duoc_dao_dien_boi ORDER BY COUNT(*) DESC
+medium gold: select duoc_dao_dien_boi , count ( * ) from phim group by duoc_dao_dien_boi
+
+eval_err_num:7
+medium pred: SELECT lich_chieu_phim.id_rap_chieu_phim, SUM(lich_chieu_phim.so_luong_suat_chieu_moi_ngay) AS tong_suat_chieu FROM lich_chieu_phim GROUP BY lich_chieu_phim.id_rap_chieu_phim ORDER BY SUM(lich_chieu_phim.so_luong_suat_chieu_moi_ngay) DESC
+medium gold: select t2.ten , sum ( t1.so_luong_suat_chieu_moi_ngay ) from lich_chieu_phim as t1 join rap_chieu_phim as t2 on t1.id_rap_chieu_phim = t2.id_rap_chieu_phim group by t1.id_rap_chieu_phim
+
+medium pred: SELECT phim.tieu_de, MAX(lich_chieu_phim.gia) FROM phim JOIN lich_chieu_phim ON phim.id_phim = lich_chieu_phim.id_phim GROUP BY phim.id_phim ORDER BY phim.id_phim DESC
+medium gold: select t2.tieu_de , max ( t1.gia ) from lich_chieu_phim as t1 join phim as t2 on t1.id_phim = t2.id_phim group by t1.id_phim
+
+medium pred: SELECT phim.tieu_de, MAX(lich_chieu_phim.gia) FROM phim JOIN lich_chieu_phim ON phim.id_phim = lich_chieu_phim.id_phim GROUP BY phim.id_phim ORDER BY phim.tieu_de DESC LIMIT 1
+medium gold: select t2.tieu_de , max ( t1.gia ) from lich_chieu_phim as t1 join phim as t2 on t1.id_phim = t2.id_phim group by t1.id_phim
+
+extra pred: SELECT duoc_dao_dien_boi FROM phim GROUP BY duoc_dao_dien_boi ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t2.duoc_dao_dien_boi from lich_chieu_phim as t1 join phim as t2 on t1.id_phim = t2.id_phim group by t2.duoc_dao_dien_boi order by sum ( t1.so_luong_suat_chieu_moi_ngay ) desc limit 1
+
+medium pred: SELECT rap_chieu_phim.dia_diem FROM rap_chieu_phim GROUP BY rap_chieu_phim.dia_diem HAVING COUNT(*) > 1 AND AVG(rap_chieu_phim.suc_chua) > 300
+medium gold: select dia_diem from rap_chieu_phim where suc_chua > 300 group by dia_diem having count ( * ) > 1
+
+medium pred: SELECT rap_chieu_phim.dia_diem FROM rap_chieu_phim WHERE rap_chieu_phim.suc_chua > 300 GROUP BY rap_chieu_phim.dia_diem HAVING COUNT(rap_chieu_phim.id_rap_chieu_phim) > 1
+medium gold: select dia_diem from rap_chieu_phim where suc_chua > 300 group by dia_diem having count ( * ) > 1
+
+easy pred: SELECT id_khoa_hoc FROM khoa_hoc WHERE ngay LIKE 'MTW%'
+easy gold: select ten_khoa_hoc from khoa_hoc where ngay = "MTW"
+
+easy pred: SELECT ten_khoa_hoc FROM khoa_hoc WHERE ngay LIKE 'MTW'
+easy gold: select ten_khoa_hoc from khoa_hoc where ngay = "MTW"
+
+easy pred: SELECT COUNT(DISTINCT dang_ky_khoa_hoc.id_sinh_vien) FROM dang_ky_khoa_hoc JOIN chuyen_doi_diem ON dang_ky_khoa_hoc.diem = chuyen_doi_diem.bang_diem WHERE chuyen_doi_diem.diem_so = 3
+easy gold: select count ( distinct id_sinh_vien ) from dang_ky_khoa_hoc where diem = "B"
+
+easy pred: SELECT COUNT(DISTINCT sinh_vien.id_sinh_vien) FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.id_sinh_vien = dang_ky_khoa_hoc.id_sinh_vien JOIN chuyen_doi_diem ON dang_ky_khoa_hoc.diem = chuyen_doi_diem.bang_diem WHERE chuyen_doi_diem.diem_so = 3.0
+easy gold: select count ( distinct id_sinh_vien ) from dang_ky_khoa_hoc where diem = "B"
+
+eval_err_num:8
+medium pred: SELECT MAX(diem_so) AS diem_cao_nhat, MIN(diem_so) AS diem_thap_nhat FROM chuyen_doi_diem
+medium gold: select max ( diem_so ) , min ( diem_so ) from chuyen_doi_diem
+
+eval_err_num:9
+medium pred: SELECT MAX(diem_so) AS diem_cao_nhat, MIN(diem_so) AS diem_thap_nhat FROM chuyen_doi_diem
+medium gold: select max ( diem_so ) , min ( diem_so ) from chuyen_doi_diem
+
+medium pred: SELECT ten FROM sinh_vien WHERE ho LIKE '%a%'
+medium gold: select distinct ten from sinh_vien where ten like "%a%"
+
+eval_err_num:10
+medium pred: SELECT ho || ' ' || ten AS ten_day_du FROM giang_vien WHERE gioi_tinh = 'Nam' AND toa_nha = 'NEB'
+medium gold: select ten , ho from giang_vien where gioi_tinh = "M" and toa_nha = "NEB"
+
+medium pred: SELECT giang_vien.phong FROM giang_vien JOIN la_thanh_vien_cua ON giang_vien.id_giang_vien = la_thanh_vien_cua.id_giang_vien JOIN khoa ON la_thanh_vien_cua.ma_so_khoa = khoa.ma_so_khoa WHERE giang_vien.ngach = 'Giáo sư' AND khoa.toa_nha = 'NEB'
+medium gold: select phong from giang_vien where ngach = "Professor" and toa_nha = "NEB"
+
+eval_err_num:11
+medium pred: SELECT giang_vien.ten FROM giang_vien JOIN la_thanh_vien_cua ON giang_vien.id_giang_vien = la_thanh_vien_cua.id_giang_vien JOIN khoa ON la_thanh_vien_cua.ma_so_khoa = khoa.ma_so_khoa WHERE giang_vien.ngach = 'Giáo sư' AND khoa.toa_nha = 'NEB' AND khoa.phong IS NOT NULL
+medium gold: select phong from giang_vien where ngach = "Professor" and toa_nha = "NEB"
+
+easy pred: SELECT id_khoa_hoc, ten_khoa_hoc, so_luong_tin_chi FROM khoa_hoc ORDER BY so_luong_tin_chi ASC
+easy gold: select * from khoa_hoc order by so_luong_tin_chi
+
+easy pred: SELECT id_khoa_hoc, so_luong_tin_chi FROM khoa_hoc ORDER BY so_luong_tin_chi ASC
+easy gold: select * from khoa_hoc order by so_luong_tin_chi
+
+medium pred: SELECT ten FROM giang_vien ORDER BY ten ASC
+medium gold: select ten from giang_vien where ngach = "Professor" order by ten
+
+extra pred: SELECT khoa.ten_khoa FROM chuyen_nganh_phu JOIN khoa ON chuyen_nganh_phu.ma_so_khoa = khoa.ma_so_khoa GROUP BY khoa.ma_so_khoa ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.ten_khoa from khoa as t1 join chuyen_nganh_phu as t2 on t1.ma_so_khoa = t2.ma_so_khoa group by t2.ma_so_khoa order by count ( * ) desc limit 1
+
+extra pred: SELECT T1.ten_khoa FROM khoa AS T1 JOIN chuyen_nganh_phu AS T2 ON T1.ma_so_khoa = T2.ma_so_khoa GROUP BY T1.ma_so_khoa ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.ten_khoa from khoa as t1 join chuyen_nganh_phu as t2 on t1.ma_so_khoa = t2.ma_so_khoa group by t2.ma_so_khoa order by count ( * ) desc limit 1
+
+hard pred: SELECT ten_khoa FROM khoa WHERE ma_so_khoa NOT IN (SELECT ma_so_khoa FROM chuyen_nganh_phu)
+hard gold: select ten_khoa from khoa except select t1.ten_khoa from khoa as t1 join chuyen_nganh_phu as t2 on t1.ma_so_khoa = t2.ma_so_khoa
+
+extra pred: SELECT ten_khoa FROM khoa JOIN la_thanh_vien_cua ON khoa.ma_so_khoa = la_thanh_vien_cua.ma_so_khoa GROUP BY khoa.ma_so_khoa ORDER BY COUNT(*) ASC LIMIT 1
+extra gold: select t1.ten_khoa from khoa as t1 join la_thanh_vien_cua as t2 on t1.ma_so_khoa = t2.ma_so_khoa group by t2.ma_so_khoa order by count ( * ) asc limit 1
+
+extra pred: SELECT ten_khoa FROM khoa JOIN la_thanh_vien_cua ON khoa.ma_so_khoa = la_thanh_vien_cua.ma_so_khoa GROUP BY khoa.ma_so_khoa ORDER BY COUNT(*) ASC LIMIT 1
+extra gold: select t1.ten_khoa from khoa as t1 join la_thanh_vien_cua as t2 on t1.ma_so_khoa = t2.ma_so_khoa group by t2.ma_so_khoa order by count ( * ) asc limit 1
+
+extra pred: SELECT giang_vien.ho, giang_vien.ten FROM giang_vien JOIN khoa_hoc ON giang_vien.id_giang_vien = khoa_hoc.nguoi_huong_dan GROUP BY giang_vien.id_giang_vien ORDER BY COUNT(*) DESC LIMIT 3
+extra gold: select t2.ten , t2.ho from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien group by t1.nguoi_huong_dan order by count ( * ) desc limit 3
+
+eval_err_num:12
+extra pred: SELECT T1.ho || ' ' || T1.ten AS ten_day_du, COUNT(*) AS so_khoa_hoc FROM giang_vien AS T1 JOIN khoa_hoc AS T2 ON T1.id_giang_vien = T2.nguoi_huong_dan GROUP BY T1.id_giang_vien ORDER BY so_khoa_hoc DESC LIMIT 3
+extra gold: select t2.ten , t2.ho from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien group by t1.nguoi_huong_dan order by count ( * ) desc limit 3
+
+extra pred: SELECT giang_vien.toa_nha FROM giang_vien JOIN khoa_hoc ON giang_vien.id_giang_vien = khoa_hoc.nguoi_huong_dan GROUP BY giang_vien.id_giang_vien, giang_vien.toa_nha ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t2.toa_nha from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien group by t1.nguoi_huong_dan order by count ( * ) desc limit 1
+
+extra pred: SELECT khoa.toa_nha FROM khoa_hoc JOIN giang_vien ON khoa_hoc.nguoi_huong_dan = giang_vien.id_giang_vien JOIN khoa ON khoa_hoc.ma_so_khoa = khoa.ma_so_khoa GROUP BY giang_vien.id_giang_vien ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t2.toa_nha from khoa_hoc as t1 join giang_vien as t2 on t1.nguoi_huong_dan = t2.id_giang_vien group by t1.nguoi_huong_dan order by count ( * ) desc limit 1
+
+medium pred: SELECT ten_khoa_hoc FROM khoa_hoc JOIN dang_ky_khoa_hoc ON khoa_hoc.id_khoa_hoc = dang_ky_khoa_hoc.ma_khoa_hoc GROUP BY khoa_hoc.id_khoa_hoc HAVING COUNT(*) >= 5
+medium gold: select t1.ten_khoa_hoc from khoa_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.id_khoa_hoc = t2.ma_khoa_hoc group by t2.ma_khoa_hoc having count ( * ) >= 5
+
+medium pred: SELECT ten_khoa_hoc FROM khoa_hoc JOIN dang_ky_khoa_hoc ON khoa_hoc.id_khoa_hoc = dang_ky_khoa_hoc.ma_khoa_hoc GROUP BY khoa_hoc.id_khoa_hoc HAVING COUNT(*) >= 5 ORDER BY ten_khoa_hoc
+medium gold: select t1.ten_khoa_hoc from khoa_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.id_khoa_hoc = t2.ma_khoa_hoc group by t2.ma_khoa_hoc having count ( * ) >= 5
+
+medium pred: SELECT khoa_hoc.ma_so_khoa, khoa.phong FROM khoa_hoc JOIN khoa ON khoa_hoc.ma_so_khoa = khoa.ma_so_khoa WHERE khoa_hoc.ten_khoa_hoc = 'Giới thiệu về khoa học máy tính'
+medium gold: select t2.ten_khoa , t2.phong from khoa_hoc as t1 join khoa as t2 on t1.ma_so_khoa = t2.ma_so_khoa where t1.ten_khoa_hoc = "INTRODUCTION TO COMPUTER SCIENCE"
+
+eval_err_num:13
+medium pred: SELECT sinh_vien.ho || ' ' || sinh_vien.ten AS ten_sinh_vien, chuyen_doi_diem.diem_so FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.id_sinh_vien = dang_ky_khoa_hoc.id_sinh_vien JOIN chuyen_doi_diem ON dang_ky_khoa_hoc.diem = chuyen_doi_diem.bang_diem
+medium gold: select t3.ten , t3.ho , t2.diem_so from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien
+
+eval_err_num:14
+medium pred: SELECT sinh_vien.ho || ' ' || sinh_vien.ten AS ten_day_du, chuyen_doi_diem.diem_so FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.id_sinh_vien = dang_ky_khoa_hoc.id_sinh_vien JOIN chuyen_doi_diem ON dang_ky_khoa_hoc.diem = chuyen_doi_diem.bang_diem
+medium gold: select t3.ten , t3.ho , t2.diem_so from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien
+
+hard pred: SELECT sinh_vien.ten FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.id_sinh_vien = dang_ky_khoa_hoc.id_sinh_vien JOIN chuyen_doi_diem ON dang_ky_khoa_hoc.diem = chuyen_doi_diem.bang_diem WHERE chuyen_doi_diem.diem_so > 3.8 GROUP BY sinh_vien.id_sinh_vien HAVING COUNT(*) >= 1 ORDER BY sinh_vien.ten ASC LIMIT 1000
+hard gold: select distinct t3.ten from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien where t2.diem_so >= 3.8
+
+hard pred: SELECT sinh_vien.ten FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.id_sinh_vien = dang_ky_khoa_hoc.id_sinh_vien JOIN chuyen_doi_diem ON dang_ky_khoa_hoc.diem = chuyen_doi_diem.bang_diem WHERE chuyen_doi_diem.diem_so > 3.8 GROUP BY sinh_vien.id_sinh_vien HAVING COUNT(*) >= 1 ORDER BY sinh_vien.ten ASC
+hard gold: select distinct t3.ten from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien where t2.diem_so >= 3.8
+
+eval_err_num:15
+medium pred: SELECT T1.ho || ' ' || T1.ten AS ten_day_du FROM giang_vien AS T1 JOIN la_thanh_vien_cua AS T2 ON T1.id_giang_vien = T2.id_giang_vien WHERE T2.ma_so_khoa = 520
+medium gold: select t1.ten , t1.ho from giang_vien as t1 join la_thanh_vien_cua as t2 on t1.id_giang_vien = t2.id_giang_vien where t2.ma_so_khoa = 520
+
+eval_err_num:16
+medium pred: SELECT T1.ho || ' ' || T1.ten AS ten_day_du FROM giang_vien AS T1 JOIN la_thanh_vien_cua AS T2 ON T1.id_giang_vien = T2.id_giang_vien WHERE T2.ma_so_khoa = 520
+medium gold: select t1.ten , t1.ho from giang_vien as t1 join la_thanh_vien_cua as t2 on t1.id_giang_vien = t2.id_giang_vien where t2.ma_so_khoa = 520
+
+medium pred: SELECT sinh_vien.ho, sinh_vien.ten FROM sinh_vien JOIN chuyen_nganh_phu ON sinh_vien.id_sinh_vien = chuyen_nganh_phu.id_sinh_vien JOIN khoa ON chuyen_nganh_phu.ma_so_khoa = khoa.ma_so_khoa WHERE khoa.ma_so_khoa = '140'
+medium gold: select t2.ten , t2.ho from chuyen_nganh_phu as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien where t1.ma_so_khoa = 140
+
+medium pred: SELECT sinh_vien.ho, sinh_vien.ten FROM sinh_vien JOIN chuyen_nganh_phu ON sinh_vien.id_sinh_vien = chuyen_nganh_phu.id_sinh_vien JOIN khoa ON chuyen_nganh_phu.ma_so_khoa = khoa.ma_so_khoa WHERE khoa.ma_so_khoa = '140'
+medium gold: select t2.ten , t2.ho from chuyen_nganh_phu as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien where t1.ma_so_khoa = 140
+
+hard pred: SELECT ten FROM giang_vien JOIN la_thanh_vien_cua ON giang_vien.id_giang_vien = la_thanh_vien_cua.id_giang_vien JOIN khoa ON la_thanh_vien_cua.ma_so_khoa = khoa.ma_so_khoa WHERE khoa.ten_khoa = 'Khoa học máy tính' AND giang_vien.ho = 'G'
+hard gold: select t2.ho from khoa as t1 join giang_vien as t2 on t1.ma_so_khoa = t3.ma_so_khoa join la_thanh_vien_cua as t3 on t2.id_giang_vien = t3.id_giang_vien where t1.ten_khoa = "Computer Science"
+
+hard pred: SELECT AVG(diem) FROM dang_ky_khoa_hoc JOIN sinh_vien ON dang_ky_khoa_hoc.id_sinh_vien = sinh_vien.id_sinh_vien WHERE sinh_vien.ho = 'Smith'
+hard gold: select avg ( t2.diem_so ) from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien where t3.ho = "Smith"
+
+hard pred: SELECT MAX(diem), MIN(diem) FROM dang_ky_khoa_hoc JOIN sinh_vien ON dang_ky_khoa_hoc.id_sinh_vien = sinh_vien.id_sinh_vien WHERE ma_thanh_pho = 'NYC'
+hard gold: select max ( t2.diem_so ) , min ( t2.diem_so ) from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien where t3.ma_thanh_pho = "NYC"
+
+eval_err_num:17
+hard pred: SELECT MAX(diem) AS cao_nhat, MIN(diem) AS thap_nhat FROM dang_ky_khoa_hoc JOIN sinh_vien ON dang_ky_khoa_hoc.id_sinh_vien = sinh_vien.id_sinh_vien WHERE ma_thanh_pho = 'NYC'
+hard gold: select max ( t2.diem_so ) , min ( t2.diem_so ) from dang_ky_khoa_hoc as t1 join chuyen_doi_diem as t2 join sinh_vien as t3 on t1.diem = t2.bang_diem and t1.id_sinh_vien = t3.id_sinh_vien where t3.ma_thanh_pho = "NYC"
+
+eval_err_num:18
+hard pred: SELECT ten_khoa_hoc FROM khoa_hoc WHERE (so_luong_tin_chi = 3 OR so_luong_tin_chi = 1) AND gio = '4'
+hard gold: select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 3 union select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 1 and gio = 4
+
+eval_err_num:19
+hard pred: SELECT ten_khoa_hoc FROM khoa_hoc WHERE (so_luong_tin_chi = 3 OR so_luong_tin_chi = 1) AND gio = '4'
+hard gold: select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 3 union select ten_khoa_hoc from khoa_hoc where so_luong_tin_chi = 1 and gio = 4
+
+eval_err_num:20
+hard pred: SELECT ten_khoa FROM khoa WHERE bo_phan IN ('AS', 'EN') AND toa_nha = 'NEB'
+hard gold: select ten_khoa from khoa where bo_phan = "AS" union select ten_khoa from khoa where bo_phan = "EN" and toa_nha = "NEB"
+
+eval_err_num:21
+hard pred: SELECT ten_khoa FROM khoa WHERE bo_phan IN ('AS', 'EN') AND toa_nha = 'NEB'
+hard gold: select ten_khoa from khoa where bo_phan = "AS" union select ten_khoa from khoa where bo_phan = "EN" and toa_nha = "NEB"
+
+eval_err_num:22
+medium pred: SELECT AVG(tuoi) AS tuoi_trung_binh, MAX(tuoi) AS tuoi_gia_nhat, MIN(tuoi) AS tuoi_tre_nhat FROM ca_si WHERE quoc_gia = 'Pháp'
+medium gold: select avg ( tuoi ) , min ( tuoi ) , max ( tuoi ) from ca_si where quoc_gia = "France"
+
+medium pred: SELECT AVG(tuoi) FROM ca_si WHERE quoc_gia = 'Pháp' SELECT tuoi FROM ca_si WHERE quoc_gia = 'Pháp' ORDER BY tuoi DESC LIMIT 1 SELECT tuoi FROM ca_si WHERE quoc_gia = 'Pháp' ORDER BY tuoi ASC LIMIT 1
+medium gold: select avg ( tuoi ) , min ( tuoi ) , max ( tuoi ) from ca_si where quoc_gia = "France"
+
+easy pred: SELECT quoc_gia FROM ca_si WHERE tuoi > 20 GROUP BY quoc_gia
+easy gold: select distinct quoc_gia from ca_si where tuoi > 20
+
+easy pred: SELECT quoc_gia FROM ca_si WHERE tuoi > 20 GROUP BY quoc_gia
+easy gold: select distinct quoc_gia from ca_si where tuoi > 20
+
+hard pred: SELECT ten_bai_hat FROM ca_si WHERE tuoi > (SELECT AVG(tuoi) FROM ca_si) ORDER BY ten_bai_hat ASC LIMIT 1000000000
+hard gold: select ten_bai_hat from ca_si where tuoi > ( select avg ( tuoi ) from ca_si )
+
+eval_err_num:23
+medium pred: SELECT AVG(suc_chua) AS suc_chua_trung_binh, MAX(cao_nhat) AS suc_chua_toida FROM san_van_dong
+medium gold: select avg ( suc_chua ) , max ( suc_chua ) from san_van_dong
+
+eval_err_num:24
+medium pred: SELECT AVG(suc_chua) AS suc_chua_trung_binh, MAX(cao_nhat) AS suc_chua_toida FROM san_van_dong
+medium gold: select avg ( suc_chua ) , max ( suc_chua ) from san_van_dong
+
+medium pred: SELECT san_van_dong.ten, COUNT(buoi_hoa_nhac.id_buoi_hoa_nhac) FROM san_van_dong JOIN buoi_hoa_nhac ON san_van_dong.id_san_van_dong = buoi_hoa_nhac.id_san_van_dong GROUP BY san_van_dong.id_san_van_dong ORDER BY COUNT(buoi_hoa_nhac.id_buoi_hoa_nhac) DESC
+medium gold: select t2.ten , count ( * ) from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong group by t1.id_san_van_dong
+
+medium pred: SELECT buoi_hoa_nhac.id_san_van_dong, COUNT(*) FROM buoi_hoa_nhac JOIN san_van_dong ON buoi_hoa_nhac.id_san_van_dong = san_van_dong.id_san_van_dong GROUP BY buoi_hoa_nhac.id_san_van_dong
+medium gold: select t2.ten , count ( * ) from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong group by t1.id_san_van_dong
+
+extra pred: SELECT san_van_dong.ten, san_van_dong.suc_chua FROM buoi_hoa_nhac JOIN san_van_dong ON buoi_hoa_nhac.id_san_van_dong = san_van_dong.id_san_van_dong WHERE buoi_hoa_nhac.nam > '2013' GROUP BY san_van_dong.id_san_van_dong ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t2.ten , t2.suc_chua from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong where t1.nam >= 2014 group by t2.id_san_van_dong order by count ( * ) desc limit 1
+
+hard pred: SELECT ten FROM san_van_dong WHERE id_san_van_dong NOT IN (SELECT id_san_van_dong FROM buoi_hoa_nhac WHERE nam = '2014')
+hard gold: select ten from san_van_dong except select t2.ten from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong where t1.nam = 2014
+
+hard pred: SELECT ten FROM san_van_dong WHERE id_san_van_dong NOT IN (SELECT id_san_van_dong FROM buoi_hoa_nhac WHERE nam = '2014')
+hard gold: select ten from san_van_dong except select t2.ten from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong where t1.nam = 2014
+
+eval_err_num:25
+medium pred: SELECT buoi_hoa_nhac.ten_buoi_hoa_nhac, buoi_hoa_nhac.chu_de, COUNT(ca_si_trong_buoi_hoa_nhac.id_ca_si) AS so_luong_ca_si FROM buoi_hoa_nhac JOIN ca_si_trong_buoi_hoa_nhac ON buoi_hoa_nhac.id_buoi_hoa_nhac = ca_si_trong_buoi_hoa_nhac.id_buoi_hoa_nhac GROUP BY buoi_hoa_nhac.id_buoi_hoa_nhac ORDER BY COUNT(ca_si_trong_buoi_hoa_nhac.id_ca_si) DESC
+medium gold: select t2.ten_buoi_hoa_nhac , t2.chu_de , count ( * ) from ca_si_trong_buoi_hoa_nhac as t1 join buoi_hoa_nhac as t2 on t1.id_buoi_hoa_nhac = t2.id_buoi_hoa_nhac group by t2.id_buoi_hoa_nhac
+
+medium pred: SELECT buoi_hoa_nhac.ten_buoi_hoa_nhac, buoi_hoa_nhac.chu_de, COUNT(ca_si_trong_buoi_hoa_nhac.id_ca_si) FROM buoi_hoa_nhac JOIN ca_si_trong_buoi_hoa_nhac ON buoi_hoa_nhac.id_buoi_hoa_nhac = ca_si_trong_buoi_hoa_nhac.id_buoi_hoa_nhac GROUP BY buoi_hoa_nhac.id_buoi_hoa_nhac ORDER BY COUNT(ca_si_trong_buoi_hoa_nhac.id_ca_si) DESC
+medium gold: select t2.ten_buoi_hoa_nhac , t2.chu_de , count ( * ) from ca_si_trong_buoi_hoa_nhac as t1 join buoi_hoa_nhac as t2 on t1.id_buoi_hoa_nhac = t2.id_buoi_hoa_nhac group by t2.id_buoi_hoa_nhac
+
+eval_err_num:26
+medium pred: SELECT ca_si.ten, COUNT(*) AS so_luong_buoi_hoa_nhac FROM ca_si JOIN ca_si_trong_buoi_hoa_nhac ON ca_si.id_ca_si = ca_si_trong_buoi_hoa_nhac.id_ca_si GROUP BY ca_si.id_ca_si ORDER BY COUNT(*) DESC
+medium gold: select t2.ten , count ( * ) from ca_si_trong_buoi_hoa_nhac as t1 join ca_si as t2 on t1.id_ca_si = t2.id_ca_si group by t2.id_ca_si
+
+eval_err_num:27
+medium pred: SELECT ca_si.ten, COUNT(*) AS so_luong_buoi_hoa_nhac FROM ca_si JOIN ca_si_trong_buoi_hoa_nhac ON ca_si.id_ca_si = ca_si_trong_buoi_hoa_nhac.id_ca_si GROUP BY ca_si.id_ca_si ORDER BY COUNT(*) DESC
+medium gold: select t2.ten , count ( * ) from ca_si_trong_buoi_hoa_nhac as t1 join ca_si as t2 on t1.id_ca_si = t2.id_ca_si group by t2.id_ca_si
+
+hard pred: SELECT ten FROM ca_si JOIN ca_si_trong_buoi_hoa_nhac ON ca_si.id_ca_si = ca_si_trong_buoi_hoa_nhac.id_ca_si JOIN buoi_hoa_nhac ON ca_si_trong_buoi_hoa_nhac.id_buoi_hoa_nhac = buoi_hoa_nhac.id_buoi_hoa_nhac WHERE nam = '2014' GROUP BY ca_si.id_ca_si HAVING COUNT(DISTINCT buoi_hoa_nhac.id_buoi_hoa_nhac) > 0
+hard gold: select t2.ten from ca_si_trong_buoi_hoa_nhac as t1 join ca_si as t2 on t1.id_ca_si = t2.id_ca_si join buoi_hoa_nhac as t3 on t1.id_buoi_hoa_nhac = t3.id_buoi_hoa_nhac where t3.nam = 2014
+
+extra pred: SELECT san_van_dong.ten, san_van_dong.dia_diem FROM san_van_dong JOIN buoi_hoa_nhac ON san_van_dong.id_san_van_dong = buoi_hoa_nhac.id_san_van_dong WHERE buoi_hoa_nhac.nam = '2014' OR buoi_hoa_nhac.nam = '2015' GROUP BY san_van_dong.id_san_van_dong HAVING COUNT(DISTINCT buoi_hoa_nhac.id_buoi_hoa_nhac) >= 2
+extra gold: select t2.ten , t2.dia_diem from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong where t1.nam = 2014 intersect select t2.ten , t2.dia_diem from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong where t1.nam = 2015
+
+hard pred: SELECT COUNT(*) FROM buoi_hoa_nhac JOIN san_van_dong ON buoi_hoa_nhac.id_san_van_dong = san_van_dong.id_san_van_dong WHERE san_van_dong.suc_chua = (SELECT MAX(suc_chua) FROM san_van_dong)
+hard gold: select count ( * ) from buoi_hoa_nhac as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id_san_van_dong order by t2.suc_chua desc limit 1
+
+easy pred: SELECT DISTINCT mau_cua_khu_nha FROM khu_nha ORDER BY mau_cua_khu_nha DESC LIMIT 10
+easy gold: select distinct mau_cua_khu_nha from khu_nha
+
+medium pred: SELECT mau_cua_khu_nha, COUNT(*) FROM khu_nha GROUP BY mau_cua_khu_nha ORDER BY COUNT(*) DESC
+medium gold: select mau_cua_khu_nha , count ( * ) from khu_nha group by mau_cua_khu_nha
+
+medium pred: SELECT danh_muc_san_pham, COUNT(*) FROM chien_dich_gui_thu_quang_cao GROUP BY danh_muc_san_pham ORDER BY COUNT(*) DESC
+medium gold: select danh_muc_san_pham , count ( * ) from chien_dich_gui_thu_quang_cao group by danh_muc_san_pham
+
+eval_err_num:28
+medium pred: SELECT thu_quang_cao_gui_khach_hang.ma_ket_qua, COUNT(*) AS so_luong_thu_quang_cao FROM thu_quang_cao_gui_khach_hang GROUP BY thu_quang_cao_gui_khach_hang.ma_ket_qua
+medium gold: select ma_ket_qua , count ( * ) from thu_quang_cao_gui_khach_hang group by ma_ket_qua
+
+hard pred: SELECT ten_khach_hang FROM khach_hang WHERE id_khach_hang IN (SELECT id_khach_hang FROM thu_quang_cao_gui_khach_hang WHERE ma_ket_qua = 'Đặt hàng' GROUP BY id_khach_hang HAVING COUNT(*) >= 2)
+hard gold: select t2.ten_khach_hang from thu_quang_cao_gui_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where ma_ket_qua = "Order" group by t1.id_khach_hang having count ( * ) >= 2
+
+extra pred: SELECT ten_khach_hang FROM khach_hang JOIN thu_quang_cao_gui_khach_hang ON khach_hang.id_khach_hang = thu_quang_cao_gui_khach_hang.id_khach_hang GROUP BY khach_hang.id_khach_hang ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t2.ten_khach_hang from thu_quang_cao_gui_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) desc limit 1
+
+extra pred: SELECT ten_khach_hang, phuong_thuc_thanh_toan FROM khach_hang WHERE id_khach_hang IN (SELECT id_khach_hang FROM thu_quang_cao_gui_khach_hang WHERE ma_ket_qua = 'Đặt hàng') EXCEPT SELECT ten_khach_hang, phuong_thuc_thanh_toan FROM khach_hang WHERE id_khach_hang IN (SELECT id_khach_hang FROM thu_quang_cao_gui_khach_hang WHERE ma_ket_qua = 'Thất bại')
+extra gold: select t2.ten_khach_hang , t2.phuong_thuc_thanh_toan from thu_quang_cao_gui_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ma_ket_qua = "Order" intersect select t2.ten_khach_hang , t2.phuong_thuc_thanh_toan from thu_quang_cao_gui_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ma_ket_qua = "No Response"
+
+medium pred: SELECT khu_nha.mau_cua_khu_nha, dia_chi_khach_hang.ma_loai_dia_chi FROM khu_nha JOIN dia_chi_khach_hang ON khu_nha.id_khu_nha = dia_chi_khach_hang.id_khu_nha JOIN khach_hang ON dia_chi_khach_hang.id_khach_hang = khach_hang.id_khach_hang
+medium gold: select t2.mau_cua_khu_nha , t1.ma_loai_dia_chi from dia_chi_khach_hang as t1 join khu_nha as t2 on t1.id_khu_nha = t2.id_khu_nha
+
+eval_err_num:29
+extra pred: SELECT phi_van_chuyen_don_hang, id_khach_hang FROM luot_dat_hang_cua_khach_hang WHERE ma_trang_thai_don_hang='Bị huỷ' OR ma_trang_thai_don_hang='Đã thanh toán tiền'
+extra gold: select phi_van_chuyen_don_hang , id_khach_hang from luot_dat_hang_cua_khach_hang where ma_trang_thai_don_hang = "Cancelled" or ma_trang_thai_don_hang = "Paid"
+
+medium pred: SELECT tai_khoan.id_tai_khoan, COUNT(*) FROM tai_khoan JOIN khach_hang ON tai_khoan.id_khach_hang = khach_hang.id_khach_hang GROUP BY tai_khoan.id_khach_hang ORDER BY COUNT(*) DESC
+medium gold: select id_khach_hang , count ( * ) from tai_khoan group by id_khach_hang
+
+eval_err_num:30
+hard pred: SELECT id_khach_hang, COUNT(*) AS so_luong_tai_khoan FROM tai_khoan GROUP BY id_khach_hang ORDER BY so_luong_tai_khoan DESC LIMIT 1
+hard gold: select id_khach_hang , count ( * ) from tai_khoan group by id_khach_hang order by count ( * ) desc limit 1
+
+extra pred: SELECT khach_hang.id_khach_hang, khach_hang.ten_cua_khach_hang, khach_hang.ho_cua_khach_hang FROM khach_hang JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang GROUP BY khach_hang.id_khach_hang ORDER BY COUNT(*) ASC LIMIT 1
+extra gold: select t2.ten_cua_khach_hang , t2.ho_cua_khach_hang , t1.id_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) asc limit 1
+
+extra pred: SELECT khach_hang.id_khach_hang, khach_hang.ho_cua_khach_hang, khach_hang.ten_cua_khach_hang FROM khach_hang JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang GROUP BY khach_hang.id_khach_hang ORDER BY COUNT(*) ASC LIMIT 1
+extra gold: select t2.ten_cua_khach_hang , t2.ho_cua_khach_hang , t1.id_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) asc limit 1
+
+extra pred: SELECT ho_cua_khach_hang, ten_cua_khach_hang FROM khach_hang WHERE id_khach_hang NOT IN (SELECT id_khach_hang FROM tai_khoan)
+extra gold: select ten_cua_khach_hang , ho_cua_khach_hang from khach_hang except select t1.ten_cua_khach_hang , t1.ho_cua_khach_hang from khach_hang as t1 join tai_khoan as t2 on t1.id_khach_hang = t2.id_khach_hang
+
+eval_err_num:31
+extra pred: SELECT khach_hang.ho_cua_khach_hang || ' ' || khach_hang.ten_cua_khach_hang AS ten_day_du FROM khach_hang LEFT JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang WHERE tai_khoan.id_khach_hang IS NULL
+extra gold: select ten_cua_khach_hang , ho_cua_khach_hang from khach_hang except select t1.ten_cua_khach_hang , t1.ho_cua_khach_hang from khach_hang as t1 join tai_khoan as t2 on t1.id_khach_hang = t2.id_khach_hang
+
+easy pred: SELECT COUNT(DISTINCT tai_khoan.id_khach_hang) FROM tai_khoan JOIN khach_hang ON tai_khoan.id_khach_hang = khach_hang.id_khach_hang
+easy gold: select count ( distinct id_khach_hang ) from tai_khoan
+
+easy pred: SELECT COUNT(DISTINCT tai_khoan.id_khach_hang) FROM tai_khoan JOIN khach_hang ON tai_khoan.id_khach_hang = khach_hang.id_khach_hang
+easy gold: select count ( distinct id_khach_hang ) from tai_khoan
+
+medium pred: SELECT COUNT(*) FROM the_khach_hang WHERE id_khach_hang = (SELECT id_khach_hang FROM khach_hang WHERE ten_cua_khach_hang = 'Art' AND ho_cua_khach_hang = 'Turcotte')
+medium gold: select count ( * ) from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten_cua_khach_hang = "Art" and t2.ho_cua_khach_hang = "Turcotte"
+
+medium pred: SELECT COUNT(*) FROM the_khach_hang WHERE id_khach_hang = (SELECT id_khach_hang FROM khach_hang WHERE ten_cua_khach_hang = 'Blanche' AND ho_cua_khach_hang = 'Huels')
+medium gold: select count ( * ) from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten_cua_khach_hang = "Blanche" and t2.ho_cua_khach_hang = "Huels" and t1.ma_loai_the = "Credit"
+
+medium pred: SELECT COUNT(*) FROM the_khach_hang JOIN khach_hang ON the_khach_hang.id_khach_hang = khach_hang.id_khach_hang WHERE khach_hang.ten_cua_khach_hang = 'Blanche' AND khach_hang.ho_cua_khach_hang = 'Huels'
+medium gold: select count ( * ) from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t2.ten_cua_khach_hang = "Blanche" and t2.ho_cua_khach_hang = "Huels" and t1.ma_loai_the = "Credit"
+
+eval_err_num:32
+medium pred: SELECT khach_hang.id_khach_hang AS id, COUNT(*) AS so_luong_the FROM the_khach_hang JOIN khach_hang ON the_khach_hang.id_khach_hang = khach_hang.id_khach_hang GROUP BY khach_hang.id_khach_hang ORDER BY COUNT(*) DESC
+medium gold: select id_khach_hang , count ( * ) from the_khach_hang group by id_khach_hang
+
+eval_err_num:33
+medium pred: SELECT khach_hang.id_khach_hang, COUNT(the_khach_hang.id_the) FROM khach_hang LEFT JOIN the_khach_hang ON khach_hang.id_khach_hang = the_khach_hang.id_khach_hang GROUP BY khach_hang.id_khach_hang
+medium gold: select id_khach_hang , count ( * ) from the_khach_hang group by id_khach_hang
+
+eval_err_num:34
+hard pred: SELECT id_khach_hang, COUNT(*) AS so_the FROM the_khach_hang GROUP BY id_khach_hang ORDER BY COUNT(*) DESC LIMIT 1
+hard gold: select id_khach_hang , count ( * ) from the_khach_hang group by id_khach_hang order by count ( * ) desc limit 1
+
+hard pred: SELECT COUNT(*) FROM the_khach_hang GROUP BY id_khach_hang ORDER BY COUNT(*) DESC LIMIT 1
+hard gold: select id_khach_hang , count ( * ) from the_khach_hang group by id_khach_hang order by count ( * ) desc limit 1
+
+medium pred: SELECT khach_hang.id_khach_hang, khach_hang.ten_cua_khach_hang, khach_hang.ho_cua_khach_hang FROM khach_hang JOIN the_khach_hang ON khach_hang.id_khach_hang = the_khach_hang.id_khach_hang GROUP BY khach_hang.id_khach_hang HAVING COUNT(*) >= 2
+medium gold: select t1.id_khach_hang , t2.ten_cua_khach_hang , t2.ho_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang having count ( * ) >= 2
+
+medium pred: SELECT kh.id_khach_hang, kh.ho_cua_khach_hang, kh.ten_cua_khach_hang FROM khach_hang AS kh JOIN the_khach_hang AS tk ON kh.id_khach_hang = tk.id_khach_hang GROUP BY kh.id_khach_hang HAVING COUNT(tk.id_the) >= 2
+medium gold: select t1.id_khach_hang , t2.ten_cua_khach_hang , t2.ho_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang having count ( * ) >= 2
+
+extra pred: SELECT khach_hang.id_khach_hang, khach_hang.ho_cua_khach_hang, khach_hang.ten_cua_khach_hang FROM khach_hang JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang GROUP BY khach_hang.id_khach_hang ORDER BY COUNT(*) ASC LIMIT 1
+extra gold: select t1.id_khach_hang , t2.ten_cua_khach_hang , t2.ho_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) asc limit 1
+
+eval_err_num:35
+extra pred: SELECT kh.id_khach_hang AS id, kh.ho_cua_khach_hang AS ho, kh.ten_cua_khach_hang AS ten FROM khach_hang AS kh JOIN tai_khoan AS tk ON kh.id_khach_hang = tk.id_khach_hang GROUP BY kh.id_khach_hang ORDER BY COUNT(tk.id_tai_khoan) ASC LIMIT 1
+extra gold: select t1.id_khach_hang , t2.ten_cua_khach_hang , t2.ho_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang order by count ( * ) asc limit 1
+
+medium pred: SELECT ma_loai_the, COUNT(*) FROM the_khach_hang GROUP BY ma_loai_the ORDER BY COUNT(*) DESC
+medium gold: select ma_loai_the , count ( * ) from the_khach_hang group by ma_loai_the
+
+medium pred: SELECT ma_loai_the, COUNT(*) FROM the_khach_hang GROUP BY ma_loai_the ORDER BY COUNT(*) DESC
+medium gold: select ma_loai_the , count ( * ) from the_khach_hang group by ma_loai_the
+
+medium pred: SELECT ma_loai_the, COUNT(*) FROM the_khach_hang GROUP BY ma_loai_the ORDER BY COUNT(*) DESC
+medium gold: select ma_loai_the , count ( distinct id_khach_hang ) from the_khach_hang group by ma_loai_the
+
+medium pred: SELECT ma_loai_the, COUNT(*) FROM the_khach_hang GROUP BY ma_loai_the ORDER BY COUNT(*) DESC
+medium gold: select ma_loai_the , count ( distinct id_khach_hang ) from the_khach_hang group by ma_loai_the
+
+extra pred: SELECT id_khach_hang, ten_cua_khach_hang FROM khach_hang WHERE id_khach_hang NOT IN (SELECT id_khach_hang FROM the_khach_hang)
+extra gold: select id_khach_hang , ten_cua_khach_hang from khach_hang except select t1.id_khach_hang , t2.ten_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where ma_loai_the = "Credit"
+
+extra pred: SELECT khach_hang.id_khach_hang, khach_hang.ten_cua_khach_hang FROM khach_hang WHERE khach_hang.id_khach_hang NOT IN (SELECT id_khach_hang FROM the_khach_hang)
+extra gold: select id_khach_hang , ten_cua_khach_hang from khach_hang except select t1.id_khach_hang , t2.ten_cua_khach_hang from the_khach_hang as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where ma_loai_the = "Credit"
+
+easy pred: SELECT ma_loai_the FROM the_khach_hang GROUP BY ma_loai_the
+easy gold: select distinct ma_loai_the from the_khach_hang
+
+easy pred: SELECT loai_giao_dich, COUNT(*) FROM giao_dich_tai_chinh GROUP BY loai_giao_dich ORDER BY COUNT(*) DESC
+easy gold: select count ( distinct loai_giao_dich ) from giao_dich_tai_chinh
+
+medium pred: SELECT ma_loai_the, COUNT(*) FROM the_khach_hang GROUP BY ma_loai_the ORDER BY COUNT(*) DESC
+medium gold: select t2.ma_loai_the , count ( * ) from giao_dich_tai_chinh as t1 join the_khach_hang as t2 on t1.id_the = t2.id_the group by t2.ma_loai_the
+
+medium pred: SELECT ma_loai_the, COUNT(*) FROM the_khach_hang GROUP BY ma_loai_the ORDER BY COUNT(*) DESC
+medium gold: select t2.ma_loai_the , count ( * ) from giao_dich_tai_chinh as t1 join the_khach_hang as t2 on t1.id_the = t2.id_the group by t2.ma_loai_the
+
+medium pred: SELECT loai_giao_dich, COUNT(*) FROM giao_dich_tai_chinh GROUP BY loai_giao_dich ORDER BY COUNT(*) DESC
+medium gold: select loai_giao_dich , count ( * ) from giao_dich_tai_chinh group by loai_giao_dich
+
+medium pred: SELECT loai_giao_dich, COUNT(*) FROM giao_dich_tai_chinh GROUP BY loai_giao_dich ORDER BY COUNT(*) DESC
+medium gold: select loai_giao_dich , count ( * ) from giao_dich_tai_chinh group by loai_giao_dich
+
+hard pred: SELECT loai_giao_dich FROM giao_dich_tai_chinh ORDER BY so_tien_giao_dich DESC LIMIT 1
+hard gold: select loai_giao_dich from giao_dich_tai_chinh group by loai_giao_dich order by sum ( so_tien_giao_dich ) desc limit 1
+
+medium pred: SELECT tai_khoan.id_tai_khoan, COUNT(*) FROM tai_khoan JOIN giao_dich_tai_chinh ON tai_khoan.id_tai_khoan = giao_dich_tai_chinh.id_tai_khoan GROUP BY tai_khoan.id_tai_khoan ORDER BY COUNT(*) DESC
+medium gold: select id_tai_khoan , count ( * ) from giao_dich_tai_chinh group by id_tai_khoan
+
+eval_err_num:36
+medium pred: SELECT giao_dich_tai_chinh.id_tai_khoan, COUNT(*) AS so_luong_giao_dich FROM giao_dich_tai_chinh GROUP BY giao_dich_tai_chinh.id_tai_khoan
+medium gold: select id_tai_khoan , count ( * ) from giao_dich_tai_chinh group by id_tai_khoan
+
+eval_err_num:37
+hard pred: SELECT ma_loai_tai_lieu, COUNT(*) AS so_luong_truy_cap FROM tai_lieu GROUP BY ma_loai_tai_lieu ORDER BY so_luong_truy_cap DESC LIMIT 1
+hard gold: select sum ( so_luong_truy_cap ) from tai_lieu group by ma_loai_tai_lieu order by count ( * ) desc limit 1
+
+eval_err_num:38
+hard pred: SELECT SUM(so_luong_truy_cap) FROM tai_lieu JOIN (SELECT ma_loai_tai_lieu, COUNT(*) AS count FROM tai_lieu GROUP BY ma_loai_tai_lieu ORDER BY count DESC LIMIT 1) AS T1 ON tai_lieu.ma_loai_tai_lieu = T1.ma_loai_tai_lieu
+hard gold: select sum ( so_luong_truy_cap ) from tai_lieu group by ma_loai_tai_lieu order by count ( * ) desc limit 1
+
+eval_err_num:39
+easy pred: SELECT SUM(so_luong_truy_cap) / COUNT(*) FROM tai_lieu
+easy gold: select avg ( so_luong_truy_cap ) from tai_lieu
+
+extra pred: SELECT ma_cau_truc_tai_lieu FROM tai_lieu ORDER BY so_luong_truy_cap ASC LIMIT 1
+extra gold: select t2.mo_ta_ve_cau_truc_tai_lieu from tai_lieu as t1 join cau_truc_tai_lieu as t2 on t1.ma_cau_truc_tai_lieu = t2.ma_cau_truc_tai_lieu group by t1.ma_cau_truc_tai_lieu order by count ( * ) desc limit 1
+
+extra pred: SELECT cau_truc_tai_lieu.mo_ta_ve_cau_truc_tai_lieu FROM tai_lieu JOIN cau_truc_tai_lieu ON tai_lieu.ma_cau_truc_tai_lieu = cau_truc_tai_lieu.ma_cau_truc_tai_lieu ORDER BY tai_lieu.so_luong_truy_cap ASC LIMIT 1
+extra gold: select t2.mo_ta_ve_cau_truc_tai_lieu from tai_lieu as t1 join cau_truc_tai_lieu as t2 on t1.ma_cau_truc_tai_lieu = t2.ma_cau_truc_tai_lieu group by t1.ma_cau_truc_tai_lieu order by count ( * ) desc limit 1
+
+eval_err_num:40
+Exec Error at document_management: ORDER BY clause should come after INTERSECT not before
+extra pred: SELECT tai_lieu.ma_tai_lieu, tai_lieu.ten_tai_lieu, tai_lieu.ma_loai_tai_lieu, tai_lieu.ma_cau_truc_tai_lieu FROM tai_lieu JOIN (SELECT ma_loai_tai_lieu FROM tai_lieu GROUP BY ma_loai_tai_lieu ORDER BY COUNT(*) DESC LIMIT 3) AS T1 ON tai_lieu.ma_loai_tai_lieu = T1.ma_loai_tai_lieu JOIN (SELECT ma_cau_truc_tai_lieu FROM tai_lieu GROUP BY ma_cau_truc_tai_lieu ORDER BY COUNT(*) DESC LIMIT 3) AS T2 ON tai_lieu.ma_cau_truc_tai_lieu = T2.ma_cau_truc_tai_lieu
+extra gold: select ten_tai_lieu from tai_lieu group by ma_loai_tai_lieu order by count ( * ) desc limit 3 intersect select ten_tai_lieu from tai_lieu group by ma_cau_truc_tai_lieu order by count ( * ) desc limit 3
+
+eval_err_num:41
+Exec Error at document_management: ORDER BY clause should come after INTERSECT not before
+extra pred: SELECT tai_lieu.ten_tai_lieu FROM tai_lieu JOIN (SELECT ma_loai_tai_lieu FROM tai_lieu GROUP BY ma_loai_tai_lieu ORDER BY COUNT(*) DESC LIMIT 3) AS T1 ON tai_lieu.ma_loai_tai_lieu = T1.ma_loai_tai_lieu JOIN (SELECT ma_cau_truc_tai_lieu FROM cau_truc_tai_lieu GROUP BY ma_cau_truc_tai_lieu ORDER BY COUNT(*) DESC LIMIT 3) AS T2 ON tai_lieu.ma_cau_truc_tai_lieu = T2.ma_cau_truc_tai_lieu
+extra gold: select ten_tai_lieu from tai_lieu group by ma_loai_tai_lieu order by count ( * ) desc limit 3 intersect select ten_tai_lieu from tai_lieu group by ma_cau_truc_tai_lieu order by count ( * ) desc limit 3
+
+easy pred: SELECT ma_loai_tai_lieu FROM tai_lieu GROUP BY ma_loai_tai_lieu HAVING SUM(so_luong_truy_cap) > 10000 ORDER BY SUM(so_luong_truy_cap) DESC LIMIT 1
+easy gold: select ma_loai_tai_lieu from tai_lieu group by ma_loai_tai_lieu having sum ( so_luong_truy_cap ) > 10000
+
+easy pred: SELECT ma_loai_tai_lieu FROM tai_lieu GROUP BY ma_loai_tai_lieu HAVING SUM(so_luong_truy_cap) > 10000 ORDER BY ma_loai_tai_lieu
+easy gold: select ma_loai_tai_lieu from tai_lieu group by ma_loai_tai_lieu having sum ( so_luong_truy_cap ) > 10000
+
+hard pred: SELECT ma_tai_lieu FROM tai_lieu WHERE ma_tai_lieu NOT IN (SELECT ma_tai_lieu FROM cac_muc_cua_tai_lieu)
+hard gold: select ten_tai_lieu from tai_lieu where ma_tai_lieu not in ( select ma_tai_lieu from cac_muc_cua_tai_lieu )
+
+hard pred: SELECT nguoi_dung.ten_nguoi_dung, nguoi_dung.mat_khau FROM nguoi_dung JOIN vai_tro ON nguoi_dung.ma_vai_tro = vai_tro.ma_vai_tro GROUP BY nguoi_dung.ma_vai_tro HAVING COUNT(*) = (SELECT COUNT(*) FROM nguoi_dung GROUP BY ma_vai_tro ORDER BY COUNT(*) DESC LIMIT 1) ORDER BY nguoi_dung.ten_nguoi_dung
+hard gold: select ten_nguoi_dung , mat_khau from nguoi_dung group by ma_vai_tro order by count ( * ) desc limit 1
+
+hard pred: SELECT nguoi_dung.ten_nguoi_dung, nguoi_dung.mat_khau FROM nguoi_dung JOIN vai_tro ON nguoi_dung.ma_vai_tro = vai_tro.ma_vai_tro GROUP BY nguoi_dung.ma_vai_tro ORDER BY COUNT(*) DESC LIMIT 1
+hard gold: select ten_nguoi_dung , mat_khau from nguoi_dung group by ma_vai_tro order by count ( * ) desc limit 1
+
+hard pred: SELECT AVG(so_luong_truy_cap) FROM tai_lieu WHERE ma_tai_lieu IN (SELECT ma_tai_lieu FROM cac_muc_cua_tai_lieu WHERE tieu_de_muc = 'Lời cảm ơn')
+hard gold: select avg ( t1.so_luong_truy_cap ) from tai_lieu as t1 join chuc_nang_phan_cua_tai_lieu as t2 on t1.ma_tai_lieu = t2.ma_tai_lieu join khu_vuc_chuc_nang as t3 on t2.ma_chuc_nang_phan = t3.ma_chuc_nang_phan where t3.mo_ta_ve_chuc_nang_phan = "Acknowledgement"
+
+hard pred: SELECT AVG(so_luong_truy_cap) FROM tai_lieu JOIN cac_muc_cua_tai_lieu ON tai_lieu.ma_tai_lieu = cac_muc_cua_tai_lieu.ma_tai_lieu WHERE tieu_de_muc = 'Lời cảm ơn'
+hard gold: select avg ( t1.so_luong_truy_cap ) from tai_lieu as t1 join chuc_nang_phan_cua_tai_lieu as t2 on t1.ma_tai_lieu = t2.ma_tai_lieu join khu_vuc_chuc_nang as t3 on t2.ma_chuc_nang_phan = t3.ma_chuc_nang_phan where t3.mo_ta_ve_chuc_nang_phan = "Acknowledgement"
+
+hard pred: SELECT ten_tai_lieu FROM tai_lieu WHERE ma_tai_lieu NOT IN (SELECT cac_muc_cua_tai_lieu.ma_tai_lieu FROM cac_muc_cua_tai_lieu JOIN hinh_anh_trong_cac_muc_cua_tai_lieu ON cac_muc_cua_tai_lieu.id_muc = hinh_anh_trong_cac_muc_cua_tai_lieu.id_muc)
+hard gold: select ten_tai_lieu from tai_lieu except select t1.ten_tai_lieu from tai_lieu as t1 join cac_muc_cua_tai_lieu as t2 on t1.ma_tai_lieu = t2.ma_tai_lieu join hinh_anh_trong_cac_muc_cua_tai_lieu as t3 on t2.id_muc = t3.id_muc
+
+hard pred: SELECT ten_tai_lieu FROM tai_lieu WHERE ma_tai_lieu NOT IN (SELECT hinh_anh_trong_cac_muc_cua_tai_lieu.id_muc FROM hinh_anh_trong_cac_muc_cua_tai_lieu JOIN hinh_anh ON hinh_anh_trong_cac_muc_cua_tai_lieu.id_hinh_anh = hinh_anh.id_hinh_anh)
+hard gold: select ten_tai_lieu from tai_lieu except select t1.ten_tai_lieu from tai_lieu as t1 join cac_muc_cua_tai_lieu as t2 on t1.ma_tai_lieu = t2.ma_tai_lieu join hinh_anh_trong_cac_muc_cua_tai_lieu as t3 on t2.id_muc = t3.id_muc
+
+extra pred: SELECT ten_tai_lieu FROM tai_lieu GROUP BY ma_tai_lieu ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.ten_tai_lieu from tai_lieu as t1 join cac_muc_cua_tai_lieu as t2 on t1.ma_tai_lieu = t2.ma_tai_lieu group by t1.ma_tai_lieu order by count ( * ) desc limit 1
+
+eval_err_num:42
+extra pred: SELECT ten_tai_lieu FROM tai_lieu ORDER BY (SELECT COUNT(*) FROM cac_muc_cua_tai_lieu WHERE ma_tai_lieu = tai_lieu.ma_tai_lieu) DESC LIMIT 1
+extra gold: select t1.ten_tai_lieu from tai_lieu as t1 join cac_muc_cua_tai_lieu as t2 on t1.ma_tai_lieu = t2.ma_tai_lieu group by t1.ma_tai_lieu order by count ( * ) desc limit 1
+
+easy pred: SELECT COUNT(*) FROM nguoi_dung
+easy gold: select count ( * ) from nguoi_dung where lan_dang_nhap_cua_nguoi_dung = 1
+
+easy pred: SELECT COUNT(*) FROM nguoi_dung
+easy gold: select count ( * ) from nguoi_dung where lan_dang_nhap_cua_nguoi_dung = 1
+
+eval_err_num:43
+hard pred: SELECT vai_tro.mo_ta_ve_vai_tro, COUNT(*) AS so_luong FROM nguoi_dung JOIN vai_tro ON nguoi_dung.ma_vai_tro = vai_tro.ma_vai_tro GROUP BY vai_tro.ma_vai_tro ORDER BY so_luong DESC LIMIT 1
+hard gold: select mo_ta_ve_vai_tro from vai_tro where ma_vai_tro = ( select ma_vai_tro from nguoi_dung where lan_dang_nhap_cua_nguoi_dung = 1 group by ma_vai_tro order by count ( * ) desc limit 1 )
+
+hard pred: SELECT vai_tro.mo_ta_ve_vai_tro FROM nguoi_dung JOIN vai_tro ON nguoi_dung.ma_vai_tro = vai_tro.ma_vai_tro GROUP BY vai_tro.ma_vai_tro ORDER BY COUNT(*) DESC LIMIT 1
+hard gold: select mo_ta_ve_vai_tro from vai_tro where ma_vai_tro = ( select ma_vai_tro from nguoi_dung where lan_dang_nhap_cua_nguoi_dung = 1 group by ma_vai_tro order by count ( * ) desc limit 1 )
+
+hard pred: SELECT AVG(so_luong_truy_cap) FROM tai_lieu WHERE ma_cau_truc_tai_lieu = (SELECT ma_cau_truc_tai_lieu FROM tai_lieu GROUP BY ma_cau_truc_tai_lieu ORDER BY COUNT(*) ASC LIMIT 1)
+hard gold: select avg ( so_luong_truy_cap ) from tai_lieu group by ma_cau_truc_tai_lieu order by count ( * ) asc limit 1
+
+eval_err_num:44
+hard pred: SELECT AVG(so_luong_truy_cap) FROM tai_lieu WHERE ma_cau_truc_tai_lieu IN (SELECT ma_cau_truc_tai_lieu FROM cau_truc_tai_lieu GROUP BY ma_cau_truc_tai_lieu HAVING COUNT(*) < ALL (SELECT COUNT(*) FROM cau_truc_tai_lieu GROUP BY ma_cau_truc_tai_lieu))
+hard gold: select avg ( so_luong_truy_cap ) from tai_lieu group by ma_cau_truc_tai_lieu order by count ( * ) asc limit 1
+
+eval_err_num:45
+medium pred: SELECT ma_vai_tro, COUNT(*) AS so_luong_nguoi_dung FROM nguoi_dung GROUP BY ma_vai_tro ORDER BY COUNT(*) DESC LIMIT 10
+medium gold: select count ( * ) , ma_vai_tro from nguoi_dung group by ma_vai_tro
+
+easy pred: SELECT ma_loai_tai_lieu FROM tai_lieu GROUP BY ma_loai_tai_lieu HAVING COUNT(*) >= 2
+easy gold: select ma_loai_tai_lieu from tai_lieu group by ma_loai_tai_lieu having count ( * ) > 2
+
+easy pred: SELECT dong_1_cua_dia_chi FROM tac_gia_khoa_hoc_va_nguoi_huong_dan JOIN khoa_hoc ON tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia = khoa_hoc.id_tac_gia WHERE ten_ca_nhan LIKE '%Cathrine%' OR ten_dem LIKE '%Cathrine%' OR ho LIKE '%Cathrine%'
+easy gold: select dong_1_cua_dia_chi from tac_gia_khoa_hoc_va_nguoi_huong_dan where ten_ca_nhan = "Cathrine"
+
+eval_err_num:46
+easy pred: SELECT dong_1_cua_dia_chi FROM tac_gia_khoa_hoc_va_nguoi_huong_dan WHERE atb_cua_tac_gia_/_nguoi_huong_dan IN (SELECT id_tac_gia FROM khoa_hoc) UNION SELECT dong_1_cua_dia_chi FROM sinh_vien WHERE ten_dang_nhap IN (SELECT atb_cua_tac_gia_/_nguoi_huong_dan FROM khoa_hoc)
+easy gold: select dong_1_cua_dia_chi from tac_gia_khoa_hoc_va_nguoi_huong_dan
+
+eval_err_num:47
+easy pred: SELECT T1.ho, T1.ten_dem, T1.ho, T1.dong_1_cua_dia_chi FROM tac_gia_khoa_hoc_va_nguoi_huong_dan AS T1 JOIN khoa_hoc AS T2 ON T1.id_tac_gia = T2.id_tac_gia WHERE T2.id_mon_hoc IS NOT NULL UNION SELECT T1.ho, T1.ten_dem, T1.ho, T1.dong_1_cua_dia_chi FROM tac_gia_khoa_hoc_va_nguoi_huong_dan AS T1 WHERE T1.id_tac_gia IN (SELECT DISTINCT id_tac_gia FROM khoa_hoc WHERE id_mon_hoc IS NULL)
+easy gold: select dong_1_cua_dia_chi from tac_gia_khoa_hoc_va_nguoi_huong_dan
+
+medium pred: SELECT ten_dang_nhap, ho FROM tac_gia_khoa_hoc_va_nguoi_huong_dan UNION SELECT ten_dang_nhap, ho FROM sinh_vien WHERE id_sinh_vien IN (SELECT id_sinh_vien FROM luot_dang_ky_khoa_hoc_cua_sinh_vien)
+medium gold: select ten_dang_nhap , ho from tac_gia_khoa_hoc_va_nguoi_huong_dan
+
+medium pred: SELECT ten_dang_nhap, ho FROM tac_gia_khoa_hoc_va_nguoi_huong_dan UNION SELECT ten_dang_nhap, ho FROM tac_gia_khoa_hoc_va_nguoi_huong_dan WHERE id_tac_gia IN (SELECT id_tac_gia FROM khoa_hoc) EXCEPT SELECT ten_dang_nhap, ho FROM sinh_vien WHERE id_sinh_vien IN (SELECT id_sinh_vien FROM luot_dang_ky_khoa_hoc_cua_sinh_vien)
+medium gold: select ten_dang_nhap , ho from tac_gia_khoa_hoc_va_nguoi_huong_dan
+
+eval_err_num:48
+medium pred: SELECT luot_dang_ky_khoa_hoc_cua_sinh_vien.ngay_dang_ky, luot_dang_ky_khoa_hoc_cua_sinh_vien.ngay_hoan_thanh FROM luot_dang_ky_khoa_hoc_cua_sinh_vien JOIN sinh_vien ON luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien = sinh_vien.id_sinh_vien
+medium gold: select ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien
+
+eval_err_num:49
+medium pred: SELECT ngay_dang_ky, ngay_hoan_thanh FROM luot_dang_ky_khoa_hoc_cua_sinh_vien
+medium gold: select ngay_ngay_dang_ky , ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien
+
+easy pred: SELECT COUNT(DISTINCT luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc) FROM luot_dang_ky_khoa_hoc_cua_sinh_vien JOIN khoa_hoc ON luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc = khoa_hoc.id_khoa_hoc
+easy gold: select count ( id_khoa_hoc ) from luot_dang_ky_khoa_hoc_cua_sinh_vien
+
+easy pred: SELECT COUNT(DISTINCT khoa_hoc.id_khoa_hoc) FROM khoa_hoc JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON khoa_hoc.id_khoa_hoc = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc
+easy gold: select count ( id_khoa_hoc ) from luot_dang_ky_khoa_hoc_cua_sinh_vien
+
+medium pred: SELECT ngay_dang_nhap_moi_nhat FROM sinh_vien WHERE ho = 'Jaskolski' OR ho = 'Langosh' ORDER BY ngay_dang_nhap_moi_nhat DESC LIMIT 1
+medium gold: select ngay_dang_nhap_moi_nhat from sinh_vien where ho = "Jaskolski" or ho = "Langosh"
+
+medium pred: SELECT ngay_dang_nhap_moi_nhat FROM sinh_vien WHERE ho = 'Jaskolski' OR ho = 'Langosh' ORDER BY ngay_dang_nhap_moi_nhat DESC LIMIT 1
+medium gold: select ngay_dang_nhap_moi_nhat from sinh_vien where ho = "Jaskolski" or ho = "Langosh"
+
+medium pred: SELECT COUNT(*) FROM sinh_vien WHERE ten_ca_nhan LIKE '%son%' OR ten_dem LIKE '%son%' OR ho LIKE '%son%'
+medium gold: select count ( * ) from sinh_vien where ten_ca_nhan like "%son%"
+
+easy pred: SELECT ten_ca_nhan FROM tac_gia_khoa_hoc_va_nguoi_huong_dan ORDER BY ten_ca_nhan ASC
+easy gold: select * from tac_gia_khoa_hoc_va_nguoi_huong_dan order by ten_ca_nhan
+
+easy pred: SELECT ten_ca_nhan FROM tac_gia_khoa_hoc_va_nguoi_huong_dan ORDER BY ten_ca_nhan ASC UNION SELECT ten_ca_nhan FROM sinh_vien ORDER BY ten_ca_nhan ASC
+easy gold: select * from tac_gia_khoa_hoc_va_nguoi_huong_dan order by ten_ca_nhan
+
+eval_err_num:50
+medium pred: SELECT ten_ca_nhan AS ten, ho AS ho FROM sinh_vien ORDER BY ho ASC
+medium gold: select ten_ca_nhan , ho from sinh_vien order by ho
+
+eval_err_num:51
+medium pred: SELECT ten_ca_nhan AS ten, ho AS ho FROM sinh_vien ORDER BY ho ASC
+medium gold: select ten_ca_nhan , ho from sinh_vien order by ho
+
+eval_err_num:52
+extra pred: SELECT ket_qua_kiem_tra, COUNT(*) AS so_luong FROM bai_kiem_tra_cua_sinh_vien GROUP BY ket_qua_kiem_tra ORDER BY COUNT(*) DESC
+extra gold: select ket_qua_kiem_tra , count ( * ) from bai_kiem_tra_cua_sinh_vien group by ket_qua_kiem_tra order by count ( * ) desc
+
+hard pred: SELECT tac_gia_khoa_hoc_va_nguoi_huong_dan.dong_1_cua_dia_chi FROM tac_gia_khoa_hoc_va_nguoi_huong_dan JOIN khoa_hoc ON tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia = khoa_hoc.id_tac_gia JOIN mon_hoc ON khoa_hoc.id_mon_hoc = mon_hoc.id_mon_hoc WHERE mon_hoc.ten_mon_hoc = 'Hệ điều hành' OR mon_hoc.ten_mon_hoc = 'Cấu trúc dữ liệu'
+hard gold: select t1.dong_1_cua_dia_chi from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia where t2.ten_khoa_hoc = "operating system" or t2.ten_khoa_hoc = "data structure"
+
+extra pred: SELECT tac_gia_khoa_hoc_va_nguoi_huong_dan.ten_ca_nhan, tac_gia_khoa_hoc_va_nguoi_huong_dan.ho, tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia FROM khoa_hoc JOIN tac_gia_khoa_hoc_va_nguoi_huong_dan ON khoa_hoc.id_tac_gia = tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia GROUP BY tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.ten_ca_nhan , t1.ho , t2.id_tac_gia from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia group by t2.id_tac_gia order by count ( * ) desc limit 1
+
+eval_err_num:53
+extra pred: SELECT ten_ca_nhan AS ten, ho, id_tac_gia FROM tac_gia_khoa_hoc_va_nguoi_huong_dan JOIN khoa_hoc ON tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia = khoa_hoc.id_tac_gia GROUP BY id_tac_gia ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.ten_ca_nhan , t1.ho , t2.id_tac_gia from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia group by t2.id_tac_gia order by count ( * ) desc limit 1
+
+medium pred: SELECT tac_gia_khoa_hoc_va_nguoi_huong_dan.dong_1_cua_dia_chi, tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia FROM khoa_hoc JOIN tac_gia_khoa_hoc_va_nguoi_huong_dan ON khoa_hoc.id_tac_gia = tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia GROUP BY tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia, tac_gia_khoa_hoc_va_nguoi_huong_dan.dong_1_cua_dia_chi HAVING COUNT(*) >= 2
+medium gold: select t1.dong_1_cua_dia_chi , t2.id_tac_gia from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia group by t2.id_tac_gia having count ( * ) >= 2
+
+medium pred: SELECT tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia, tac_gia_khoa_hoc_va_nguoi_huong_dan.dong_1_cua_dia_chi FROM khoa_hoc JOIN tac_gia_khoa_hoc_va_nguoi_huong_dan ON khoa_hoc.id_tac_gia = tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia GROUP BY tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia HAVING COUNT(*) > 2
+medium gold: select t1.dong_1_cua_dia_chi , t2.id_tac_gia from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia group by t2.id_tac_gia having count ( * ) >= 2
+
+medium pred: SELECT ten_khoa_hoc FROM khoa_hoc JOIN tac_gia_khoa_hoc_va_nguoi_huong_dan ON khoa_hoc.id_tac_gia = tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia WHERE ten_ca_nhan LIKE 'Julio%'
+medium gold: select t2.ten_khoa_hoc from tac_gia_khoa_hoc_va_nguoi_huong_dan as t1 join khoa_hoc as t2 on t1.id_tac_gia = t2.id_tac_gia where t1.ten_ca_nhan = "Julio"
+
+eval_err_num:54
+medium pred: SELECT mon_hoc.id_mon_hoc AS mon_hoc_id, mon_hoc.ten_mon_hoc AS ten_mon_hoc, COUNT(khoa_hoc.id_mon_hoc) AS so_khoa_hoc FROM mon_hoc JOIN khoa_hoc ON mon_hoc.id_mon_hoc = khoa_hoc.id_mon_hoc GROUP BY mon_hoc.id_mon_hoc ORDER BY COUNT(khoa_hoc.id_mon_hoc) DESC
+medium gold: select t1.id_mon_hoc , t2.ten_mon_hoc , count ( * ) from khoa_hoc as t1 join mon_hoc as t2 on t1.id_mon_hoc = t2.id_mon_hoc group by t1.id_mon_hoc
+
+eval_err_num:55
+medium pred: SELECT mon_hoc.id_mon_hoc, mon_hoc.ten_mon_hoc, COUNT(*) AS so_khoa_hoc FROM mon_hoc JOIN khoa_hoc ON mon_hoc.id_mon_hoc = khoa_hoc.id_mon_hoc GROUP BY mon_hoc.id_mon_hoc, mon_hoc.ten_mon_hoc ORDER BY COUNT(*) DESC
+medium gold: select t1.id_mon_hoc , t2.ten_mon_hoc , count ( * ) from khoa_hoc as t1 join mon_hoc as t2 on t1.id_mon_hoc = t2.id_mon_hoc group by t1.id_mon_hoc
+
+eval_err_num:56
+hard pred: SELECT mon_hoc.id_mon_hoc, mon_hoc.ten_mon_hoc, COUNT(khoa_hoc.id_mon_hoc) AS so_khoa_hoc FROM mon_hoc JOIN khoa_hoc ON mon_hoc.id_mon_hoc = khoa_hoc.id_mon_hoc GROUP BY mon_hoc.id_mon_hoc ORDER BY so_khoa_hoc ASC
+hard gold: select t1.id_mon_hoc , t2.ten_mon_hoc , count ( * ) from khoa_hoc as t1 join mon_hoc as t2 on t1.id_mon_hoc = t2.id_mon_hoc group by t1.id_mon_hoc order by count ( * ) asc
+
+eval_err_num:57
+hard pred: SELECT mon_hoc.id_mon_hoc, COUNT(*) AS so_khoa_hoc FROM mon_hoc JOIN khoa_hoc ON mon_hoc.id_mon_hoc = khoa_hoc.id_mon_hoc GROUP BY mon_hoc.id_mon_hoc ORDER BY so_khoa_hoc ASC
+hard gold: select t1.id_mon_hoc , t2.ten_mon_hoc , count ( * ) from khoa_hoc as t1 join mon_hoc as t2 on t1.id_mon_hoc = t2.id_mon_hoc group by t1.id_mon_hoc order by count ( * ) asc
+
+eval_err_num:58
+medium pred: SELECT ngay_ngay_dang_ky FROM khoa_hoc WHERE ten_khoa_hoc = 'tiếng Tây Ban Nha'
+medium gold: select t2.ngay_ngay_dang_ky from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc where t1.ten_khoa_hoc = "Spanish"
+
+extra pred: SELECT ten_khoa_hoc FROM khoa_hoc JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON khoa_hoc.id_khoa_hoc = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc GROUP BY khoa_hoc.id_khoa_hoc ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.ten_khoa_hoc from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc order by count ( * ) desc limit 1
+
+extra pred: SELECT ten_khoa_hoc FROM khoa_hoc JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON khoa_hoc.id_khoa_hoc = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc GROUP BY khoa_hoc.id_khoa_hoc ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.ten_khoa_hoc from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc order by count ( * ) desc limit 1
+
+medium pred: SELECT ten_khoa_hoc FROM khoa_hoc JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON khoa_hoc.id_khoa_hoc = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc GROUP BY khoa_hoc.id_khoa_hoc HAVING COUNT(DISTINCT luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien) = 1
+medium gold: select t1.ten_khoa_hoc from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc having count ( * ) = 1
+
+medium pred: SELECT ten_khoa_hoc FROM khoa_hoc JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON khoa_hoc.id_khoa_hoc = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc GROUP BY khoa_hoc.id_khoa_hoc HAVING COUNT(DISTINCT luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien) = 1
+medium gold: select t1.ten_khoa_hoc from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc having count ( * ) = 1
+
+medium pred: SELECT khoa_hoc.ten_khoa_hoc, khoa_hoc.mo_ta_ve_khoa_hoc FROM khoa_hoc JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON khoa_hoc.id_khoa_hoc = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc GROUP BY khoa_hoc.id_khoa_hoc HAVING COUNT(*) > 2
+medium gold: select t1.mo_ta_ve_khoa_hoc , t1.ten_khoa_hoc from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc having count ( * ) > 2
+
+medium pred: SELECT ten_khoa_hoc, mo_ta_ve_khoa_hoc FROM khoa_hoc JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON khoa_hoc.id_khoa_hoc = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc GROUP BY khoa_hoc.id_khoa_hoc HAVING COUNT(luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien) > 2
+medium gold: select t1.mo_ta_ve_khoa_hoc , t1.ten_khoa_hoc from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc having count ( * ) > 2
+
+eval_err_num:59
+medium pred: SELECT ten_khoa_hoc, COUNT(*) AS so_luong_hoc_sinh FROM khoa_hoc JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON khoa_hoc.id_khoa_hoc = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc GROUP BY khoa_hoc.id_khoa_hoc ORDER BY COUNT(*) DESC
+medium gold: select t1.ten_khoa_hoc , count ( * ) from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc
+
+eval_err_num:60
+medium pred: SELECT khoa_hoc.ten_khoa_hoc, COUNT(*) AS so_luong_sinh_vien FROM khoa_hoc JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON khoa_hoc.id_khoa_hoc = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc GROUP BY khoa_hoc.id_khoa_hoc ORDER BY COUNT(*) DESC
+medium gold: select t1.ten_khoa_hoc , count ( * ) from khoa_hoc as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc group by t1.ten_khoa_hoc
+
+medium pred: SELECT ngay_lam_bai_kiem_tra FROM bai_kiem_tra_cua_sinh_vien WHERE ket_qua_kiem_tra = 'Đạt'
+medium gold: select t1.ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky where t2.ket_qua_kiem_tra = "Pass"
+
+medium pred: SELECT bai_kiem_tra_cua_sinh_vien.ngay_lam_bai_kiem_tra FROM bai_kiem_tra_cua_sinh_vien JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON bai_kiem_tra_cua_sinh_vien.id_dang_ky = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_dang_ky WHERE bai_kiem_tra_cua_sinh_vien.ket_qua_kiem_tra = 'Đạt'
+medium gold: select t1.ngay_ngay_dang_ky from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky where t2.ket_qua_kiem_tra = "Pass"
+
+medium pred: SELECT luot_dang_ky_khoa_hoc_cua_sinh_vien.ngay_hoan_thanh FROM khoa_hoc JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON khoa_hoc.id_khoa_hoc = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc JOIN bai_kiem_tra_cua_sinh_vien ON luot_dang_ky_khoa_hoc_cua_sinh_vien.id_dang_ky = bai_kiem_tra_cua_sinh_vien.id_dang_ky WHERE bai_kiem_tra_cua_sinh_vien.ket_qua_kiem_tra = 'Trượt'
+medium gold: select t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join bai_kiem_tra_cua_sinh_vien as t2 on t1.id_dang_ky = t2.id_dang_ky where t2.ket_qua_kiem_tra = "Fail"
+
+medium pred: SELECT ngay_dang_ky, ngay_hoan_thanh FROM luot_dang_ky_khoa_hoc_cua_sinh_vien JOIN sinh_vien ON luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien = sinh_vien.id_sinh_vien WHERE sinh_vien.ten_ca_nhan = 'Karson'
+medium gold: select t1.ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien where t2.ten_ca_nhan = "Karson"
+
+extra pred: SELECT luot_dang_ky_khoa_hoc_cua_sinh_vien.ngay_ngay_dang_ky, luot_dang_ky_khoa_hoc_cua_sinh_vien.ngay_hoan_thanh FROM sinh_vien JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON sinh_vien.id_sinh_vien = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien WHERE sinh_vien.ho = 'Zieme' AND sinh_vien.ten_ca_nhan LIKE 'Bernie%'
+extra gold: select t1.ngay_ngay_dang_ky , t1.ngay_hoan_thanh from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien where t2.ho = "Zieme" and t2.ten_ca_nhan = "Bernie"
+
+extra pred: SELECT sinh_vien.id_sinh_vien, sinh_vien.ten_dang_nhap FROM sinh_vien JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON sinh_vien.id_sinh_vien = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien GROUP BY sinh_vien.id_sinh_vien ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.id_sinh_vien , t2.ten_dang_nhap from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien order by count ( * ) desc limit 1
+
+extra pred: SELECT T1.id_sinh_vien, T1.ten_ca_nhan FROM sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien GROUP BY T1.id_sinh_vien ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.id_sinh_vien , t2.ten_dang_nhap from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien order by count ( * ) desc limit 1
+
+medium pred: SELECT sinh_vien.id_sinh_vien, sinh_vien.ten_ca_nhan FROM sinh_vien JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON sinh_vien.id_sinh_vien = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien GROUP BY sinh_vien.id_sinh_vien HAVING COUNT(*) >= 2
+medium gold: select t1.id_sinh_vien , t2.ten_ca_nhan from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien having count ( * ) >= 2
+
+medium pred: SELECT sinh_vien.id_sinh_vien, sinh_vien.ten_ca_nhan FROM sinh_vien JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON sinh_vien.id_sinh_vien = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien GROUP BY sinh_vien.id_sinh_vien HAVING COUNT(*) >= 2
+medium gold: select t1.id_sinh_vien , t2.ten_ca_nhan from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien having count ( * ) >= 2
+
+medium pred: SELECT sinh_vien.id_sinh_vien, sinh_vien.ten_dem FROM sinh_vien JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON sinh_vien.id_sinh_vien = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien GROUP BY sinh_vien.id_sinh_vien HAVING COUNT(*) <= 2 ORDER BY COUNT(*) DESC LIMIT 10
+medium gold: select t1.id_sinh_vien , t2.ten_dem from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien having count ( * ) <= 2
+
+medium pred: SELECT sinh_vien.id_sinh_vien, sinh_vien.ten_dem FROM sinh_vien JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON sinh_vien.id_sinh_vien = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien GROUP BY sinh_vien.id_sinh_vien ORDER BY COUNT(*) DESC LIMIT 2
+medium gold: select t1.id_sinh_vien , t2.ten_dem from luot_dang_ky_khoa_hoc_cua_sinh_vien as t1 join sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien group by t1.id_sinh_vien having count ( * ) <= 2
+
+hard pred: SELECT ten_ca_nhan FROM sinh_vien WHERE id_sinh_vien NOT IN (SELECT id_sinh_vien FROM luot_dang_ky_khoa_hoc_cua_sinh_vien)
+hard gold: select ten_ca_nhan from sinh_vien except select t1.ten_ca_nhan from sinh_vien as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien
+
+hard pred: SELECT ten_ca_nhan FROM sinh_vien AS T1 WHERE T1.id_sinh_vien NOT IN (SELECT id_sinh_vien FROM luot_dang_ky_khoa_hoc_cua_sinh_vien)
+hard gold: select ten_ca_nhan from sinh_vien except select t1.ten_ca_nhan from sinh_vien as t1 join luot_dang_ky_khoa_hoc_cua_sinh_vien as t2 on t1.id_sinh_vien = t2.id_sinh_vien
+
+eval_err_num:61
+hard pred: SELECT ten_dang_nhap FROM (SELECT ten_dang_nhap FROM sinh_vien UNION SELECT ten_dang_nhap FROM tac_gia_khoa_hoc_va_nguoi_huong_dan) AS combined GROUP BY ten_dang_nhap HAVING COUNT(*) > 1
+hard gold: select ten_dang_nhap from tac_gia_khoa_hoc_va_nguoi_huong_dan intersect select ten_dang_nhap from sinh_vien
+
+hard pred: SELECT ten_dang_nhap FROM sinh_vien UNION SELECT ten_dang_nhap FROM tac_gia_khoa_hoc_va_nguoi_huong_dan WHERE ten_dang_nhap IN (SELECT ten_dang_nhap FROM sinh_vien)
+hard gold: select ten_dang_nhap from tac_gia_khoa_hoc_va_nguoi_huong_dan intersect select ten_dang_nhap from sinh_vien
+
+hard pred: SELECT ten_ca_nhan FROM sinh_vien INTERSECT SELECT ten_ca_nhan FROM tac_gia_khoa_hoc_va_nguoi_huong_dan
+hard gold: select ten_ca_nhan from tac_gia_khoa_hoc_va_nguoi_huong_dan intersect select ten_ca_nhan from sinh_vien
+
+eval_err_num:62
+hard pred: SELECT DISTINCT sinh_vien.ten_ca_nhan FROM sinh_vien JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien ON sinh_vien.id_sinh_vien = luot_dang_ky_khoa_hoc_cua_sinh_vien.id_sinh_vien JOIN khoa_hoc ON luot_dang_ky_khoa_hoc_cua_sinh_vien.id_khoa_hoc = khoa_hoc.id_khoa_hoc JOIN tac_gia_khoa_hoc_va_nguoi_huong_dan ON khoa_hoc.id_tac_gia = tac_gia_khoa_hoc_va_nguoi_huong_dan.id_tac_gia WHERE sinh_vien.ten_ca_nhan = tac_gia_khoa_hoc_va_nguoi_huong_dan.ten_ca_nhan AND sinh_vien.ten_ca_nhan <> ''
+hard gold: select ten_ca_nhan from tac_gia_khoa_hoc_va_nguoi_huong_dan intersect select ten_ca_nhan from sinh_vien
+
+eval_err_num:63
+easy pred: SELECT SUM(ngua_lam_viec) / COUNT(*) FROM trang_trai WHERE tong_so_ngua > 5000
+easy gold: select avg ( ngua_lam_viec ) from trang_trai where tong_so_ngua > 5000
+
+eval_err_num:64
+medium pred: SELECT MAX(trang_trai.bo) AS max_bo, MIN(trang_trai.bo) AS min_bo FROM trang_trai
+medium gold: select max ( bo_cai ) , min ( bo_cai ) from trang_trai
+
+eval_err_num:65
+medium pred: SELECT MAX(trang_trai.bo) AS max_bo, MIN(trang_trai.bo) AS min_bo FROM trang_trai
+medium gold: select max ( bo_cai ) , min ( bo_cai ) from trang_trai
+
+easy pred: SELECT ten_chinh_thuc, dan_so FROM thanh_pho ORDER BY dan_so DESC
+easy gold: select ten_chinh_thuc from thanh_pho order by dan_so desc
+
+medium pred: SELECT thanh_pho.ten_chinh_thuc FROM cuoc_thi_trang_trai JOIN thanh_pho ON cuoc_thi_trang_trai.id_thanh_pho_chu_nha = thanh_pho.id_thanh_pho GROUP BY thanh_pho.id_thanh_pho, thanh_pho.ten_chinh_thuc HAVING COUNT(*) > 1
+medium gold: select t1.ten_chinh_thuc from thanh_pho as t1 join cuoc_thi_trang_trai as t2 on t1.id_thanh_pho = t2.id_thanh_pho_chu_nha group by t2.id_thanh_pho_chu_nha having count ( * ) > 1
+
+medium pred: SELECT thanh_pho.ten_chinh_thuc FROM cuoc_thi_trang_trai JOIN thanh_pho ON cuoc_thi_trang_trai.id_thanh_pho_chu_nha = thanh_pho.id_thanh_pho GROUP BY thanh_pho.id_thanh_pho, thanh_pho.ten_chinh_thuc HAVING COUNT(*) > 1
+medium gold: select t1.ten_chinh_thuc from thanh_pho as t1 join cuoc_thi_trang_trai as t2 on t1.id_thanh_pho = t2.id_thanh_pho_chu_nha group by t2.id_thanh_pho_chu_nha having count ( * ) > 1
+
+extra pred: SELECT thanh_pho.cap_bac FROM cuoc_thi_trang_trai JOIN thanh_pho ON cuoc_thi_trang_trai.id_thanh_pho_chu_nha = thanh_pho.id_thanh_pho GROUP BY thanh_pho.id_thanh_pho ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.cap_bac from thanh_pho as t1 join cuoc_thi_trang_trai as t2 on t1.id_thanh_pho = t2.id_thanh_pho_chu_nha group by t2.id_thanh_pho_chu_nha order by count ( * ) desc limit 1
+
+extra pred: SELECT thanh_pho.cap_bac FROM cuoc_thi_trang_trai JOIN thanh_pho ON cuoc_thi_trang_trai.id_thanh_pho_chu_nha = thanh_pho.id_thanh_pho GROUP BY thanh_pho.id_thanh_pho ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.cap_bac from thanh_pho as t1 join cuoc_thi_trang_trai as t2 on t1.id_thanh_pho = t2.id_thanh_pho_chu_nha group by t2.id_thanh_pho_chu_nha order by count ( * ) desc limit 1
+
+eval_err_num:66
+medium pred: SELECT cap_bac, COUNT(*) AS so_luong FROM thanh_pho GROUP BY cap_bac ORDER BY COUNT(*) ASC
+medium gold: select cap_bac from thanh_pho group by cap_bac order by count ( * ) asc
+
+eval_err_num:67
+medium pred: SELECT cap_bac, COUNT(*) AS tien_su_xuat_hien FROM thanh_pho GROUP BY cap_bac ORDER BY tien_su_xuat_hien ASC
+medium gold: select cap_bac from thanh_pho group by cap_bac order by count ( * ) asc
+
+eval_err_num:68
+hard pred: SELECT cap_bac, COUNT(*) AS so_luong FROM thanh_pho GROUP BY cap_bac ORDER BY so_luong DESC LIMIT 1
+hard gold: select cap_bac from thanh_pho group by cap_bac order by count ( * ) desc limit 1
+
+hard pred: SELECT cap_bac FROM thanh_pho WHERE dan_so > 1500 AND dan_so < 500
+hard gold: select cap_bac from thanh_pho where dan_so > 1500 intersect select cap_bac from thanh_pho where dan_so < 500
+
+eval_err_num:69
+medium pred: SELECT COUNT(*) AS so_chuyen_bay, ngay, phi_cong FROM chuyen_bay ORDER BY do_cao ASC
+medium gold: select so_hieu , ngay , phi_cong from chuyen_bay order by do_cao asc
+
+easy pred: SELECT co_phan_nhom FROM cong_ty_dieu_hanh ORDER BY co_phan_nhom DESC LIMIT 1
+easy gold: select max ( co_phan_nhom ) from cong_ty_dieu_hanh
+
+easy pred: SELECT van_toc FROM chuyen_bay WHERE phi_cong = 'Thompson'
+easy gold: select avg ( van_toc ) from chuyen_bay where phi_cong = "Thompson"
+
+medium pred: SELECT cong_ty_dieu_hanh.ten, cong_ty_dieu_hanh.loai FROM cong_ty_dieu_hanh JOIN chuyen_bay ON cong_ty_dieu_hanh.id = chuyen_bay.id_cong_ty GROUP BY cong_ty_dieu_hanh.id ORDER BY cong_ty_dieu_hanh.ten ASC
+medium gold: select t1.ten , t1.loai from cong_ty_dieu_hanh as t1 join chuyen_bay as t2 on t1.id = t2.id_cong_ty
+
+medium pred: SELECT loai FROM cong_ty_dieu_hanh JOIN chuyen_bay ON cong_ty_dieu_hanh.id = chuyen_bay.id_cong_ty WHERE van_toc < 200 GROUP BY loai HAVING COUNT(*) > 0 ORDER BY loai
+medium gold: select distinct t1.loai from cong_ty_dieu_hanh as t1 join chuyen_bay as t2 on t1.id = t2.id_cong_ty where t2.van_toc < 200
+
+extra pred: SELECT san_bay.id, san_bay.ten, san_bay.iata FROM san_bay JOIN chuyen_bay ON san_bay.id = chuyen_bay.id_san_bay GROUP BY san_bay.id ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.id , t1.ten , t1.iata from san_bay as t1 join chuyen_bay as t2 on t1.id = t2.id_san_bay group by t2.id order by count ( * ) desc limit 1
+
+extra pred: SELECT COUNT(*) FROM san_bay WHERE id NOT IN (SELECT DISTINCT id_san_bay FROM chuyen_bay WHERE phi_cong = 'Thompson')
+extra gold: select count ( * ) from san_bay where id not in ( select id_san_bay from chuyen_bay where phi_cong = "Thompson" )
+
+extra pred: SELECT phi_cong FROM chuyen_bay JOIN cong_ty_dieu_hanh ON chuyen_bay.id_cong_ty = cong_ty_dieu_hanh.id WHERE hoat_dong_chinh = 'Vận chuyển hàng hoá' OR hoat_dong_chinh = 'Dịch vụ ăn uống' GROUP BY phi_cong HAVING COUNT(DISTINCT id_cong_ty) > 1
+extra gold: select t2.phi_cong from cong_ty_dieu_hanh as t1 join chuyen_bay as t2 on t1.id = t2.id_cong_ty where t1.hoat_dong_chinh = "Cargo" intersect select t2.phi_cong from cong_ty_dieu_hanh as t1 join chuyen_bay as t2 on t1.id = t2.id_cong_ty where t1.hoat_dong_chinh = "Catering services"
+
+hard pred: SELECT COUNT(*) FROM chuyen_bay JOIN cong_ty_dieu_hanh ON chuyen_bay.id_cong_ty = cong_ty_dieu_hanh.id GROUP BY chuyen_bay.id_san_bay, cong_ty_dieu_hanh.id
+hard gold: select t3.id , count ( * ) from cong_ty_dieu_hanh as t1 join chuyen_bay as t2 on t1.id = t2.id_cong_ty join san_bay as t3 on t2.id_san_bay = t3.id group by t3.id
+
+medium pred: SELECT quoc_gia, COUNT(*) FROM san_bay GROUP BY quoc_gia ORDER BY COUNT(*) DESC
+medium gold: select count ( * ) , quoc_gia from san_bay group by quoc_gia
+
+medium pred: SELECT lai_suat_thi_truong FROM do_noi_that ORDER BY lai_suat_thi_truong DESC LIMIT 2
+medium gold: select sum ( lai_suat_thi_truong ) from do_noi_that order by lai_suat_thi_truong desc limit 2
+
+eval_err_num:70
+extra pred: SELECT ten FROM do_noi_that WHERE gia_tinh_theo_do_la < (SELECT MAX(gia_tinh_theo_do_la) FROM xuong_san_xuat_do_noi_that)
+extra gold: select t1.ten from do_noi_that as t1 join xuong_san_xuat_do_noi_that as t2 on t1.id_do_noi_that = t2.id_do_noi_that where t2.gia_tinh_theo_do_la < ( select max ( gia_tinh_theo_do_la ) from xuong_san_xuat_do_noi_that )
+
+medium pred: SELECT so_luong_cua_hang, AVG(so_luong_nha_may) FROM nha_san_xuat WHERE nam_mo_cua < 1990 GROUP BY id_nha_san_xuat ORDER BY so_luong_cua_hang DESC LIMIT 1
+medium gold: select max ( so_luong_cua_hang ) , avg ( so_luong_nha_may ) from nha_san_xuat where nam_mo_cua < 1990
+
+hard pred: SELECT xuong_san_xuat_do_noi_that.id_nha_san_xuat, nha_san_xuat.so_luong_cua_hang FROM xuong_san_xuat_do_noi_that JOIN nha_san_xuat ON xuong_san_xuat_do_noi_that.id_nha_san_xuat = nha_san_xuat.id_nha_san_xuat ORDER BY xuong_san_xuat_do_noi_that.gia_tinh_theo_do_la DESC LIMIT 1
+hard gold: select t1.id_nha_san_xuat , t1.so_luong_cua_hang from nha_san_xuat as t1 join xuong_san_xuat_do_noi_that as t2 on t1.id_nha_san_xuat = t2.id_nha_san_xuat order by t2.gia_tinh_theo_do_la desc limit 1
+
+medium pred: SELECT nha_san_xuat.ten, COUNT(xuong_san_xuat_do_noi_that.id_do_noi_that) FROM nha_san_xuat JOIN xuong_san_xuat_do_noi_that ON nha_san_xuat.id_nha_san_xuat = xuong_san_xuat_do_noi_that.id_nha_san_xuat GROUP BY nha_san_xuat.id_nha_san_xuat ORDER BY COUNT(xuong_san_xuat_do_noi_that.id_do_noi_that) DESC
+medium gold: select count ( * ) , t1.ten from nha_san_xuat as t1 join xuong_san_xuat_do_noi_that as t2 on t1.id_nha_san_xuat = t2.id_nha_san_xuat group by t1.id_nha_san_xuat
+
+extra pred: SELECT T1.ten FROM nha_san_xuat AS T1 JOIN xuong_san_xuat_do_noi_that AS T2 ON T1.id_nha_san_xuat = T2.id_nha_san_xuat JOIN do_noi_that AS T3 ON T2.id_do_noi_that = T3.id_do_noi_that WHERE T3.so_luong_bo_phan < 6 OR T3.so_luong_bo_phan > 10 GROUP BY T1.id_nha_san_xuat HAVING COUNT(DISTINCT T3.id_do_noi_that) >= 2 ORDER BY T1.ten ASC
+extra gold: select t3.ten from do_noi_that as t1 join xuong_san_xuat_do_noi_that as t2 on t1.id_do_noi_that = t2.id_do_noi_that join nha_san_xuat as t3 on t2.id_nha_san_xuat = t3.id_nha_san_xuat where t1.so_luong_bo_phan < 6 intersect select t3.ten from do_noi_that as t1 join xuong_san_xuat_do_noi_that as t2 on t1.id_do_noi_that = t2.id_do_noi_that join nha_san_xuat as t3 on t2.id_nha_san_xuat = t3.id_nha_san_xuat where t1.so_luong_bo_phan > 10
+
+hard pred: SELECT ten FROM bao_tang AS T1 WHERE so_luong_nhan_vien > (SELECT so_luong_nhan_vien FROM bao_tang AS T2 WHERE nam_mo_cua > '2010') AND T1.id_bao_tang != (SELECT id_bao_tang FROM bao_tang WHERE nam_mo_cua > '2010')
+hard gold: select ten from bao_tang where so_luong_nhan_vien > ( select min ( so_luong_nhan_vien ) from bao_tang where nam_mo_cua > 2010 )
+
+eval_err_num:71
+medium pred: SELECT khach_tham_quan.id_khach_tham_quan AS id, khach_tham_quan.ten, khach_tham_quan.tuoi FROM khach_tham_quan WHERE khach_tham_quan.id_khach_tham_quan IN (SELECT id_khach_tham_quan FROM chuyen_tham GROUP BY id_khach_tham_quan HAVING COUNT(*) > 1)
+medium gold: select t1.id_khach_tham_quan , t1.ten , t1.tuoi from khach_tham_quan as t1 join chuyen_tham as t2 on t1.id_khach_tham_quan = t2.id_khach_tham_quan group by t1.id_khach_tham_quan having count ( * ) > 1
+
+extra pred: SELECT chuyen_tham.id_khach_tham_quan, khach_tham_quan.ten, khach_tham_quan.cap_do_thanh_vien FROM chuyen_tham JOIN khach_tham_quan ON chuyen_tham.id_khach_tham_quan = khach_tham_quan.id_khach_tham_quan ORDER BY tong_so_tien_da_chi DESC LIMIT 1
+extra gold: select t2.id_khach_tham_quan , t1.ten , t1.cap_do_thanh_vien from khach_tham_quan as t1 join chuyen_tham as t2 on t1.id_khach_tham_quan = t2.id_khach_tham_quan group by t2.id_khach_tham_quan order by sum ( t2.tong_so_tien_da_chi ) desc limit 1
+
+extra pred: SELECT T1.id_bao_tang, T1.ten FROM bao_tang AS T1 JOIN chuyen_tham AS T2 ON T1.id_bao_tang = T2.id_bao_tang GROUP BY T1.id_bao_tang ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t2.id_bao_tang , t1.ten from bao_tang as t1 join chuyen_tham as t2 on t1.id_bao_tang = t2.id_bao_tang group by t2.id_bao_tang order by count ( * ) desc limit 1
+
+hard pred: SELECT ten FROM bao_tang WHERE id_bao_tang NOT IN (SELECT DISTINCT id_bao_tang FROM chuyen_tham)
+hard gold: select ten from bao_tang where id_bao_tang not in ( select id_bao_tang from chuyen_tham )
+
+hard pred: SELECT khach_tham_quan.ten, khach_tham_quan.tuoi FROM khach_tham_quan JOIN chuyen_tham ON khach_tham_quan.id_khach_tham_quan = chuyen_tham.id_khach_tham_quan GROUP BY khach_tham_quan.id_khach_tham_quan ORDER BY SUM(so_luong_ve) DESC LIMIT 1
+hard gold: select t1.ten , t1.tuoi from khach_tham_quan as t1 join chuyen_tham as t2 on t1.id_khach_tham_quan = t2.id_khach_tham_quan order by t2.so_luong_ve desc limit 1
+
+extra pred: SELECT T1.ten FROM khach_tham_quan AS T1 JOIN chuyen_tham AS T2 ON T1.id_khach_tham_quan = T2.id_khach_tham_quan JOIN bao_tang AS T3 ON T2.id_bao_tang = T3.id_bao_tang WHERE T3.nam_mo_cua < '2009' OR T3.nam_mo_cua > '2011' GROUP BY T1.id_khach_tham_quan HAVING COUNT(DISTINCT T3.id_bao_tang) > 1
+extra gold: select t1.ten from khach_tham_quan as t1 join chuyen_tham as t2 on t1.id_khach_tham_quan = t2.id_khach_tham_quan join bao_tang as t3 on t3.id_bao_tang = t2.id_bao_tang where t3.nam_mo_cua < 2009 intersect select t1.ten from khach_tham_quan as t1 join chuyen_tham as t2 on t1.id_khach_tham_quan = t2.id_khach_tham_quan join bao_tang as t3 on t3.id_bao_tang = t2.id_bao_tang where t3.nam_mo_cua > 2011
+
+extra pred: SELECT COUNT(*) FROM khach_tham_quan WHERE id_khach_tham_quan NOT IN (SELECT chuyen_tham.id_khach_tham_quan FROM chuyen_tham JOIN bao_tang ON chuyen_tham.id_bao_tang = bao_tang.id_bao_tang WHERE bao_tang.nam_mo_cua > '2010')
+extra gold: select count ( * ) from khach_tham_quan where id_khach_tham_quan not in ( select t2.id_khach_tham_quan from bao_tang as t1 join chuyen_tham as t2 on t1.id_bao_tang = t2.id_bao_tang where t1.nam_mo_cua > 2010 )
+
+easy pred: SELECT ten FROM hoc_sinh_trung_hoc WHERE id = (SELECT id_hoc_sinh FROM ban_be WHERE id_ban_be = 1)
+easy gold: select khoi_lop from hoc_sinh_trung_hoc where ten = "Kyle"
+
+eval_err_num:72
+medium pred: SELECT COUNT(*) FROM hoc_sinh_trung_hoc WHERE khoi_lop IN (9, 10)
+medium gold: select count ( * ) from hoc_sinh_trung_hoc where khoi_lop = 9 or khoi_lop = 10
+
+eval_err_num:73
+medium pred: SELECT COUNT(*) FROM hoc_sinh_trung_hoc WHERE khoi_lop IN (9, 10)
+medium gold: select count ( * ) from hoc_sinh_trung_hoc where khoi_lop = 9 or khoi_lop = 10
+
+medium pred: SELECT khoi_lop, COUNT(*) FROM hoc_sinh_trung_hoc GROUP BY khoi_lop ORDER BY COUNT(*) DESC
+medium gold: select khoi_lop , count ( * ) from hoc_sinh_trung_hoc group by khoi_lop
+
+medium pred: SELECT khoi_lop, COUNT(*) FROM hoc_sinh_trung_hoc GROUP BY khoi_lop ORDER BY COUNT(*) DESC
+medium gold: select khoi_lop , count ( * ) from hoc_sinh_trung_hoc group by khoi_lop
+
+eval_err_num:74
+medium pred: SELECT T1.id, COUNT(T2.id_hoc_sinh) AS count FROM hoc_sinh_trung_hoc AS T1 LEFT JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh GROUP BY T1.id ORDER BY COUNT(T2.id_hoc_sinh) DESC LIMIT 10
+medium gold: select id_hoc_sinh , count ( * ) from ban_be group by id_hoc_sinh
+
+eval_err_num:75
+medium pred: SELECT hoc_sinh_trung_hoc.id AS id, COUNT(ban_be.id_hoc_sinh) AS count FROM hoc_sinh_trung_hoc LEFT JOIN ban_be ON hoc_sinh_trung_hoc.id = ban_be.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id ORDER BY COUNT(ban_be.id_hoc_sinh) DESC LIMIT 10
+medium gold: select id_hoc_sinh , count ( * ) from ban_be group by id_hoc_sinh
+
+eval_err_num:76
+medium pred: SELECT hoc_sinh_trung_hoc.ten AS ten, COUNT(ban_be.id_hoc_sinh) AS count FROM hoc_sinh_trung_hoc LEFT JOIN ban_be ON hoc_sinh_trung_hoc.id = ban_be.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id ORDER BY count DESC LIMIT 10
+medium gold: select t2.ten , count ( * ) from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh
+
+eval_err_num:77
+medium pred: SELECT hoc_sinh_trung_hoc.ten, COUNT(ban_be.id_hoc_sinh) AS so_ban_be FROM hoc_sinh_trung_hoc LEFT JOIN ban_be ON hoc_sinh_trung_hoc.id = ban_be.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id ORDER BY COUNT(ban_be.id_hoc_sinh) DESC LIMIT 10
+medium gold: select t2.ten , count ( * ) from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh
+
+extra pred: SELECT T1.ten FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh GROUP BY T1.id ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh order by count ( * ) desc limit 1
+
+extra pred: SELECT T1.ten FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh GROUP BY T1.id ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh order by count ( * ) desc limit 1
+
+medium pred: SELECT ten FROM hoc_sinh_trung_hoc JOIN ban_be ON hoc_sinh_trung_hoc.id = ban_be.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id HAVING COUNT(ban_be.id_ban_be) >= 3
+medium gold: select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh having count ( * ) >= 3
+
+medium pred: SELECT ten FROM hoc_sinh_trung_hoc JOIN ban_be ON hoc_sinh_trung_hoc.id = ban_be.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id HAVING COUNT(ban_be.id_ban_be) >= 3
+medium gold: select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh having count ( * ) >= 3
+
+hard pred: SELECT hoc_sinh_trung_hoc.ten FROM hoc_sinh_trung_hoc JOIN ban_be ON hoc_sinh_trung_hoc.id = ban_be.id_hoc_sinh WHERE hoc_sinh_trung_hoc.ten = 'Kyle'
+hard gold: select t3.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id join hoc_sinh_trung_hoc as t3 on t1.id_ban_be = t3.id where t2.ten = "Kyle"
+
+hard pred: SELECT hoc_sinh_trung_hoc.ten FROM hoc_sinh_trung_hoc JOIN ban_be ON hoc_sinh_trung_hoc.id = ban_be.id_hoc_sinh WHERE hoc_sinh_trung_hoc.ten = 'Kyle'
+hard gold: select t3.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id join hoc_sinh_trung_hoc as t3 on t1.id_ban_be = t3.id where t2.ten = "Kyle"
+
+medium pred: SELECT COUNT(*) FROM ban_be WHERE id_hoc_sinh = (SELECT id FROM hoc_sinh_trung_hoc WHERE ten = 'Kyle')
+medium gold: select count ( * ) from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id where t2.ten = "Kyle"
+
+medium pred: SELECT COUNT(*) FROM ban_be WHERE id_hoc_sinh = (SELECT id FROM hoc_sinh_trung_hoc WHERE ten = 'Kyle')
+medium gold: select count ( * ) from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id where t2.ten = "Kyle"
+
+hard pred: SELECT id FROM hoc_sinh_trung_hoc WHERE id NOT IN (SELECT id_hoc_sinh FROM ban_be)
+hard gold: select id from hoc_sinh_trung_hoc except select id_hoc_sinh from ban_be
+
+eval_err_num:78
+hard pred: SELECT id AS id FROM hoc_sinh_trung_hoc AS T1 WHERE T1.id NOT IN (SELECT id_hoc_sinh AS id FROM ban_be AS T2)
+hard gold: select id from hoc_sinh_trung_hoc except select id_hoc_sinh from ban_be
+
+hard pred: SELECT ten FROM hoc_sinh_trung_hoc WHERE id NOT IN (SELECT id_hoc_sinh FROM ban_be)
+hard gold: select ten from hoc_sinh_trung_hoc except select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id
+
+hard pred: SELECT ten FROM hoc_sinh_trung_hoc WHERE id NOT IN (SELECT id_hoc_sinh FROM ban_be)
+hard gold: select ten from hoc_sinh_trung_hoc except select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id
+
+eval_err_num:79
+hard pred: SELECT hoc_sinh_trung_hoc.id FROM hoc_sinh_trung_hoc JOIN ban_be ON ban_be.id_hoc_sinh = hoc_sinh_trung_hoc.id JOIN luot_thich ON luot_thich.id_hoc_sinh = hoc_sinh_trung_hoc.id WHERE ban_be.id_ban_be IS NOT NULL AND luot_thich.id_luot_thich IS NOT NULL
+hard gold: select id_hoc_sinh from ban_be intersect select id_luot_thich from luot_thich
+
+hard pred: SELECT T1.id FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh JOIN luot_thich AS T3 ON T1.id = T3.id_hoc_sinh WHERE T2.id_hoc_sinh = T1.id AND T3.id_hoc_sinh = T1.id GROUP BY T1.id HAVING COUNT(DISTINCT T2.id_ban_be) > 0 AND COUNT(DISTINCT T3.id_luot_thich) > 0
+hard gold: select id_hoc_sinh from ban_be intersect select id_luot_thich from luot_thich
+
+hard pred: SELECT T1.ten FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh JOIN luot_thich AS T3 ON T1.id = T3.id_hoc_sinh GROUP BY T1.id HAVING COUNT(DISTINCT T2.id_ban_be) > 0 AND COUNT(DISTINCT T3.id_luot_thich) > 0
+hard gold: select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id intersect select t2.ten from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_luot_thich = t2.id
+
+eval_err_num:80
+hard pred: SELECT T1.ten FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh JOIN luot_thich AS T3 ON T1.id = T3.id_hoc_sinh WHERE T1.ten IS NOT NULL GROUP BY T1.id HAVING COUNT(DISTINCT T2.id_ban_be) > 0 AND COUNT(DISTINCT T3.id_luot_thich) > 0 ORDER BY T1.ten LIMIT 1000
+hard gold: select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id intersect select t2.ten from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_luot_thich = t2.id
+
+eval_err_num:81
+medium pred: SELECT hoc_sinh_trung_hoc.ten, COUNT(*) AS so_luot_thich FROM hoc_sinh_trung_hoc JOIN luot_thich ON hoc_sinh_trung_hoc.id = luot_thich.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id ORDER BY COUNT(*) DESC
+medium gold: select t2.ten , count ( * ) from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh
+
+eval_err_num:82
+medium pred: SELECT hoc_sinh_trung_hoc.ten, COUNT(*) AS so_luot_thich FROM hoc_sinh_trung_hoc JOIN luot_thich ON hoc_sinh_trung_hoc.id = luot_thich.id_hoc_sinh GROUP BY hoc_sinh_trung_hoc.id ORDER BY COUNT(*) DESC
+medium gold: select t2.ten , count ( * ) from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh
+
+eval_err_num:83
+extra pred: SELECT ten FROM hoc_sinh_trung_hoc ORDER BY (SELECT COUNT(*) FROM luot_thich WHERE luot_thich.id_hoc_sinh = hoc_sinh_trung_hoc.id) DESC LIMIT 1
+extra gold: select t2.ten from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh order by count ( * ) desc limit 1
+
+eval_err_num:84
+extra pred: SELECT ten FROM hoc_sinh_trung_hoc ORDER BY (SELECT COUNT(*) FROM luot_thich WHERE luot_thich.id_hoc_sinh = hoc_sinh_trung_hoc.id) DESC LIMIT 1
+extra gold: select t2.ten from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh order by count ( * ) desc limit 1
+
+medium pred: SELECT ten FROM hoc_sinh_trung_hoc WHERE id IN (SELECT id_hoc_sinh FROM luot_thich GROUP BY id_hoc_sinh HAVING COUNT(*) >= 2)
+medium gold: select t2.ten from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh having count ( * ) >= 2
+
+medium pred: SELECT ten FROM hoc_sinh_trung_hoc WHERE id IN (SELECT id_hoc_sinh FROM luot_thich GROUP BY id_hoc_sinh HAVING COUNT(*) >= 2)
+medium gold: select t2.ten from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id group by t1.id_hoc_sinh having count ( * ) >= 2
+
+hard pred: SELECT T1.ten FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh WHERE T1.khoi_lop > 5 GROUP BY T1.id HAVING COUNT(T2.id_ban_be) >= 2
+hard gold: select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id where t2.khoi_lop > 5 group by t1.id_hoc_sinh having count ( * ) >= 2
+
+hard pred: SELECT T1.ten FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh WHERE T1.khoi_lop >= 5 GROUP BY T1.id HAVING COUNT(T2.id_ban_be) >= 2
+hard gold: select t2.ten from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id where t2.khoi_lop > 5 group by t1.id_hoc_sinh having count ( * ) >= 2
+
+medium pred: SELECT COUNT(*) FROM luot_thich WHERE id_hoc_sinh = (SELECT id FROM hoc_sinh_trung_hoc WHERE ten = 'Kyle')
+medium gold: select count ( * ) from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id where t2.ten = "Kyle"
+
+medium pred: SELECT COUNT(*) FROM luot_thich WHERE id_hoc_sinh = (SELECT id FROM hoc_sinh_trung_hoc WHERE ten = 'Kyle')
+medium gold: select count ( * ) from luot_thich as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id where t2.ten = "Kyle"
+
+eval_err_num:85
+hard pred: SELECT AVG(T1.khoi_lop) FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh WHERE T2.id_ban_be IS NOT NULL GROUP BY T1.id HAVING COUNT(DISTINCT T2.id_ban_be) > 0
+hard gold: select avg ( khoi_lop ) from hoc_sinh_trung_hoc where id in ( select t1.id_hoc_sinh from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id )
+
+eval_err_num:86
+hard pred: SELECT AVG(T1.khoi_lop) FROM hoc_sinh_trung_hoc AS T1 JOIN ban_be AS T2 ON T1.id = T2.id_hoc_sinh WHERE T2.id_ban_be IS NOT NULL GROUP BY T1.id HAVING COUNT(DISTINCT T2.id_ban_be) > 0
+hard gold: select avg ( khoi_lop ) from hoc_sinh_trung_hoc where id in ( select t1.id_hoc_sinh from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id )
+
+extra pred: SELECT khoi_lop FROM hoc_sinh_trung_hoc WHERE id NOT IN (SELECT id_hoc_sinh FROM ban_be) ORDER BY khoi_lop LIMIT 1
+extra gold: select min ( khoi_lop ) from hoc_sinh_trung_hoc where id not in ( select t1.id_hoc_sinh from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id )
+
+extra pred: SELECT khoi_lop FROM hoc_sinh_trung_hoc WHERE id NOT IN (SELECT id_hoc_sinh FROM ban_be UNION SELECT id_ban_be FROM ban_be) ORDER BY khoi_lop LIMIT 1
+extra gold: select min ( khoi_lop ) from hoc_sinh_trung_hoc where id not in ( select t1.id_hoc_sinh from ban_be as t1 join hoc_sinh_trung_hoc as t2 on t1.id_hoc_sinh = t2.id )
+
+easy pred: SELECT chu_de_bua_tiec, so_luong_nguoi_to_chuc FROM bua_tiec ORDER BY so_luong_nguoi_to_chuc ASC
+easy gold: select chu_de_bua_tiec from bua_tiec order by so_luong_nguoi_to_chuc asc
+
+eval_err_num:87
+easy pred: SELECT COUNT(chu_tiec.id_nguoi_to_chuc) / COUNT(DISTINCT bua_tiec.id_bua_tiec) FROM bua_tiec JOIN chu_tiec ON bua_tiec.id_bua_tiec = chu_tiec.id_bua_tiec
+easy gold: select avg ( so_luong_nguoi_to_chuc ) from bua_tiec
+
+medium pred: SELECT bua_tiec.dia_diem FROM bua_tiec JOIN chu_tiec ON bua_tiec.id_bua_tiec = chu_tiec.id_bua_tiec GROUP BY bua_tiec.dia_diem ORDER BY COUNT(chu_tiec.id_nguoi_to_chuc) DESC LIMIT 1
+medium gold: select dia_diem from bua_tiec order by so_luong_nguoi_to_chuc desc limit 1
+
+medium pred: SELECT bua_tiec.dia_diem FROM bua_tiec JOIN chu_tiec ON bua_tiec.id_bua_tiec = chu_tiec.id_bua_tiec GROUP BY bua_tiec.id_bua_tiec ORDER BY COUNT(chu_tiec.id_nguoi_to_chuc) DESC LIMIT 1
+medium gold: select dia_diem from bua_tiec order by so_luong_nguoi_to_chuc desc limit 1
+
+medium pred: SELECT quoc_tich, COUNT(*) FROM nguoi_to_chuc GROUP BY quoc_tich ORDER BY COUNT(*) DESC
+medium gold: select quoc_tich , count ( * ) from nguoi_to_chuc group by quoc_tich
+
+medium pred: SELECT quoc_tich, COUNT(*) FROM nguoi_to_chuc GROUP BY quoc_tich ORDER BY COUNT(*) DESC
+medium gold: select quoc_tich , count ( * ) from nguoi_to_chuc group by quoc_tich
+
+hard pred: SELECT quoc_tich FROM nguoi_to_chuc WHERE tuoi > '45' INTERSECT SELECT quoc_tich FROM nguoi_to_chuc WHERE tuoi < '35' GROUP BY quoc_tich
+hard gold: select quoc_tich from nguoi_to_chuc where tuoi > 45 intersect select quoc_tich from nguoi_to_chuc where tuoi < 35
+
+eval_err_num:88
+hard pred: SELECT bua_tiec.dia_diem FROM bua_tiec JOIN chu_tiec ON bua_tiec.id_bua_tiec = chu_tiec.id_bua_tiec JOIN nguoi_to_chuc ON chu_tiec.id_nguoi_to_chuc = nguoi_to_chuc.id_nguoi_to_chuc WHERE CAST(nguoi_to_chuc.tuoi AS INTEGER) > 50 GROUP BY bua_tiec.id_bua_tiec HAVING COUNT(DISTINCT chu_tiec.id_nguoi_to_chuc) > 1
+hard gold: select t3.dia_diem from chu_tiec as t1 join nguoi_to_chuc as t2 on t1.id_nguoi_to_chuc = t2.id_nguoi_to_chuc join bua_tiec as t3 on t1.id_bua_tiec = t3.id_bua_tiec where t2.tuoi > 50
+
+eval_err_num:89
+hard pred: SELECT bua_tiec.dia_diem FROM bua_tiec JOIN chu_tiec ON bua_tiec.id_bua_tiec = chu_tiec.id_bua_tiec JOIN nguoi_to_chuc ON chu_tiec.id_nguoi_to_chuc = nguoi_to_chuc.id_nguoi_to_chuc WHERE CAST(nguoi_to_chuc.tuoi AS INTEGER) > 50 GROUP BY bua_tiec.id_bua_tiec HAVING COUNT(*) > 1
+hard gold: select t3.dia_diem from chu_tiec as t1 join nguoi_to_chuc as t2 on t1.id_nguoi_to_chuc = t2.id_nguoi_to_chuc join bua_tiec as t3 on t1.id_bua_tiec = t3.id_bua_tiec where t2.tuoi > 50
+
+hard pred: SELECT ten FROM nguoi_to_chuc JOIN chu_tiec ON nguoi_to_chuc.id_nguoi_to_chuc = chu_tiec.id_nguoi_to_chuc JOIN bua_tiec ON chu_tiec.id_bua_tiec = bua_tiec.id_bua_tiec GROUP BY nguoi_to_chuc.id_nguoi_to_chuc HAVING COUNT(*) > 20
+hard gold: select t2.ten from chu_tiec as t1 join nguoi_to_chuc as t2 on t1.id_nguoi_to_chuc = t2.id_nguoi_to_chuc join bua_tiec as t3 on t1.id_bua_tiec = t3.id_bua_tiec where t3.so_luong_nguoi_to_chuc > 20
+
+hard pred: SELECT ten FROM nguoi_to_chuc JOIN chu_tiec ON nguoi_to_chuc.id_nguoi_to_chuc = chu_tiec.id_nguoi_to_chuc JOIN bua_tiec ON chu_tiec.id_bua_tiec = bua_tiec.id_bua_tiec GROUP BY chu_tiec.id_bua_tiec HAVING COUNT(*) > 20
+hard gold: select t2.ten from chu_tiec as t1 join nguoi_to_chuc as t2 on t1.id_nguoi_to_chuc = t2.id_nguoi_to_chuc join bua_tiec as t3 on t1.id_bua_tiec = t3.id_bua_tiec where t3.so_luong_nguoi_to_chuc > 20
+
+medium pred: SELECT ten, quoc_tich FROM nguoi_to_chuc JOIN chu_tiec ON nguoi_to_chuc.id_nguoi_to_chuc = chu_tiec.id_nguoi_to_chuc ORDER BY tuoi DESC LIMIT 1
+medium gold: select ten , quoc_tich from nguoi_to_chuc order by tuoi desc limit 1
+
+eval_err_num:90
+medium pred: SELECT ten, quoc_tich FROM nguoi_to_chuc JOIN chu_tiec ON nguoi_to_chuc.id_nguoi_to_chuc = chu_tiec.id_nguoi_to_chuc ORDER BY CAST(tuoi AS INTEGER) DESC LIMIT 1
+medium gold: select ten , quoc_tich from nguoi_to_chuc order by tuoi desc limit 1
+
+hard pred: SELECT ten FROM nguoi_to_chuc EXCEPT SELECT T2.ten FROM chu_tiec AS T1 JOIN nguoi_to_chuc AS T2 ON T1.id_nguoi_to_chuc = T2.id_nguoi_to_chuc
+hard gold: select ten from nguoi_to_chuc where id_nguoi_to_chuc not in ( select id_nguoi_to_chuc from chu_tiec )
+
+easy pred: SELECT nha_mang FROM dien_thoai WHERE bo_nho_theo_g > 32 GROUP BY nha_mang
+easy gold: select distinct nha_mang from dien_thoai where bo_nho_theo_g > 32
+
+medium pred: SELECT nha_mang, COUNT(*) FROM dien_thoai GROUP BY nha_mang ORDER BY COUNT(*) DESC
+medium gold: select nha_mang , count ( * ) from dien_thoai group by nha_mang
+
+medium pred: SELECT ten, SUM(so_luong_co_phieu) FROM dien_thoai JOIN thi_truong_dien_thoai ON dien_thoai.id_dien_thoai = thi_truong_dien_thoai.id_dien_thoai GROUP BY dien_thoai.id_dien_thoai, dien_thoai.ten ORDER BY SUM(so_luong_co_phieu) DESC
+medium gold: select t2.ten , sum ( t1.so_luong_co_phieu ) from thi_truong_dien_thoai as t1 join dien_thoai as t2 on t1.id_dien_thoai = t2.id_dien_thoai group by t2.ten
+
+eval_err_num:91
+hard pred: SELECT dien_thoai.ten, SUM(thi_truong_dien_thoai.so_luong_co_phieu) AS tong_co_phieu FROM dien_thoai JOIN thi_truong_dien_thoai ON dien_thoai.id_dien_thoai = thi_truong_dien_thoai.id_dien_thoai GROUP BY dien_thoai.id_dien_thoai HAVING SUM(thi_truong_dien_thoai.so_luong_co_phieu) > 2000 ORDER BY tong_co_phieu DESC
+hard gold: select t2.ten from thi_truong_dien_thoai as t1 join dien_thoai as t2 on t1.id_dien_thoai = t2.id_dien_thoai group by t2.ten having sum ( t1.so_luong_co_phieu ) >= 2000 order by sum ( t1.so_luong_co_phieu ) desc
+
+eval_err_num:92
+easy pred: SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc JOIN danh_muc ON noi_dung_danh_muc.id_danh_muc = danh_muc.id_danh_muc WHERE danh_muc.ten_danh_muc = 'Danh muc'
+easy gold: select distinct ( ten_muc_nhap_cua_danh_muc ) from noi_dung_danh_muc
+
+eval_err_num:93
+easy pred: SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc JOIN danh_muc ON noi_dung_danh_muc.id_danh_muc = danh_muc.id_danh_muc WHERE danh_muc.ten_danh_muc = 'Category' ORDER BY ten_muc_nhap_cua_danh_muc ASC
+easy gold: select distinct ( ten_muc_nhap_cua_danh_muc ) from noi_dung_danh_muc
+
+hard pred: SELECT danh_muc.nha_xuat_ban_danh_muc, COUNT(*) FROM danh_muc GROUP BY danh_muc.nha_xuat_ban_danh_muc ORDER BY COUNT(*) DESC LIMIT 1
+hard gold: select nha_xuat_ban_danh_muc from danh_muc group by nha_xuat_ban_danh_muc order by count ( * ) desc limit 1
+
+hard pred: SELECT danh_muc.nha_xuat_ban_danh_muc, COUNT(*) FROM danh_muc GROUP BY danh_muc.nha_xuat_ban_danh_muc ORDER BY COUNT(*) DESC LIMIT 1
+hard gold: select nha_xuat_ban_danh_muc from danh_muc group by nha_xuat_ban_danh_muc order by count ( * ) desc limit 1
+
+extra pred: SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc JOIN thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc ON noi_dung_danh_muc.id_muc_nhap_cua_danh_muc = thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc.id_muc_nhap_cua_danh_muc GROUP BY noi_dung_danh_muc.id_muc_nhap_cua_danh_muc ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc as t1 join thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc as t2 on t1.id_muc_nhap_cua_danh_muc = t2.id_muc_nhap_cua_danh_muc where t2.gia_tri_thuoc_tinh = ( select gia_tri_thuoc_tinh from thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc group by gia_tri_thuoc_tinh order by count ( * ) desc limit 1 )
+
+extra pred: SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc JOIN thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc ON noi_dung_danh_muc.id_muc_nhap_cua_danh_muc = thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc.id_muc_nhap_cua_danh_muc GROUP BY noi_dung_danh_muc.id_muc_nhap_cua_danh_muc ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc as t1 join thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc as t2 on t1.id_muc_nhap_cua_danh_muc = t2.id_muc_nhap_cua_danh_muc where t2.gia_tri_thuoc_tinh = ( select gia_tri_thuoc_tinh from thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc group by gia_tri_thuoc_tinh order by count ( * ) desc limit 1 )
+
+medium pred: SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc JOIN thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc ON noi_dung_danh_muc.id_muc_nhap_cua_danh_muc = thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc.id_muc_nhap_cua_danh_muc JOIN dinh_nghia_thuoc_tinh ON thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc.id_thuoc_tinh = dinh_nghia_thuoc_tinh.id_thuoc_tinh WHERE dinh_nghia_thuoc_tinh.ten_thuoc_tinh = 'gia_tinh_theo_euro' ORDER BY gia_tinh_theo_euro DESC LIMIT 1
+medium gold: select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc order by gia_tinh_theo_do_la desc limit 1
+
+medium pred: SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc JOIN thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc ON noi_dung_danh_muc.id_muc_nhap_cua_danh_muc = thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc.id_muc_nhap_cua_danh_muc JOIN dinh_nghia_thuoc_tinh ON thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc.id_thuoc_tinh = dinh_nghia_thuoc_tinh.id_thuoc_tinh WHERE dinh_nghia_thuoc_tinh.ten_thuoc_tinh = 'gia_tinh_theo_euro' ORDER BY thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc.gia_tri_thuoc_tinh DESC LIMIT 1
+medium gold: select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc order by gia_tinh_theo_do_la desc limit 1
+
+eval_err_num:94
+hard pred: SELECT ten_cap_do_cua_danh_muc FROM cau_truc_danh_muc JOIN danh_muc ON cau_truc_danh_muc.id_danh_muc = danh_muc.id_danh_muc ORDER BY MIN(gia_tinh_theo_do_la) ASC LIMIT 1
+hard gold: select t2.ten_cap_do_cua_danh_muc from noi_dung_danh_muc as t1 join cau_truc_danh_muc as t2 on t1.cap_do_cua_danh_muc = t2.cap_do_cua_danh_muc order by t1.gia_tinh_theo_do_la limit 1
+
+hard pred: SELECT ten_cap_do_cua_danh_muc FROM cau_truc_danh_muc JOIN noi_dung_danh_muc ON cau_truc_danh_muc.cap_do_cua_danh_muc = noi_dung_danh_muc.cap_do_cua_danh_muc JOIN thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc ON cau_truc_danh_muc.cap_do_cua_danh_muc = thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc.cap_do_cua_danh_muc JOIN dinh_nghia_thuoc_tinh ON thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc.id_thuoc_tinh = dinh_nghia_thuoc_tinh.id_thuoc_tinh WHERE dinh_nghia_thuoc_tinh.ten_thuoc_tinh = 'gia_tinh_theo_do_la' ORDER BY gia_tinh_theo_do_la LIMIT 1
+hard gold: select t2.ten_cap_do_cua_danh_muc from noi_dung_danh_muc as t1 join cau_truc_danh_muc as t2 on t1.cap_do_cua_danh_muc = t2.cap_do_cua_danh_muc order by t1.gia_tinh_theo_do_la limit 1
+
+eval_err_num:95
+medium pred: SELECT AVG(gia_tinh_theo_euro) AS avg_price, MIN(gia_tinh_theo_euro) AS min_price FROM noi_dung_danh_muc
+medium gold: select avg ( gia_tinh_theo_euro ) , min ( gia_tinh_theo_euro ) from noi_dung_danh_muc
+
+eval_err_num:96
+medium pred: SELECT AVG(gia_tinh_theo_euro) AS trung_binh, MIN(gia_tinh_theo_euro) AS min_gia FROM noi_dung_danh_muc
+medium gold: select avg ( gia_tinh_theo_euro ) , min ( gia_tinh_theo_euro ) from noi_dung_danh_muc
+
+medium pred: SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc ORDER BY gia_tinh_theo_do_la DESC LIMIT 1
+medium gold: select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc order by chieu_cao desc limit 1
+
+eval_err_num:97
+medium pred: SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc ORDER BY CAST(chieu_cao AS INTEGER) DESC LIMIT 1
+medium gold: select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc order by chieu_cao desc limit 1
+
+eval_err_num:98
+medium pred: SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc ORDER BY CAST(dung_tich AS INTEGER) ASC LIMIT 1
+medium gold: select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc order by dung_tich asc limit 1
+
+eval_err_num:99
+medium pred: SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc ORDER BY CAST(dung_tich AS INTEGER) ASC LIMIT 1
+medium gold: select ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc order by dung_tich asc limit 1
+
+medium pred: SELECT ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc WHERE cap_do_cua_danh_muc = 8
+medium gold: select t1.ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc as t1 join thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc as t2 on t1.id_muc_nhap_cua_danh_muc = t2.id_muc_nhap_cua_danh_muc where t2.cap_do_cua_danh_muc = "8"
+
+medium pred: SELECT T1.ten_muc_nhap_cua_danh_muc FROM noi_dung_danh_muc AS T1 JOIN cau_truc_danh_muc AS T2 ON T1.cap_do_cua_danh_muc = T2.cap_do_cua_danh_muc WHERE T2.cap_do_cua_danh_muc = 8
+medium gold: select t1.ten_muc_nhap_cua_danh_muc from noi_dung_danh_muc as t1 join thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc as t2 on t1.id_muc_nhap_cua_danh_muc = t2.id_muc_nhap_cua_danh_muc where t2.cap_do_cua_danh_muc = "8"
+
+medium pred: SELECT ten_thuoc_tinh, id_thuoc_tinh FROM dinh_nghia_thuoc_tinh WHERE id_thuoc_tinh IN (SELECT id_thuoc_tinh FROM thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc WHERE gia_tri_thuoc_tinh = '0')
+medium gold: select t1.ten_thuoc_tinh , t1.id_thuoc_tinh from dinh_nghia_thuoc_tinh as t1 join thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc as t2 on t1.id_thuoc_tinh = t2.id_thuoc_tinh where t2.gia_tri_thuoc_tinh = 0
+
+medium pred: SELECT ten_muc_nhap_cua_danh_muc, dung_tich FROM noi_dung_danh_muc JOIN thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc ON noi_dung_danh_muc.id_muc_nhap_cua_danh_muc = thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc.id_muc_nhap_cua_danh_muc JOIN dinh_nghia_thuoc_tinh ON thuoc_tinh_bo_sung_cho_noi_dung_cua_danh_muc.id_thuoc_tinh = dinh_nghia_thuoc_tinh.id_thuoc_tinh WHERE dinh_nghia_thuoc_tinh.ten_thuoc_tinh = 'gia_tinh_theo_euro' AND gia_tinh_theo_euro > 700
+medium gold: select ten_muc_nhap_cua_danh_muc , dung_tich from noi_dung_danh_muc where gia_tinh_theo_do_la > 700
+
+medium pred: SELECT ten_muc_nhap_cua_danh_muc, dung_tich FROM noi_dung_danh_muc WHERE gia_tinh_theo_euro > 700 OR gia_tinh_theo_bang_anh > 700 OR gia_tinh_theo_do_la > 700
+medium gold: select ten_muc_nhap_cua_danh_muc , dung_tich from noi_dung_danh_muc where gia_tinh_theo_do_la > 700
+
+easy pred: SELECT ngay_thay_doi_moi_nhat_duoc_thuc_hien FROM danh_muc GROUP BY ngay_thay_doi_moi_nhat_duoc_thuc_hien HAVING COUNT(*) > 1 ORDER BY ngay_thay_doi_moi_nhat_duoc_thuc_hien DESC
+easy gold: select ngay_thay_doi_moi_nhat_duoc_thuc_hien from danh_muc group by ngay_thay_doi_moi_nhat_duoc_thuc_hien having count ( * ) > 1
+
+eval_err_num:100
+easy pred: SELECT COUNT(*) FROM noi_dung_danh_muc WHERE id_danh_muc = 1
+easy gold: select count ( * ) from noi_dung_danh_muc
+
+easy pred: SELECT COUNT(DISTINCT phan_cong_du_an.nha_khoa_hoc) FROM phan_cong_du_an JOIN du_an ON phan_cong_du_an.du_an = du_an.ma JOIN nha_khoa_hoc ON phan_cong_du_an.nha_khoa_hoc = nha_khoa_hoc.ssn
+easy gold: select count ( distinct nha_khoa_hoc ) from phan_cong_du_an
+
+easy pred: SELECT COUNT(DISTINCT nha_khoa_hoc) FROM phan_cong_du_an GROUP BY du_an HAVING COUNT(DISTINCT nha_khoa_hoc) > 1
+easy gold: select count ( distinct nha_khoa_hoc ) from phan_cong_du_an
+
+easy pred: SELECT COUNT(*) FROM du_an
+easy gold: select count ( distinct ten ) from du_an
+
+easy pred: SELECT COUNT(*) FROM du_an
+easy gold: select count ( distinct ten ) from du_an
+
+easy pred: SELECT AVG(so_gio) FROM du_an WHERE ma IN (SELECT du_an FROM phan_cong_du_an)
+easy gold: select avg ( so_gio ) from du_an
+
+hard pred: SELECT ten FROM du_an WHERE so_gio > (SELECT AVG(so_gio) FROM du_an) ORDER BY so_gio DESC
+hard gold: select ten from du_an where so_gio > ( select avg ( so_gio ) from du_an )
+
+extra pred: SELECT du_an.ten, du_an.so_gio FROM du_an JOIN phan_cong_du_an ON du_an.ma = phan_cong_du_an.du_an GROUP BY du_an.ma ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.ten , t1.so_gio from du_an as t1 join phan_cong_du_an as t2 on t1.ma = t2.du_an group by t2.du_an order by count ( * ) desc limit 1
+
+extra pred: SELECT du_an.ten, du_an.so_gio FROM du_an JOIN phan_cong_du_an ON du_an.ma = phan_cong_du_an.du_an GROUP BY du_an.ma ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.ten , t1.so_gio from du_an as t1 join phan_cong_du_an as t2 on t1.ma = t2.du_an group by t2.du_an order by count ( * ) desc limit 1
+
+extra pred: SELECT ten FROM nha_khoa_hoc JOIN phan_cong_du_an ON nha_khoa_hoc.ssn = phan_cong_du_an.nha_khoa_hoc JOIN du_an ON phan_cong_du_an.du_an = du_an.ma WHERE du_an.ten = 'Vật chất của thời gian' OR du_an.ten = 'Hiện tượng thị sai kỳ bí' GROUP BY nha_khoa_hoc.ssn HAVING COUNT(DISTINCT du_an.ma) = 2
+extra gold: select t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.ten = "Matter of Time" intersect select t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.ten = "A Puzzling Parallax"
+
+extra pred: SELECT T1.ten FROM nha_khoa_hoc AS T1 JOIN phan_cong_du_an AS T2 ON T1.ssn = T2.nha_khoa_hoc JOIN du_an AS T3 ON T2.du_an = T3.ma WHERE T3.ten = 'Vật chất của thời gian' OR T3.ten = 'Hiện tượng thị sai kỳ bí' GROUP BY T1.ssn HAVING COUNT(DISTINCT T3.ma) = 2
+extra gold: select t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.ten = "Matter of Time" intersect select t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.ten = "A Puzzling Parallax"
+
+medium pred: SELECT COUNT(*) FROM phan_cong_du_an JOIN du_an ON phan_cong_du_an.du_an = du_an.ma GROUP BY phan_cong_du_an.du_an ORDER BY COUNT(*) DESC
+medium gold: select count ( * ) , t1.ten from du_an as t1 join phan_cong_du_an as t2 on t1.ma = t2.du_an group by t1.ten
+
+medium pred: SELECT du_an.ten, COUNT(phan_cong_du_an.nha_khoa_hoc) FROM du_an JOIN phan_cong_du_an ON du_an.ma = phan_cong_du_an.du_an GROUP BY du_an.ma ORDER BY COUNT(phan_cong_du_an.nha_khoa_hoc) DESC
+medium gold: select count ( * ) , t1.ten from du_an as t1 join phan_cong_du_an as t2 on t1.ma = t2.du_an group by t1.ten
+
+hard pred: SELECT COUNT(*) FROM nha_khoa_hoc JOIN phan_cong_du_an ON nha_khoa_hoc.ssn = phan_cong_du_an.nha_khoa_hoc JOIN du_an ON phan_cong_du_an.du_an = du_an.ma WHERE du_an.so_gio > 300 GROUP BY phan_cong_du_an.nha_khoa_hoc HAVING COUNT(*) > 1
+hard gold: select count ( * ) , t1.ten from du_an as t1 join phan_cong_du_an as t2 on t1.ma = t2.du_an where t1.so_gio > 300 group by t1.ten
+
+hard pred: SELECT du_an.ten, COUNT(phan_cong_du_an.nha_khoa_hoc) FROM du_an JOIN phan_cong_du_an ON du_an.ma = phan_cong_du_an.du_an WHERE du_an.so_gio > 300 GROUP BY du_an.ma ORDER BY COUNT(phan_cong_du_an.nha_khoa_hoc) DESC
+hard gold: select count ( * ) , t1.ten from du_an as t1 join phan_cong_du_an as t2 on t1.ma = t2.du_an where t1.so_gio > 300 group by t1.ten
+
+eval_err_num:101
+medium pred: SELECT nha_khoa_hoc.ssn, COUNT(phan_cong_du_an.du_an) AS count, nha_khoa_hoc.ten FROM nha_khoa_hoc JOIN phan_cong_du_an ON nha_khoa_hoc.ssn = phan_cong_du_an.nha_khoa_hoc GROUP BY nha_khoa_hoc.ssn ORDER BY count DESC
+medium gold: select count ( * ) , t1.ten from nha_khoa_hoc as t1 join phan_cong_du_an as t2 on t1.ssn = t2.nha_khoa_hoc group by t1.ten
+
+eval_err_num:102
+medium pred: SELECT nha_khoa_hoc.ten, COUNT(*) AS so_du_an FROM nha_khoa_hoc JOIN phan_cong_du_an ON nha_khoa_hoc.ssn = phan_cong_du_an.nha_khoa_hoc GROUP BY nha_khoa_hoc.ssn ORDER BY COUNT(*) DESC
+medium gold: select count ( * ) , t1.ten from nha_khoa_hoc as t1 join phan_cong_du_an as t2 on t1.ssn = t2.nha_khoa_hoc group by t1.ten
+
+extra pred: SELECT nha_khoa_hoc.ssn, nha_khoa_hoc.ten FROM nha_khoa_hoc JOIN phan_cong_du_an ON nha_khoa_hoc.ssn = phan_cong_du_an.nha_khoa_hoc JOIN du_an ON phan_cong_du_an.du_an = du_an.ma ORDER BY du_an.so_gio DESC LIMIT 1
+extra gold: select t3.ssn , t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.so_gio = ( select max ( so_gio ) from du_an )
+
+extra pred: SELECT nha_khoa_hoc.ssn, nha_khoa_hoc.ten FROM nha_khoa_hoc JOIN phan_cong_du_an ON nha_khoa_hoc.ssn = phan_cong_du_an.nha_khoa_hoc JOIN du_an ON phan_cong_du_an.du_an = du_an.ma ORDER BY du_an.so_gio DESC LIMIT 1
+extra gold: select t3.ssn , t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.so_gio = ( select max ( so_gio ) from du_an )
+
+easy pred: SELECT T1.ten FROM nha_khoa_hoc AS T1 JOIN phan_cong_du_an AS T2 ON T1.ssn = T2.nha_khoa_hoc JOIN du_an AS T3 ON T2.du_an = T3.ma GROUP BY T1.ssn HAVING COUNT(DISTINCT T3.ma) > 0
+easy gold: select t2.ten from phan_cong_du_an as t1 join nha_khoa_hoc as t2 on t1.nha_khoa_hoc = t2.ssn
+
+easy pred: SELECT T1.ten FROM nha_khoa_hoc AS T1 JOIN phan_cong_du_an AS T2 ON T1.ssn = T2.nha_khoa_hoc GROUP BY T1.ssn HAVING COUNT(DISTINCT T2.du_an) > 0
+easy gold: select t2.ten from phan_cong_du_an as t1 join nha_khoa_hoc as t2 on t1.nha_khoa_hoc = t2.ssn
+
+eval_err_num:103
+hard pred: SELECT ten FROM du_an EXCEPT SELECT T1.ten FROM du_an T1 JOIN phan_cong_du_an T2 ON T1.ma = T2.du_an
+hard gold: select ten from du_an where ma not in ( select du_an from phan_cong_du_an )
+
+eval_err_num:104
+hard pred: SELECT ten FROM du_an EXCEPT SELECT T1.ten FROM du_an T1 JOIN phan_cong_du_an T2 ON T1.ma = T2.du_an
+hard gold: select ten from du_an where ma not in ( select du_an from phan_cong_du_an )
+
+eval_err_num:105
+hard pred: SELECT ten FROM nha_khoa_hoc EXCEPT SELECT T1.ten FROM phan_cong_du_an AS T1 JOIN nha_khoa_hoc AS T2 ON T1.nha_khoa_hoc = T2.ssn
+hard gold: select ten from nha_khoa_hoc where ssn not in ( select nha_khoa_hoc from phan_cong_du_an )
+
+hard pred: SELECT ten FROM nha_khoa_hoc WHERE ssn NOT IN (SELECT nha_khoa_hoc FROM phan_cong_du_an JOIN du_an ON phan_cong_du_an.du_an = du_an.ma WHERE du_an.so_gio = (SELECT MAX(so_gio) FROM du_an))
+hard gold: select ten from nha_khoa_hoc except select t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.so_gio = ( select max ( so_gio ) from du_an )
+
+hard pred: SELECT ten FROM nha_khoa_hoc WHERE ssn NOT IN (SELECT nha_khoa_hoc FROM phan_cong_du_an WHERE du_an = (SELECT ma FROM du_an ORDER BY so_gio DESC LIMIT 1))
+hard gold: select ten from nha_khoa_hoc except select t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.so_gio = ( select max ( so_gio ) from du_an )
+
+extra pred: SELECT du_an.ten, nha_khoa_hoc.ten FROM du_an JOIN phan_cong_du_an ON du_an.ma = phan_cong_du_an.du_an JOIN nha_khoa_hoc ON phan_cong_du_an.nha_khoa_hoc = nha_khoa_hoc.ssn WHERE du_an.ma = (SELECT ma FROM du_an ORDER BY so_gio ASC LIMIT 1)
+extra gold: select t2.ten , t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.so_gio = ( select min ( so_gio ) from du_an )
+
+extra pred: SELECT du_an.ten, nha_khoa_hoc.ten FROM du_an JOIN phan_cong_du_an ON du_an.ma = phan_cong_du_an.du_an JOIN nha_khoa_hoc ON phan_cong_du_an.nha_khoa_hoc = nha_khoa_hoc.ssn ORDER BY du_an.so_gio ASC LIMIT 1
+extra gold: select t2.ten , t3.ten from phan_cong_du_an as t1 join du_an as t2 on t1.du_an = t2.ma join nha_khoa_hoc as t3 on t1.nha_khoa_hoc = t3.ssn where t2.so_gio = ( select min ( so_gio ) from du_an )
+
+medium pred: SELECT loai, COUNT(*) FROM tau GROUP BY loai ORDER BY COUNT(*) DESC
+medium gold: select loai , count ( * ) from tau group by loai
+
+eval_err_num:106
+medium pred: SELECT loai AS ten_loai_tau, COUNT(*) AS so_luong_con_tau FROM tau GROUP BY loai ORDER BY so_luong_con_tau DESC LIMIT 10
+medium gold: select loai , count ( * ) from tau group by loai
+
+medium pred: SELECT quoc_tich, MAX(gia_tri_tai_san_rong) FROM ca_si GROUP BY quoc_tich ORDER BY MAX(gia_tri_tai_san_rong) DESC
+medium gold: select quoc_tich , max ( gia_tri_tai_san_rong ) from ca_si group by quoc_tich
+
+medium pred: SELECT quoc_tich, MAX(gia_tri_tai_san_rong) FROM ca_si GROUP BY quoc_tich ORDER BY MAX(gia_tri_tai_san_rong) DESC LIMIT 1
+medium gold: select quoc_tich , max ( gia_tri_tai_san_rong ) from ca_si group by quoc_tich
+
+medium pred: SELECT ca_si.ten FROM ca_si JOIN bai_hat ON ca_si.id_ca_si = bai_hat.id_ca_si WHERE bai_hat.doanh_so > 300000 GROUP BY ca_si.id_ca_si HAVING COUNT(*) > 0 ORDER BY ca_si.ten ASC
+medium gold: select distinct t1.ten from ca_si as t1 join bai_hat as t2 on t1.id_ca_si = t2.id_ca_si where t2.doanh_so > 300000
+
+medium pred: SELECT T1.ten FROM bai_hat JOIN ca_si AS T1 ON bai_hat.id_ca_si = T1.id_ca_si WHERE bai_hat.doanh_so > 300000 GROUP BY T1.id_ca_si HAVING COUNT(*) = 1 ORDER BY bai_hat.doanh_so DESC LIMIT 1000000
+medium gold: select distinct t1.ten from ca_si as t1 join bai_hat as t2 on t1.id_ca_si = t2.id_ca_si where t2.doanh_so > 300000
+
+medium pred: SELECT T1.ten FROM bai_hat JOIN ca_si AS T1 ON bai_hat.id_ca_si = T1.id_ca_si GROUP BY T1.id_ca_si HAVING COUNT(*) > 1
+medium gold: select t1.ten from ca_si as t1 join bai_hat as t2 on t1.id_ca_si = t2.id_ca_si group by t1.ten having count ( * ) > 1
+
+medium pred: SELECT T2.ten FROM bai_hat AS T1 JOIN ca_si AS T2 ON T1.id_ca_si = T2.id_ca_si GROUP BY T2.id_ca_si HAVING COUNT(*) > 1
+medium gold: select t1.ten from ca_si as t1 join bai_hat as t2 on t1.id_ca_si = t2.id_ca_si group by t1.ten having count ( * ) > 1
+
+medium pred: SELECT ca_si.ten, SUM(bai_hat.doanh_so) FROM ca_si JOIN bai_hat ON ca_si.id_ca_si = bai_hat.id_ca_si GROUP BY ca_si.id_ca_si ORDER BY SUM(bai_hat.doanh_so) DESC LIMIT 10
+medium gold: select t1.ten , sum ( t2.doanh_so ) from ca_si as t1 join bai_hat as t2 on t1.id_ca_si = t2.id_ca_si group by t1.ten
+
+medium pred: SELECT ca_si.ten, SUM(bai_hat.doanh_so) FROM ca_si JOIN bai_hat ON ca_si.id_ca_si = bai_hat.id_ca_si GROUP BY ca_si.id_ca_si ORDER BY SUM(bai_hat.doanh_so) DESC
+medium gold: select t1.ten , sum ( t2.doanh_so ) from ca_si as t1 join bai_hat as t2 on t1.id_ca_si = t2.id_ca_si group by t1.ten
+
+hard pred: SELECT ten FROM ca_si WHERE id_ca_si NOT IN (SELECT DISTINCT id_ca_si FROM bai_hat)
+hard gold: select ten from ca_si where id_ca_si not in ( select id_ca_si from bai_hat )
+
+hard pred: SELECT ten FROM ca_si WHERE id_ca_si NOT IN (SELECT DISTINCT id_ca_si FROM bai_hat)
+hard gold: select ten from ca_si where id_ca_si not in ( select id_ca_si from bai_hat )
+
+hard pred: SELECT quoc_tich FROM ca_si WHERE nam_sinh < 1945 OR nam_sinh > 1955
+hard gold: select quoc_tich from ca_si where nam_sinh < 1945 intersect select quoc_tich from ca_si where nam_sinh > 1955
+
+hard pred: SELECT quoc_tich FROM ca_si WHERE nam_sinh < 1945 OR nam_sinh > 1955
+hard gold: select quoc_tich from ca_si where nam_sinh < 1945 intersect select quoc_tich from ca_si where nam_sinh > 1955
+
+eval_err_num:107
+easy pred: SELECT AVG(thu_hang_cua_cau_lac_bo.vang) FROM thu_hang_cua_cau_lac_bo JOIN cau_lac_bo ON thu_hang_cua_cau_lac_bo.id_cau_lac_bo = cau_lac_bo.id_cau_lac_bo WHERE thu_hang_cua_cau_lac_bo.vang IS NOT NULL
+easy gold: select avg ( vang ) from thu_hang_cua_cau_lac_bo
+
+medium pred: SELECT thu_hang_cua_cau_lac_bo.bac FROM thu_hang_cua_cau_lac_bo ORDER BY thu_hang_cua_cau_lac_bo.bac DESC LIMIT 1 UNION SELECT thu_hang_cua_cau_lac_bo.bac FROM thu_hang_cua_cau_lac_bo ORDER BY thu_hang_cua_cau_lac_bo.bac ASC LIMIT 1
+medium gold: select max ( bac ) , min ( bac ) from thu_hang_cua_cau_lac_bo
+
+medium pred: SELECT bac FROM thu_hang_cua_cau_lac_bo ORDER BY bac DESC LIMIT 1 UNION SELECT bac FROM thu_hang_cua_cau_lac_bo ORDER BY bac ASC LIMIT 1
+medium gold: select max ( bac ) , min ( bac ) from thu_hang_cua_cau_lac_bo
+
+eval_err_num:108
+easy pred: SELECT COUNT(*) FROM cau_lac_bo WHERE id_cau_lac_bo IN (SELECT id_cau_lac_bo FROM thu_hang_cua_cau_lac_bo WHERE vang + bac + dong < 10)
+easy gold: select count ( * ) from thu_hang_cua_cau_lac_bo where tong < 10
+
+eval_err_num:109
+easy pred: SELECT COUNT(*) FROM cau_lac_bo WHERE id_cau_lac_bo IN (SELECT id_cau_lac_bo FROM thu_hang_cua_cau_lac_bo WHERE vang + bac + dong < 10)
+easy gold: select count ( * ) from thu_hang_cua_cau_lac_bo where tong < 10
+
+medium pred: SELECT cau_lac_bo.ten FROM cau_lac_bo JOIN cau_thu ON cau_lac_bo.id_cau_lac_bo = cau_thu.id_cau_lac_bo WHERE cau_thu.vi_tri = 'Cánh phải' GROUP BY cau_lac_bo.id_cau_lac_bo HAVING COUNT(DISTINCT cau_thu.id_cau_thu) > 0
+medium gold: select t1.ten from cau_lac_bo as t1 join cau_thu as t2 on t1.id_cau_lac_bo = t2.id_cau_lac_bo where t2.vi_tri = "Right Wing"
+
+medium pred: SELECT T2.ten FROM cau_thu AS T1 JOIN cau_lac_bo AS T2 ON T1.id_cau_lac_bo = T2.id_cau_lac_bo WHERE T1.vi_tri = 'Cánh phải' GROUP BY T2.id_cau_lac_bo HAVING COUNT(*) > 0
+medium gold: select t1.ten from cau_lac_bo as t1 join cau_thu as t2 on t1.id_cau_lac_bo = t2.id_cau_lac_bo where t2.vi_tri = "Right Wing"
+
+medium pred: SELECT AVG(diem_so) FROM cau_thu WHERE id_cau_lac_bo = (SELECT id_cau_lac_bo FROM cau_lac_bo WHERE ten = 'AIB')
+medium gold: select avg ( t2.diem_so ) from cau_lac_bo as t1 join cau_thu as t2 on t1.id_cau_lac_bo = t2.id_cau_lac_bo where t1.ten = "AIB"
+
+medium pred: SELECT AVG(diem_so) FROM cau_thu WHERE id_cau_lac_bo = (SELECT id_cau_lac_bo FROM cau_lac_bo WHERE ten = 'AIB')
+medium gold: select avg ( t2.diem_so ) from cau_lac_bo as t1 join cau_thu as t2 on t1.id_cau_lac_bo = t2.id_cau_lac_bo where t1.ten = "AIB"
+
+medium pred: SELECT vi_tri, AVG(diem_so) FROM cau_thu GROUP BY vi_tri ORDER BY AVG(diem_so) DESC
+medium gold: select vi_tri , avg ( diem_so ) from cau_thu group by vi_tri
+
+eval_err_num:110
+medium pred: SELECT vi_tri, SUM(diem_so) / COUNT(*) AS diem_trung_binh FROM cau_thu GROUP BY vi_tri
+medium gold: select vi_tri , avg ( diem_so ) from cau_thu group by vi_tri
+
+easy pred: SELECT vi_tri FROM cau_thu WHERE diem_so > 20 GROUP BY vi_tri HAVING AVG(diem_so) > 20 ORDER BY vi_tri ASC
+easy gold: select vi_tri from cau_thu group by ten having avg ( diem_so ) >= 20
+
+easy pred: SELECT vi_tri FROM cau_thu GROUP BY vi_tri HAVING AVG(diem_so) > 20
+easy gold: select vi_tri from cau_thu group by ten having avg ( diem_so ) >= 20
+
+medium pred: SELECT loai_cuoc_thi, COUNT(*) FROM cuoc_thi GROUP BY loai_cuoc_thi ORDER BY COUNT(*) DESC
+medium gold: select loai_cuoc_thi , count ( * ) from cuoc_thi group by loai_cuoc_thi
+
+medium pred: SELECT loai_cuoc_thi, COUNT(*) FROM cuoc_thi GROUP BY loai_cuoc_thi ORDER BY COUNT(*) DESC
+medium gold: select loai_cuoc_thi , count ( * ) from cuoc_thi group by loai_cuoc_thi
+
+easy pred: SELECT loai_cuoc_thi FROM cuoc_thi GROUP BY loai_cuoc_thi HAVING COUNT(*) < 5
+easy gold: select loai_cuoc_thi from cuoc_thi group by loai_cuoc_thi having count ( * ) <= 5
+
+easy pred: SELECT loai_cuoc_thi FROM cuoc_thi GROUP BY loai_cuoc_thi ORDER BY COUNT(*) DESC LIMIT 5
+easy gold: select loai_cuoc_thi from cuoc_thi group by loai_cuoc_thi having count ( * ) <= 5
+
+hard pred: SELECT vi_tri FROM cau_thu WHERE diem_so > 20 INTERSECT SELECT vi_tri FROM cau_thu WHERE diem_so < 10 ORDER BY vi_tri
+hard gold: select vi_tri from cau_thu where diem_so > 20 intersect select vi_tri from cau_thu where diem_so < 10
+
+medium pred: SELECT vi_tri, COUNT(*) FROM cau_thu WHERE diem_so < 30 GROUP BY vi_tri ORDER BY COUNT(*) DESC
+medium gold: select count ( * ) , vi_tri from cau_thu where diem_so < 30 group by vi_tri
+
+medium pred: SELECT vi_tri, COUNT(*) FROM cau_thu WHERE diem_so < 30 GROUP BY vi_tri ORDER BY COUNT(*) DESC
+medium gold: select count ( * ) , vi_tri from cau_thu where diem_so < 30 group by vi_tri
+
+extra pred: SELECT quoc_gia, COUNT(*) FROM cuoc_thi GROUP BY quoc_gia ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select quoc_gia from cuoc_thi where loai_cuoc_thi = "Tournament" group by quoc_gia order by count ( * ) desc limit 1
+
+extra pred: SELECT quoc_gia FROM cuoc_thi GROUP BY quoc_gia ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select quoc_gia from cuoc_thi where loai_cuoc_thi = "Tournament" group by quoc_gia order by count ( * ) desc limit 1
+
+hard pred: SELECT quoc_gia FROM cuoc_thi WHERE loai_cuoc_thi = 'Giao huynh' OR loai_cuoc_thi = 'Giai dau'
+hard gold: select quoc_gia from cuoc_thi where loai_cuoc_thi = "Friendly" intersect select quoc_gia from cuoc_thi where loai_cuoc_thi = "Tournament"
+
+hard pred: SELECT quoc_gia FROM cuoc_thi WHERE loai_cuoc_thi = 'Giao huynh' OR loai_cuoc_thi = 'Giai dau'
+hard gold: select quoc_gia from cuoc_thi where loai_cuoc_thi = "Friendly" intersect select quoc_gia from cuoc_thi where loai_cuoc_thi = "Tournament"
+
+hard pred: SELECT quoc_gia FROM cuoc_thi WHERE loai_cuoc_thi = 'Giao huynh' EXCEPT SELECT quoc_gia FROM cuoc_thi WHERE loai_cuoc_thi = 'Giao huynh'
+hard gold: select quoc_gia from cuoc_thi except select quoc_gia from cuoc_thi where loai_cuoc_thi = "Friendly"
+
+hard pred: SELECT quoc_gia FROM cuoc_thi WHERE loai_cuoc_thi != 'Giao huynh' EXCEPT SELECT quoc_gia FROM cuoc_thi WHERE loai_cuoc_thi = 'Giao huynh'
+hard gold: select quoc_gia from cuoc_thi except select quoc_gia from cuoc_thi where loai_cuoc_thi = "Friendly"
+
+medium pred: SELECT quoc_gia, COUNT(*) FROM san_van_dong GROUP BY quoc_gia ORDER BY COUNT(*) DESC
+medium gold: select quoc_gia , count ( * ) from san_van_dong group by quoc_gia
+
+hard pred: SELECT quoc_gia FROM san_van_dong WHERE nam_mo_cua > 2006 GROUP BY quoc_gia HAVING COUNT(*) = 0
+hard gold: select quoc_gia from san_van_dong except select quoc_gia from san_van_dong where nam_mo_cua > 2006
+
+easy pred: SELECT van_dong_vien_boi.ten, ho_so.ket_qua, van_dong_vien_boi.100_met FROM van_dong_vien_boi JOIN ho_so ON van_dong_vien_boi.id = ho_so.id_van_dong_vien_boi ORDER BY ho_so.ket_qua ASC, van_dong_vien_boi.100_met ASC
+easy gold: select ten from van_dong_vien_boi order by "100_met"
+
+eval_err_num:111
+easy pred: SELECT COUNT(DISTINCT van_dong_vien_boi.quoc_tich) FROM van_dong_vien_boi JOIN ho_so ON van_dong_vien_boi.id = ho_so.id_van_dong_vien_boi JOIN su_kien ON ho_so.id_su_kien = su_kien.id JOIN san_van_dong ON su_kien.id_san_van_dong = san_van_dong.id WHERE san_van_dong.quoc_gia IS NOT NULL AND van_dong_vien_boi.quoc_tich = san_van_dong.quoc_gia
+easy gold: select count ( distinct quoc_tich ) from van_dong_vien_boi
+
+medium pred: SELECT quoc_gia FROM san_van_dong GROUP BY quoc_gia HAVING COUNT(*) > 1
+medium gold: select quoc_tich , count ( * ) from van_dong_vien_boi group by quoc_tich having count ( * ) > 1
+
+eval_err_num:112
+medium pred: SELECT ho_so.ket_qua FROM ho_so JOIN van_dong_vien_boi ON ho_so.id_van_dong_vien_boi = van_dong_vien_boi.id WHERE van_dong_vien_boi.quoc_tich = 'Úc' AND van_dong_vien_boi.200_met IS NOT NULL AND van_dong_vien_boi.300_met IS NOT NULL
+medium gold: select "200_met" , "300_met" from van_dong_vien_boi where quoc_tich = "Australia"
+
+extra pred: SELECT T1.ten FROM san_van_dong AS T1 JOIN su_kien AS T2 ON T1.id = T2.id_san_van_dong GROUP BY T1.id ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.ten from san_van_dong as t1 join su_kien as t2 on t1.id = t2.id_san_van_dong group by t2.id_san_van_dong order by count ( * ) desc limit 1
+
+extra pred: SELECT van_dong_vien_boi.ten FROM van_dong_vien_boi JOIN ho_so ON van_dong_vien_boi.id = ho_so.id_van_dong_vien_boi GROUP BY van_dong_vien_boi.id ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t1.ten from van_dong_vien_boi as t1 join ho_so as t2 on t1.id = t2.id_van_dong_vien_boi group by t2.id_van_dong_vien_boi order by count ( * ) desc limit 1
+
+medium pred: SELECT van_dong_vien_boi.ten FROM van_dong_vien_boi JOIN ho_so ON van_dong_vien_boi.id = ho_so.id_van_dong_vien_boi GROUP BY van_dong_vien_boi.id HAVING COUNT(*) >= 2
+medium gold: select t1.ten from van_dong_vien_boi as t1 join ho_so as t2 on t1.id = t2.id_van_dong_vien_boi group by t2.id_van_dong_vien_boi having count ( * ) >= 2
+
+hard pred: SELECT van_dong_vien_boi.ten, van_dong_vien_boi.quoc_tich FROM ho_so JOIN van_dong_vien_boi ON ho_so.id_van_dong_vien_boi = van_dong_vien_boi.id GROUP BY van_dong_vien_boi.id HAVING COUNT(*) > 1
+hard gold: select t1.ten , t1.quoc_tich from van_dong_vien_boi as t1 join ho_so as t2 on t1.id = t2.id_van_dong_vien_boi where ket_qua = "Win" group by t2.id_van_dong_vien_boi having count ( * ) > 1
+
+extra pred: SELECT T1.ten FROM san_van_dong AS T1 JOIN ho_so AS T2 ON T1.id = T2.id_su_kien JOIN van_dong_vien_boi AS T3 ON T2.id_van_dong_vien_boi = T3.id WHERE T3.quoc_tich = 'Úc' GROUP BY T1.id HAVING COUNT(DISTINCT T2.id) > 0
+extra gold: select t4.ten from van_dong_vien_boi as t1 join ho_so as t2 on t1.id = t2.id_van_dong_vien_boi join su_kien as t3 on t2.id_su_kien = t3.id join san_van_dong as t4 on t4.id = t3.id_san_van_dong where t1.quoc_tich = "Australia"
+
+extra pred: SELECT T1.ten FROM san_van_dong AS T1 JOIN su_kien AS T3 ON T3.id_san_van_dong = T1.id JOIN ho_so AS T2 ON T2.id_su_kien = T3.id GROUP BY T1.id ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t3.ten from ho_so as t1 join su_kien as t2 on t1.id_su_kien = t2.id join san_van_dong as t3 on t3.id = t2.id_san_van_dong group by t2.id_san_van_dong order by count ( * ) desc limit 1
+
+easy pred: SELECT van_dong_vien_boi.id, van_dong_vien_boi.ten, van_dong_vien_boi.quoc_tich, van_dong_vien_boi.100_met, van_dong_vien_boi.200_met, van_dong_vien_boi.300_met, van_dong_vien_boi.400_met, van_dong_vien_boi.500_met, van_dong_vien_boi.600_met, van_dong_vien_boi.700_met, van_dong_vien_boi.thoi_gian FROM van_dong_vien_boi AS T1 JOIN ho_so AS T2 ON T1.id = T2.id_van_dong_vien_boi JOIN su_kien AS T3 ON T2.id_su_kien = T3.id JOIN san_van_dong AS T4 ON T3.id_san_van_dong = T4.id
+easy gold: select * from van_dong_vien_boi
+
+easy pred: SELECT AVG(san_van_dong.suc_chua) FROM san_van_dong JOIN su_kien ON san_van_dong.id = su_kien.id_san_van_dong WHERE su_kien.nam = '2005'
+easy gold: select avg ( suc_chua ) from san_van_dong where nam_mo_cua = 2005
+
+easy pred: SELECT * FROM nha_dau_tu AS T1
+easy gold: select chi_tiet_ve_nha_dau_tu from nha_dau_tu
+
+easy pred: SELECT * FROM lot
+easy gold: select distinct chi_tiet_ve_cac_lot from lot
+
+easy pred: SELECT so_tien_giao_dich FROM giao_dich ORDER BY so_tien_giao_dich DESC LIMIT 1
+easy gold: select max ( so_tien_giao_dich ) from giao_dich
+
+easy pred: SELECT ngay_giao_dich FROM giao_dich JOIN loai_giao_dich ON giao_dich.ma_loai_giao_dich = loai_giao_dich.ma_loai_giao_dich WHERE loai_giao_dich.mo_ta_ve_loai_giao_dich = 'bán'
+easy gold: select ngay_giao_dich from giao_dich where ma_loai_giao_dich = "SALE"
+
+easy pred: SELECT AVG(so_tien_giao_dich) FROM giao_dich JOIN loai_giao_dich ON giao_dich.ma_loai_giao_dich = loai_giao_dich.ma_loai_giao_dich WHERE loai_giao_dich.mo_ta_ve_loai_giao_dich = 'bán'
+easy gold: select avg ( so_tien_giao_dich ) from giao_dich where ma_loai_giao_dich = "SALE"
+
+easy pred: SELECT loai_giao_dich.mo_ta_ve_loai_giao_dich FROM loai_giao_dich JOIN giao_dich ON giao_dich.ma_loai_giao_dich = loai_giao_dich.ma_loai_giao_dich WHERE giao_dich.ma_loai_giao_dich = 'mua'
+easy gold: select mo_ta_ve_loai_giao_dich from loai_giao_dich where ma_loai_giao_dich = "PUR"
+
+medium pred: SELECT so_tien_giao_dich FROM giao_dich JOIN loai_giao_dich ON giao_dich.ma_loai_giao_dich = loai_giao_dich.ma_loai_giao_dich WHERE loai_giao_dich.ma_loai_giao_dich = 'mua' AND so_luong_co_phieu > 50 ORDER BY so_tien_giao_dich LIMIT 1
+medium gold: select min ( so_tien_giao_dich ) from giao_dich where ma_loai_giao_dich = "PUR" and so_luong_co_phieu > 50
+
+easy pred: SELECT so_luong_co_phieu FROM giao_dich WHERE so_tien_giao_dich < 1000 ORDER BY so_luong_co_phieu DESC LIMIT 1
+easy gold: select max ( so_luong_co_phieu ) from giao_dich where so_tien_giao_dich < 10000
+
+medium pred: SELECT ngay_giao_dich FROM giao_dich WHERE so_luong_co_phieu > 100 OR so_tien_giao_dich < 1000
+medium gold: select ngay_giao_dich from giao_dich where so_luong_co_phieu > 100 or so_tien_giao_dich > 1000
+
+eval_err_num:113
+medium pred: SELECT giao_dich.ngay_giao_dich, loai_giao_dich.mo_ta_ve_loai_giao_dich FROM giao_dich JOIN loai_giao_dich ON giao_dich.ma_loai_giao_dich = loai_giao_dich.ma_loai_giao_dich WHERE CAST(giao_dich.so_luong_co_phieu AS INTEGER) < 10
+medium gold: select t1.mo_ta_ve_loai_giao_dich , t2.ngay_giao_dich from loai_giao_dich as t1 join giao_dich as t2 on t1.ma_loai_giao_dich = t2.ma_loai_giao_dich where t2.so_luong_co_phieu < 10
+
+eval_err_num:114
+medium pred: SELECT nha_dau_tu.id_nha_dau_tu, nha_dau_tu.chi_tiet_ve_nha_dau_tu FROM nha_dau_tu JOIN giao_dich ON nha_dau_tu.id_nha_dau_tu = giao_dich.id_nha_dau_tu WHERE CAST(giao_dich.so_luong_co_phieu AS INTEGER) > 150
+medium gold: select t1.chi_tiet_ve_nha_dau_tu from nha_dau_tu as t1 join giao_dich as t2 on t1.id_nha_dau_tu = t2.id_nha_dau_tu where t2.so_luong_co_phieu > 100
+
+easy pred: SELECT COUNT(DISTINCT giao_dich.ma_loai_giao_dich) FROM giao_dich JOIN loai_giao_dich ON giao_dich.ma_loai_giao_dich = loai_giao_dich.ma_loai_giao_dich
+easy gold: select count ( distinct ma_loai_giao_dich ) from giao_dich
+
+medium pred: SELECT lot.chi_tiet_ve_cac_lot, nha_dau_tu.id_nha_dau_tu FROM lot JOIN nha_dau_tu ON lot.id_nha_dau_tu = nha_dau_tu.id_nha_dau_tu
+medium gold: select chi_tiet_ve_cac_lot , id_nha_dau_tu from lot
+
+eval_err_num:115
+hard pred: SELECT lot.chi_tiet_ve_cac_lot FROM lot JOIN giao_dich ON lot.id_nha_dau_tu = giao_dich.id_nha_dau_tu WHERE CAST(giao_dich.so_luong_co_phieu AS INTEGER) > 100 AND giao_dich.ma_loai_giao_dich = 'buy'
+hard gold: select t1.chi_tiet_ve_cac_lot from lot as t1 join giao_dich_lot as t2 on t1.id_lot = t2.id_giao_dich join giao_dich as t3 on t2.id_giao_dich = t3.id_giao_dich where t3.so_luong_co_phieu > 100 and t3.ma_loai_giao_dich = "PUR"
+
+medium pred: SELECT AVG(so_tien_giao_dich) FROM giao_dich JOIN loai_giao_dich ON giao_dich.ma_loai_giao_dich = loai_giao_dich.ma_loai_giao_dich GROUP BY loai_giao_dich.ma_loai_giao_dich
+medium gold: select ma_loai_giao_dich , avg ( so_tien_giao_dich ) from giao_dich group by ma_loai_giao_dich
+
+eval_err_num:116
+medium pred: SELECT giao_dich.ma_loai_giao_dich, MAX(giao_dich.so_luong_co_phieu) AS max_so_luong, MIN(giao_dich.so_luong_co_phieu) AS min_so_luong FROM giao_dich JOIN loai_giao_dich ON giao_dich.ma_loai_giao_dich = loai_giao_dich.ma_loai_giao_dich GROUP BY giao_dich.ma_loai_giao_dich
+medium gold: select ma_loai_giao_dich , max ( so_luong_co_phieu ) , min ( so_luong_co_phieu ) from giao_dich group by ma_loai_giao_dich
+
+eval_err_num:117
+medium pred: SELECT giao_dich.id_nha_dau_tu, AVG(CAST(giao_dich.so_luong_co_phieu AS REAL)) FROM giao_dich JOIN nha_dau_tu ON giao_dich.id_nha_dau_tu = nha_dau_tu.id_nha_dau_tu GROUP BY giao_dich.id_nha_dau_tu
+medium gold: select id_nha_dau_tu , avg ( so_luong_co_phieu ) from giao_dich group by id_nha_dau_tu
+
+eval_err_num:118
+extra pred: SELECT giao_dich.id_nha_dau_tu, AVG(CAST(giao_dich.so_luong_co_phieu AS REAL)) FROM giao_dich JOIN nha_dau_tu ON giao_dich.id_nha_dau_tu = nha_dau_tu.id_nha_dau_tu GROUP BY giao_dich.id_nha_dau_tu ORDER BY AVG(CAST(giao_dich.so_luong_co_phieu AS REAL))
+extra gold: select id_nha_dau_tu , avg ( so_luong_co_phieu ) from giao_dich group by id_nha_dau_tu order by avg ( so_luong_co_phieu )
+
+eval_err_num:119
+medium pred: SELECT nha_dau_tu.id_nha_dau_tu, COUNT(*) AS so_luong_giao_dich_trung_binh FROM giao_dich JOIN nha_dau_tu ON giao_dich.id_nha_dau_tu = nha_dau_tu.id_nha_dau_tu GROUP BY nha_dau_tu.id_nha_dau_tu
+medium gold: select id_nha_dau_tu , avg ( so_tien_giao_dich ) from giao_dich group by id_nha_dau_tu
+
+eval_err_num:120
+medium pred: SELECT lot.id_lot, COUNT(*) AS so_luong_giao_dich FROM giao_dich JOIN giao_dich_lot ON giao_dich.id_giao_dich = giao_dich_lot.id_giao_dich JOIN lot ON giao_dich_lot.id_lot = lot.id_lot GROUP BY lot.id_lot
+medium gold: select t2.id_lot , avg ( so_tien_giao_dich ) from giao_dich as t1 join giao_dich_lot as t2 on t1.id_giao_dich = t2.id_giao_dich group by t2.id_lot
+
+eval_err_num:121
+hard pred: SELECT giao_dich_lot.id_lot, COUNT(*) AS so_luong_giao_dich FROM giao_dich JOIN giao_dich_lot ON giao_dich.id_giao_dich = giao_dich_lot.id_giao_dich GROUP BY giao_dich_lot.id_lot ORDER BY COUNT(*)
+hard gold: select t2.id_lot , avg ( so_tien_giao_dich ) from giao_dich as t1 join giao_dich_lot as t2 on t1.id_giao_dich = t2.id_giao_dich group by t2.id_lot order by avg ( so_tien_giao_dich )
+
+medium pred: SELECT COUNT(*) FROM giao_dich JOIN loai_giao_dich ON giao_dich.ma_loai_giao_dich = loai_giao_dich.ma_loai_giao_dich WHERE loai_giao_dich.mo_ta_ve_loai_giao_dich = 'Bán' GROUP BY giao_dich.id_nha_dau_tu
+medium gold: select id_nha_dau_tu , count ( * ) from giao_dich where ma_loai_giao_dich = "SALE" group by id_nha_dau_tu
+
+medium pred: SELECT id_nha_dau_tu, COUNT(*) FROM giao_dich GROUP BY id_nha_dau_tu ORDER BY COUNT(*) DESC
+medium gold: select id_nha_dau_tu , count ( * ) from giao_dich group by id_nha_dau_tu
+
+eval_err_num:122
+extra pred: SELECT g.id_nha_dau_tu, nd.chi_tiet_ve_nha_dau_tu, COUNT(*) AS so_lan_giao_dich FROM giao_dich g JOIN nha_dau_tu nd ON g.id_nha_dau_tu = nd.id_nha_dau_tu GROUP BY g.id_nha_dau_tu ORDER BY COUNT(*) DESC LIMIT 3
+extra gold: select t2.id_nha_dau_tu , t1.chi_tiet_ve_nha_dau_tu from nha_dau_tu as t1 join giao_dich as t2 on t1.id_nha_dau_tu = t2.id_nha_dau_tu group by t2.id_nha_dau_tu order by count ( * ) desc limit 3
+
+medium pred: SELECT id_nha_dau_tu FROM giao_dich GROUP BY id_nha_dau_tu HAVING COUNT(*) >= 2
+medium gold: select t2.id_nha_dau_tu from nha_dau_tu as t1 join giao_dich as t2 on t1.id_nha_dau_tu = t2.id_nha_dau_tu group by t2.id_nha_dau_tu having count ( * ) >= 2
+
+hard pred: SELECT g.id_nha_dau_tu, n.chi_tiet_ve_nha_dau_tu FROM giao_dich AS g JOIN loai_giao_dich AS l ON g.ma_loai_giao_dich = l.ma_loai_giao_dich JOIN nha_dau_tu AS n ON g.id_nha_dau_tu = n.id_nha_dau_tu WHERE l.mo_ta_ve_loai_giao_dich = 'ban' GROUP BY g.id_nha_dau_tu HAVING COUNT(*) >= 2
+hard gold: select t2.id_nha_dau_tu , t1.chi_tiet_ve_nha_dau_tu from nha_dau_tu as t1 join giao_dich as t2 on t1.id_nha_dau_tu = t2.id_nha_dau_tu where t2.ma_loai_giao_dich = "SALE" group by t2.id_nha_dau_tu having count ( * ) >= 2
+
+medium pred: SELECT ngay_giao_dich FROM giao_dich WHERE so_luong_co_phieu >= 100 OR so_tien_giao_dich > 100
+medium gold: select ngay_giao_dich from giao_dich where so_luong_co_phieu >= 100 or so_tien_giao_dich >= 100
+
+hard pred: SELECT chi_tiet_ban_hang FROM ban_hang JOIN giao_dich ON ban_hang.id_giao_dich_ban_hang = giao_dich.id_giao_dich UNION SELECT chi_tiet_mua_hang FROM mua_hang JOIN giao_dich ON mua_hang.id_giao_dich_mua_hang = giao_dich.id_giao_dich
+hard gold: select chi_tiet_ban_hang from ban_hang union select chi_tiet_mua_hang from mua_hang
+
+hard pred: SELECT lot.chi_tiet_ve_cac_lot FROM lot WHERE lot.id_lot NOT IN (SELECT giao_dich_lot.id_lot FROM giao_dich_lot)
+hard gold: select chi_tiet_ve_cac_lot from lot except select t1.chi_tiet_ve_cac_lot from lot as t1 join giao_dich_lot as t2 on t1.id_lot = t2.id_lot
+
+eval_err_num:123
+easy pred: SELECT COUNT(*) FROM dbo.nha_ga_tau_hoa JOIN dbo.nha_ga ON nha_ga_tau_hoa.id_nha_ga = nha_ga.id_ga_tau JOIN dbo.toa_hoa ON nha_ga_tau_hoa.id_tau = toa_hoa.id_tau
+easy gold: select count ( * ) from nha_ga
+
+hard pred: SELECT dia_diem FROM nha_ga WHERE id_ga_tau NOT IN (SELECT id_nha_ga FROM nha_ga_tau_hoa) AND so_luong_san_ga < 15
+hard gold: select dia_diem from nha_ga except select dia_diem from nha_ga where so_luong_san_ga >= 15
+
+hard pred: SELECT dia_diem FROM nha_ga ORDER BY so_luong_xuat_canh_hang_nam DESC LIMIT 1
+hard gold: select dia_diem from nha_ga group by dia_diem order by count ( * ) desc limit 1
+
+medium pred: SELECT toa_hoa.ten, toa_hoa.thoi_gian, toa_hoa.dich_vu FROM toa_hoa JOIN nha_ga_tau_hoa ON toa_hoa.id_tau = nha_ga_tau_hoa.id_tau JOIN nha_ga ON nha_ga_tau_hoa.id_nha_ga = nha_ga.id_ga_tau
+medium gold: select ten , thoi_gian , dich_vu from toa_hoa
+
+easy pred: SELECT COUNT(*) FROM toa_hoa JOIN nha_ga_tau_hoa ON toa_hoa.id_tau = nha_ga_tau_hoa.id_tau JOIN nha_ga ON nha_ga_tau_hoa.id_nha_ga = nha_ga.id_ga_tau
+easy gold: select count ( * ) from toa_hoa
+
+medium pred: SELECT nha_ga.ten, COUNT(nha_ga_tau_hoa.id_tau) FROM nha_ga JOIN nha_ga_tau_hoa ON nha_ga.id_ga_tau = nha_ga_tau_hoa.id_nha_ga GROUP BY nha_ga.id_ga_tau ORDER BY COUNT(nha_ga_tau_hoa.id_tau) DESC
+medium gold: select t2.ten , count ( * ) from nha_ga_tau_hoa as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id_ga_tau group by t1.id_nha_ga
+
+extra pred: SELECT T1.ten FROM nha_ga AS T1 JOIN nha_ga_tau_hoa AS T2 ON T1.id_ga_tau = T2.id_nha_ga JOIN toa_hoa AS T3 ON T2.id_tau = T3.id_tau GROUP BY T1.id_ga_tau ORDER BY COUNT(*) DESC LIMIT 1
+extra gold: select t2.ten from nha_ga_tau_hoa as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id_ga_tau group by t1.id_nha_ga order by count ( * ) desc limit 1
+
+medium pred: SELECT T1.ten FROM nha_ga AS T1 JOIN nha_ga_tau_hoa AS T2 ON T1.id_ga_tau = T2.id_nha_ga JOIN toa_hoa AS T3 ON T2.id_tau = T3.id_tau GROUP BY T1.id_ga_tau HAVING COUNT(*) >= 2
+medium gold: select t2.ten from nha_ga_tau_hoa as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id_ga_tau group by t1.id_nha_ga having count ( * ) >= 2
+
+easy pred: SELECT nha_ga.dia_diem FROM nha_ga JOIN nha_ga_tau_hoa ON nha_ga.id_ga_tau = nha_ga_tau_hoa.id_nha_ga GROUP BY nha_ga.dia_diem HAVING COUNT(DISTINCT nha_ga_tau_hoa.id_tau) = 1
+easy gold: select dia_diem from nha_ga group by dia_diem having count ( * ) = 1
+
+extra pred: SELECT T1.ten FROM nha_ga AS T1 JOIN nha_ga_tau_hoa AS T2 ON T1.id_ga_tau = T2.id_nha_ga JOIN toa_hoa AS T3 ON T2.id_tau = T3.id_tau WHERE T3.ten = 'Ananthapuri Express' OR T3.ten = 'Guruvayur Express' GROUP BY T1.id_ga_tau HAVING COUNT(DISTINCT T3.ten) = 2
+extra gold: select t2.ten from nha_ga_tau_hoa as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id_ga_tau join toa_hoa as t3 on t3.id_tau = t1.id_tau where t3.ten = "Ananthapuri Express" intersect select t2.ten from nha_ga_tau_hoa as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id_ga_tau join toa_hoa as t3 on t3.id_tau = t1.id_tau where t3.ten = "Guruvayur Express"
+
+extra pred: SELECT ten FROM toa_hoa WHERE id_tau NOT IN (SELECT T2.id_tau FROM nha_ga_tau_hoa AS T2 JOIN nha_ga AS T3 ON T2.id_nha_ga = T3.id_ga_tau WHERE T3.dia_diem = 'London')
+extra gold: select t2.ten from nha_ga_tau_hoa as t1 join toa_hoa as t2 on t1.id_tau = t2.id_tau where t1.id_nha_ga not in ( select t4.id_ga_tau from nha_ga_tau_hoa as t3 join nha_ga as t4 on t3.id_nha_ga = t4.id_ga_tau where t4.dia_diem = "London" )
+
+medium pred: SELECT ten, dia_diem FROM nha_ga ORDER BY so_luong_xuat_canh_hang_nam DESC, so_luong_trao_doi_hang_nam DESC
+medium gold: select ten , dia_diem from nha_ga order by so_luong_xuat_canh_hang_nam , so_luong_trao_doi_hang_nam
+
+medium pred: SELECT id_phieu_bau, so_dien_thoai, ma_vung_cua_tieu_bang.ma_vung FROM phieu_bau JOIN ma_vung_cua_tieu_bang ON phieu_bau.tieu_bang = ma_vung_cua_tieu_bang.tieu_bang
+medium gold: select id_phieu_bau , so_dien_thoai , tieu_bang from phieu_bau
+
+eval_err_num:124
+medium pred: SELECT MIN(ma_vung), MAX(ma_vung) FROM dbo.ma_vung_cua_tieu_bang
+medium gold: select max ( ma_vung ) , min ( ma_vung ) from ma_vung_cua_tieu_bang
+
+easy pred: SELECT MAX(ngay_duoc_tao) FROM phieu_bau JOIN ma_vung_cua_tieu_bang ON phieu_bau.tieu_bang = ma_vung_cua_tieu_bang.tieu_bang WHERE ma_vung = 'CA'
+easy gold: select max ( ngay_duoc_tao ) from phieu_bau where tieu_bang = "CA"
+
+medium pred: SELECT phieu_bau.tieu_bang, phieu_bau.ngay_duoc_tao FROM phieu_bau JOIN ma_vung_cua_tieu_bang ON phieu_bau.tieu_bang = ma_vung_cua_tieu_bang.tieu_bang
+medium gold: select distinct tieu_bang , ngay_duoc_tao from phieu_bau
+
+medium pred: SELECT thi_sinh.ma_so_thi_sinh, thi_sinh.ten_thi_sinh FROM thi_sinh JOIN phieu_bau ON thi_sinh.ma_so_thi_sinh = phieu_bau.ma_so_thi_sinh GROUP BY thi_sinh.ma_so_thi_sinh, thi_sinh.ten_thi_sinh HAVING COUNT(*) >= 2
+medium gold: select t1.ma_so_thi_sinh , t1.ten_thi_sinh from thi_sinh as t1 join phieu_bau as t2 on t1.ma_so_thi_sinh = t2.ma_so_thi_sinh group by t1.ma_so_thi_sinh having count ( * ) >= 2
+
+eval_err_num:125
+medium pred: SELECT COUNT(*) FROM phieu_bau WHERE tieu_bang IN (SELECT tieu_bang FROM ma_vung_cua_tieu_bang WHERE ma_vung IN (1, 2))
+medium gold: select count ( * ) from phieu_bau where tieu_bang = "NY" or tieu_bang = "CA"
+
+extra pred: SELECT ma_vung FROM ma_vung_cua_tieu_bang JOIN phieu_bau ON ma_vung_cua_tieu_bang.tieu_bang = phieu_bau.tieu_bang WHERE ma_so_thi_sinh = 12345 OR ma_so_thi_sinh = 67890 GROUP BY ma_vung HAVING COUNT(DISTINCT ma_so_thi_sinh) = 2
+extra gold: select t3.ma_vung from thi_sinh as t1 join phieu_bau as t2 on t1.ma_so_thi_sinh = t2.ma_so_thi_sinh join ma_vung_cua_tieu_bang as t3 on t2.tieu_bang = t3.tieu_bang where t1.ten_thi_sinh = "Tabatha Gehling" intersect select t3.ma_vung from thi_sinh as t1 join phieu_bau as t2 on t1.ma_so_thi_sinh = t2.ma_so_thi_sinh join ma_vung_cua_tieu_bang as t3 on t2.tieu_bang = t3.tieu_bang where t1.ten_thi_sinh = "Kelly Clauss"
+
+eval_err_num:126
+medium pred: SELECT AVG(tuoi_cua_nguoi_thua_cuoc) AS avg_age_loser, AVG(tuoi_cua_nguoi_chien_thang) AS avg_age_winner FROM tran_dau
+medium gold: select avg ( tuoi_cua_nguoi_thua_cuoc ) , avg ( tuoi_cua_nguoi_chien_thang ) from tran_dau
+
+eval_err_num:127
+medium pred: SELECT AVG(tuoi_cua_nguoi_thua_cuoc) AS AVG_age_loser, AVG(tuoi_cua_nguoi_chien_thang) AS AVG_age_winner FROM tran_dau
+medium gold: select avg ( tuoi_cua_nguoi_thua_cuoc ) , avg ( tuoi_cua_nguoi_chien_thang ) from tran_dau
+
+easy pred: SELECT thu_hang_cua_nguoi_thua_cuoc FROM tran_dau ORDER BY thu_hang_cua_nguoi_thua_cuoc ASC LIMIT 1
+easy gold: select min ( thu_hang_cua_nguoi_thua_cuoc ) from tran_dau
+
+easy pred: SELECT thu_hang_cua_nguoi_thua_cuoc FROM tran_dau ORDER BY thu_hang_cua_nguoi_thua_cuoc ASC LIMIT 1
+easy gold: select min ( thu_hang_cua_nguoi_thua_cuoc ) from tran_dau
+
+easy pred: SELECT COUNT(DISTINCT tran_dau.nguoi_thua_cuoc) FROM tran_dau
+easy gold: select count ( distinct ten_nguoi_thua_cuoc ) from tran_dau
+
+easy pred: SELECT COUNT(DISTINCT nguoi_thua_cuoc) FROM tran_dau
+easy gold: select count ( distinct ten_nguoi_thua_cuoc ) from tran_dau
+
+easy pred: SELECT ten_giai_dau FROM tran_dau GROUP BY ten_giai_dau HAVING COUNT(*) > 10 ORDER BY ten_giai_dau
+easy gold: select ten_giai_dau from tran_dau group by ten_giai_dau having count ( * ) > 10
+
+hard pred: SELECT tran_dau.nguoi_chien_thang FROM tran_dau WHERE tran_dau.nam = 2013 INTERSECT SELECT tran_dau.nguoi_chien_thang FROM tran_dau WHERE tran_dau.nam = 2016
+hard gold: select ten_nguoi_chien_thang from tran_dau where nam = 2013 intersect select ten_nguoi_chien_thang from tran_dau where nam = 2016
+
+hard pred: SELECT ten FROM tran_dau JOIN nguoi_choi ON tran_dau.id_cua_nguoi_chien_thang = nguoi_choi.id_nguoi_choi WHERE nam = 2013 INTERSECT SELECT ten FROM tran_dau JOIN nguoi_choi ON tran_dau.id_cua_nguoi_chien_thang = nguoi_choi.id_nguoi_choi WHERE nam = 2016
+hard gold: select ten_nguoi_chien_thang from tran_dau where nam = 2013 intersect select ten_nguoi_chien_thang from tran_dau where nam = 2016
+
+eval_err_num:128
+medium pred: SELECT COUNT(*) FROM tran_dau WHERE nam IN (2013, 2016)
+medium gold: select count ( * ) from tran_dau where nam = 2013 or nam = 2016
+
+eval_err_num:129
+extra pred: SELECT nguoi_choi.ma_quoc_gia, nguoi_choi.ten FROM nguoi_choi JOIN tran_dau ON nguoi_choi.id_nguoi_choi = tran_dau.id_cua_nguoi_chien_thang WHERE tran_dau.ten_giai_dau IN ('WTA Championship', 'Australian Open') GROUP BY nguoi_choi.id_nguoi_choi HAVING COUNT(DISTINCT tran_dau.ten_giai_dau) = 2
+extra gold: select t1.ma_quoc_gia , t1.ten from nguoi_choi as t1 join tran_dau as t2 on t1.id_nguoi_choi = t2.id_cua_nguoi_chien_thang where t2.ten_giai_dau = "WTA Championships" intersect select t1.ma_quoc_gia , t1.ten from nguoi_choi as t1 join tran_dau as t2 on t1.id_nguoi_choi = t2.id_cua_nguoi_chien_thang where t2.ten_giai_dau = "Australian Open"
+
+eval_err_num:130
+medium pred: SELECT ten, ma_quoc_gia FROM nguoi_choi ORDER BY (JULIANDAY('now') - JULIANDAY(ngay_sinh)) DESC LIMIT 1
+medium gold: select ten , ma_quoc_gia from nguoi_choi order by ngay_sinh limit 1
+
+medium pred: SELECT ten, ma_quoc_gia FROM nguoi_choi ORDER BY ngay_sinh DESC LIMIT 1
+medium gold: select ten , ma_quoc_gia from nguoi_choi order by ngay_sinh limit 1
+
+medium pred: SELECT ten_nguoi_thua_cuoc FROM tran_dau JOIN nguoi_choi ON tran_dau.id_nguoi_thua_cuoc = nguoi_choi.id_nguoi_choi UNION SELECT ten_nguoi_chien_thang FROM tran_dau JOIN nguoi_choi ON tran_dau.id_cua_nguoi_chien_thang = nguoi_choi.id_nguoi_choi UNION SELECT ten FROM nguoi_choi ORDER BY ngay_sinh ASC
+medium gold: select ten , ho from nguoi_choi order by ngay_sinh
+
+medium pred: SELECT ten_nguoi_thua_cuoc FROM tran_dau JOIN nguoi_choi ON tran_dau.id_nguoi_thua_cuoc = nguoi_choi.id_nguoi_choi WHERE tay_thuan_cua_nguoi_thua_cuoc = 'left' ORDER BY ngay_sinh ASC
+medium gold: select ten , ho from nguoi_choi where tay_thuan = "L" order by ngay_sinh
+
+hard pred: SELECT ten, ma_quoc_gia FROM nguoi_choi JOIN xep_hang ON nguoi_choi.id_nguoi_choi = xep_hang.id_nguoi_choi GROUP BY nguoi_choi.id_nguoi_choi ORDER BY COUNT(*) DESC LIMIT 1
+hard gold: select t1.ma_quoc_gia , t1.ten from nguoi_choi as t1 join xep_hang as t2 on t1.id_nguoi_choi = t2.id_nguoi_choi order by t2.tour_du_dau desc limit 1
+
+hard pred: SELECT nguoi_choi.ten, nguoi_choi.ma_quoc_gia FROM xep_hang JOIN nguoi_choi ON xep_hang.id_nguoi_choi = nguoi_choi.id_nguoi_choi GROUP BY nguoi_choi.id_nguoi_choi ORDER BY COUNT(*) DESC LIMIT 1
+hard gold: select t1.ma_quoc_gia , t1.ten from nguoi_choi as t1 join xep_hang as t2 on t1.id_nguoi_choi = t2.id_nguoi_choi order by t2.tour_du_dau desc limit 1
+
+eval_err_num:131
+hard pred: SELECT nam, COUNT(*) AS so_luong FROM tran_dau GROUP BY nam ORDER BY so_luong DESC LIMIT 1
+hard gold: select nam from tran_dau group by nam order by count ( * ) desc limit 1
+
+hard pred: SELECT nam, COUNT(*) FROM tran_dau GROUP BY nam ORDER BY COUNT(*) DESC LIMIT 1
+hard gold: select nam from tran_dau group by nam order by count ( * ) desc limit 1
+
+hard pred: SELECT tran_dau.nguoi_chien_thang, tran_dau.diem_xep_hang_cua_nguoi_chien_thang FROM tran_dau ORDER BY tran_dau.so_tran DESC LIMIT 1
+hard gold: select ten_nguoi_chien_thang , diem_xep_hang_cua_nguoi_chien_thang from tran_dau group by ten_nguoi_chien_thang order by count ( * ) desc limit 1
+
+hard pred: SELECT tran_dau.nguoi_chien_thang, xep_hang.diem_xep_hang FROM tran_dau JOIN xep_hang ON tran_dau.id_cua_nguoi_chien_thang = xep_hang.id_nguoi_choi ORDER BY tran_dau.so_tran DESC LIMIT 1
+hard gold: select ten_nguoi_chien_thang , diem_xep_hang_cua_nguoi_chien_thang from tran_dau group by ten_nguoi_chien_thang order by count ( * ) desc limit 1
+
+hard pred: SELECT tran_dau.nguoi_chien_thang FROM tran_dau JOIN xep_hang ON tran_dau.id_cua_nguoi_chien_thang = xep_hang.id_nguoi_choi WHERE tran_dau.ten_giai_dau = 'Úc mở rộng' ORDER BY xep_hang.diem_xep_hang DESC LIMIT 1
+hard gold: select ten_nguoi_chien_thang from tran_dau where ten_giai_dau = "Australian Open" order by diem_xep_hang_cua_nguoi_chien_thang desc limit 1
+
+hard pred: SELECT tran_dau.nguoi_chien_thang FROM tran_dau JOIN xep_hang ON tran_dau.id_cua_nguoi_chien_thang = xep_hang.id_nguoi_choi WHERE tran_dau.ten_giai_dau = 'Úc mở rộng' ORDER BY xep_hang.diem_xep_hang DESC LIMIT 1
+hard gold: select ten_nguoi_chien_thang from tran_dau where ten_giai_dau = "Australian Open" order by diem_xep_hang_cua_nguoi_chien_thang desc limit 1
+
+medium pred: SELECT tran_dau.nguoi_thua_cuoc, tran_dau.nguoi_chien_thang FROM tran_dau ORDER BY tran_dau.phut DESC LIMIT 1
+medium gold: select ten_nguoi_chien_thang , ten_nguoi_thua_cuoc from tran_dau order by phut desc limit 1
+
+medium pred: SELECT tran_dau.nguoi_chien_thang, tran_dau.nguoi_thua_cuoc FROM tran_dau ORDER BY tran_dau.phut DESC LIMIT 1
+medium gold: select ten_nguoi_chien_thang , ten_nguoi_thua_cuoc from tran_dau order by phut desc limit 1
+
+eval_err_num:132
+medium pred: SELECT ten, AVG(xep_hang.xep_hang) AS thuc_hang_trung_binh FROM nguoi_choi JOIN xep_hang ON nguoi_choi.id_nguoi_choi = xep_hang.id_nguoi_choi GROUP BY nguoi_choi.id_nguoi_choi ORDER BY thuc_hang_trung_binh ASC
+medium gold: select avg ( xep_hang ) , t1.ten from nguoi_choi as t1 join xep_hang as t2 on t1.id_nguoi_choi = t2.id_nguoi_choi group by t1.ten
+
+eval_err_num:133
+medium pred: SELECT nguoi_choi.ten, AVG(xep_hang.xep_hang) AS trung_binh_xep_hang FROM nguoi_choi JOIN xep_hang ON nguoi_choi.id_nguoi_choi = xep_hang.id_nguoi_choi GROUP BY nguoi_choi.id_nguoi_choi ORDER BY trung_binh_xep_hang ASC
+medium gold: select avg ( xep_hang ) , t1.ten from nguoi_choi as t1 join xep_hang as t2 on t1.id_nguoi_choi = t2.id_nguoi_choi group by t1.ten
+
+eval_err_num:134
+medium pred: SELECT nguoi_choi.ten, SUM(xep_hang.diem_xep_hang) AS tong_diem_xep_hang FROM nguoi_choi JOIN xep_hang ON nguoi_choi.id_nguoi_choi = xep_hang.id_nguoi_choi GROUP BY nguoi_choi.id_nguoi_choi ORDER BY tong_diem_xep_hang DESC
+medium gold: select sum ( diem_xep_hang ) , t1.ten from nguoi_choi as t1 join xep_hang as t2 on t1.id_nguoi_choi = t2.id_nguoi_choi group by t1.ten
+
+eval_err_num:135
+medium pred: SELECT nguoi_choi.ten, SUM(xep_hang.diem_xep_hang) AS tong_diem_xep_hang FROM nguoi_choi JOIN xep_hang ON nguoi_choi.id_nguoi_choi = xep_hang.id_nguoi_choi GROUP BY nguoi_choi.id_nguoi_choi ORDER BY tong_diem_xep_hang DESC
+medium gold: select sum ( diem_xep_hang ) , t1.ten from nguoi_choi as t1 join xep_hang as t2 on t1.id_nguoi_choi = t2.id_nguoi_choi group by t1.ten
+
+eval_err_num:136
+medium pred: SELECT ngay_xep_hang, COUNT(*) AS tour_du_dau FROM xep_hang GROUP BY ngay_xep_hang
+medium gold: select sum ( tour_du_dau ) , ngay_xep_hang from xep_hang group by ngay_xep_hang
+
+eval_err_num:137
+medium pred: SELECT xep_hang.ngay_xep_hang, COUNT(*) AS tour_du_dau FROM xep_hang GROUP BY xep_hang.ngay_xep_hang ORDER BY COUNT(*) DESC
+medium gold: select sum ( tour_du_dau ) , ngay_xep_hang from xep_hang group by ngay_xep_hang
+
+medium pred: SELECT nam, COUNT(*) FROM tran_dau GROUP BY nam ORDER BY nam ASC
+medium gold: select count ( * ) , nam from tran_dau group by nam
+
+medium pred: SELECT COUNT(*) FROM tran_dau GROUP BY nam ORDER BY nam ASC
+medium gold: select count ( * ) , nam from tran_dau group by nam
+
+medium pred: SELECT COUNT(DISTINCT tran_dau.id_cua_nguoi_chien_thang) FROM tran_dau JOIN nguoi_choi ON tran_dau.id_cua_nguoi_chien_thang = nguoi_choi.id_nguoi_choi WHERE ten_giai_dau = 'giải vô địch WTA' AND tay_thuan_cua_nguoi_chien_thang = 'left'
+medium gold: select count ( distinct ten_nguoi_chien_thang ) from tran_dau where ten_giai_dau = "WTA Championships" and tay_thuan_cua_nguoi_chien_thang = "L"
+
+medium pred: SELECT COUNT(*) FROM tran_dau JOIN nguoi_choi ON tran_dau.id_cua_nguoi_chien_thang = nguoi_choi.id_nguoi_choi WHERE tay_thuan_cua_nguoi_chien_thang = 'Left' AND ten_giai_dau = 'WTA Championship'
+medium gold: select count ( distinct ten_nguoi_chien_thang ) from tran_dau where ten_giai_dau = "WTA Championships" and tay_thuan_cua_nguoi_chien_thang = "L"
+
+hard pred: SELECT nguoi_choi.ten, nguoi_choi.ma_quoc_gia, nguoi_choi.ngay_sinh FROM nguoi_choi JOIN tran_dau ON tran_dau.id_cua_nguoi_chien_thang = nguoi_choi.id_nguoi_choi ORDER BY xep_hang.diem_xep_hang DESC LIMIT 1
+hard gold: select t1.ten , t1.ma_quoc_gia , t1.ngay_sinh from nguoi_choi as t1 join tran_dau as t2 on t1.id_nguoi_choi = t2.id_cua_nguoi_chien_thang order by t2.diem_xep_hang_cua_nguoi_chien_thang desc limit 1
+
+hard pred: SELECT tran_dau.nguoi_chien_thang, nguoi_choi.ma_quoc_gia, nguoi_choi.ngay_sinh FROM tran_dau JOIN nguoi_choi ON tran_dau.id_cua_nguoi_chien_thang = nguoi_choi.id_nguoi_choi ORDER BY xep_hang.diem_xep_hang DESC LIMIT 1
+hard gold: select t1.ten , t1.ma_quoc_gia , t1.ngay_sinh from nguoi_choi as t1 join tran_dau as t2 on t1.id_nguoi_choi = t2.id_cua_nguoi_chien_thang order by t2.diem_xep_hang_cua_nguoi_chien_thang desc limit 1
+
+                     easy                 medium               hard                 extra                all                 
+count                248                  405                  190                  107                  950                 
+=====================   EXECUTION ACCURACY     =====================
+execution            0.843                0.709                0.705                0.720                0.744               
+
+====================== EXACT MATCHING ACCURACY =====================
+exact match          0.694                0.464                0.379                0.262                0.484               
+
+---------------------PARTIAL MATCHING ACCURACY----------------------
+select               0.894                0.872                0.862                0.867                0.876               
+select(no AGG)       0.919                0.881                0.862                0.889                0.889               
+where                0.831                0.791                0.582                0.545                0.712               
+where(no OP)         0.857                0.813                0.653                0.682                0.763               
+group(no Having)     0.658                0.680                0.625                0.490                0.625               
+group                0.553                0.524                0.607                0.216                0.484               
+order                0.667                0.448                0.683                0.765                0.596               
+and/or               1.000                0.978                0.994                0.990                0.988               
+IUEN                 0.000                0.000                0.579                0.750                0.483               
+keywords             0.810                0.724                0.660                0.700                0.725               
+---------------------- PARTIAL MATCHING RECALL ----------------------
+select               0.847                0.709                0.721                0.729                0.749               
+select(no AGG)       0.871                0.716                0.721                0.748                0.761               
+where                0.800                0.714                0.600                0.453                0.668               
+where(no OP)         0.825                0.734                0.674                0.566                0.715               
+group(no Having)     0.926                0.530                0.603                0.455                0.570               
+group                0.778                0.409                0.586                0.200                0.441               
+order                0.968                0.732                0.603                0.709                0.720               
+and/or               0.996                0.992                0.952                0.925                0.978               
+IUEN                 0.000                0.000                0.216                0.150                0.197               
+keywords             0.862                0.608                0.553                0.589                0.637               
+---------------------- PARTIAL MATCHING F1 --------------------------
+select               0.870                0.782                0.785                0.792                0.808               
+select(no AGG)       0.894                0.790                0.785                0.812                0.820               
+where                0.815                0.751                0.591                0.495                0.689               
+where(no OP)         0.841                0.771                0.663                0.619                0.738               
+group(no Having)     0.769                0.596                0.614                0.472                0.596               
+group                0.646                0.460                0.596                0.208                0.462               
+order                0.789                0.556                0.641                0.736                0.652               
+and/or               0.998                0.985                0.973                0.956                0.983               
+IUEN                 1.000                1.000                0.314                0.250                0.280               
+keywords             0.835                0.661                0.602                0.640                0.678               

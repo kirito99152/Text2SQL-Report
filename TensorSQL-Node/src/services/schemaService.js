@@ -228,9 +228,8 @@ class SchemaService {
     /**
      * Converts the schema object into the text format required by the Planning prompt.
      * @param {Object} schema 
-     * @param {string} [schemaLinking] - Optional schema linking text from question token matching
      */
-    buildSchemaContext(schema, schemaLinking) {
+    buildSchemaContext(schema) {
         let sb = "";
         for (const table of schema.tables) {
             const schemaPrefix = table.schema || "dbo";
@@ -264,11 +263,6 @@ class SchemaService {
             sb += "\n";
         }
 
-        // Add schema linking if provided (maps question tokens to schema elements)
-        if (schemaLinking) {
-            sb += schemaLinking + "\n";
-        }
-
         return sb;
     }
 
@@ -278,13 +272,17 @@ class SchemaService {
      * 
      * @param {Object} schema - The enriched schema object
      * @param {Set<string>|null} relevantTables - Set of relevant table names, or null for full
-     * @param {string} [schemaLinking] - Optional schema linking text
      * @returns {string} - The filtered schema context
      */
-    buildFilteredSchemaContext(schema, relevantTables, schemaLinking) {
+    buildFilteredSchemaContext(schema, relevantTables) {
         // Fallback to full schema if no relevant tables identified
-        if (!relevantTables || relevantTables.size === 0) {
-            return this.buildSchemaContext(schema, schemaLinking);
+        if (!relevantTables || (relevantTables instanceof Set ? relevantTables.size === 0 : relevantTables.length === 0)) {
+            return this.buildSchemaContext(schema);
+        }
+
+        // Ensure it's a Set if it's an Array
+        if (Array.isArray(relevantTables)) {
+            relevantTables = new Set(relevantTables);
         }
 
         let sb = "";
@@ -324,11 +322,6 @@ class SchemaService {
                 }
                 sb += "\n";
             }
-        }
-
-        // Add schema linking
-        if (schemaLinking) {
-            sb += schemaLinking + "\n";
         }
 
         return sb;
