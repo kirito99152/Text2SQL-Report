@@ -1,26 +1,1319 @@
 [Benchmark] Loading data...
-[Benchmark] Loaded 1906 previous results.
-[Benchmark] Successfully processed: 1906
 [Benchmark] Processing range 0 to 1905 (1906 total)
-[Benchmark] RESUME: Skipping 1906 already processed items.
-[Benchmark] NEW: Processing 0 fresh items.
-[Benchmark] Total Work Queue: 0
+[Benchmark] NEW: Processing 1906 fresh items.
+[Benchmark] Total Work Queue: 1906
 [Benchmark] API: http://tensorsql-node:5002/api/text2sql/generate
-[Benchmark] Workers: 20
+[Benchmark] Workers: 10
 
 [Benchmark] Loaded 166 enriched schemas from cache.
 [Benchmark] All 166 schemas are already enriched in cache.
 
-==================================================
-  BENCHMARK RESULTS (Spider Exact Match)
-==================================================
-Total entries in map: 1906
-Current success:     1906
-Current errors:      0
-Exact Match:         1062/1906 (55.7%)
-Execution time:      0s (0.0m)
+============================================================
+  PROGRESS: 0 items | Success: 0 | EM: 0 (0.0%) | Errors: 0
+============================================================
 
-Files saved:
-  /app/benchmark_tensor_logs/benchmark_results_base.json
-  /app/benchmark_tensor_logs/pred_base.sql
-  /app/benchmark_tensor_logs/gold_base.sql
+
+============================================================
+  PROGRESS: 0 items | Success: 0 | EM: 0 (0.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 0 items | Success: 0 | EM: 0 (0.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 0 items | Success: 0 | EM: 0 (0.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 0 items | Success: 0 | EM: 0 (0.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 0 items | Success: 0 | EM: 0 (0.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 0 items | Success: 0 | EM: 0 (0.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 0 items | Success: 0 | EM: 0 (0.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 0 items | Success: 0 | EM: 0 (0.0%) | Errors: 0
+============================================================
+
+[2/1906] ✓ MATCH | DB: assets_maintenance | 290116ms
+  Q: Mỗi hợp đồng bảo trì có bao nhiêu tài sản ? Liệt kê id hợp đồng và số lượng tài sản trong từng hợp đồng .
+  Gold: select count ( * ) , t1.id_hop_dong_bao_tri from hop_dong_bao_tri as t1 join tai_san as t2 on t1.id_hop_dong_bao_tri = t2.id_hop_dong_bao_tri group by t1.id_hop_dong_bao_tri
+  Gen:  SELECT T1.id_hop_dong_bao_tri , COUNT ( * ) FROM hop_dong_bao_tri AS T1 JOIN tai_san AS T2 ON T1.id_hop_dong_bao_tri = T2.id_hop_dong_bao_tri GROUP BY T1.id_hop_dong_bao_tri
+
+
+============================================================
+  PROGRESS: 1 items | Success: 1 | EM: 1 (100.0%) | Errors: 0
+============================================================
+
+[5/1906] ✗ NO MATCH | DB: assets_maintenance | 315610ms
+  Q: Cho biết tên và id của những nhân viên đã ghi lại nhật ký lỗi nhưng chưa liên hệ với bất kỳ kỹ sư nào .
+  Gold: select t1.ten_nhan_vien , t1.id_nhan_vien from nhan_vien as t1 join nhat_ky_loi as t2 on t1.id_nhan_vien = t2.duoc_ghi_lai_boi_nhan_vien_co_id except select t3.ten_nhan_vien , t3.id_nhan_vien from nhan_vien as t3 join chuyen_tham_cua_ky_su as t4 on t3.id_nhan_vien = t4.id_nhan_vien_lien_lac
+  Gen:  select t1.id_nhan_vien , t1.ten_nhan_vien from nhan_vien as t1 join nhat_ky_loi as t2 on t1.id_nhan_vien = t2.duoc_ghi_lai_boi_nhan_vien_co_id except select t1.id_nhan_vien , t1.ten_nhan_vien from nhan_vien as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_nhan_vien = t2.id_nhan_vien_lien_lac
+  Eval Error: 'chuyen_tham_cua_ky_su.duoc_ghi_lai_boi_nhan_vien_co_id'
+
+[1/1906] ✗ NO MATCH | DB: assets_maintenance | 316821ms
+  Q: Những tài sản nào có 2 bộ phận và có ít hơn 2 nhật kí lỗi ? Liệt kê id và chi tiết của những tài sản này .
+  Gold: select t1.id_tai_san , t1.chi_tiet_tai_san from tai_san as t1 join bo_phan_cua_tai_san as t2 on t1.id_tai_san = t2.id_tai_san group by t1.id_tai_san having count ( * ) = 2 intersect select t1.id_tai_san , t1.chi_tiet_tai_san from tai_san as t1 join nhat_ky_loi as t2 on t1.id_tai_san = t2.id_tai_san group by t1.id_tai_san having count ( * ) < 2
+  Gen:  SELECT T1.id_tai_san, T1.chi_tiet_tai_san FROM tai_san AS T1 JOIN bo_phan_cua_tai_san AS T2 ON T1.id_tai_san = T2.id_tai_san JOIN nhat_ky_loi AS T3 ON T1.id_tai_san = T3.id_tai_san GROUP BY T1.id_tai_san HAVING COUNT(T2.id_bo_phan) = 2 AND COUNT(T3.id_muc_nhap_cua_nhat_ky_loi) < 2
+
+[3/1906] ✓ MATCH | DB: assets_maintenance | 320257ms
+  Q: Đếm số lượng tài sản được cung cấp bởi từng công ty bên thứ ba . Hiển thị đồng thời id của những công ty này .
+  Gold: select count ( * ) , t1.id_cong_ty from cong_ty_ben_thu_ba as t1 join tai_san as t2 on t1.id_cong_ty = t2.id_cong_ty_cung_cap group by t1.id_cong_ty
+  Gen:  SELECT T2.id_cong_ty , COUNT ( * ) FROM tai_san AS T1 JOIN cong_ty_ben_thu_ba AS T2 ON T1.id_cong_ty_cung_cap = T2.id_cong_ty GROUP BY T2.id_cong_ty
+
+[10/1906] ✗ NO MATCH | DB: assets_maintenance | 325864ms
+  Q: Mỗi bộ phận có thể được sử dụng trong bao nhiêu tài sản ? Liệt kê tên của tất cả các bộ phận và số lượng tài sản có thể sử dụng từng bộ phận .
+  Gold: select t1.ten_bo_phan , count ( * ) from bo_phan as t1 join bo_phan_cua_tai_san as t2 on t1.id_bo_phan = t2.id_bo_phan group by t1.ten_bo_phan
+  Gen:  SELECT T1.ten_bo_phan , COUNT ( * ) FROM bo_phan AS T1 JOIN bo_phan_cua_tai_san AS T2 ON T1.id_bo_phan = T2.id_bo_phan GROUP BY T1.id_bo_phan
+
+[9/1906] ✓ MATCH | DB: assets_maintenance | 327329ms
+  Q: Đối với tất cả các lỗi liên quan đến các bộ phận khác nhau , cho biết mô tả về những kỹ năng cần thiết của các kỹ sư để khắc phục chúng . Liệt kê tên của các lỗi và mô tả về kỹ năng tương ứng .
+  Gold: select t1.ten_viet_tat_cua_loi , t3.mo_ta_ve_ky_nang from loi_bo_phan as t1 join ky_nang_can_de_sua_chua as t2 on t1.id_bo_phan_bi_loi = t2.id_bo_phan_bi_loi join ky_nang as t3 on t2.id_ky_nang = t3.id_ky_nang
+  Gen:  SELECT T1.ten_viet_tat_cua_loi , T3.mo_ta_ve_ky_nang FROM loi_bo_phan AS T1 JOIN ky_nang_can_de_sua_chua AS T2 ON T1.id_bo_phan_bi_loi = T2.id_bo_phan_bi_loi JOIN ky_nang AS T3 ON T2.id_ky_nang = T3.id_ky_nang
+
+[6/1906] ✓ MATCH | DB: assets_maintenance | 329485ms
+  Q: Kỹ sư nào đã đến nhiều lần nhất ? Hiển thị id , tên và họ của kỹ sư này .
+  Gold: select t1.id_ky_su , t1.ten , t1.ho from ky_su_bao_tri as t1 join chuyen_tham_cua_ky_su as t2 group by t1.id_ky_su order by count ( * ) desc limit 1
+  Gen:  SELECT T1.id_ky_su , T1.ten , T1.ho FROM ky_su_bao_tri AS T1 JOIN chuyen_tham_cua_ky_su AS T2 ON T1.id_ky_su = T2.id_ky_su GROUP BY T1.id_ky_su ORDER BY COUNT(*) DESC LIMIT 1
+
+
+============================================================
+  PROGRESS: 7 items | Success: 7 | EM: 4 (57.1%) | Errors: 0
+============================================================
+
+[8/1906] ✗ NO MATCH | DB: assets_maintenance | 331021ms
+  Q: Liệt kê tên , họ , chi tiết và mô tả về kỹ năng của tất cả các kỹ sư .
+  Gold: select t1.ten , t1.ho , t1.nhung_chi_tiet_khac , t3.mo_ta_ve_ky_nang from ky_su_bao_tri as t1 join ky_nang_cua_ky_su as t2 on t1.id_ky_su = t2.id_ky_su join ky_nang as t3 on t2.id_ky_nang = t3.id_ky_nang
+  Gen:  SELECT T1.ten, T1.ho, T3.mo_ta_ve_ky_nang FROM ky_su_bao_tri AS T1 JOIN ky_nang_cua_ky_su AS T2 ON T1.id_ky_su = T2.id_ky_su JOIN ky_nang AS T3 ON T2.id_ky_nang = T3.id_ky_nang
+
+[4/1906] ✗ NO MATCH | DB: assets_maintenance | 331251ms
+  Q: Công ty bên thứ ba nào có ít nhất 2 kỹ sư bảo trì hoặc có ít nhất 2 hợp đồng bảo trì ? Liệt kê tên và id của những công ty này .
+  Gold: select t1.id_cong_ty , t1.ten_cong_ty from cong_ty_ben_thu_ba as t1 join ky_su_bao_tri as t2 on t1.id_cong_ty = t2.id_cong_ty group by t1.id_cong_ty having count ( * ) >= 2 union select t3.id_cong_ty , t3.ten_cong_ty from cong_ty_ben_thu_ba as t3 join hop_dong_bao_tri as t4 on t3.id_cong_ty = t4.id_hop_dong_bao_tri_cua_cong_ty group by t3.id_cong_ty having count ( * ) >= 2
+  Gen:  SELECT T1.id_cong_ty , T1.ten_cong_ty FROM cong_ty_ben_thu_ba AS T1 JOIN ky_su_bao_tri AS T2 ON T1.id_cong_ty = T2.id_cong_ty GROUP BY T1.id_cong_ty , T1.ten_cong_ty HAVING COUNT ( * ) >= 2 UNION SELECT T1.id_cong_ty , T1.ten_cong_ty FROM cong_ty_ben_thu_ba AS T1 JOIN hop_dong_bao_tri AS T3 ON T1.id_cong_ty = T3.id_hop_dong_bao_tri_cua_cong_ty GROUP BY T1.id_cong_ty , T1.ten_cong_ty HAVING COUNT ( * ) >= 2
+
+[7/1906] ✗ NO MATCH | DB: assets_maintenance | 336684ms
+  Q: Cho biết những bộ phận nào bị nhiều hơn 2 lỗi . Hiển thị tên và id của những bộ phận này .
+  Gold: select t1.ten_bo_phan , t1.id_bo_phan from bo_phan as t1 join loi_bo_phan as t2 on t1.id_bo_phan = t2.id_bo_phan group by t1.id_bo_phan having count ( * ) > 2
+  Gen:  SELECT T1.id_bo_phan , T1.ten_bo_phan FROM bo_phan AS T1 JOIN loi_bo_phan AS T2 ON T1.id_bo_phan = T2.id_bo_phan JOIN nhat_ky_cua_loi_bo_phan AS T3 ON T2.id_bo_phan_bi_loi = T3.id_bo_phan_bi_loi JOIN nhat_ky_loi AS T4 ON T3.id_muc_nhap_cua_nhat_ky_loi = T4.id_muc_nhap_cua_nhat_ky_loi GROUP BY T1.id_bo_phan , T1.ten_bo_phan HAVING COUNT ( * ) > 2
+
+
+============================================================
+  PROGRESS: 10 items | Success: 10 | EM: 4 (40.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 10 items | Success: 10 | EM: 4 (40.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 10 items | Success: 10 | EM: 4 (40.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 10 items | Success: 10 | EM: 4 (40.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 10 items | Success: 10 | EM: 4 (40.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 10 items | Success: 10 | EM: 4 (40.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 10 items | Success: 10 | EM: 4 (40.0%) | Errors: 0
+============================================================
+
+[13/1906] ✓ MATCH | DB: assets_maintenance | 236300ms
+  Q: Cho biết danh sách không trùng lặp bao gồm họ của tất cả các kỹ sư .
+  Gold: select distinct ho from ky_su_bao_tri
+  Gen:  SELECT DISTINCT ho FROM ky_su_bao_tri
+
+[12/1906] ✓ MATCH | DB: assets_maintenance | 242106ms
+  Q: Nhật ký lỗi nào đòi hỏi nhiều lượt ghé thăm từ các kỹ sư nhất ? Liệt kê id của nhật ký lỗi này và số lượng lượt ghé thăm tương ứng .
+  Gold: select count ( * ) , t1.id_muc_nhap_cua_nhat_ky_loi from nhat_ky_loi as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_muc_nhap_cua_nhat_ky_loi = t2.id_muc_nhap_cua_nhat_ky_loi group by t1.id_muc_nhap_cua_nhat_ky_loi order by count ( * ) desc limit 1
+  Gen:  SELECT T1.id_muc_nhap_cua_nhat_ky_loi , COUNT(*) FROM nhat_ky_loi AS T1 JOIN chuyen_tham_cua_ky_su AS T2 ON T1.id_muc_nhap_cua_nhat_ky_loi = T2.id_muc_nhap_cua_nhat_ky_loi GROUP BY T1.id_muc_nhap_cua_nhat_ky_loi ORDER BY COUNT(*) DESC LIMIT 1
+
+
+============================================================
+  PROGRESS: 12 items | Success: 12 | EM: 6 (50.0%) | Errors: 0
+============================================================
+
+[14/1906] ✓ MATCH | DB: assets_maintenance | 258221ms
+  Q: Cho biết các tình trạng lỗi khác nhau đã được ghi lại .
+  Gold: select distinct tinh_trang_loi from nhat_ky_cua_loi_bo_phan
+  Gen:  SELECT DISTINCT tinh_trang_loi FROM nhat_ky_cua_loi_bo_phan
+
+[16/1906] ✓ MATCH | DB: assets_maintenance | 255946ms
+  Q: Liệt kê id tài sản , chi tiết , thương hiệu và mẫu mã của từng tài sản .
+  Gold: select id_tai_san , chi_tiet_tai_san , thuong_hieu_tai_san , mau_ma_tai_san from tai_san
+  Gen:  SELECT tai_san.id_tai_san, tai_san.chi_tiet_tai_san, tai_san.thuong_hieu_tai_san, tai_san.mau_ma_tai_san FROM tai_san
+
+[17/1906] ✓ MATCH | DB: assets_maintenance | 256036ms
+  Q: Tài sản đầu tiên được mua vào thời điểm nào ?
+  Gold: select ngay_mua_tai_san from tai_san order by ngay_mua_tai_san asc limit 1
+  Gen:  SELECT ngay_mua_tai_san FROM tai_san ORDER BY ngay_mua_tai_san ASC LIMIT 1
+
+[15/1906] ✓ MATCH | DB: assets_maintenance | 262467ms
+  Q: Những kỹ sư nào chưa bao giờ ghé thăm để bảo trì tài sản ? Cho biết tên và họ của những kỹ sư này .
+  Gold: select ten , ho from ky_su_bao_tri where id_ky_su not in ( select id_ky_su from chuyen_tham_cua_ky_su )
+  Gen:  SELECT ten, ho FROM ky_su_bao_tri WHERE id_ky_su NOT IN (SELECT id_ky_su FROM chuyen_tham_cua_ky_su)
+
+[19/1906] ✗ NO MATCH | DB: assets_maintenance | 258574ms
+  Q: Cho biết tên của bộ phận gặp phải ít lỗi nhất .
+  Gold: select t1.ten_bo_phan from bo_phan as t1 join loi_bo_phan as t2 on t1.id_bo_phan = t2.id_bo_phan group by t1.ten_bo_phan order by count ( * ) asc limit 1
+  Gen:  SELECT T1.ten_bo_phan FROM bo_phan AS T1 JOIN nhat_ky_cua_loi_bo_phan AS T2 ON T1.id_bo_phan = T2.id_bo_phan_bi_loi GROUP BY T1.id_bo_phan ORDER BY COUNT(*) ASC LIMIT 1
+
+[11/1906] ✗ NO MATCH | DB: assets_maintenance | 303613ms
+  Q: Cho biết mô tả lỗi và tình trạng lỗi của tất cả các lỗi được ghi lại trong nhật ký .
+  Gold: select t1.mo_ta_ve_loi , t2.tinh_trang_loi from nhat_ky_loi as t1 join nhat_ky_cua_loi_bo_phan as t2 on t1.id_muc_nhap_cua_nhat_ky_loi = t2.id_muc_nhap_cua_nhat_ky_loi
+  Gen:  SELECT T2.mo_ta_loi , T3.tinh_trang_loi FROM nhat_ky_loi AS T1 JOIN loi_bo_phan AS T2 ON T1.id_bo_phan_bi_loi = T2.id_bo_phan_bi_loi JOIN nhat_ky_cua_loi_bo_phan AS T3 ON T1.id_muc_nhap_cua_nhat_ky_loi = T3.id_muc_nhap_cua_nhat_ky_loi
+  Eval Error: 'nhat_ky_loi.id_bo_phan_bi_loi'
+
+[20/1906] ✓ MATCH | DB: assets_maintenance | 260226ms
+  Q: Trong số những kỹ sư đã ghé thăm , kỹ sư nào có số lượt ghé thăm ít nhất ? Liệt kê id , tên và họ của kỹ sư này .
+  Gold: select t1.id_ky_su , t1.ten , t1.ho from ky_su_bao_tri as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_ky_su = t2.id_ky_su group by t1.id_ky_su order by count ( * ) asc limit 1
+  Gen:  SELECT T1.id_ky_su , T1.ten , T1.ho FROM ky_su_bao_tri AS T1 JOIN chuyen_tham_cua_ky_su AS T2 ON T1.id_ky_su = T2.id_ky_su GROUP BY T1.id_ky_su ORDER BY COUNT(*) ASC LIMIT 1
+
+
+============================================================
+  PROGRESS: 19 items | Success: 19 | EM: 11 (57.9%) | Errors: 0
+============================================================
+
+[18/1906] ✗ NO MATCH | DB: assets_maintenance | 278845ms
+  Q: Lỗi bộ phận nào đòi hỏi số lượng kỹ năng nhiều nhất để khắc phục ? Liệt kê id và tên của bộ phận gặp phải loại lỗi này .
+  Gold: select t1.id_bo_phan , t1.ten_bo_phan from bo_phan as t1 join loi_bo_phan as t2 on t1.id_bo_phan = t2.id_bo_phan join ky_nang_can_de_sua_chua as t3 on t2.id_bo_phan_bi_loi = t3.id_bo_phan_bi_loi group by t1.id_bo_phan order by count ( * ) desc limit 1
+  Gen:  SELECT T1.id_bo_phan_bi_loi, T1.ten_viet_tat_cua_loi, T2.id_bo_phan, T2.ten_bo_phan FROM loi_bo_phan AS T1 JOIN ky_nang_can_de_sua_chua AS T3 ON T1.id_bo_phan_bi_loi = T3.id_bo_phan_bi_loi JOIN bo_phan AS T2 ON T1.id_bo_phan = T2.id_bo_phan GROUP BY T1.id_bo_phan_bi_loi, T1.ten_viet_tat_cua_loi, T2.id_bo_phan, T2.ten_bo_phan ORDER BY COUNT(*) DESC LIMIT 1
+
+
+============================================================
+  PROGRESS: 20 items | Success: 20 | EM: 11 (55.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 20 items | Success: 20 | EM: 11 (55.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 20 items | Success: 20 | EM: 11 (55.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 20 items | Success: 20 | EM: 11 (55.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 20 items | Success: 20 | EM: 11 (55.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 20 items | Success: 20 | EM: 11 (55.0%) | Errors: 0
+============================================================
+
+[24/1906] ✓ MATCH | DB: assets_maintenance | 210417ms
+  Q: Cho biết những mẫu mã khác nhau của tất cả các tài sản .
+  Gold: select distinct mau_ma_tai_san from tai_san
+  Gen:  SELECT DISTINCT mau_ma_tai_san FROM tai_san
+
+[21/1906] ✓ MATCH | DB: assets_maintenance | 242357ms
+  Q: Những nhân viên đã liên lạc với những kỹ sư nào ? Liệt kê tên của tất cả các nhân viên cũng như là tên và họ của những kỹ sư mà họ đã liên lạc .
+  Gold: select t1.ten_nhan_vien , t3.ten , t3.ho from nhan_vien as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_nhan_vien = t2.id_nhan_vien_lien_lac join ky_su_bao_tri as t3 on t2.id_ky_su = t3.id_ky_su
+  Gen:  SELECT T1.ten_nhan_vien, T3.ten, T3.ho FROM nhan_vien AS T1 JOIN chuyen_tham_cua_ky_su AS T2 ON T1.id_nhan_vien = T2.id_nhan_vien_lien_lac JOIN ky_su_bao_tri AS T3 ON T2.id_ky_su = T3.id_ky_su
+
+[25/1906] ✓ MATCH | DB: assets_maintenance | 210552ms
+  Q: Liệt kê thương hiệu , mẫu mã và chi tiết của tất cả các tài sản theo thứ tự ngày thanh lý tăng dần .
+  Gold: select thuong_hieu_tai_san , mau_ma_tai_san , chi_tiet_tai_san from tai_san order by ngay_thanh_ly_tai_san asc
+  Gen:  SELECT thuong_hieu_tai_san, mau_ma_tai_san, chi_tiet_tai_san FROM tai_san ORDER BY ngay_thanh_ly_tai_san ASC
+
+[23/1906] ✓ MATCH | DB: assets_maintenance | 218804ms
+  Q: Kỹ năng nào được sử dụng để sửa nhiều loại lỗi nhất ? Liệt kê id và mô tả của kỹ năng này .
+  Gold: select t1.id_ky_nang , t1.mo_ta_ve_ky_nang from ky_nang as t1 join ky_nang_can_de_sua_chua as t2 on t1.id_ky_nang = t2.id_ky_nang group by t1.id_ky_nang order by count ( * ) desc limit 1
+  Gen:  SELECT T1.id_ky_nang, T1.mo_ta_ve_ky_nang FROM ky_nang AS T1 JOIN ky_nang_can_de_sua_chua AS T2 ON T1.id_ky_nang = T2.id_ky_nang GROUP BY T1.id_ky_nang ORDER BY COUNT(*) DESC LIMIT 1
+
+[29/1906] ✓ MATCH | DB: assets_maintenance | 202492ms
+  Q: Cho biết giới tính có nhiều nhân viên nhất .
+  Gold: select gioi_tinh from nhan_vien group by gioi_tinh order by count ( * ) desc limit 1
+  Gen:  SELECT gioi_tinh FROM nhan_vien GROUP BY gioi_tinh ORDER BY COUNT(*) DESC LIMIT 1
+
+[22/1906] ✓ MATCH | DB: assets_maintenance | 242882ms
+  Q: Nhật ký lỗi nào bao gồm nhiều bộ phận bị lỗi nhất ? Liệt kê id , mô tả và thời gian ghi lại của nhật ký lỗi này .
+  Gold: select t1.id_muc_nhap_cua_nhat_ky_loi , t1.mo_ta_ve_loi , t1.thoi_gian_muc_nhap_cua_nhat_ky_loi from nhat_ky_loi as t1 join nhat_ky_cua_loi_bo_phan as t2 on t1.id_muc_nhap_cua_nhat_ky_loi = t2.id_muc_nhap_cua_nhat_ky_loi group by t1.id_muc_nhap_cua_nhat_ky_loi order by count ( * ) desc limit 1
+  Gen:  SELECT T1.id_muc_nhap_cua_nhat_ky_loi , T1.mo_ta_ve_loi , T1.thoi_gian_muc_nhap_cua_nhat_ky_loi FROM nhat_ky_loi AS T1 JOIN nhat_ky_cua_loi_bo_phan AS T2 ON T1.id_muc_nhap_cua_nhat_ky_loi = T2.id_muc_nhap_cua_nhat_ky_loi GROUP BY T1.id_muc_nhap_cua_nhat_ky_loi ORDER BY COUNT(*) DESC LIMIT 1
+
+[27/1906] ✓ MATCH | DB: assets_maintenance | 213563ms
+  Q: Công ty nào đã bắt đầu các hợp đồng bảo trì sớm nhất ? Cho biết tên của công ty này .
+  Gold: select t1.ten_cong_ty from cong_ty_ben_thu_ba as t1 join hop_dong_bao_tri as t2 on t1.id_cong_ty = t2.id_hop_dong_bao_tri_cua_cong_ty order by t2.ngay_bat_dau_hop_dong asc limit 1
+  Gen:  SELECT cong_ty_ben_thu_ba.ten_cong_ty FROM hop_dong_bao_tri JOIN cong_ty_ben_thu_ba ON hop_dong_bao_tri.id_hop_dong_bao_tri_cua_cong_ty = cong_ty_ben_thu_ba.id_cong_ty ORDER BY ngay_bat_dau_hop_dong ASC LIMIT 1
+
+[28/1906] ✓ MATCH | DB: assets_maintenance | 211184ms
+  Q: Công ty nào đã kết thúc các hợp đồng bảo trì muộn nhất ? Cho biết tên của công ty này .
+  Gold: select t1.ten_cong_ty from cong_ty_ben_thu_ba as t1 join hop_dong_bao_tri as t2 on t1.id_cong_ty = t2.id_hop_dong_bao_tri_cua_cong_ty order by t2.ngay_ket_thuc_hop_dong desc limit 1
+  Gen:  SELECT cong_ty_ben_thu_ba.ten_cong_ty FROM hop_dong_bao_tri JOIN cong_ty_ben_thu_ba ON hop_dong_bao_tri.id_hop_dong_bao_tri_cua_cong_ty = cong_ty_ben_thu_ba.id_cong_ty ORDER BY hop_dong_bao_tri.ngay_ket_thuc_hop_dong DESC LIMIT 1
+
+[26/1906] ✓ MATCH | DB: assets_maintenance | 218599ms
+  Q: Bộ phận nào có số tiền phải trả ít nhất ? Liệt kê id của bộ phận này và số tiền tương ứng phải trả .
+  Gold: select id_bo_phan , so_tien_phai_tra from bo_phan order by so_tien_phai_tra asc limit 1
+  Gen:  SELECT id_bo_phan, so_tien_phai_tra FROM bo_phan ORDER BY so_tien_phai_tra ASC LIMIT 1
+
+
+============================================================
+  PROGRESS: 29 items | Success: 29 | EM: 20 (69.0%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 29 items | Success: 29 | EM: 20 (69.0%) | Errors: 0
+============================================================
+
+[32/1906] ✓ MATCH | DB: book_2 | 68529ms
+  Q: Có bao nhiêu cuốn sách ?
+  Gold: select count ( * ) from sach
+  Gen:  SELECT COUNT(*) FROM sach
+
+[35/1906] ✓ MATCH | DB: book_2 | 65239ms
+  Q: Tiêu đề của những cuốn sách mà tác giả không phải là ' Elaine Lee ' ?
+  Gold: select tieu_de from sach where tac_gia != "elaine lee"
+  Gen:  SELECT sach.tieu_de FROM sach WHERE sach.tac_gia != 'Elaine Lee'
+
+[30/1906] ✗ NO MATCH | DB: assets_maintenance | 255123ms
+  Q: Mỗi nhân viên đã liên lạc với bao nhiêu kỹ sư ? Cho biết tên của những nhân viên này và số lượng kỹ sư mà họ đã liên lạc .
+  Gold: select t1.ten_nhan_vien , count ( * ) from nhan_vien as t1 join chuyen_tham_cua_ky_su as t2 on t1.id_nhan_vien = t2.id_nhan_vien_lien_lac group by t1.ten_nhan_vien
+  Gen:  SELECT T1.ten_nhan_vien , COUNT(DISTINCT T2.id_ky_su) FROM nhan_vien AS T1 JOIN chuyen_tham_cua_ky_su AS T2 ON T1.id_nhan_vien = T2.id_nhan_vien_lien_lac GROUP BY T1.id_nhan_vien
+
+[36/1906] ✓ MATCH | DB: book_2 | 64856ms
+  Q: Cho biết tiêu đề và số lượng phát hành của từng cuốn sách .
+  Gold: select tieu_de , so_luong_phat_hanh from sach
+  Gen:  SELECT sach.tieu_de, sach.so_luong_phat_hanh FROM sach
+
+[31/1906] ✓ MATCH | DB: assets_maintenance | 75118ms
+  Q: Cho biết mẫu mã của những tài sản không phát sinh bất cứ lỗi nào .
+  Gold: select mau_ma_tai_san from tai_san where id_tai_san not in (select id_tai_san from nhat_ky_loi)
+  Gen:  SELECT T1.mau_ma_tai_san FROM tai_san AS T1 WHERE T1.id_tai_san NOT IN (SELECT id_tai_san FROM nhat_ky_loi)
+
+
+============================================================
+  PROGRESS: 34 items | Success: 34 | EM: 24 (70.6%) | Errors: 0
+============================================================
+
+[37/1906] ✗ NO MATCH | DB: book_2 | 71066ms
+  Q: Liệt kê ngày xuất bản của các cuốn sách theo thứ tự giá bán giảm dần .
+  Gold: select ngay_xuat_ban from an_pham order by gia_ban desc
+  Gen:  SELECT an_pham.ngay_xuat_ban FROM sach JOIN an_pham ON sach.id_sach = an_pham.id_sach ORDER BY an_pham.gia_ban DESC
+
+[39/1906] ✓ MATCH | DB: book_2 | 72041ms
+  Q: Liệt kê nhà xuất bản của ấn phẩm có giá cao nhất .
+  Gold: select nha_xuat_ban from an_pham order by gia_ban desc limit 1
+  Gen:  SELECT nha_xuat_ban FROM an_pham ORDER BY gia_ban DESC LIMIT 1
+
+[33/1906] ✓ MATCH | DB: book_2 | 84579ms
+  Q: Liệt kê tác giả của các cuốn sách theo thứ tự bảng chữ cái tăng dần .
+  Gold: select tac_gia from sach order by tac_gia asc
+  Gen:  SELECT tac_gia FROM sach ORDER BY tac_gia ASC
+
+[38/1906] ✓ MATCH | DB: book_2 | 76396ms
+  Q: Liệt kê các nhà xuất bản khác nhau của các ấn phẩm có giá cao hơn 5000000 .
+  Gold: select distinct nha_xuat_ban from an_pham where gia_ban > 5000000
+  Gen:  SELECT DISTINCT nha_xuat_ban FROM an_pham WHERE gia_ban > 5000000
+
+[34/1906] ✗ NO MATCH | DB: book_2 | 86334ms
+  Q: Liệt kê tiêu đề của các cuốn sách theo thứ tự tăng dần về số lượng phát hành .
+  Gold: select tieu_de from sach order by so_luong_phat_hanh asc
+  Gen:  SELECT sach.tieu_de, sach.so_luong_phat_hanh FROM sach ORDER BY sach.so_luong_phat_hanh ASC
+
+
+============================================================
+  PROGRESS: 39 items | Success: 39 | EM: 27 (69.2%) | Errors: 0
+============================================================
+
+[40/1906] ✓ MATCH | DB: book_2 | 46735ms
+  Q: Liệt kê ngày xuất bản của 3 ấn phẩm với giá thấp nhất .
+  Gold: select ngay_xuat_ban from an_pham order by gia_ban asc limit 3
+  Gen:  SELECT an_pham.ngay_xuat_ban FROM an_pham ORDER BY an_pham.gia_ban ASC LIMIT 3
+
+[41/1906] ✓ MATCH | DB: book_2 | 52296ms
+  Q: Hiển thị tiêu đề và ngày xuất bản của các cuốn sách .
+  Gold: select t1.tieu_de , t2.ngay_xuat_ban from sach as t1 join an_pham as t2 on t1.id_sach = t2.id_sach
+  Gen:  SELECT sach.tieu_de, an_pham.ngay_xuat_ban FROM sach JOIN an_pham ON sach.id_sach = an_pham.id_sach
+
+[43/1906] ✓ MATCH | DB: book_2 | 58259ms
+  Q: Hiển thị tên sách theo thứ tự giảm dần của giá xuất bản .
+  Gold: select t1.tieu_de from sach as t1 join an_pham as t2 on t1.id_sach = t2.id_sach order by t2.gia_ban desc
+  Gen:  SELECT sach.tieu_de FROM sach JOIN an_pham ON sach.id_sach = an_pham.id_sach ORDER BY an_pham.gia_ban DESC
+
+[45/1906] ✓ MATCH | DB: book_2 | 53801ms
+  Q: Hiển thị các nhà xuất bản khác nhau cùng với số lượng ấn phẩm mà họ có .
+  Gold: select nha_xuat_ban , count ( * ) from an_pham group by nha_xuat_ban
+  Gen:  SELECT an_pham.nha_xuat_ban, COUNT(*) FROM an_pham GROUP BY an_pham.nha_xuat_ban
+
+[42/1906] ✓ MATCH | DB: book_2 | 64029ms
+  Q: Hiển thị các tác giả đã xuất bản một cuốn sách có giá hơn 4000000 .
+  Gold: select t1.tac_gia from sach as t1 join an_pham as t2 on t1.id_sach = t2.id_sach where t2.gia_ban > 4000000
+  Gen:  SELECT sach.tac_gia FROM sach JOIN an_pham ON sach.id_sach = an_pham.id_sach WHERE an_pham.gia_ban > 4000000
+
+
+============================================================
+  PROGRESS: 44 items | Success: 44 | EM: 32 (72.7%) | Errors: 0
+============================================================
+
+[48/1906] ✓ MATCH | DB: book_2 | 53608ms
+  Q: Liệt kê tên những quyển sách không được xuất bản .
+  Gold: select tieu_de from sach where id_sach not in ( select id_sach from an_pham )
+  Gen:  SELECT tieu_de FROM sach WHERE id_sach NOT IN (SELECT id_sach FROM an_pham)
+
+[44/1906] ✓ MATCH | DB: book_2 | 71331ms
+  Q: Hiển thị các nhà xuất bản có nhiều hơn một ấn phẩm .
+  Gold: select nha_xuat_ban from an_pham group by nha_xuat_ban having count ( * ) > 1
+  Gen:  SELECT nha_xuat_ban FROM an_pham GROUP BY nha_xuat_ban HAVING COUNT(*) > 1
+
+[46/1906] ✓ MATCH | DB: book_2 | 62261ms
+  Q: Hiển thị ngày xuất bản phổ biến nhất .
+  Gold: select ngay_xuat_ban from an_pham group by ngay_xuat_ban order by count ( * ) desc limit 1
+  Gen:  SELECT ngay_xuat_ban FROM an_pham GROUP BY ngay_xuat_ban ORDER BY COUNT(*) DESC LIMIT 1
+
+[47/1906] ✓ MATCH | DB: book_2 | 64249ms
+  Q: Liệt kê các tác giả đã viết nhiều hơn một cuốn sách .
+  Gold: select tac_gia from sach group by tac_gia having count ( * ) > 1
+  Gen:  SELECT tac_gia FROM sach GROUP BY tac_gia HAVING COUNT(*) > 1
+
+[50/1906] ✓ MATCH | DB: book_2 | 46172ms
+  Q: Có bao nhiêu giá trị khác nhau cho ngày xuất bản các ấn phẩm ?
+  Gold: select count ( distinct ngay_xuat_ban ) from an_pham
+  Gen:  SELECT COUNT(DISTINCT an_pham.ngay_xuat_ban) FROM an_pham
+
+
+============================================================
+  PROGRESS: 49 items | Success: 49 | EM: 37 (75.5%) | Errors: 0
+============================================================
+
+[51/1906] ✓ MATCH | DB: book_2 | 45535ms
+  Q: Có bao nhiêu giá trị khác nhau cho ngày xuất bản có trong hồ sơ ?
+  Gold: select count ( distinct ngay_xuat_ban ) from an_pham
+  Gen:  SELECT COUNT(DISTINCT ngay_xuat_ban) FROM an_pham
+
+[52/1906] ✓ MATCH | DB: book_2 | 49320ms
+  Q: Hiển thị giá của các ấn phẩm có nhà xuất bản là ' Person ' hoặc ' Wiley ' .
+  Gold: select gia_ban from an_pham where nha_xuat_ban = "person" or nha_xuat_ban = "wiley"
+  Gen:  SELECT gia_ban FROM an_pham WHERE nha_xuat_ban = 'Person' OR nha_xuat_ban = 'Wiley'
+
+[53/1906] ✓ MATCH | DB: company_1 | 47640ms
+  Q: Liệt kê tên của tất cả các bộ phận và sắp xếp kết quả theo ngày bắt đầu của họ .
+  Gold: select ten_bo_phan from bo_phan order by ngay_bat_dau_quan_ly
+  Gen:  SELECT ten_bo_phan FROM bo_phan ORDER BY ngay_bat_dau_quan_ly ASC
+
+[49/1906] ✗ NO MATCH | DB: book_2 | 92681ms
+  Q: Hiển thị các nhà xuất bản có ấn phẩm với giá cao hơn 10000000 và ấn phẩm với giá thấp hơn 5000000 .
+  Gold: select nha_xuat_ban from an_pham where gia_ban > 10000000 intersect select nha_xuat_ban from an_pham where gia_ban < 5000000
+  Gen:  SELECT nha_xuat_ban FROM an_pham WHERE gia_ban > 10000000 GROUP BY nha_xuat_ban INTERSECT SELECT nha_xuat_ban FROM an_pham WHERE gia_ban < 5000000 GROUP BY nha_xuat_ban
+
+[55/1906] ✓ MATCH | DB: company_1 | 46845ms
+  Q: Có bao nhiêu người phụ thuộc có giới tính nữ ?
+  Gold: select count ( * ) from nguoi_phu_thuoc where gioi_tinh = "f"
+  Gen:  SELECT COUNT(*) FROM nguoi_phu_thuoc WHERE gioi_tinh = 'Nữ'
+
+[54/1906] ✓ MATCH | DB: company_1 | 54124ms
+  Q: Tìm tên của tất cả những người phụ thuộc có quan hệ vợ / chồng với một số nhân viên .
+  Gold: select ten_nguoi_phu_thuoc from nguoi_phu_thuoc where moi_quan_he = "spouse"
+  Gen:  SELECT ten_nguoi_phu_thuoc FROM nguoi_phu_thuoc WHERE moi_quan_he = 'vợ/chồng'
+
+[57/1906] ✓ MATCH | DB: company_1 | 44143ms
+  Q: Cho biết tên và họ của những nhân viên kiếm được hơn 30000 tiền lương .
+  Gold: select ten , ho from nhan_vien where luong > 30000
+  Gen:  SELECT ten, ho FROM nhan_vien WHERE luong > 30000
+
+
+============================================================
+  PROGRESS: 56 items | Success: 56 | EM: 43 (76.8%) | Errors: 0
+============================================================
+
+[58/1906] ✗ NO MATCH | DB: company_1 | 52836ms
+  Q: Tìm số lượng các nhân viên có mức lương thấp hơn 50000 ở mỗi giới tính .
+  Gold: select count ( * ) , gioi_tinh from nhan_vien where luong < 50000 group by gioi_tinh
+  Gen:  SELECT COUNT(*) FROM nhan_vien WHERE luong < 50000 GROUP BY gioi_tinh
+
+[59/1906] ✓ MATCH | DB: company_1 | 42208ms
+  Q: Liệt kê tên , họ và địa chỉ của tất cả các nhân viên theo thứ tự tăng dần về ngày sinh của từng nhân viên .
+  Gold: select ten , ho , dia_chi from nhan_vien order by ngay_sinh
+  Gen:  SELECT ten, ho, dia_chi FROM nhan_vien ORDER BY ngay_sinh ASC
+
+[56/1906] ✓ MATCH | DB: company_1 | 69091ms
+  Q: Tìm tên của những bộ phận được đặt tại Houston .
+  Gold: select t1.ten_bo_phan from bo_phan as t1 join dia_diem_cua_bo_phan as t2 on t1.ma_so_bo_phan = t2.ma_so_bo_phan where t2.dia_diem_bo_phan = "houston"
+  Gen:  SELECT bo_phan.ten_bo_phan FROM bo_phan JOIN dia_diem_cua_bo_phan ON bo_phan.ma_so_bo_phan = dia_diem_cua_bo_phan.ma_so_bo_phan WHERE dia_diem_bo_phan = 'Houston'
+
+[60/1906] ✓ MATCH | DB: course_teach | 50021ms
+  Q: Có bao nhiêu giáo viên ?
+  Gold: select count ( * ) from giao_vien
+  Gen:  SELECT COUNT(*) FROM giao_vien
+
+[63/1906] ✓ MATCH | DB: course_teach | 36819ms
+  Q: Liệt kê tên của các giáo viên theo thứ tự tăng dần về độ tuổi của từng người .
+  Gold: select ten from giao_vien order by tuoi asc
+  Gen:  SELECT ten FROM giao_vien ORDER BY tuoi ASC
+
+[61/1906] ✓ MATCH | DB: course_teach | 41234ms
+  Q: Tổng số giáo viên là bao nhiêu ?
+  Gold: select count ( * ) from giao_vien
+  Gen:  SELECT COUNT(*) FROM giao_vien
+
+[62/1906] ✓ MATCH | DB: course_teach | 43181ms
+  Q: Cho biết tên của giáo viên và sắp xếp kết quả theo thứ tự tăng dần về độ tuổi .
+  Gold: select ten from giao_vien order by tuoi asc
+  Gen:  SELECT ten FROM giao_vien ORDER BY tuoi ASC
+
+
+============================================================
+  PROGRESS: 63 items | Success: 63 | EM: 49 (77.8%) | Errors: 0
+============================================================
+
+[64/1906] ✓ MATCH | DB: course_teach | 46307ms
+  Q: Liệt kê độ tuổi và quê hương của tất cả các giáo viên
+  Gold: select tuoi , que_quan from giao_vien
+  Gen:  SELECT giao_vien.tuoi, giao_vien.que_quan FROM giao_vien
+
+[65/1906] ✓ MATCH | DB: course_teach | 47688ms
+  Q: Cho biết độ tuổi và quê hương của mỗi giáo viên .
+  Gold: select tuoi , que_quan from giao_vien
+  Gen:  SELECT giao_vien.tuoi, giao_vien.que_quan FROM giao_vien
+
+[66/1906] ✓ MATCH | DB: course_teach | 47220ms
+  Q: Liệt kê tên của các giáo viên có quê hương không phải là ' Khu đô thị Little Lever ' .
+  Gold: select ten from giao_vien where que_quan != "little lever urban distric"
+  Gen:  SELECT ten FROM giao_vien WHERE que_quan != 'Khu đô thị Little Lever'
+
+[67/1906] ✓ MATCH | DB: course_teach | 49155ms
+  Q: Các giáo viên có quê hương không phải ở ' Khu đô thị Little Lever ' có tên là gì ?
+  Gold: select ten from giao_vien where que_quan != "little lever urban distric"
+  Gen:  SELECT ten FROM giao_vien WHERE que_quan != 'Khu đô thị Little Lever'
+
+
+============================================================
+  PROGRESS: 67 items | Success: 67 | EM: 53 (79.1%) | Errors: 0
+============================================================
+
+[69/1906] ✓ MATCH | DB: course_teach | 50239ms
+  Q: Tên của các giáo viên ở độ tuổi 32 hoặc 33 là gì ?
+  Gold: select ten from giao_vien where tuoi = 32 or tuoi = 33
+  Gen:  SELECT ten FROM giao_vien WHERE tuoi = '32' OR tuoi = '33'
+
+[68/1906] ✓ MATCH | DB: course_teach | 64144ms
+  Q: Hiển thị tên của các giáo viên ở độ tuổi 32 hoặc 33 ?
+  Gold: select ten from giao_vien where tuoi = 32 or tuoi = 33
+  Gen:  SELECT ten FROM giao_vien WHERE tuoi = '32' OR tuoi = '33'
+
+[72/1906] ✓ MATCH | DB: course_teach | 56403ms
+  Q: Hiển thị những quê hương khác nhau của các giáo viên và số lượng giáo viên đến từ mỗi quê hương .
+  Gold: select que_quan , count ( * ) from giao_vien group by que_quan
+  Gen:  SELECT que_quan, COUNT(*) FROM giao_vien GROUP BY que_quan
+
+[70/1906] ✓ MATCH | DB: course_teach | 60436ms
+  Q: Quê hương của giáo viên trẻ nhất là ở đâu ?
+  Gold: select que_quan from giao_vien order by tuoi asc limit 1
+  Gen:  SELECT que_quan FROM giao_vien ORDER BY tuoi ASC LIMIT 1
+
+[73/1906] ✓ MATCH | DB: course_teach | 56152ms
+  Q: mỗi quê hương có bao nhiêu giáo viên .
+  Gold: select que_quan , count ( * ) from giao_vien group by que_quan
+  Gen:  SELECT que_quan, COUNT(*) FROM giao_vien GROUP BY que_quan
+
+
+============================================================
+  PROGRESS: 72 items | Success: 72 | EM: 58 (80.6%) | Errors: 0
+============================================================
+
+[71/1906] ✗ NO MATCH | DB: course_teach | 71372ms
+  Q: Giáo viên trẻ nhất từ đâu đến ?
+  Gold: select que_quan from giao_vien order by tuoi asc limit 1
+  Gen:  SELECT ten, que_quan FROM giao_vien ORDER BY tuoi ASC LIMIT 1
+
+[74/1906] ✓ MATCH | DB: course_teach | 58549ms
+  Q: Liệt kê quê hương phổ biến nhất mà các giáo viên đến từ .
+  Gold: select que_quan from giao_vien group by que_quan order by count ( * ) desc limit 1
+  Gen:  SELECT que_quan FROM giao_vien GROUP BY que_quan ORDER BY COUNT(*) DESC LIMIT 1
+
+[76/1906] ✓ MATCH | DB: course_teach | 55712ms
+  Q: Hiển thị những nơi là quê hương của ít nhất hai giáo viên .
+  Gold: select que_quan from giao_vien group by que_quan having count ( * ) >= 2
+  Gen:  SELECT que_quan FROM giao_vien GROUP BY que_quan HAVING COUNT(*) >= 2
+
+[75/1906] ✓ MATCH | DB: course_teach | 64461ms
+  Q: Nơi nào là quê hương của nhiều giáo viên nhất ?
+  Gold: select que_quan from giao_vien group by que_quan order by count ( * ) desc limit 1
+  Gen:  SELECT que_quan FROM giao_vien GROUP BY que_quan ORDER BY COUNT(*) DESC LIMIT 1
+
+[77/1906] ✓ MATCH | DB: course_teach | 58023ms
+  Q: Những nơi nào là quê hương của ít nhất 2 giáo viên ?
+  Gold: select que_quan from giao_vien group by que_quan having count ( * ) >= 2
+  Gen:  SELECT que_quan FROM giao_vien GROUP BY que_quan HAVING COUNT(*) >= 2
+
+
+============================================================
+  PROGRESS: 77 items | Success: 77 | EM: 62 (80.5%) | Errors: 0
+============================================================
+
+[79/1906] ✓ MATCH | DB: course_teach | 71685ms
+  Q: Tên của các giáo viên và các khoá học họ đã dạy ?
+  Gold: select t3.ten , t2.khoa_hoc from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien
+  Gen:  SELECT T1.ten, T3.khoa_hoc FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien JOIN khoa_hoc AS T3 ON T2.id_khoa_hoc = T3.id_khoa_hoc
+
+[80/1906] ✓ MATCH | DB: course_teach | 65350ms
+  Q: Hiển thị tên của các giáo viên cũng như là các khoá học họ được sắp xếp để dạy theo thứ tự bảng chữ cái tăng dần của tên giáo viên .
+  Gold: select t3.ten , t2.khoa_hoc from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien order by t3.ten
+  Gen:  SELECT giao_vien.ten, khoa_hoc.khoa_hoc FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien JOIN khoa_hoc ON sap_xep_khoa_hoc.id_khoa_hoc = khoa_hoc.id_khoa_hoc ORDER BY giao_vien.ten ASC
+
+[78/1906] ✓ MATCH | DB: course_teach | 78753ms
+  Q: Hiển thị tên của tất cả các giáo viên cũng như là các khoá học họ được sắp xếp để dạy .
+  Gold: select t3.ten , t2.khoa_hoc from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien
+  Gen:  SELECT T1.ten, T3.khoa_hoc FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien JOIN khoa_hoc AS T3 ON T2.id_khoa_hoc = T3.id_khoa_hoc
+
+
+============================================================
+  PROGRESS: 80 items | Success: 80 | EM: 65 (81.2%) | Errors: 0
+============================================================
+
+[81/1906] ✓ MATCH | DB: course_teach | 68482ms
+  Q: Hiển thị tên của các giáo viên và các khoá học họ dạy theo thứ tự bảng chữ cái tăng dần của tên giáo viên
+  Gold: select t3.ten , t2.khoa_hoc from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien order by t3.ten
+  Gen:  SELECT T1.ten, T3.khoa_hoc FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien JOIN khoa_hoc AS T3 ON T2.id_khoa_hoc = T3.id_khoa_hoc ORDER BY T1.ten ASC
+
+[82/1906] ✓ MATCH | DB: course_teach | 75862ms
+  Q: Hiển thị tên của các giáo viên đã giảng dạy các khoá học ' Toán ' .
+  Gold: select t3.ten from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien where t2.khoa_hoc = "math"
+  Gen:  SELECT T1.ten FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien JOIN khoa_hoc AS T3 ON T2.id_khoa_hoc = T3.id_khoa_hoc WHERE T3.khoa_hoc = 'Toán'
+
+[85/1906] ✗ NO MATCH | DB: course_teach | 69684ms
+  Q: Cho biết tên của các giáo viên cũng như là họ đã dạy bao nhiêu khoá học ?
+  Gold: select t2.ten , count ( * ) from sap_xep_khoa_hoc as t1 join giao_vien as t2 on t1.id_giao_vien = t2.id_giao_vien group by t2.ten
+  Gen:  SELECT giao_vien.ten, COUNT(*) FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien GROUP BY giao_vien.id_giao_vien
+
+[83/1906] ✓ MATCH | DB: course_teach | 78229ms
+  Q: Tên của những giáo viên dạy bộ môn ' Toán ' ?
+  Gold: select t3.ten from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien where t2.khoa_hoc = "math"
+  Gen:  SELECT giao_vien.ten FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien JOIN khoa_hoc ON sap_xep_khoa_hoc.id_khoa_hoc = khoa_hoc.id_khoa_hoc WHERE khoa_hoc.khoa_hoc = 'Toán'
+
+[87/1906] ✗ NO MATCH | DB: course_teach | 59081ms
+  Q: Tên của các giáo viên dạy ít nhất hai khoá học
+  Gold: select t2.ten from sap_xep_khoa_hoc as t1 join giao_vien as t2 on t1.id_giao_vien = t2.id_giao_vien group by t2.ten having count ( * ) >= 2
+  Gen:  SELECT giao_vien.ten FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien GROUP BY giao_vien.id_giao_vien HAVING COUNT(*) >= 2
+
+[86/1906] ✗ NO MATCH | DB: course_teach | 72209ms
+  Q: Hiển thị tên của giáo viên dạy ít nhất hai khoá học .
+  Gold: select t2.ten from sap_xep_khoa_hoc as t1 join giao_vien as t2 on t1.id_giao_vien = t2.id_giao_vien group by t2.ten having count ( * ) >= 2
+  Gen:  SELECT ten FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien GROUP BY giao_vien.id_giao_vien HAVING COUNT(*) >= 2
+
+
+============================================================
+  PROGRESS: 86 items | Success: 86 | EM: 68 (79.1%) | Errors: 0
+============================================================
+
+[84/1906] ✗ NO MATCH | DB: course_teach | 87225ms
+  Q: Hiển thị tên của giáo viên và số lượng các khoá học họ dạy .
+  Gold: select t2.ten , count ( * ) from sap_xep_khoa_hoc as t1 join giao_vien as t2 on t1.id_giao_vien = t2.id_giao_vien group by t2.ten
+  Gen:  SELECT giao_vien.ten, COUNT(*) FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien GROUP BY giao_vien.id_giao_vien
+
+[90/1906] ✓ MATCH | DB: decoration_competition | 59192ms
+  Q: Có bao nhiêu thành viên tất cả ?
+  Gold: select count ( * ) from thanh_vien
+  Gen:  SELECT COUNT(*) FROM thanh_vien
+
+[89/1906] ✓ MATCH | DB: course_teach | 61678ms
+  Q: Tên của các giáo viên chưa được sắp xếp dạy khoá học nào
+  Gold: select ten from giao_vien where id_giao_vien not in ( select id_giao_vien from sap_xep_khoa_hoc )
+  Gen:  SELECT ten FROM giao_vien WHERE id_giao_vien NOT IN (SELECT id_giao_vien FROM sap_xep_khoa_hoc)
+
+[88/1906] ✓ MATCH | DB: course_teach | 64032ms
+  Q: Liệt kê tên của các giáo viên chưa được sắp xếp để dạy các khoá học .
+  Gold: select ten from giao_vien where id_giao_vien not in ( select id_giao_vien from sap_xep_khoa_hoc )
+  Gen:  SELECT ten FROM giao_vien WHERE id_giao_vien NOT IN (SELECT id_giao_vien FROM sap_xep_khoa_hoc)
+
+
+============================================================
+  PROGRESS: 90 items | Success: 90 | EM: 71 (78.9%) | Errors: 0
+============================================================
+
+[91/1906] ✓ MATCH | DB: decoration_competition | 61181ms
+  Q: Liệt kê tên của tất cả các thành viên theo thứ tự bảng chữ cái tăng dần .
+  Gold: select ten from thanh_vien order by ten asc
+  Gen:  SELECT ten FROM thanh_vien ORDER BY ten ASC
+
+[93/1906] ✓ MATCH | DB: decoration_competition | 57880ms
+  Q: Hiển thị tên của các thành viên đến từ ' Hoa Kỳ ' hoặc ' Canada ' .
+  Gold: select ten from thanh_vien where quoc_gia = "united states" or quoc_gia = "canada"
+  Gen:  SELECT ten FROM thanh_vien WHERE quoc_gia = 'Hoa Kỳ' OR quoc_gia = 'Canada'
+
+[92/1906] ✓ MATCH | DB: decoration_competition | 66087ms
+  Q: Cho biết tên và quốc gia của các thành viên .
+  Gold: select ten , quoc_gia from thanh_vien
+  Gen:  SELECT ten, quoc_gia FROM thanh_vien
+
+[96/1906] ✓ MATCH | DB: decoration_competition | 54893ms
+  Q: Cho biết tên của những quốc gia có nhiều hơn hai thành viên ?
+  Gold: select quoc_gia from thanh_vien group by quoc_gia having count ( * ) > 2
+  Gen:  SELECT quoc_gia FROM thanh_vien GROUP BY quoc_gia HAVING COUNT(*) > 2
+
+[94/1906] ✓ MATCH | DB: decoration_competition | 64025ms
+  Q: Hiển thị tên của các quốc gia khác nhau và số lượng thành viên đến từ mỗi quốc gia .
+  Gold: select quoc_gia , count ( * ) from thanh_vien group by quoc_gia
+  Gen:  SELECT quoc_gia, COUNT(*) FROM thanh_vien GROUP BY quoc_gia
+
+
+============================================================
+  PROGRESS: 95 items | Success: 95 | EM: 76 (80.0%) | Errors: 0
+============================================================
+
+[97/1906] ✓ MATCH | DB: decoration_competition | 58654ms
+  Q: Hiển thị tên người lãnh đạo và địa điểm của các trường đại học .
+  Gold: select ten_lanh_dao , dia_diem_truong_dai_hoc from truong_dai_hoc
+  Gen:  SELECT ten_lanh_dao, dia_diem_truong_dai_hoc FROM truong_dai_hoc
+
+[95/1906] ✓ MATCH | DB: decoration_competition | 71259ms
+  Q: Quốc gia nào là nơi có nhiều thành viên nhất đến từ đó ?
+  Gold: select quoc_gia from thanh_vien group by quoc_gia order by count ( * ) desc limit 1
+  Gen:  SELECT quoc_gia FROM thanh_vien GROUP BY quoc_gia ORDER BY COUNT(*) DESC LIMIT 1
+
+[99/1906] ✓ MATCH | DB: decoration_competition | 55618ms
+  Q: Liêt kê tên của các thành viên và địa điểm của các trường đại học mà họ theo học theo thứ tự bảng chữ cái tăng dần của tên thành viên .
+  Gold: select t2.ten , t1.dia_diem_truong_dai_hoc from truong_dai_hoc as t1 join thanh_vien as t2 on t1.id_dai_hoc = t2.id_dai_hoc order by t2.ten asc
+  Gen:  SELECT thanh_vien.ten, truong_dai_hoc.dia_diem_truong_dai_hoc FROM thanh_vien JOIN truong_dai_hoc ON thanh_vien.id_dai_hoc = truong_dai_hoc.id_dai_hoc ORDER BY thanh_vien.ten ASC
+
+[98/1906] ✓ MATCH | DB: decoration_competition | 61129ms
+  Q: Hiển thị tên của các thành viên và tên của các trường đại học mà họ đang theo học .
+  Gold: select t2.ten , t1.ten from truong_dai_hoc as t1 join thanh_vien as t2 on t1.id_dai_hoc = t2.id_dai_hoc
+  Gen:  SELECT thanh_vien.ten, truong_dai_hoc.ten FROM thanh_vien JOIN truong_dai_hoc ON thanh_vien.id_dai_hoc = truong_dai_hoc.id_dai_hoc
+
+
+============================================================
+  PROGRESS: 99 items | Success: 99 | EM: 80 (80.8%) | Errors: 0
+============================================================
+
+[100/1906] ✓ MATCH | DB: decoration_competition | 61214ms
+  Q: Hiển thị tên những người lãnh đạo của các trường đại học có liên kết với các thành viên đến từ quốc gia Canada .
+  Gold: select distinct t1.ten_lanh_dao from truong_dai_hoc as t1 join thanh_vien as t2 on t1.id_dai_hoc = t2.id_dai_hoc where t2.quoc_gia = "canada"
+  Gen:  SELECT truong_dai_hoc.ten_lanh_dao FROM truong_dai_hoc JOIN thanh_vien ON truong_dai_hoc.id_dai_hoc = thanh_vien.id_dai_hoc WHERE thanh_vien.quoc_gia = 'Canada'
+
+[101/1906] ✓ MATCH | DB: decoration_competition | 69453ms
+  Q: Hiển thị tên của các thành viên và những chủ đề trang trí mà họ có .
+  Gold: select t1.ten , t2.chu_de_trang_tri from thanh_vien as t1 join vong as t2 on t1.id_thanh_vien = t2.id_thanh_vien
+  Gen:  SELECT thanh_vien.ten, vong.chu_de_trang_tri FROM thanh_vien JOIN vong ON thanh_vien.id_thanh_vien = vong.id_thanh_vien
+
+[104/1906] ✓ MATCH | DB: decoration_competition | 67013ms
+  Q: Liệt kê tên của các thành viên không tham gia vào bất kỳ vòng thi nào .
+  Gold: select ten from thanh_vien where id_thanh_vien not in ( select id_thanh_vien from vong )
+  Gen:  SELECT ten FROM thanh_vien WHERE id_thanh_vien NOT IN (SELECT id_thanh_vien FROM vong)
+
+
+============================================================
+  PROGRESS: 102 items | Success: 102 | EM: 83 (81.4%) | Errors: 0
+============================================================
+
+[105/1906] ✓ MATCH | DB: election_representative | 66647ms
+  Q: Có bao nhiêu cuộc bầu cử ?
+  Gold: select count ( * ) from cuoc_bau_cu
+  Gen:  SELECT COUNT(*) FROM cuoc_bau_cu
+
+[106/1906] ✓ MATCH | DB: election_representative | 74731ms
+  Q: Liệt kê số lượng phiếu bầu của các cuộc bầu cử theo thứ tự giảm dần .
+  Gold: select so_luong_phieu_bau from cuoc_bau_cu order by so_luong_phieu_bau desc
+  Gen:  SELECT so_luong_phieu_bau FROM cuoc_bau_cu ORDER BY so_luong_phieu_bau DESC
+
+[107/1906] ✓ MATCH | DB: election_representative | 72787ms
+  Q: Liệt kê ngày và tỷ lệ phiếu bầu của các cuộc bầu cử .
+  Gold: select ngay , ti_le_phieu_bau from cuoc_bau_cu
+  Gen:  SELECT ngay, ti_le_phieu_bau FROM cuoc_bau_cu
+
+[102/1906] ✓ MATCH | DB: decoration_competition | 96695ms
+  Q: Hiển thị tên của các thành viên đã đạt được thứ hạng cao hơn 3 .
+  Gold: select t1.ten from thanh_vien as t1 join vong as t2 on t1.id_thanh_vien = t2.id_thanh_vien where t2.xep_hang_tung_vong > 3
+  Gen:  SELECT thanh_vien.ten FROM thanh_vien JOIN vong ON thanh_vien.id_thanh_vien = vong.id_thanh_vien WHERE vong.xep_hang_tung_vong > 3
+
+
+============================================================
+  PROGRESS: 106 items | Success: 106 | EM: 87 (82.1%) | Errors: 0
+============================================================
+
+[108/1906] ✓ MATCH | DB: election_representative | 85089ms
+  Q: Tỷ lệ phiếu bầu tối thiểu và tối đa của các cuộc bầu cử là bao nhiêu ?
+  Gold: select min ( ti_le_phieu_bau ) , max ( ti_le_phieu_bau ) from cuoc_bau_cu
+  Gen:  SELECT MIN(ti_le_phieu_bau), MAX(ti_le_phieu_bau) FROM cuoc_bau_cu
+
+[109/1906] ✓ MATCH | DB: election_representative | 81660ms
+  Q: Cho biết tên và đảng của mỗi người đại diện .
+  Gold: select ten , dang from dai_dien
+  Gen:  SELECT ten, dang FROM dai_dien
+
+[110/1906] ✓ MATCH | DB: election_representative | 80355ms
+  Q: Cho biết tên của những người đại diện mà đảng của họ không phải là ' Đảng Cộng hoà ' .
+  Gold: select ten from dai_dien where dang != "republican"
+  Gen:  SELECT ten FROM dai_dien WHERE dang != 'Đảng Cộng hoà'
+
+
+============================================================
+  PROGRESS: 109 items | Success: 109 | EM: 90 (82.6%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 109 items | Success: 109 | EM: 90 (82.6%) | Errors: 0
+============================================================
+
+[111/1906] ✓ MATCH | DB: election_representative | 110005ms
+  Q: Tuổi thọ của các đại diện từ tiểu bang New York hoặc tiểu bang Indiana là bao nhiêu ?
+  Gold: select tuoi_tho from dai_dien where tieu_bang = "new york" or tieu_bang = "indiana"
+  Gen:  SELECT tuoi_tho FROM dai_dien WHERE tieu_bang = 'New York' OR tieu_bang = 'Indiana'
+
+[112/1906] ✓ MATCH | DB: election_representative | 93420ms
+  Q: Tên của các đại diện và ngày bầu cử mà họ đã tham gia ?
+  Gold: select t2.ten , t1.ngay from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien
+  Gen:  SELECT T1.ten, T2.ngay FROM dai_dien AS T1 JOIN cuoc_bau_cu AS T2 ON T1.id_dai_dien = T2.id_dai_dien
+
+[103/1906] ✓ MATCH | DB: decoration_competition | 170887ms
+  Q: Hiển thị tên của các thành viên theo thứ tự tăng dần về thứ hạng của mỗi người .
+  Gold: select t1.ten from thanh_vien as t1 join vong as t2 on t1.id_thanh_vien = t2.id_thanh_vien order by xep_hang_tung_vong asc
+  Gen:  SELECT thanh_vien.ten FROM thanh_vien JOIN vong ON thanh_vien.id_thanh_vien = vong.id_thanh_vien ORDER BY vong.xep_hang_tung_vong ASC
+
+[114/1906] ✓ MATCH | DB: election_representative | 95528ms
+  Q: Săp xếp tên của các đại diện theo thứ tự giảm dần về số lượng phiếu bầu .
+  Gold: select t2.ten from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien order by so_luong_phieu_bau desc
+  Gen:  SELECT dai_dien.ten FROM dai_dien JOIN cuoc_bau_cu ON dai_dien.id_dai_dien = cuoc_bau_cu.id_dai_dien ORDER BY cuoc_bau_cu.so_luong_phieu_bau DESC
+
+
+============================================================
+  PROGRESS: 113 items | Success: 113 | EM: 94 (83.2%) | Errors: 0
+============================================================
+
+[113/1906] ✓ MATCH | DB: election_representative | 133900ms
+  Q: Tên của các đại diện có hơn 10000 phiếu trong cuộc bầu cử ?
+  Gold: select t2.ten from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien where so_luong_phieu_bau > 10000
+  Gen:  SELECT T1.ten FROM dai_dien AS T1 JOIN cuoc_bau_cu AS T2 ON T1.id_dai_dien = T2.id_dai_dien WHERE T2.so_luong_phieu_bau > 10000
+
+[118/1906] ✓ MATCH | DB: election_representative | 91418ms
+  Q: Cho biết các đảng khác nhau của tất cả những người đại diện . Hiển thị tên đảng và số lượng người đại diện mà mỗi đảng có .
+  Gold: select dang , count ( * ) from dai_dien group by dang
+  Gen:  SELECT dang, COUNT(*) FROM dai_dien GROUP BY dang
+
+[116/1906] ✓ MATCH | DB: election_representative | 119570ms
+  Q: Liệt kê tuổi thọ của tất cả những người đại diện theo thứ tự tỷ lệ phiếu bầu giảm dần .
+  Gold: select t2.tuoi_tho from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien order by ti_le_phieu_bau desc
+  Gen:  SELECT dai_dien.tuoi_tho FROM dai_dien JOIN cuoc_bau_cu ON dai_dien.id_dai_dien = cuoc_bau_cu.id_dai_dien ORDER BY cuoc_bau_cu.ti_le_phieu_bau DESC
+
+
+============================================================
+  PROGRESS: 116 items | Success: 116 | EM: 97 (83.6%) | Errors: 0
+============================================================
+
+[119/1906] ✗ NO MATCH | DB: election_representative | 104839ms
+  Q: Đảng nào có nhiều người đại diện nhất ?
+  Gold: select dang , count ( * ) from dai_dien group by dang order by count ( * ) desc limit 1
+  Gen:  SELECT dang FROM dai_dien GROUP BY dang ORDER BY COUNT(*) DESC LIMIT 1
+
+[115/1906] ✗ NO MATCH | DB: election_representative | 151209ms
+  Q: Cho biết đảng của người đại diện có số phiếu bầu ít nhất .
+  Gold: select t2.dang from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien order by so_luong_phieu_bau asc limit 1
+  Gen:  SELECT T2.dang FROM dai_dien T2 JOIN cuoc_bau_cu T1 ON T2.id_dai_dien = T1.id_dai_dien GROUP BY T2.id_dai_dien ORDER BY SUM(T1.so_luong_phieu_bau) ASC LIMIT 1
+  Eval Error: 't2'
+
+
+============================================================
+  PROGRESS: 118 items | Success: 118 | EM: 97 (82.2%) | Errors: 0
+============================================================
+
+[117/1906] ✓ MATCH | DB: election_representative | 132849ms
+  Q: Số phiếu trung bình của những người đại diện cho đảng ' Cộng hoà ' là bao nhiêu ?
+  Gold: select avg ( t1.so_luong_phieu_bau ) from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien where t2.dang = "republican"
+  Gen:  SELECT AVG(cuoc_bau_cu.so_luong_phieu_bau) FROM dai_dien JOIN cuoc_bau_cu ON dai_dien.id_dai_dien = cuoc_bau_cu.id_dai_dien WHERE dai_dien.dang = 'Cộng hoà'
+
+[120/1906] ✓ MATCH | DB: election_representative | 89350ms
+  Q: Những đảng nào có ít nhất ba người đại diện ?
+  Gold: select dang from dai_dien group by dang having count ( * ) >= 3
+  Gen:  SELECT dang FROM dai_dien GROUP BY dang HAVING COUNT(*) >= 3
+
+[121/1906] ✗ NO MATCH | DB: election_representative | 99829ms
+  Q: Những bang nào có ít nhất hai người đại diện ?
+  Gold: select tieu_bang from dai_dien group by tieu_bang having count ( * ) >= 2
+  Gen:  SELECT dang FROM dai_dien GROUP BY dang HAVING COUNT(*) >= 2
+
+[124/1906] ✓ MATCH | DB: election_representative | 64400ms
+  Q: Có tất cả bao nhiêu đảng khác nhau ?
+  Gold: select count ( distinct dang ) from dai_dien
+  Gen:  SELECT COUNT(DISTINCT dang) FROM dai_dien
+
+[125/1906] ✓ MATCH | DB: match_season | 60968ms
+  Q: Tổng cộng có bao nhiêu quốc gia ?
+  Gold: select count ( * ) from quoc_gia
+  Gen:  SELECT COUNT(*) FROM quoc_gia
+
+[122/1906] ✓ MATCH | DB: election_representative | 109621ms
+  Q: Liệt kê tên của những người đại diện chưa tham gia cuộc bầu cử nào được liệt kê ở đây .
+  Gold: select ten from dai_dien where id_dai_dien not in ( select id_dai_dien from cuoc_bau_cu )
+  Gen:  SELECT ten FROM dai_dien WHERE id_dai_dien NOT IN (SELECT id_dai_dien FROM cuoc_bau_cu)
+
+[126/1906] ✓ MATCH | DB: match_season | 66078ms
+  Q: Đếm số lượng quốc gia .
+  Gold: select count ( * ) from quoc_gia
+  Gen:  SELECT COUNT(*) FROM quoc_gia
+
+
+============================================================
+  PROGRESS: 125 items | Success: 125 | EM: 103 (82.4%) | Errors: 0
+============================================================
+
+[127/1906] ✓ MATCH | DB: match_season | 57200ms
+  Q: Hiển thị tên quốc gia và thủ đô của tất cả các quốc gia .
+  Gold: select ten_quoc_gia , thu_do from quoc_gia
+  Gen:  SELECT quoc_gia.ten_quoc_gia, quoc_gia.thu_do FROM quoc_gia
+
+[123/1906] ✓ MATCH | DB: election_representative | 106251ms
+  Q: Hiển thị các đảng có cả người đại diện ở tiểu bang New York và người đại diện ở tiểu bang Pennsylvania .
+  Gold: select dang from dai_dien where tieu_bang = "new york" intersect select dang from dai_dien where tieu_bang = "pennsylvania"
+  Gen:  SELECT dang FROM dai_dien WHERE tieu_bang = 'New York' INTERSECT SELECT dang FROM dai_dien WHERE tieu_bang = 'Pennsylvania'
+
+[128/1906] ✓ MATCH | DB: match_season | 64175ms
+  Q: Liệt kê tên và thủ đô của từng quốc gia .
+  Gold: select ten_quoc_gia , thu_do from quoc_gia
+  Gen:  SELECT ten_quoc_gia, thu_do FROM quoc_gia
+
+
+============================================================
+  PROGRESS: 128 items | Success: 128 | EM: 106 (82.8%) | Errors: 0
+============================================================
+
+[129/1906] ✓ MATCH | DB: match_season | 72258ms
+  Q: Hiển thị tất cả các ngôn ngữ bản địa chính thức có chứa cụm từ ' tiếng Anh ' trong tên .
+  Gold: select ngon_ngu_ban_dia_chinh_thuc from quoc_gia where ngon_ngu_ban_dia_chinh_thuc like "%english%"
+  Gen:  SELECT quoc_gia.ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia WHERE quoc_gia.ngon_ngu_ban_dia_chinh_thuc LIKE '%tiếng Anh%'
+
+[131/1906] ✓ MATCH | DB: match_season | 65993ms
+  Q: Hiển thị các vị trí khác nhau trong tất cả các trận đấu .
+  Gold: select distinct vi_tri from tran_dau_trong_mua_giai
+  Gen:  SELECT DISTINCT vi_tri FROM tran_dau_trong_mua_giai
+
+[130/1906] ✓ MATCH | DB: match_season | 77742ms
+  Q: Những ngôn ngữ bản địa chính thức có chứa cụm từ ' tiếng Anh ' trong tên là những ngôn ngữ nào ?
+  Gold: select ngon_ngu_ban_dia_chinh_thuc from quoc_gia where ngon_ngu_ban_dia_chinh_thuc like "%english%"
+  Gen:  SELECT ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia WHERE ngon_ngu_ban_dia_chinh_thuc LIKE '%tiếng Anh%'
+
+
+============================================================
+  PROGRESS: 131 items | Success: 131 | EM: 109 (83.2%) | Errors: 0
+============================================================
+
+[132/1906] ✓ MATCH | DB: match_season | 77900ms
+  Q: Những vị trí khác nhau trong các trận đấu là những vị trí nào ?
+  Gold: select distinct vi_tri from tran_dau_trong_mua_giai
+  Gen:  SELECT DISTINCT vi_tri FROM tran_dau_trong_mua_giai
+
+[133/1906] ✗ NO MATCH | DB: match_season | 93353ms
+  Q: Hiển thị các cầu thủ đến từ trường đại học UCLA .
+  Gold: select cau_thu from tran_dau_trong_mua_giai where truong_dai_hoc = "ucla"
+  Gen:  SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu WHERE tran_dau_trong_mua_giai.truong_dai_hoc = 'UCLA'
+
+[135/1906] ✗ NO MATCH | DB: match_season | 90427ms
+  Q: Hiển thị những vị trí khác nhau của các cầu thủ đến từ trường đại học UCLA hoặc Duke .
+  Gold: select distinct vi_tri from tran_dau_trong_mua_giai where truong_dai_hoc = "ucla" or truong_dai_hoc = "duke"
+  Gen:  SELECT DISTINCT vi_tri FROM tran_dau_trong_mua_giai WHERE truong_dai_hoc IN ('UCLA', 'Duke')
+
+[137/1906] ✓ MATCH | DB: match_season | 79914ms
+  Q: Hiển thị mã số tuyển chọn tân binh và mùa tuyển chọn của các cầu thủ có vị trí là ' hậu vệ ' .
+  Gold: select ma_so_tuyen_chon_tan_binh , mua_tuyen_chon from tran_dau_trong_mua_giai where vi_tri = "defender"
+  Gen:  SELECT ma_so_tuyen_chon_tan_binh, mua_tuyen_chon FROM tran_dau_trong_mua_giai WHERE vi_tri = 'hậu vệ'
+
+
+============================================================
+  PROGRESS: 135 items | Success: 135 | EM: 111 (82.2%) | Errors: 0
+============================================================
+
+[138/1906] ✓ MATCH | DB: match_season | 91173ms
+  Q: Mã số tuyển chọn tân binh và mùa tuyển chọn cho các cầu thủ ở vị trí ' hậu vệ ' ?
+  Gold: select ma_so_tuyen_chon_tan_binh , mua_tuyen_chon from tran_dau_trong_mua_giai where vi_tri = "defender"
+  Gen:  SELECT ma_so_tuyen_chon_tan_binh, mua_tuyen_chon FROM tran_dau_trong_mua_giai WHERE vi_tri = 'hậu vệ'
+
+
+============================================================
+  PROGRESS: 136 items | Success: 136 | EM: 112 (82.4%) | Errors: 0
+============================================================
+
+[141/1906] ✓ MATCH | DB: match_season | 71265ms
+  Q: Hiển thị các cầu thủ và số năm họ đã chơi .
+  Gold: select cau_thu , so_nam_da_choi from cau_thu
+  Gen:  SELECT cau_thu.cau_thu, cau_thu.so_nam_da_choi FROM cau_thu
+
+[134/1906] ✗ NO MATCH | DB: match_season | 139927ms
+  Q: Những cầu thủ nào đến từ UCLA ?
+  Gold: select cau_thu from tran_dau_trong_mua_giai where truong_dai_hoc = "ucla"
+  Gen:  SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu WHERE tran_dau_trong_mua_giai.truong_dai_hoc = 'UCLA'
+
+[142/1906] ✓ MATCH | DB: match_season | 70085ms
+  Q: Liệt kê tên các cầu thủ khác nhau và số năm mà họ đã chơi ?
+  Gold: select cau_thu , so_nam_da_choi from cau_thu
+  Gen:  SELECT cau_thu.cau_thu, cau_thu.so_nam_da_choi FROM cau_thu
+
+[143/1906] ✓ MATCH | DB: match_season | 54819ms
+  Q: Hiển thị tên của tất cả các đội .
+  Gold: select ten from doi
+  Gen:  SELECT ten FROM doi
+
+[139/1906] ✓ MATCH | DB: match_season | 101087ms
+  Q: Có bao nhiêu đội khác nhau tham gia vào các trận đấu ?
+  Gold: select count ( distinct doi ) from tran_dau_trong_mua_giai
+  Gen:  SELECT COUNT(DISTINCT doi) FROM tran_dau_trong_mua_giai
+
+[140/1906] ✓ MATCH | DB: match_season | 96127ms
+  Q: Đếm số lượng các đội khác nhau tham gia vào các trận đấu .
+  Gold: select count ( distinct doi ) from tran_dau_trong_mua_giai
+  Gen:  SELECT COUNT(DISTINCT doi) FROM tran_dau_trong_mua_giai
+
+
+============================================================
+  PROGRESS: 142 items | Success: 142 | EM: 117 (82.4%) | Errors: 0
+============================================================
+
+[144/1906] ✓ MATCH | DB: match_season | 64642ms
+  Q: Liệt kê tên của từng đội .
+  Gold: select ten from doi
+  Gen:  SELECT ten FROM doi
+
+[136/1906] ✗ NO MATCH | DB: match_season | 152912ms
+  Q: Những cầu thủ đến từ các trường đại học UCLA hoặc Duke chơi ở các vị trí khác nhau nào ?
+  Gold: select distinct vi_tri from tran_dau_trong_mua_giai where truong_dai_hoc = "ucla" or truong_dai_hoc = "duke"
+  Gen:  SELECT cau_thu , vi_tri FROM tran_dau_trong_mua_giai WHERE truong_dai_hoc IN ('UCLA', 'Duke')
+
+[145/1906] ✓ MATCH | DB: match_season | 90263ms
+  Q: Hiển thị mùa bóng , cầu thủ và tên quốc gia của cầu thủ đó .
+  Gold: select t2.mua_giai , t2.cau_thu , t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia
+  Gen:  SELECT mua_giai, cau_thu, quoc_gia.ten_quoc_gia FROM tran_dau_trong_mua_giai JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia
+
+
+============================================================
+  PROGRESS: 145 items | Success: 145 | EM: 119 (82.1%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 145 items | Success: 145 | EM: 119 (82.1%) | Errors: 0
+============================================================
+
+[147/1906] ✗ NO MATCH | DB: match_season | 100549ms
+  Q: Những cầu thủ nào đến từ Indonesia ?
+  Gold: select t2.cau_thu from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t1.ten_quoc_gia = "indonesia"
+  Gen:  SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.ten_quoc_gia = 'Indonesia'
+
+[152/1906] ✗ NO MATCH | DB: match_season | 82061ms
+  Q: Ngôn ngữ bản địa chính thức của các quốc gia có cầu thủ đến từ các trường đại học Maryland hoặc Duke là ngôn ngữ nào ?
+  Gold: select t1.ngon_ngu_ban_dia_chinh_thuc from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.truong_dai_hoc = "maryland" or t2.truong_dai_hoc = "duke"
+  Gen:  SELECT quoc_gia.ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.truong_dai_hoc IN ('Maryland', 'Duke')
+
+[146/1906] ✗ NO MATCH | DB: match_season | 112796ms
+  Q: Đối với mỗi cầu thủ , cho biết tên , mùa bóng và quốc gia mà cầu thủ đó đến từ ?
+  Gold: select t2.mua_giai , t2.cau_thu , t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia
+  Gen:  SELECT cau_thu.cau_thu , tran_dau_trong_mua_giai.mua_giai , quoc_gia.ten_quoc_gia FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia
+
+[151/1906] ✗ NO MATCH | DB: match_season | 84139ms
+  Q: Cho biết ngôn ngữ chính thức của các quốc gia có các cầu thủ đến từ đại học Maryland hoặc Duke .
+  Gold: select t1.ngon_ngu_ban_dia_chinh_thuc from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.truong_dai_hoc = "maryland" or t2.truong_dai_hoc = "duke"
+  Gen:  SELECT ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE truong_dai_hoc IN ('Maryland', 'Duke')
+
+
+============================================================
+  PROGRESS: 149 items | Success: 149 | EM: 119 (79.9%) | Errors: 0
+============================================================
+
+[150/1906] ✗ NO MATCH | DB: match_season | 105146ms
+  Q: Cho biết các vị trí khác nhau của các cầu thủ chơi cho đất nước với thủ đô là Dublin .
+  Gold: select distinct t2.vi_tri from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t1.thu_do = "dublin"
+  Gen:  SELECT DISTINCT tran_dau_trong_mua_giai.vi_tri FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.thu_do = 'Dublin'
+
+[154/1906] ✓ MATCH | DB: match_season | 101102ms
+  Q: Đếm số lượng ngôn ngữ chính thức được sử dụng bởi các quốc gia có cầu thủ đảm nhận vị trí ' hậu vệ ' .
+  Gold: select count ( distinct t1.ngon_ngu_ban_dia_chinh_thuc ) from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = "defender"
+  Gen:  SELECT COUNT(DISTINCT quoc_gia.ngon_ngu_ban_dia_chinh_thuc) FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.vi_tri = 'hậu vệ'
+
+[148/1906] ✗ NO MATCH | DB: match_season | 126871ms
+  Q: Những cầu thủ đến từ Indonesia là những cầu thủ nào ?
+  Gold: select t2.cau_thu from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t1.ten_quoc_gia = "indonesia"
+  Gen:  SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.ten_quoc_gia = 'Indonesia'
+
+
+============================================================
+  PROGRESS: 152 items | Success: 152 | EM: 120 (78.9%) | Errors: 0
+============================================================
+
+[155/1906] ✓ MATCH | DB: match_season | 94499ms
+  Q: Hiển thị mùa giải , cầu thủ và tên của các đội mà những cầu thủ đó thuộc về .
+  Gold: select t1.mua_giai , t1.cau_thu , t2.ten from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi
+  Gen:  SELECT tran_dau_trong_mua_giai.mua_giai , tran_dau_trong_mua_giai.cau_thu , doi.ten FROM tran_dau_trong_mua_giai JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi
+
+[149/1906] ✗ NO MATCH | DB: match_season | 150558ms
+  Q: Cho biết các vị trí khác nhau của các cầu thủ đến từ quốc gia với thủ đô là Dublin .
+  Gold: select distinct t2.vi_tri from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t1.thu_do = "dublin"
+  Gen:  SELECT DISTINCT tran_dau_trong_mua_giai.vi_tri FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.thu_do = 'Dublin'
+
+[153/1906] ✓ MATCH | DB: match_season | 141908ms
+  Q: Có bao nhiêu ngôn ngữ chính thức khác nhau được sử dụng bởi các quốc gia có một số cầu thủ chơi ở vị trí ' hậu vệ ' ?
+  Gold: select count ( distinct t1.ngon_ngu_ban_dia_chinh_thuc ) from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = "defender"
+  Gen:  SELECT COUNT(DISTINCT quoc_gia.ngon_ngu_ban_dia_chinh_thuc) FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.vi_tri = 'hậu vệ'
+
+
+============================================================
+  PROGRESS: 155 items | Success: 155 | EM: 122 (78.7%) | Errors: 0
+============================================================
+
+[159/1906] ✓ MATCH | DB: match_season | 92050ms
+  Q: Có bao nhiêu trường đại học riêng biệt có các cầu thủ chơi trong đội ' Columbus Crew ' ?
+  Gold: select count ( distinct t1.truong_dai_hoc ) from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = "columbus crew"
+  Gen:  SELECT COUNT(DISTINCT truong_dai_hoc) FROM tran_dau_trong_mua_giai JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi WHERE doi.ten = 'Columbus Crew'
+
+
+============================================================
+  PROGRESS: 156 items | Success: 156 | EM: 123 (78.8%) | Errors: 0
+============================================================
+
+[161/1906] ✓ MATCH | DB: match_season | 80158ms
+  Q: Hiển thị tất cả các cầu thủ thi đấu cho đội ' Columbus Crew ' và số năm đã chơi của từng cầu thủ .
+  Gold: select t1.cau_thu , t1.so_nam_da_choi from cau_thu as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = "columbus crew"
+  Gen:  SELECT cau_thu.cau_thu, cau_thu.so_nam_da_choi FROM cau_thu JOIN doi ON cau_thu.doi = doi.id_doi WHERE doi.ten = 'Columbus Crew'
+
+[156/1906] ✗ NO MATCH | DB: match_season | 126170ms
+  Q: Cho biết tên của tất cả các cầu thủ khác nhau , cũng như là những mùa giải họ đã tham gia thi đấu và tên đội bóng của họ trong từng mùa giải .
+  Gold: select t1.mua_giai , t1.cau_thu , t2.ten from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi
+  Gen:  SELECT cau_thu.cau_thu, tran_dau_trong_mua_giai.mua_giai, doi.ten FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu AND cau_thu.doi = tran_dau_trong_mua_giai.doi JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi
+
+[158/1906] ✗ NO MATCH | DB: match_season | 121183ms
+  Q: Cho biết vị trí của các cầu thủ trong đội Ryley Goldner .
+  Gold: select t1.vi_tri from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = "ryley goldner"
+  Gen:  SELECT tran_dau_trong_mua_giai.vi_tri FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi WHERE doi.ten = 'Ryley Goldner'
+
+[157/1906] ✓ MATCH | DB: match_season | 129775ms
+  Q: Hiển thị vị trí của các cầu thủ trong đội ' Ryley Goldner ' .
+  Gold: select t1.vi_tri from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = "ryley goldner"
+  Gen:  SELECT vi_tri FROM tran_dau_trong_mua_giai JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi WHERE doi.ten = 'Ryley Goldner'
+
+
+============================================================
+  PROGRESS: 160 items | Success: 160 | EM: 125 (78.1%) | Errors: 0
+============================================================
+
+[160/1906] ✓ MATCH | DB: match_season | 117829ms
+  Q: Đếm số lượng trường đại học khác nhau có các cầu thủ chơi cho Columbus Crew .
+  Gold: select count ( distinct t1.truong_dai_hoc ) from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = "columbus crew"
+  Gen:  SELECT COUNT(DISTINCT truong_dai_hoc) FROM tran_dau_trong_mua_giai JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi WHERE doi.ten = 'Columbus Crew'
+
+[162/1906] ✓ MATCH | DB: match_season | 109181ms
+  Q: Liệt kê các cầu thủ đã chơi cho Columbus Crew và mỗi cầu thủ đã chơi được bao nhiêu năm ?
+  Gold: select t1.cau_thu , t1.so_nam_da_choi from cau_thu as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = "columbus crew"
+  Gen:  SELECT cau_thu.cau_thu, cau_thu.so_nam_da_choi FROM cau_thu JOIN doi ON cau_thu.doi = doi.id_doi WHERE doi.ten = 'Columbus Crew'
+
+
+============================================================
+  PROGRESS: 162 items | Success: 162 | EM: 127 (78.4%) | Errors: 0
+============================================================
+
+[163/1906] ✓ MATCH | DB: match_season | 138363ms
+  Q: Hiển thị vị trí của tất cả các cầu thủ và số lượng cầu thủ chơi ở từng vị trí .
+  Gold: select vi_tri , count ( * ) from tran_dau_trong_mua_giai group by vi_tri
+  Gen:  SELECT vi_tri, COUNT(*) FROM tran_dau_trong_mua_giai GROUP BY vi_tri
+
+[164/1906] ✗ NO MATCH | DB: match_season | 122991ms
+  Q: Có bao nhiêu cầu thủ chơi ở từng vị trí ?
+  Gold: select vi_tri , count ( * ) from tran_dau_trong_mua_giai group by vi_tri
+  Gen:  SELECT vi_tri, COUNT(DISTINCT cau_thu) FROM tran_dau_trong_mua_giai GROUP BY vi_tri
+
+
+============================================================
+  PROGRESS: 164 items | Success: 164 | EM: 128 (78.0%) | Errors: 0
+============================================================
+
+[170/1906] ✓ MATCH | DB: match_season | 78896ms
+  Q: Vị trí phổ biến nhất trong tất cả các mùa thi đấu là vị trí nào ?
+  Gold: select vi_tri from tran_dau_trong_mua_giai group by vi_tri order by count ( * ) desc limit 1
+  Gen:  SELECT vi_tri FROM tran_dau_trong_mua_giai GROUP BY vi_tri ORDER BY COUNT(*) DESC LIMIT 1
+
+[167/1906] ✗ NO MATCH | DB: match_season | 104349ms
+  Q: Liệt kê tất cả các cầu thủ theo thứ tự bảng chữ cái tăng dần của các trường đại học .
+  Gold: select cau_thu from tran_dau_trong_mua_giai order by truong_dai_hoc asc
+  Gen:  SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu ORDER BY tran_dau_trong_mua_giai.truong_dai_hoc ASC
+
+
+============================================================
+  PROGRESS: 166 items | Success: 166 | EM: 129 (77.7%) | Errors: 0
+============================================================
+
+[171/1906] ✓ MATCH | DB: match_season | 97937ms
+  Q: Hiển thị 3 trường đại học đứng đầu về số lượng cầu thủ trong các mùa giải thi đấu .
+  Gold: select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc order by count ( * ) desc limit 3
+  Gen:  SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc ORDER BY COUNT(*) DESC LIMIT 3
+
+[165/1906] ✗ NO MATCH | DB: match_season | 168416ms
+  Q: Hiển thị tên các quốc gia và số lượng cầu thủ tương ứng với từng quốc gia .
+  Gold: select ten_quoc_gia , count ( * ) from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia group by t1.ten_quoc_gia
+  Gen:  SELECT quoc_gia.ten_quoc_gia , COUNT(DISTINCT cau_thu.cau_thu) FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia JOIN cau_thu ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu GROUP BY quoc_gia.id_quoc_gia
+
+[166/1906] ✗ NO MATCH | DB: match_season | 145033ms
+  Q: Có bao nhiêu cầu thủ đến từ mỗi quốc gia ?
+  Gold: select ten_quoc_gia , count ( * ) from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia group by t1.ten_quoc_gia
+  Gen:  SELECT quoc_gia , COUNT(DISTINCT cau_thu.cau_thu) FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu GROUP BY quoc_gia
+
+
+============================================================
+  PROGRESS: 169 items | Success: 169 | EM: 130 (76.9%) | Errors: 0
+============================================================
+
+[169/1906] ✗ NO MATCH | DB: match_season | 146302ms
+  Q: Cho biết vị trí có nhiều cầu thủ nắm giữ nhất trong tất cả các mùa thi đấu ?
+  Gold: select vi_tri from tran_dau_trong_mua_giai group by vi_tri order by count ( * ) desc limit 1
+  Gen:  SELECT vi_tri FROM tran_dau_trong_mua_giai GROUP BY vi_tri ORDER BY COUNT(cau_thu) DESC LIMIT 1
+
+[175/1906] ✓ MATCH | DB: match_season | 64833ms
+  Q: Hiển thị tên của các trường đại học có ít nhất hai cầu thủ theo thứ tự bảng chữ cái giảm dần .
+  Gold: select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc having count ( * ) >= 2 order by truong_dai_hoc desc
+  Gen:  SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc HAVING COUNT(*) >= 2 ORDER BY truong_dai_hoc DESC
+
+[168/1906] ✗ NO MATCH | DB: match_season | 155900ms
+  Q: Cho biết tất cả các cầu thủ đã chơi trong một số mùa giải ? Sắp xếp kết quả theo thứ tự bảng chữ cái tăng dần của các trường đại học mà từng cầu thủ theo học .
+  Gold: select cau_thu from tran_dau_trong_mua_giai order by truong_dai_hoc asc
+  Gen:  SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu ORDER BY tran_dau_trong_mua_giai.truong_dai_hoc ASC
+
+
+============================================================
+  PROGRESS: 172 items | Success: 172 | EM: 131 (76.2%) | Errors: 0
+============================================================
+
+[172/1906] ✗ NO MATCH | DB: match_season | 143363ms
+  Q: Ba trường đại học có nhiều cầu thủ nhất là những trường đại học nào ?
+  Gold: select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc order by count ( * ) desc limit 3
+  Gen:  SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc ORDER BY COUNT(cau_thu) DESC LIMIT 3
+
+[178/1906] ✓ MATCH | DB: match_season | 54919ms
+  Q: Cho biết tên của các đội bóng không có hồ sơ mùa giải thi đấu .
+  Gold: select ten from doi where id_doi not in ( select doi from tran_dau_trong_mua_giai )
+  Gen:  SELECT ten FROM doi WHERE id_doi NOT IN (SELECT doi FROM tran_dau_trong_mua_giai)
+
+[177/1906] ✓ MATCH | DB: match_season | 58255ms
+  Q: Những đội không có hồ sơ mùa giải thi đấu có tên là gì ?
+  Gold: select ten from doi where id_doi not in ( select doi from tran_dau_trong_mua_giai )
+  Gen:  SELECT ten FROM doi WHERE id_doi NOT IN (SELECT doi FROM tran_dau_trong_mua_giai)
+
+[173/1906] ✗ NO MATCH | DB: match_season | 111293ms
+  Q: Hiển thị tên của các trường đại học có ít nhất 2 cầu thủ .
+  Gold: select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc having count ( * ) >= 2
+  Gen:  SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc HAVING COUNT(DISTINCT cau_thu) >= 2
+
+[174/1906] ✓ MATCH | DB: match_season | 110914ms
+  Q: Những trường đại học có hai hoặc nhiều hơn 2 cầu thủ có tên là gì ?
+  Gold: select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc having count ( * ) >= 2
+  Gen:  SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc HAVING COUNT(*) >= 2
+
+[176/1906] ✓ MATCH | DB: match_season | 84702ms
+  Q: Cho biết tên của các trường đại học có hai hoặc nhiều hơn 2 cầu thủ , đồng thời liệt kê kết quả theo thứ tự bảng chữ cái giảm dần .
+  Gold: select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc having count ( * ) >= 2 order by truong_dai_hoc desc
+  Gen:  SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc HAVING COUNT(*) >= 2 ORDER BY truong_dai_hoc DESC
+
+
+============================================================
+  PROGRESS: 178 items | Success: 178 | EM: 135 (75.8%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS: 178 items | Success: 178 | EM: 135 (75.8%) | Errors: 0
+============================================================
+
+[179/1906] ✓ MATCH | DB: match_season | 122028ms
+  Q: Cho biết tên của các quốc gia có cả các cầu thủ chơi ở vị trí ' tiền đạo ' và các cầu thủ chơi ở vị trí ' hậu vệ ' .
+  Gold: select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = "forward" intersect select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = "defender"
+  Gen:  SELECT quoc_gia.ten_quoc_gia FROM tran_dau_trong_mua_giai JOIN quoc_gia ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.vi_tri = 'tiền đạo' INTERSECT SELECT quoc_gia.ten_quoc_gia FROM tran_dau_trong_mua_giai JOIN quoc_gia ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.vi_tri = 'hậu vệ'
+
+[188/1906] ✓ MATCH | DB: perpetrator | 68707ms
+  Q: Cho biết tên của tất cả cá nhân theo thứ tự tăng dần về chiều cao .
+  Gold: select ten from ca_nhan order by chieu_cao asc
+  Gen:  SELECT ten FROM ca_nhan ORDER BY chieu_cao ASC
+
+[180/1906] ✓ MATCH | DB: match_season | 99985ms
+  Q: Những quốc gia có một số cầu thủ chơi ở vị trí ' tiền đạo ' và một số cầu thủ chơi vị trí ' hậu vệ ' có tên là gì ?
+  Gold: select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = "forward" intersect select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = "defender"
+  Gen:  SELECT ten_quoc_gia FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.vi_tri = 'tiền đạo' INTERSECT SELECT ten_quoc_gia FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.vi_tri = 'hậu vệ'
+
+[181/1906] ✓ MATCH | DB: match_season | 96987ms
+  Q: Trường đại học nào có các cầu thủ ở vị trí ' tiền vệ ' cũng như là các cầu thủ ở vị trí ' hậu vệ ' ?
+  Gold: select truong_dai_hoc from tran_dau_trong_mua_giai where vi_tri = "midfielder" intersect select truong_dai_hoc from tran_dau_trong_mua_giai where vi_tri = "defender"
+  Gen:  SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai WHERE vi_tri = 'tiền vệ' INTERSECT SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai WHERE vi_tri = 'hậu vệ'
+
+
+============================================================
+  PROGRESS: 182 items | Success: 182 | EM: 139 (76.4%) | Errors: 0
+============================================================
+
+[182/1906] ✓ MATCH | DB: match_season | 98132ms
+  Q: Cho biết các trường đại học có một số cầu thủ chơi vị trí ' tiền vệ ' và một số cầu thủ chơi vị trí ' hậu vệ ' .
+  Gold: select truong_dai_hoc from tran_dau_trong_mua_giai where vi_tri = "midfielder" intersect select truong_dai_hoc from tran_dau_trong_mua_giai where vi_tri = "defender"
+  Gen:  SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai WHERE vi_tri = 'tiền vệ' INTERSECT SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai WHERE vi_tri = 'hậu vệ'
+
+  [Retry 1/3] 500 Error encountered, retrying in 2s...
+[187/1906] ✗ NO MATCH | DB: perpetrator | 103743ms
+  Q: Cho biết địa điểm nơi kẻ phạm tội đã giết nhiều người nhất sống tại ?
+  Gold: select dia_diem from toi_pham order by so_nguoi_bi_giet desc limit 1
+  Gen:  SELECT T1.que_quan FROM ca_nhan AS T1 JOIN toi_pham AS T2 ON T1.id_ca_nhan = T2.id_ca_nhan GROUP BY T1.id_ca_nhan ORDER BY SUM(T2.so_nguoi_bi_giet) DESC LIMIT 1
+
+
+============================================================
+  PROGRESS: 184 items | Success: 184 | EM: 140 (76.1%) | Errors: 0
+============================================================
+
+[185/1906] ✗ NO MATCH | DB: perpetrator | 113912ms
+  Q: Liệt kê số người bị thương bởi những kẻ tội phạm theo thứ tự tăng dần .
+  Gold: select so_nguoi_bi_thuong from toi_pham order by so_nguoi_bi_thuong asc
+  Gen:  SELECT T1.id_ca_nhan, T1.ten, SUM(T2.so_nguoi_bi_thuong) FROM ca_nhan AS T1 JOIN toi_pham AS T2 ON T1.id_ca_nhan = T2.id_ca_nhan GROUP BY T1.id_ca_nhan ORDER BY SUM(T2.so_nguoi_bi_thuong) ASC
+
+
+============================================================
+  PROGRESS: 185 items | Success: 185 | EM: 140 (75.7%) | Errors: 0
+============================================================
+
+[186/1906] ✗ NO MATCH | DB: perpetrator | 153517ms
+  Q: Số người trung bình bị thương bởi tất cả các kẻ tội phạm là bao nhiêu ?
+  Gold: select avg ( so_nguoi_bi_thuong ) from toi_pham
+  Gen:  SELECT SUM(so_nguoi_bi_thuong) / COUNT(DISTINCT id_ca_nhan) FROM toi_pham
+  Eval Error: Error col: /
+
+[191/1906] ✗ NO MATCH | DB: perpetrator | 84228ms
+  Q: Cho biết tên của kẻ phạm tội có trọng lượng lớn nhất .
+  Gold: select t1.ten from ca_nhan as t1 join toi_pham as t2 on t1.id_ca_nhan = t2.id_ca_nhan order by t1.can_nang desc limit 1
+  Gen:  SELECT ten FROM ca_nhan ORDER BY can_nang DESC LIMIT 1
+
+
+============================================================
+  PROGRESS: 187 items | Success: 187 | EM: 140 (74.9%) | Errors: 0
+============================================================
+
+[189/1906] ✓ MATCH | DB: perpetrator | 108217ms
+  Q: Cho biết tên của những kẻ phạm tội .
+  Gold: select t1.ten from ca_nhan as t1 join toi_pham as t2 on t1.id_ca_nhan = t2.id_ca_nhan
+  Gen:  SELECT ca_nhan.ten FROM ca_nhan JOIN toi_pham ON ca_nhan.id_ca_nhan = toi_pham.id_ca_nhan
+

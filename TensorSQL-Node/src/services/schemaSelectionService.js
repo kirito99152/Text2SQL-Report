@@ -3,7 +3,7 @@ const aiService = require('./aiService');
 const prompts = require('../prompts');
 const promptsRetry = require('../prompts_retry');
 
-const MAX_TABLES = 15;
+const MAX_TABLES = 10;
 
 class SchemaSelectionService {
 

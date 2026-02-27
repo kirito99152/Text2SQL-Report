@@ -1,24 +1,16 @@
 [
   {
     "url": "http://94.101.98.245/generate_output",
-    "status": "idle",
-    "completed": 4211,
+    "status": "down",
+    "completed": 5002,
     "activeRequests": [],
-    "isHealthy": true,
+    "isHealthy": false,
     "maxConcurrent": 1
-  },
-  {
-    "url": "http://149.36.1.166/generate_output",
-    "status": "idle",
-    "completed": 7091,
-    "activeRequests": [],
-    "isHealthy": true,
-    "maxConcurrent": 4
   },
   {
     "url": "http://149.36.1.19/generate_output",
     "status": "down",
-    "completed": 2983,
+    "completed": 5642,
     "activeRequests": [],
     "isHealthy": false,
     "maxConcurrent": 4
@@ -26,7 +18,7 @@
   {
     "url": "http://149.36.0.108/generate_output",
     "status": "down",
-    "completed": 3669,
+    "completed": 6359,
     "activeRequests": [],
     "isHealthy": false,
     "maxConcurrent": 4
@@ -34,7 +26,15 @@
   {
     "url": "http://149.36.0.67/generate_output",
     "status": "down",
-    "completed": 6579,
+    "completed": 9292,
+    "activeRequests": [],
+    "isHealthy": false,
+    "maxConcurrent": 4
+  },
+  {
+    "url": "http://149.36.1.166/generate_output",
+    "status": "down",
+    "completed": 9985,
     "activeRequests": [],
     "isHealthy": false,
     "maxConcurrent": 4

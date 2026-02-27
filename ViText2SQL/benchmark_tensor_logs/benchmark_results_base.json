@@ -1,0 +1,1562 @@
+[
+  {
+    "id": 31,
+    "db_id": "book_2",
+    "question": "Có bao nhiêu cuốn sách ?",
+    "gold_sql": "select count ( * ) from sach",
+    "generated_sql": "SELECT COUNT(*) FROM sach",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 68529
+  },
+  {
+    "id": 32,
+    "db_id": "book_2",
+    "question": "Liệt kê tác giả của các cuốn sách theo thứ tự bảng chữ cái tăng dần .",
+    "gold_sql": "select tac_gia from sach order by tac_gia asc",
+    "generated_sql": "SELECT tac_gia FROM sach ORDER BY tac_gia ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 84579
+  },
+  {
+    "id": 33,
+    "db_id": "book_2",
+    "question": "Liệt kê tiêu đề của các cuốn sách theo thứ tự tăng dần về số lượng phát hành .",
+    "gold_sql": "select tieu_de from sach order by so_luong_phat_hanh asc",
+    "generated_sql": "SELECT sach.tieu_de, sach.so_luong_phat_hanh FROM sach ORDER BY sach.so_luong_phat_hanh ASC",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 86334
+  },
+  {
+    "id": 34,
+    "db_id": "book_2",
+    "question": "Tiêu đề của những cuốn sách mà tác giả không phải là ' Elaine Lee ' ?",
+    "gold_sql": "select tieu_de from sach where tac_gia != \"elaine lee\"",
+    "generated_sql": "SELECT sach.tieu_de FROM sach WHERE sach.tac_gia != 'Elaine Lee'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 65239
+  },
+  {
+    "id": 35,
+    "db_id": "book_2",
+    "question": "Cho biết tiêu đề và số lượng phát hành của từng cuốn sách .",
+    "gold_sql": "select tieu_de , so_luong_phat_hanh from sach",
+    "generated_sql": "SELECT sach.tieu_de, sach.so_luong_phat_hanh FROM sach",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 64856
+  },
+  {
+    "id": 36,
+    "db_id": "book_2",
+    "question": "Liệt kê ngày xuất bản của các cuốn sách theo thứ tự giá bán giảm dần .",
+    "gold_sql": "select ngay_xuat_ban from an_pham order by gia_ban desc",
+    "generated_sql": "SELECT an_pham.ngay_xuat_ban FROM sach JOIN an_pham ON sach.id_sach = an_pham.id_sach ORDER BY an_pham.gia_ban DESC",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 71066
+  },
+  {
+    "id": 37,
+    "db_id": "book_2",
+    "question": "Liệt kê các nhà xuất bản khác nhau của các ấn phẩm có giá cao hơn 5000000 .",
+    "gold_sql": "select distinct nha_xuat_ban from an_pham where gia_ban > 5000000",
+    "generated_sql": "SELECT DISTINCT nha_xuat_ban FROM an_pham WHERE gia_ban > 5000000",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 76396
+  },
+  {
+    "id": 38,
+    "db_id": "book_2",
+    "question": "Liệt kê nhà xuất bản của ấn phẩm có giá cao nhất .",
+    "gold_sql": "select nha_xuat_ban from an_pham order by gia_ban desc limit 1",
+    "generated_sql": "SELECT nha_xuat_ban FROM an_pham ORDER BY gia_ban DESC LIMIT 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 72041
+  },
+  {
+    "id": 39,
+    "db_id": "book_2",
+    "question": "Liệt kê ngày xuất bản của 3 ấn phẩm với giá thấp nhất .",
+    "gold_sql": "select ngay_xuat_ban from an_pham order by gia_ban asc limit 3",
+    "generated_sql": "SELECT an_pham.ngay_xuat_ban FROM an_pham ORDER BY an_pham.gia_ban ASC LIMIT 3",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 46735
+  },
+  {
+    "id": 40,
+    "db_id": "book_2",
+    "question": "Hiển thị tiêu đề và ngày xuất bản của các cuốn sách .",
+    "gold_sql": "select t1.tieu_de , t2.ngay_xuat_ban from sach as t1 join an_pham as t2 on t1.id_sach = t2.id_sach",
+    "generated_sql": "SELECT sach.tieu_de, an_pham.ngay_xuat_ban FROM sach JOIN an_pham ON sach.id_sach = an_pham.id_sach",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 52296
+  },
+  {
+    "id": 41,
+    "db_id": "book_2",
+    "question": "Hiển thị các tác giả đã xuất bản một cuốn sách có giá hơn 4000000 .",
+    "gold_sql": "select t1.tac_gia from sach as t1 join an_pham as t2 on t1.id_sach = t2.id_sach where t2.gia_ban > 4000000",
+    "generated_sql": "SELECT sach.tac_gia FROM sach JOIN an_pham ON sach.id_sach = an_pham.id_sach WHERE an_pham.gia_ban > 4000000",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 64029
+  },
+  {
+    "id": 42,
+    "db_id": "book_2",
+    "question": "Hiển thị tên sách theo thứ tự giảm dần của giá xuất bản .",
+    "gold_sql": "select t1.tieu_de from sach as t1 join an_pham as t2 on t1.id_sach = t2.id_sach order by t2.gia_ban desc",
+    "generated_sql": "SELECT sach.tieu_de FROM sach JOIN an_pham ON sach.id_sach = an_pham.id_sach ORDER BY an_pham.gia_ban DESC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 58259
+  },
+  {
+    "id": 43,
+    "db_id": "book_2",
+    "question": "Hiển thị các nhà xuất bản có nhiều hơn một ấn phẩm .",
+    "gold_sql": "select nha_xuat_ban from an_pham group by nha_xuat_ban having count ( * ) > 1",
+    "generated_sql": "SELECT nha_xuat_ban FROM an_pham GROUP BY nha_xuat_ban HAVING COUNT(*) > 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 71331
+  },
+  {
+    "id": 44,
+    "db_id": "book_2",
+    "question": "Hiển thị các nhà xuất bản khác nhau cùng với số lượng ấn phẩm mà họ có .",
+    "gold_sql": "select nha_xuat_ban , count ( * ) from an_pham group by nha_xuat_ban",
+    "generated_sql": "SELECT an_pham.nha_xuat_ban, COUNT(*) FROM an_pham GROUP BY an_pham.nha_xuat_ban",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 53801
+  },
+  {
+    "id": 45,
+    "db_id": "book_2",
+    "question": "Hiển thị ngày xuất bản phổ biến nhất .",
+    "gold_sql": "select ngay_xuat_ban from an_pham group by ngay_xuat_ban order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT ngay_xuat_ban FROM an_pham GROUP BY ngay_xuat_ban ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 62261
+  },
+  {
+    "id": 46,
+    "db_id": "book_2",
+    "question": "Liệt kê các tác giả đã viết nhiều hơn một cuốn sách .",
+    "gold_sql": "select tac_gia from sach group by tac_gia having count ( * ) > 1",
+    "generated_sql": "SELECT tac_gia FROM sach GROUP BY tac_gia HAVING COUNT(*) > 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 64249
+  },
+  {
+    "id": 47,
+    "db_id": "book_2",
+    "question": "Liệt kê tên những quyển sách không được xuất bản .",
+    "gold_sql": "select tieu_de from sach where id_sach not in ( select id_sach from an_pham )",
+    "generated_sql": "SELECT tieu_de FROM sach WHERE id_sach NOT IN (SELECT id_sach FROM an_pham)",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 53608
+  },
+  {
+    "id": 48,
+    "db_id": "book_2",
+    "question": "Hiển thị các nhà xuất bản có ấn phẩm với giá cao hơn 10000000 và ấn phẩm với giá thấp hơn 5000000 .",
+    "gold_sql": "select nha_xuat_ban from an_pham where gia_ban > 10000000 intersect select nha_xuat_ban from an_pham where gia_ban < 5000000",
+    "generated_sql": "SELECT nha_xuat_ban FROM an_pham WHERE gia_ban > 10000000 GROUP BY nha_xuat_ban INTERSECT SELECT nha_xuat_ban FROM an_pham WHERE gia_ban < 5000000 GROUP BY nha_xuat_ban",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 92681
+  },
+  {
+    "id": 49,
+    "db_id": "book_2",
+    "question": "Có bao nhiêu giá trị khác nhau cho ngày xuất bản các ấn phẩm ?",
+    "gold_sql": "select count ( distinct ngay_xuat_ban ) from an_pham",
+    "generated_sql": "SELECT COUNT(DISTINCT an_pham.ngay_xuat_ban) FROM an_pham",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 46172
+  },
+  {
+    "id": 50,
+    "db_id": "book_2",
+    "question": "Có bao nhiêu giá trị khác nhau cho ngày xuất bản có trong hồ sơ ?",
+    "gold_sql": "select count ( distinct ngay_xuat_ban ) from an_pham",
+    "generated_sql": "SELECT COUNT(DISTINCT ngay_xuat_ban) FROM an_pham",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 45535
+  },
+  {
+    "id": 51,
+    "db_id": "book_2",
+    "question": "Hiển thị giá của các ấn phẩm có nhà xuất bản là ' Person ' hoặc ' Wiley ' .",
+    "gold_sql": "select gia_ban from an_pham where nha_xuat_ban = \"person\" or nha_xuat_ban = \"wiley\"",
+    "generated_sql": "SELECT gia_ban FROM an_pham WHERE nha_xuat_ban = 'Person' OR nha_xuat_ban = 'Wiley'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 49320
+  },
+  {
+    "id": 52,
+    "db_id": "company_1",
+    "question": "Liệt kê tên của tất cả các bộ phận và sắp xếp kết quả theo ngày bắt đầu của họ .",
+    "gold_sql": "select ten_bo_phan from bo_phan order by ngay_bat_dau_quan_ly",
+    "generated_sql": "SELECT ten_bo_phan FROM bo_phan ORDER BY ngay_bat_dau_quan_ly ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 47640
+  },
+  {
+    "id": 53,
+    "db_id": "company_1",
+    "question": "Tìm tên của tất cả những người phụ thuộc có quan hệ vợ / chồng với một số nhân viên .",
+    "gold_sql": "select ten_nguoi_phu_thuoc from nguoi_phu_thuoc where moi_quan_he = \"spouse\"",
+    "generated_sql": "SELECT ten_nguoi_phu_thuoc FROM nguoi_phu_thuoc WHERE moi_quan_he = 'vợ/chồng'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 54124
+  },
+  {
+    "id": 54,
+    "db_id": "company_1",
+    "question": "Có bao nhiêu người phụ thuộc có giới tính nữ ?",
+    "gold_sql": "select count ( * ) from nguoi_phu_thuoc where gioi_tinh = \"f\"",
+    "generated_sql": "SELECT COUNT(*) FROM nguoi_phu_thuoc WHERE gioi_tinh = 'Nữ'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 46845
+  },
+  {
+    "id": 55,
+    "db_id": "company_1",
+    "question": "Tìm tên của những bộ phận được đặt tại Houston .",
+    "gold_sql": "select t1.ten_bo_phan from bo_phan as t1 join dia_diem_cua_bo_phan as t2 on t1.ma_so_bo_phan = t2.ma_so_bo_phan where t2.dia_diem_bo_phan = \"houston\"",
+    "generated_sql": "SELECT bo_phan.ten_bo_phan FROM bo_phan JOIN dia_diem_cua_bo_phan ON bo_phan.ma_so_bo_phan = dia_diem_cua_bo_phan.ma_so_bo_phan WHERE dia_diem_bo_phan = 'Houston'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 69091
+  },
+  {
+    "id": 56,
+    "db_id": "company_1",
+    "question": "Cho biết tên và họ của những nhân viên kiếm được hơn 30000 tiền lương .",
+    "gold_sql": "select ten , ho from nhan_vien where luong > 30000",
+    "generated_sql": "SELECT ten, ho FROM nhan_vien WHERE luong > 30000",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 44143
+  },
+  {
+    "id": 57,
+    "db_id": "company_1",
+    "question": "Tìm số lượng các nhân viên có mức lương thấp hơn 50000 ở mỗi giới tính .",
+    "gold_sql": "select count ( * ) , gioi_tinh from nhan_vien where luong < 50000 group by gioi_tinh",
+    "generated_sql": "SELECT COUNT(*) FROM nhan_vien WHERE luong < 50000 GROUP BY gioi_tinh",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 52836
+  },
+  {
+    "id": 58,
+    "db_id": "company_1",
+    "question": "Liệt kê tên , họ và địa chỉ của tất cả các nhân viên theo thứ tự tăng dần về ngày sinh của từng nhân viên .",
+    "gold_sql": "select ten , ho , dia_chi from nhan_vien order by ngay_sinh",
+    "generated_sql": "SELECT ten, ho, dia_chi FROM nhan_vien ORDER BY ngay_sinh ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 42208
+  },
+  {
+    "id": 59,
+    "db_id": "course_teach",
+    "question": "Có bao nhiêu giáo viên ?",
+    "gold_sql": "select count ( * ) from giao_vien",
+    "generated_sql": "SELECT COUNT(*) FROM giao_vien",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 50021
+  },
+  {
+    "id": 60,
+    "db_id": "course_teach",
+    "question": "Tổng số giáo viên là bao nhiêu ?",
+    "gold_sql": "select count ( * ) from giao_vien",
+    "generated_sql": "SELECT COUNT(*) FROM giao_vien",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 41234
+  },
+  {
+    "id": 61,
+    "db_id": "course_teach",
+    "question": "Cho biết tên của giáo viên và sắp xếp kết quả theo thứ tự tăng dần về độ tuổi .",
+    "gold_sql": "select ten from giao_vien order by tuoi asc",
+    "generated_sql": "SELECT ten FROM giao_vien ORDER BY tuoi ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 43181
+  },
+  {
+    "id": 62,
+    "db_id": "course_teach",
+    "question": "Liệt kê tên của các giáo viên theo thứ tự tăng dần về độ tuổi của từng người .",
+    "gold_sql": "select ten from giao_vien order by tuoi asc",
+    "generated_sql": "SELECT ten FROM giao_vien ORDER BY tuoi ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 36819
+  },
+  {
+    "id": 63,
+    "db_id": "course_teach",
+    "question": "Liệt kê độ tuổi và quê hương của tất cả các giáo viên",
+    "gold_sql": "select tuoi , que_quan from giao_vien",
+    "generated_sql": "SELECT giao_vien.tuoi, giao_vien.que_quan FROM giao_vien",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 46307
+  },
+  {
+    "id": 64,
+    "db_id": "course_teach",
+    "question": "Cho biết độ tuổi và quê hương của mỗi giáo viên .",
+    "gold_sql": "select tuoi , que_quan from giao_vien",
+    "generated_sql": "SELECT giao_vien.tuoi, giao_vien.que_quan FROM giao_vien",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 47688
+  },
+  {
+    "id": 65,
+    "db_id": "course_teach",
+    "question": "Liệt kê tên của các giáo viên có quê hương không phải là ' Khu đô thị Little Lever ' .",
+    "gold_sql": "select ten from giao_vien where que_quan != \"little lever urban distric\"",
+    "generated_sql": "SELECT ten FROM giao_vien WHERE que_quan != 'Khu đô thị Little Lever'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 47220
+  },
+  {
+    "id": 66,
+    "db_id": "course_teach",
+    "question": "Các giáo viên có quê hương không phải ở ' Khu đô thị Little Lever ' có tên là gì ?",
+    "gold_sql": "select ten from giao_vien where que_quan != \"little lever urban distric\"",
+    "generated_sql": "SELECT ten FROM giao_vien WHERE que_quan != 'Khu đô thị Little Lever'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 49155
+  },
+  {
+    "id": 67,
+    "db_id": "course_teach",
+    "question": "Hiển thị tên của các giáo viên ở độ tuổi 32 hoặc 33 ?",
+    "gold_sql": "select ten from giao_vien where tuoi = 32 or tuoi = 33",
+    "generated_sql": "SELECT ten FROM giao_vien WHERE tuoi = '32' OR tuoi = '33'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 64144
+  },
+  {
+    "id": 68,
+    "db_id": "course_teach",
+    "question": "Tên của các giáo viên ở độ tuổi 32 hoặc 33 là gì ?",
+    "gold_sql": "select ten from giao_vien where tuoi = 32 or tuoi = 33",
+    "generated_sql": "SELECT ten FROM giao_vien WHERE tuoi = '32' OR tuoi = '33'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 50239
+  },
+  {
+    "id": 69,
+    "db_id": "course_teach",
+    "question": "Quê hương của giáo viên trẻ nhất là ở đâu ?",
+    "gold_sql": "select que_quan from giao_vien order by tuoi asc limit 1",
+    "generated_sql": "SELECT que_quan FROM giao_vien ORDER BY tuoi ASC LIMIT 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 60436
+  },
+  {
+    "id": 70,
+    "db_id": "course_teach",
+    "question": "Giáo viên trẻ nhất từ đâu đến ?",
+    "gold_sql": "select que_quan from giao_vien order by tuoi asc limit 1",
+    "generated_sql": "SELECT ten, que_quan FROM giao_vien ORDER BY tuoi ASC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 71372
+  },
+  {
+    "id": 71,
+    "db_id": "course_teach",
+    "question": "Hiển thị những quê hương khác nhau của các giáo viên và số lượng giáo viên đến từ mỗi quê hương .",
+    "gold_sql": "select que_quan , count ( * ) from giao_vien group by que_quan",
+    "generated_sql": "SELECT que_quan, COUNT(*) FROM giao_vien GROUP BY que_quan",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 56403
+  },
+  {
+    "id": 72,
+    "db_id": "course_teach",
+    "question": "mỗi quê hương có bao nhiêu giáo viên .",
+    "gold_sql": "select que_quan , count ( * ) from giao_vien group by que_quan",
+    "generated_sql": "SELECT que_quan, COUNT(*) FROM giao_vien GROUP BY que_quan",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 56152
+  },
+  {
+    "id": 73,
+    "db_id": "course_teach",
+    "question": "Liệt kê quê hương phổ biến nhất mà các giáo viên đến từ .",
+    "gold_sql": "select que_quan from giao_vien group by que_quan order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT que_quan FROM giao_vien GROUP BY que_quan ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 58549
+  },
+  {
+    "id": 74,
+    "db_id": "course_teach",
+    "question": "Nơi nào là quê hương của nhiều giáo viên nhất ?",
+    "gold_sql": "select que_quan from giao_vien group by que_quan order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT que_quan FROM giao_vien GROUP BY que_quan ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 64461
+  },
+  {
+    "id": 75,
+    "db_id": "course_teach",
+    "question": "Hiển thị những nơi là quê hương của ít nhất hai giáo viên .",
+    "gold_sql": "select que_quan from giao_vien group by que_quan having count ( * ) >= 2",
+    "generated_sql": "SELECT que_quan FROM giao_vien GROUP BY que_quan HAVING COUNT(*) >= 2",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 55712
+  },
+  {
+    "id": 76,
+    "db_id": "course_teach",
+    "question": "Những nơi nào là quê hương của ít nhất 2 giáo viên ?",
+    "gold_sql": "select que_quan from giao_vien group by que_quan having count ( * ) >= 2",
+    "generated_sql": "SELECT que_quan FROM giao_vien GROUP BY que_quan HAVING COUNT(*) >= 2",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 58023
+  },
+  {
+    "id": 77,
+    "db_id": "course_teach",
+    "question": "Hiển thị tên của tất cả các giáo viên cũng như là các khoá học họ được sắp xếp để dạy .",
+    "gold_sql": "select t3.ten , t2.khoa_hoc from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien",
+    "generated_sql": "SELECT T1.ten, T3.khoa_hoc FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien JOIN khoa_hoc AS T3 ON T2.id_khoa_hoc = T3.id_khoa_hoc",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 78753
+  },
+  {
+    "id": 78,
+    "db_id": "course_teach",
+    "question": "Tên của các giáo viên và các khoá học họ đã dạy ?",
+    "gold_sql": "select t3.ten , t2.khoa_hoc from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien",
+    "generated_sql": "SELECT T1.ten, T3.khoa_hoc FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien JOIN khoa_hoc AS T3 ON T2.id_khoa_hoc = T3.id_khoa_hoc",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 71685
+  },
+  {
+    "id": 79,
+    "db_id": "course_teach",
+    "question": "Hiển thị tên của các giáo viên cũng như là các khoá học họ được sắp xếp để dạy theo thứ tự bảng chữ cái tăng dần của tên giáo viên .",
+    "gold_sql": "select t3.ten , t2.khoa_hoc from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien order by t3.ten",
+    "generated_sql": "SELECT giao_vien.ten, khoa_hoc.khoa_hoc FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien JOIN khoa_hoc ON sap_xep_khoa_hoc.id_khoa_hoc = khoa_hoc.id_khoa_hoc ORDER BY giao_vien.ten ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 65350
+  },
+  {
+    "id": 80,
+    "db_id": "course_teach",
+    "question": "Hiển thị tên của các giáo viên và các khoá học họ dạy theo thứ tự bảng chữ cái tăng dần của tên giáo viên",
+    "gold_sql": "select t3.ten , t2.khoa_hoc from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien order by t3.ten",
+    "generated_sql": "SELECT T1.ten, T3.khoa_hoc FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien JOIN khoa_hoc AS T3 ON T2.id_khoa_hoc = T3.id_khoa_hoc ORDER BY T1.ten ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 68482
+  },
+  {
+    "id": 81,
+    "db_id": "course_teach",
+    "question": "Hiển thị tên của các giáo viên đã giảng dạy các khoá học ' Toán ' .",
+    "gold_sql": "select t3.ten from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien where t2.khoa_hoc = \"math\"",
+    "generated_sql": "SELECT T1.ten FROM giao_vien AS T1 JOIN sap_xep_khoa_hoc AS T2 ON T1.id_giao_vien = T2.id_giao_vien JOIN khoa_hoc AS T3 ON T2.id_khoa_hoc = T3.id_khoa_hoc WHERE T3.khoa_hoc = 'Toán'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 75862
+  },
+  {
+    "id": 82,
+    "db_id": "course_teach",
+    "question": "Tên của những giáo viên dạy bộ môn ' Toán ' ?",
+    "gold_sql": "select t3.ten from sap_xep_khoa_hoc as t1 join khoa_hoc as t2 on t1.id_khoa_hoc = t2.id_khoa_hoc join giao_vien as t3 on t1.id_giao_vien = t3.id_giao_vien where t2.khoa_hoc = \"math\"",
+    "generated_sql": "SELECT giao_vien.ten FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien JOIN khoa_hoc ON sap_xep_khoa_hoc.id_khoa_hoc = khoa_hoc.id_khoa_hoc WHERE khoa_hoc.khoa_hoc = 'Toán'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 78229
+  },
+  {
+    "id": 83,
+    "db_id": "course_teach",
+    "question": "Hiển thị tên của giáo viên và số lượng các khoá học họ dạy .",
+    "gold_sql": "select t2.ten , count ( * ) from sap_xep_khoa_hoc as t1 join giao_vien as t2 on t1.id_giao_vien = t2.id_giao_vien group by t2.ten",
+    "generated_sql": "SELECT giao_vien.ten, COUNT(*) FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien GROUP BY giao_vien.id_giao_vien",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 87225
+  },
+  {
+    "id": 84,
+    "db_id": "course_teach",
+    "question": "Cho biết tên của các giáo viên cũng như là họ đã dạy bao nhiêu khoá học ?",
+    "gold_sql": "select t2.ten , count ( * ) from sap_xep_khoa_hoc as t1 join giao_vien as t2 on t1.id_giao_vien = t2.id_giao_vien group by t2.ten",
+    "generated_sql": "SELECT giao_vien.ten, COUNT(*) FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien GROUP BY giao_vien.id_giao_vien",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 69684
+  },
+  {
+    "id": 85,
+    "db_id": "course_teach",
+    "question": "Hiển thị tên của giáo viên dạy ít nhất hai khoá học .",
+    "gold_sql": "select t2.ten from sap_xep_khoa_hoc as t1 join giao_vien as t2 on t1.id_giao_vien = t2.id_giao_vien group by t2.ten having count ( * ) >= 2",
+    "generated_sql": "SELECT ten FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien GROUP BY giao_vien.id_giao_vien HAVING COUNT(*) >= 2",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 72209
+  },
+  {
+    "id": 86,
+    "db_id": "course_teach",
+    "question": "Tên của các giáo viên dạy ít nhất hai khoá học",
+    "gold_sql": "select t2.ten from sap_xep_khoa_hoc as t1 join giao_vien as t2 on t1.id_giao_vien = t2.id_giao_vien group by t2.ten having count ( * ) >= 2",
+    "generated_sql": "SELECT giao_vien.ten FROM giao_vien JOIN sap_xep_khoa_hoc ON giao_vien.id_giao_vien = sap_xep_khoa_hoc.id_giao_vien GROUP BY giao_vien.id_giao_vien HAVING COUNT(*) >= 2",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 59081
+  },
+  {
+    "id": 87,
+    "db_id": "course_teach",
+    "question": "Liệt kê tên của các giáo viên chưa được sắp xếp để dạy các khoá học .",
+    "gold_sql": "select ten from giao_vien where id_giao_vien not in ( select id_giao_vien from sap_xep_khoa_hoc )",
+    "generated_sql": "SELECT ten FROM giao_vien WHERE id_giao_vien NOT IN (SELECT id_giao_vien FROM sap_xep_khoa_hoc)",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 64032
+  },
+  {
+    "id": 88,
+    "db_id": "course_teach",
+    "question": "Tên của các giáo viên chưa được sắp xếp dạy khoá học nào",
+    "gold_sql": "select ten from giao_vien where id_giao_vien not in ( select id_giao_vien from sap_xep_khoa_hoc )",
+    "generated_sql": "SELECT ten FROM giao_vien WHERE id_giao_vien NOT IN (SELECT id_giao_vien FROM sap_xep_khoa_hoc)",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 61678
+  },
+  {
+    "id": 89,
+    "db_id": "decoration_competition",
+    "question": "Có bao nhiêu thành viên tất cả ?",
+    "gold_sql": "select count ( * ) from thanh_vien",
+    "generated_sql": "SELECT COUNT(*) FROM thanh_vien",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 59192
+  },
+  {
+    "id": 90,
+    "db_id": "decoration_competition",
+    "question": "Liệt kê tên của tất cả các thành viên theo thứ tự bảng chữ cái tăng dần .",
+    "gold_sql": "select ten from thanh_vien order by ten asc",
+    "generated_sql": "SELECT ten FROM thanh_vien ORDER BY ten ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 61181
+  },
+  {
+    "id": 91,
+    "db_id": "decoration_competition",
+    "question": "Cho biết tên và quốc gia của các thành viên .",
+    "gold_sql": "select ten , quoc_gia from thanh_vien",
+    "generated_sql": "SELECT ten, quoc_gia FROM thanh_vien",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 66087
+  },
+  {
+    "id": 92,
+    "db_id": "decoration_competition",
+    "question": "Hiển thị tên của các thành viên đến từ ' Hoa Kỳ ' hoặc ' Canada ' .",
+    "gold_sql": "select ten from thanh_vien where quoc_gia = \"united states\" or quoc_gia = \"canada\"",
+    "generated_sql": "SELECT ten FROM thanh_vien WHERE quoc_gia = 'Hoa Kỳ' OR quoc_gia = 'Canada'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 57880
+  },
+  {
+    "id": 93,
+    "db_id": "decoration_competition",
+    "question": "Hiển thị tên của các quốc gia khác nhau và số lượng thành viên đến từ mỗi quốc gia .",
+    "gold_sql": "select quoc_gia , count ( * ) from thanh_vien group by quoc_gia",
+    "generated_sql": "SELECT quoc_gia, COUNT(*) FROM thanh_vien GROUP BY quoc_gia",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 64025
+  },
+  {
+    "id": 94,
+    "db_id": "decoration_competition",
+    "question": "Quốc gia nào là nơi có nhiều thành viên nhất đến từ đó ?",
+    "gold_sql": "select quoc_gia from thanh_vien group by quoc_gia order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT quoc_gia FROM thanh_vien GROUP BY quoc_gia ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 71259
+  },
+  {
+    "id": 95,
+    "db_id": "decoration_competition",
+    "question": "Cho biết tên của những quốc gia có nhiều hơn hai thành viên ?",
+    "gold_sql": "select quoc_gia from thanh_vien group by quoc_gia having count ( * ) > 2",
+    "generated_sql": "SELECT quoc_gia FROM thanh_vien GROUP BY quoc_gia HAVING COUNT(*) > 2",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 54893
+  },
+  {
+    "id": 96,
+    "db_id": "decoration_competition",
+    "question": "Hiển thị tên người lãnh đạo và địa điểm của các trường đại học .",
+    "gold_sql": "select ten_lanh_dao , dia_diem_truong_dai_hoc from truong_dai_hoc",
+    "generated_sql": "SELECT ten_lanh_dao, dia_diem_truong_dai_hoc FROM truong_dai_hoc",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 58654
+  },
+  {
+    "id": 97,
+    "db_id": "decoration_competition",
+    "question": "Hiển thị tên của các thành viên và tên của các trường đại học mà họ đang theo học .",
+    "gold_sql": "select t2.ten , t1.ten from truong_dai_hoc as t1 join thanh_vien as t2 on t1.id_dai_hoc = t2.id_dai_hoc",
+    "generated_sql": "SELECT thanh_vien.ten, truong_dai_hoc.ten FROM thanh_vien JOIN truong_dai_hoc ON thanh_vien.id_dai_hoc = truong_dai_hoc.id_dai_hoc",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 61129
+  },
+  {
+    "id": 98,
+    "db_id": "decoration_competition",
+    "question": "Liêt kê tên của các thành viên và địa điểm của các trường đại học mà họ theo học theo thứ tự bảng chữ cái tăng dần của tên thành viên .",
+    "gold_sql": "select t2.ten , t1.dia_diem_truong_dai_hoc from truong_dai_hoc as t1 join thanh_vien as t2 on t1.id_dai_hoc = t2.id_dai_hoc order by t2.ten asc",
+    "generated_sql": "SELECT thanh_vien.ten, truong_dai_hoc.dia_diem_truong_dai_hoc FROM thanh_vien JOIN truong_dai_hoc ON thanh_vien.id_dai_hoc = truong_dai_hoc.id_dai_hoc ORDER BY thanh_vien.ten ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 55618
+  },
+  {
+    "id": 99,
+    "db_id": "decoration_competition",
+    "question": "Hiển thị tên những người lãnh đạo của các trường đại học có liên kết với các thành viên đến từ quốc gia Canada .",
+    "gold_sql": "select distinct t1.ten_lanh_dao from truong_dai_hoc as t1 join thanh_vien as t2 on t1.id_dai_hoc = t2.id_dai_hoc where t2.quoc_gia = \"canada\"",
+    "generated_sql": "SELECT truong_dai_hoc.ten_lanh_dao FROM truong_dai_hoc JOIN thanh_vien ON truong_dai_hoc.id_dai_hoc = thanh_vien.id_dai_hoc WHERE thanh_vien.quoc_gia = 'Canada'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 61214
+  },
+  {
+    "id": 100,
+    "db_id": "decoration_competition",
+    "question": "Hiển thị tên của các thành viên và những chủ đề trang trí mà họ có .",
+    "gold_sql": "select t1.ten , t2.chu_de_trang_tri from thanh_vien as t1 join vong as t2 on t1.id_thanh_vien = t2.id_thanh_vien",
+    "generated_sql": "SELECT thanh_vien.ten, vong.chu_de_trang_tri FROM thanh_vien JOIN vong ON thanh_vien.id_thanh_vien = vong.id_thanh_vien",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 69453
+  },
+  {
+    "id": 101,
+    "db_id": "decoration_competition",
+    "question": "Hiển thị tên của các thành viên đã đạt được thứ hạng cao hơn 3 .",
+    "gold_sql": "select t1.ten from thanh_vien as t1 join vong as t2 on t1.id_thanh_vien = t2.id_thanh_vien where t2.xep_hang_tung_vong > 3",
+    "generated_sql": "SELECT thanh_vien.ten FROM thanh_vien JOIN vong ON thanh_vien.id_thanh_vien = vong.id_thanh_vien WHERE vong.xep_hang_tung_vong > 3",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 96695
+  },
+  {
+    "id": 102,
+    "db_id": "decoration_competition",
+    "question": "Hiển thị tên của các thành viên theo thứ tự tăng dần về thứ hạng của mỗi người .",
+    "gold_sql": "select t1.ten from thanh_vien as t1 join vong as t2 on t1.id_thanh_vien = t2.id_thanh_vien order by xep_hang_tung_vong asc",
+    "generated_sql": "SELECT thanh_vien.ten FROM thanh_vien JOIN vong ON thanh_vien.id_thanh_vien = vong.id_thanh_vien ORDER BY vong.xep_hang_tung_vong ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 170887
+  },
+  {
+    "id": 103,
+    "db_id": "decoration_competition",
+    "question": "Liệt kê tên của các thành viên không tham gia vào bất kỳ vòng thi nào .",
+    "gold_sql": "select ten from thanh_vien where id_thanh_vien not in ( select id_thanh_vien from vong )",
+    "generated_sql": "SELECT ten FROM thanh_vien WHERE id_thanh_vien NOT IN (SELECT id_thanh_vien FROM vong)",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 67013
+  },
+  {
+    "id": 104,
+    "db_id": "election_representative",
+    "question": "Có bao nhiêu cuộc bầu cử ?",
+    "gold_sql": "select count ( * ) from cuoc_bau_cu",
+    "generated_sql": "SELECT COUNT(*) FROM cuoc_bau_cu",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 66647
+  },
+  {
+    "id": 105,
+    "db_id": "election_representative",
+    "question": "Liệt kê số lượng phiếu bầu của các cuộc bầu cử theo thứ tự giảm dần .",
+    "gold_sql": "select so_luong_phieu_bau from cuoc_bau_cu order by so_luong_phieu_bau desc",
+    "generated_sql": "SELECT so_luong_phieu_bau FROM cuoc_bau_cu ORDER BY so_luong_phieu_bau DESC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 74731
+  },
+  {
+    "id": 106,
+    "db_id": "election_representative",
+    "question": "Liệt kê ngày và tỷ lệ phiếu bầu của các cuộc bầu cử .",
+    "gold_sql": "select ngay , ti_le_phieu_bau from cuoc_bau_cu",
+    "generated_sql": "SELECT ngay, ti_le_phieu_bau FROM cuoc_bau_cu",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 72787
+  },
+  {
+    "id": 107,
+    "db_id": "election_representative",
+    "question": "Tỷ lệ phiếu bầu tối thiểu và tối đa của các cuộc bầu cử là bao nhiêu ?",
+    "gold_sql": "select min ( ti_le_phieu_bau ) , max ( ti_le_phieu_bau ) from cuoc_bau_cu",
+    "generated_sql": "SELECT MIN(ti_le_phieu_bau), MAX(ti_le_phieu_bau) FROM cuoc_bau_cu",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 85089
+  },
+  {
+    "id": 108,
+    "db_id": "election_representative",
+    "question": "Cho biết tên và đảng của mỗi người đại diện .",
+    "gold_sql": "select ten , dang from dai_dien",
+    "generated_sql": "SELECT ten, dang FROM dai_dien",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 81660
+  },
+  {
+    "id": 109,
+    "db_id": "election_representative",
+    "question": "Cho biết tên của những người đại diện mà đảng của họ không phải là ' Đảng Cộng hoà ' .",
+    "gold_sql": "select ten from dai_dien where dang != \"republican\"",
+    "generated_sql": "SELECT ten FROM dai_dien WHERE dang != 'Đảng Cộng hoà'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 80355
+  },
+  {
+    "id": 110,
+    "db_id": "election_representative",
+    "question": "Tuổi thọ của các đại diện từ tiểu bang New York hoặc tiểu bang Indiana là bao nhiêu ?",
+    "gold_sql": "select tuoi_tho from dai_dien where tieu_bang = \"new york\" or tieu_bang = \"indiana\"",
+    "generated_sql": "SELECT tuoi_tho FROM dai_dien WHERE tieu_bang = 'New York' OR tieu_bang = 'Indiana'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 110005
+  },
+  {
+    "id": 111,
+    "db_id": "election_representative",
+    "question": "Tên của các đại diện và ngày bầu cử mà họ đã tham gia ?",
+    "gold_sql": "select t2.ten , t1.ngay from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien",
+    "generated_sql": "SELECT T1.ten, T2.ngay FROM dai_dien AS T1 JOIN cuoc_bau_cu AS T2 ON T1.id_dai_dien = T2.id_dai_dien",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 93420
+  },
+  {
+    "id": 112,
+    "db_id": "election_representative",
+    "question": "Tên của các đại diện có hơn 10000 phiếu trong cuộc bầu cử ?",
+    "gold_sql": "select t2.ten from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien where so_luong_phieu_bau > 10000",
+    "generated_sql": "SELECT T1.ten FROM dai_dien AS T1 JOIN cuoc_bau_cu AS T2 ON T1.id_dai_dien = T2.id_dai_dien WHERE T2.so_luong_phieu_bau > 10000",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 133900
+  },
+  {
+    "id": 113,
+    "db_id": "election_representative",
+    "question": "Săp xếp tên của các đại diện theo thứ tự giảm dần về số lượng phiếu bầu .",
+    "gold_sql": "select t2.ten from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien order by so_luong_phieu_bau desc",
+    "generated_sql": "SELECT dai_dien.ten FROM dai_dien JOIN cuoc_bau_cu ON dai_dien.id_dai_dien = cuoc_bau_cu.id_dai_dien ORDER BY cuoc_bau_cu.so_luong_phieu_bau DESC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 95528
+  },
+  {
+    "id": 114,
+    "db_id": "election_representative",
+    "question": "Cho biết đảng của người đại diện có số phiếu bầu ít nhất .",
+    "gold_sql": "select t2.dang from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien order by so_luong_phieu_bau asc limit 1",
+    "generated_sql": "SELECT T2.dang FROM dai_dien T2 JOIN cuoc_bau_cu T1 ON T2.id_dai_dien = T1.id_dai_dien GROUP BY T2.id_dai_dien ORDER BY SUM(T1.so_luong_phieu_bau) ASC LIMIT 1",
+    "exact_match": false,
+    "eval_error": "'t2'",
+    "duration_ms": 151209
+  },
+  {
+    "id": 115,
+    "db_id": "election_representative",
+    "question": "Liệt kê tuổi thọ của tất cả những người đại diện theo thứ tự tỷ lệ phiếu bầu giảm dần .",
+    "gold_sql": "select t2.tuoi_tho from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien order by ti_le_phieu_bau desc",
+    "generated_sql": "SELECT dai_dien.tuoi_tho FROM dai_dien JOIN cuoc_bau_cu ON dai_dien.id_dai_dien = cuoc_bau_cu.id_dai_dien ORDER BY cuoc_bau_cu.ti_le_phieu_bau DESC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 119570
+  },
+  {
+    "id": 116,
+    "db_id": "election_representative",
+    "question": "Số phiếu trung bình của những người đại diện cho đảng ' Cộng hoà ' là bao nhiêu ?",
+    "gold_sql": "select avg ( t1.so_luong_phieu_bau ) from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien where t2.dang = \"republican\"",
+    "generated_sql": "SELECT AVG(cuoc_bau_cu.so_luong_phieu_bau) FROM dai_dien JOIN cuoc_bau_cu ON dai_dien.id_dai_dien = cuoc_bau_cu.id_dai_dien WHERE dai_dien.dang = 'Cộng hoà'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 132849
+  },
+  {
+    "id": 117,
+    "db_id": "election_representative",
+    "question": "Cho biết các đảng khác nhau của tất cả những người đại diện . Hiển thị tên đảng và số lượng người đại diện mà mỗi đảng có .",
+    "gold_sql": "select dang , count ( * ) from dai_dien group by dang",
+    "generated_sql": "SELECT dang, COUNT(*) FROM dai_dien GROUP BY dang",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 91418
+  },
+  {
+    "id": 118,
+    "db_id": "election_representative",
+    "question": "Đảng nào có nhiều người đại diện nhất ?",
+    "gold_sql": "select dang , count ( * ) from dai_dien group by dang order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT dang FROM dai_dien GROUP BY dang ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 104839
+  },
+  {
+    "id": 119,
+    "db_id": "election_representative",
+    "question": "Những đảng nào có ít nhất ba người đại diện ?",
+    "gold_sql": "select dang from dai_dien group by dang having count ( * ) >= 3",
+    "generated_sql": "SELECT dang FROM dai_dien GROUP BY dang HAVING COUNT(*) >= 3",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 89350
+  },
+  {
+    "id": 120,
+    "db_id": "election_representative",
+    "question": "Những bang nào có ít nhất hai người đại diện ?",
+    "gold_sql": "select tieu_bang from dai_dien group by tieu_bang having count ( * ) >= 2",
+    "generated_sql": "SELECT dang FROM dai_dien GROUP BY dang HAVING COUNT(*) >= 2",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 99829
+  },
+  {
+    "id": 121,
+    "db_id": "election_representative",
+    "question": "Liệt kê tên của những người đại diện chưa tham gia cuộc bầu cử nào được liệt kê ở đây .",
+    "gold_sql": "select ten from dai_dien where id_dai_dien not in ( select id_dai_dien from cuoc_bau_cu )",
+    "generated_sql": "SELECT ten FROM dai_dien WHERE id_dai_dien NOT IN (SELECT id_dai_dien FROM cuoc_bau_cu)",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 109621
+  },
+  {
+    "id": 122,
+    "db_id": "election_representative",
+    "question": "Hiển thị các đảng có cả người đại diện ở tiểu bang New York và người đại diện ở tiểu bang Pennsylvania .",
+    "gold_sql": "select dang from dai_dien where tieu_bang = \"new york\" intersect select dang from dai_dien where tieu_bang = \"pennsylvania\"",
+    "generated_sql": "SELECT dang FROM dai_dien WHERE tieu_bang = 'New York' INTERSECT SELECT dang FROM dai_dien WHERE tieu_bang = 'Pennsylvania'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 106251
+  },
+  {
+    "id": 123,
+    "db_id": "election_representative",
+    "question": "Có tất cả bao nhiêu đảng khác nhau ?",
+    "gold_sql": "select count ( distinct dang ) from dai_dien",
+    "generated_sql": "SELECT COUNT(DISTINCT dang) FROM dai_dien",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 64400
+  },
+  {
+    "id": 124,
+    "db_id": "match_season",
+    "question": "Tổng cộng có bao nhiêu quốc gia ?",
+    "gold_sql": "select count ( * ) from quoc_gia",
+    "generated_sql": "SELECT COUNT(*) FROM quoc_gia",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 60968
+  },
+  {
+    "id": 125,
+    "db_id": "match_season",
+    "question": "Đếm số lượng quốc gia .",
+    "gold_sql": "select count ( * ) from quoc_gia",
+    "generated_sql": "SELECT COUNT(*) FROM quoc_gia",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 66078
+  },
+  {
+    "id": 126,
+    "db_id": "match_season",
+    "question": "Hiển thị tên quốc gia và thủ đô của tất cả các quốc gia .",
+    "gold_sql": "select ten_quoc_gia , thu_do from quoc_gia",
+    "generated_sql": "SELECT quoc_gia.ten_quoc_gia, quoc_gia.thu_do FROM quoc_gia",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 57200
+  },
+  {
+    "id": 127,
+    "db_id": "match_season",
+    "question": "Liệt kê tên và thủ đô của từng quốc gia .",
+    "gold_sql": "select ten_quoc_gia , thu_do from quoc_gia",
+    "generated_sql": "SELECT ten_quoc_gia, thu_do FROM quoc_gia",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 64175
+  },
+  {
+    "id": 128,
+    "db_id": "match_season",
+    "question": "Hiển thị tất cả các ngôn ngữ bản địa chính thức có chứa cụm từ ' tiếng Anh ' trong tên .",
+    "gold_sql": "select ngon_ngu_ban_dia_chinh_thuc from quoc_gia where ngon_ngu_ban_dia_chinh_thuc like \"%english%\"",
+    "generated_sql": "SELECT quoc_gia.ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia WHERE quoc_gia.ngon_ngu_ban_dia_chinh_thuc LIKE '%tiếng Anh%'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 72258
+  },
+  {
+    "id": 129,
+    "db_id": "match_season",
+    "question": "Những ngôn ngữ bản địa chính thức có chứa cụm từ ' tiếng Anh ' trong tên là những ngôn ngữ nào ?",
+    "gold_sql": "select ngon_ngu_ban_dia_chinh_thuc from quoc_gia where ngon_ngu_ban_dia_chinh_thuc like \"%english%\"",
+    "generated_sql": "SELECT ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia WHERE ngon_ngu_ban_dia_chinh_thuc LIKE '%tiếng Anh%'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 77742
+  },
+  {
+    "id": 130,
+    "db_id": "match_season",
+    "question": "Hiển thị các vị trí khác nhau trong tất cả các trận đấu .",
+    "gold_sql": "select distinct vi_tri from tran_dau_trong_mua_giai",
+    "generated_sql": "SELECT DISTINCT vi_tri FROM tran_dau_trong_mua_giai",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 65993
+  },
+  {
+    "id": 131,
+    "db_id": "match_season",
+    "question": "Những vị trí khác nhau trong các trận đấu là những vị trí nào ?",
+    "gold_sql": "select distinct vi_tri from tran_dau_trong_mua_giai",
+    "generated_sql": "SELECT DISTINCT vi_tri FROM tran_dau_trong_mua_giai",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 77900
+  },
+  {
+    "id": 132,
+    "db_id": "match_season",
+    "question": "Hiển thị các cầu thủ đến từ trường đại học UCLA .",
+    "gold_sql": "select cau_thu from tran_dau_trong_mua_giai where truong_dai_hoc = \"ucla\"",
+    "generated_sql": "SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu WHERE tran_dau_trong_mua_giai.truong_dai_hoc = 'UCLA'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 93353
+  },
+  {
+    "id": 133,
+    "db_id": "match_season",
+    "question": "Những cầu thủ nào đến từ UCLA ?",
+    "gold_sql": "select cau_thu from tran_dau_trong_mua_giai where truong_dai_hoc = \"ucla\"",
+    "generated_sql": "SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu WHERE tran_dau_trong_mua_giai.truong_dai_hoc = 'UCLA'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 139927
+  },
+  {
+    "id": 134,
+    "db_id": "match_season",
+    "question": "Hiển thị những vị trí khác nhau của các cầu thủ đến từ trường đại học UCLA hoặc Duke .",
+    "gold_sql": "select distinct vi_tri from tran_dau_trong_mua_giai where truong_dai_hoc = \"ucla\" or truong_dai_hoc = \"duke\"",
+    "generated_sql": "SELECT DISTINCT vi_tri FROM tran_dau_trong_mua_giai WHERE truong_dai_hoc IN ('UCLA', 'Duke')",
+    "exact_match": false,
+    "eval_error": "",
+    "duration_ms": 90427
+  },
+  {
+    "id": 135,
+    "db_id": "match_season",
+    "question": "Những cầu thủ đến từ các trường đại học UCLA hoặc Duke chơi ở các vị trí khác nhau nào ?",
+    "gold_sql": "select distinct vi_tri from tran_dau_trong_mua_giai where truong_dai_hoc = \"ucla\" or truong_dai_hoc = \"duke\"",
+    "generated_sql": "SELECT cau_thu , vi_tri FROM tran_dau_trong_mua_giai WHERE truong_dai_hoc IN ('UCLA', 'Duke')",
+    "exact_match": false,
+    "eval_error": "",
+    "duration_ms": 152912
+  },
+  {
+    "id": 136,
+    "db_id": "match_season",
+    "question": "Hiển thị mã số tuyển chọn tân binh và mùa tuyển chọn của các cầu thủ có vị trí là ' hậu vệ ' .",
+    "gold_sql": "select ma_so_tuyen_chon_tan_binh , mua_tuyen_chon from tran_dau_trong_mua_giai where vi_tri = \"defender\"",
+    "generated_sql": "SELECT ma_so_tuyen_chon_tan_binh, mua_tuyen_chon FROM tran_dau_trong_mua_giai WHERE vi_tri = 'hậu vệ'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 79914
+  },
+  {
+    "id": 137,
+    "db_id": "match_season",
+    "question": "Mã số tuyển chọn tân binh và mùa tuyển chọn cho các cầu thủ ở vị trí ' hậu vệ ' ?",
+    "gold_sql": "select ma_so_tuyen_chon_tan_binh , mua_tuyen_chon from tran_dau_trong_mua_giai where vi_tri = \"defender\"",
+    "generated_sql": "SELECT ma_so_tuyen_chon_tan_binh, mua_tuyen_chon FROM tran_dau_trong_mua_giai WHERE vi_tri = 'hậu vệ'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 91173
+  },
+  {
+    "id": 138,
+    "db_id": "match_season",
+    "question": "Có bao nhiêu đội khác nhau tham gia vào các trận đấu ?",
+    "gold_sql": "select count ( distinct doi ) from tran_dau_trong_mua_giai",
+    "generated_sql": "SELECT COUNT(DISTINCT doi) FROM tran_dau_trong_mua_giai",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 101087
+  },
+  {
+    "id": 139,
+    "db_id": "match_season",
+    "question": "Đếm số lượng các đội khác nhau tham gia vào các trận đấu .",
+    "gold_sql": "select count ( distinct doi ) from tran_dau_trong_mua_giai",
+    "generated_sql": "SELECT COUNT(DISTINCT doi) FROM tran_dau_trong_mua_giai",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 96127
+  },
+  {
+    "id": 140,
+    "db_id": "match_season",
+    "question": "Hiển thị các cầu thủ và số năm họ đã chơi .",
+    "gold_sql": "select cau_thu , so_nam_da_choi from cau_thu",
+    "generated_sql": "SELECT cau_thu.cau_thu, cau_thu.so_nam_da_choi FROM cau_thu",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 71265
+  },
+  {
+    "id": 141,
+    "db_id": "match_season",
+    "question": "Liệt kê tên các cầu thủ khác nhau và số năm mà họ đã chơi ?",
+    "gold_sql": "select cau_thu , so_nam_da_choi from cau_thu",
+    "generated_sql": "SELECT cau_thu.cau_thu, cau_thu.so_nam_da_choi FROM cau_thu",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 70085
+  },
+  {
+    "id": 142,
+    "db_id": "match_season",
+    "question": "Hiển thị tên của tất cả các đội .",
+    "gold_sql": "select ten from doi",
+    "generated_sql": "SELECT ten FROM doi",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 54819
+  },
+  {
+    "id": 143,
+    "db_id": "match_season",
+    "question": "Liệt kê tên của từng đội .",
+    "gold_sql": "select ten from doi",
+    "generated_sql": "SELECT ten FROM doi",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 64642
+  },
+  {
+    "id": 144,
+    "db_id": "match_season",
+    "question": "Hiển thị mùa bóng , cầu thủ và tên quốc gia của cầu thủ đó .",
+    "gold_sql": "select t2.mua_giai , t2.cau_thu , t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia",
+    "generated_sql": "SELECT mua_giai, cau_thu, quoc_gia.ten_quoc_gia FROM tran_dau_trong_mua_giai JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 90263
+  },
+  {
+    "id": 145,
+    "db_id": "match_season",
+    "question": "Đối với mỗi cầu thủ , cho biết tên , mùa bóng và quốc gia mà cầu thủ đó đến từ ?",
+    "gold_sql": "select t2.mua_giai , t2.cau_thu , t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia",
+    "generated_sql": "SELECT cau_thu.cau_thu , tran_dau_trong_mua_giai.mua_giai , quoc_gia.ten_quoc_gia FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 112796
+  },
+  {
+    "id": 146,
+    "db_id": "match_season",
+    "question": "Những cầu thủ nào đến từ Indonesia ?",
+    "gold_sql": "select t2.cau_thu from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t1.ten_quoc_gia = \"indonesia\"",
+    "generated_sql": "SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.ten_quoc_gia = 'Indonesia'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 100549
+  },
+  {
+    "id": 147,
+    "db_id": "match_season",
+    "question": "Những cầu thủ đến từ Indonesia là những cầu thủ nào ?",
+    "gold_sql": "select t2.cau_thu from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t1.ten_quoc_gia = \"indonesia\"",
+    "generated_sql": "SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.ten_quoc_gia = 'Indonesia'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 126871
+  },
+  {
+    "id": 148,
+    "db_id": "match_season",
+    "question": "Cho biết các vị trí khác nhau của các cầu thủ đến từ quốc gia với thủ đô là Dublin .",
+    "gold_sql": "select distinct t2.vi_tri from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t1.thu_do = \"dublin\"",
+    "generated_sql": "SELECT DISTINCT tran_dau_trong_mua_giai.vi_tri FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.thu_do = 'Dublin'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 150558
+  },
+  {
+    "id": 149,
+    "db_id": "match_season",
+    "question": "Cho biết các vị trí khác nhau của các cầu thủ chơi cho đất nước với thủ đô là Dublin .",
+    "gold_sql": "select distinct t2.vi_tri from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t1.thu_do = \"dublin\"",
+    "generated_sql": "SELECT DISTINCT tran_dau_trong_mua_giai.vi_tri FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.thu_do = 'Dublin'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 105146
+  },
+  {
+    "id": 150,
+    "db_id": "match_season",
+    "question": "Cho biết ngôn ngữ chính thức của các quốc gia có các cầu thủ đến từ đại học Maryland hoặc Duke .",
+    "gold_sql": "select t1.ngon_ngu_ban_dia_chinh_thuc from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.truong_dai_hoc = \"maryland\" or t2.truong_dai_hoc = \"duke\"",
+    "generated_sql": "SELECT ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE truong_dai_hoc IN ('Maryland', 'Duke')",
+    "exact_match": false,
+    "eval_error": "",
+    "duration_ms": 84139
+  },
+  {
+    "id": 151,
+    "db_id": "match_season",
+    "question": "Ngôn ngữ bản địa chính thức của các quốc gia có cầu thủ đến từ các trường đại học Maryland hoặc Duke là ngôn ngữ nào ?",
+    "gold_sql": "select t1.ngon_ngu_ban_dia_chinh_thuc from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.truong_dai_hoc = \"maryland\" or t2.truong_dai_hoc = \"duke\"",
+    "generated_sql": "SELECT quoc_gia.ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.truong_dai_hoc IN ('Maryland', 'Duke')",
+    "exact_match": false,
+    "eval_error": "",
+    "duration_ms": 82061
+  },
+  {
+    "id": 152,
+    "db_id": "match_season",
+    "question": "Có bao nhiêu ngôn ngữ chính thức khác nhau được sử dụng bởi các quốc gia có một số cầu thủ chơi ở vị trí ' hậu vệ ' ?",
+    "gold_sql": "select count ( distinct t1.ngon_ngu_ban_dia_chinh_thuc ) from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = \"defender\"",
+    "generated_sql": "SELECT COUNT(DISTINCT quoc_gia.ngon_ngu_ban_dia_chinh_thuc) FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.vi_tri = 'hậu vệ'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 141908
+  },
+  {
+    "id": 153,
+    "db_id": "match_season",
+    "question": "Đếm số lượng ngôn ngữ chính thức được sử dụng bởi các quốc gia có cầu thủ đảm nhận vị trí ' hậu vệ ' .",
+    "gold_sql": "select count ( distinct t1.ngon_ngu_ban_dia_chinh_thuc ) from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = \"defender\"",
+    "generated_sql": "SELECT COUNT(DISTINCT quoc_gia.ngon_ngu_ban_dia_chinh_thuc) FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.vi_tri = 'hậu vệ'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 101102
+  },
+  {
+    "id": 154,
+    "db_id": "match_season",
+    "question": "Hiển thị mùa giải , cầu thủ và tên của các đội mà những cầu thủ đó thuộc về .",
+    "gold_sql": "select t1.mua_giai , t1.cau_thu , t2.ten from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi",
+    "generated_sql": "SELECT tran_dau_trong_mua_giai.mua_giai , tran_dau_trong_mua_giai.cau_thu , doi.ten FROM tran_dau_trong_mua_giai JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 94499
+  },
+  {
+    "id": 155,
+    "db_id": "match_season",
+    "question": "Cho biết tên của tất cả các cầu thủ khác nhau , cũng như là những mùa giải họ đã tham gia thi đấu và tên đội bóng của họ trong từng mùa giải .",
+    "gold_sql": "select t1.mua_giai , t1.cau_thu , t2.ten from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi",
+    "generated_sql": "SELECT cau_thu.cau_thu, tran_dau_trong_mua_giai.mua_giai, doi.ten FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu AND cau_thu.doi = tran_dau_trong_mua_giai.doi JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 126170
+  },
+  {
+    "id": 156,
+    "db_id": "match_season",
+    "question": "Hiển thị vị trí của các cầu thủ trong đội ' Ryley Goldner ' .",
+    "gold_sql": "select t1.vi_tri from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = \"ryley goldner\"",
+    "generated_sql": "SELECT vi_tri FROM tran_dau_trong_mua_giai JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi WHERE doi.ten = 'Ryley Goldner'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 129775
+  },
+  {
+    "id": 157,
+    "db_id": "match_season",
+    "question": "Cho biết vị trí của các cầu thủ trong đội Ryley Goldner .",
+    "gold_sql": "select t1.vi_tri from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = \"ryley goldner\"",
+    "generated_sql": "SELECT tran_dau_trong_mua_giai.vi_tri FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi WHERE doi.ten = 'Ryley Goldner'",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 121183
+  },
+  {
+    "id": 158,
+    "db_id": "match_season",
+    "question": "Có bao nhiêu trường đại học riêng biệt có các cầu thủ chơi trong đội ' Columbus Crew ' ?",
+    "gold_sql": "select count ( distinct t1.truong_dai_hoc ) from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = \"columbus crew\"",
+    "generated_sql": "SELECT COUNT(DISTINCT truong_dai_hoc) FROM tran_dau_trong_mua_giai JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi WHERE doi.ten = 'Columbus Crew'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 92050
+  },
+  {
+    "id": 159,
+    "db_id": "match_season",
+    "question": "Đếm số lượng trường đại học khác nhau có các cầu thủ chơi cho Columbus Crew .",
+    "gold_sql": "select count ( distinct t1.truong_dai_hoc ) from tran_dau_trong_mua_giai as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = \"columbus crew\"",
+    "generated_sql": "SELECT COUNT(DISTINCT truong_dai_hoc) FROM tran_dau_trong_mua_giai JOIN doi ON tran_dau_trong_mua_giai.doi = doi.id_doi WHERE doi.ten = 'Columbus Crew'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 117829
+  },
+  {
+    "id": 160,
+    "db_id": "match_season",
+    "question": "Hiển thị tất cả các cầu thủ thi đấu cho đội ' Columbus Crew ' và số năm đã chơi của từng cầu thủ .",
+    "gold_sql": "select t1.cau_thu , t1.so_nam_da_choi from cau_thu as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = \"columbus crew\"",
+    "generated_sql": "SELECT cau_thu.cau_thu, cau_thu.so_nam_da_choi FROM cau_thu JOIN doi ON cau_thu.doi = doi.id_doi WHERE doi.ten = 'Columbus Crew'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 80158
+  },
+  {
+    "id": 161,
+    "db_id": "match_season",
+    "question": "Liệt kê các cầu thủ đã chơi cho Columbus Crew và mỗi cầu thủ đã chơi được bao nhiêu năm ?",
+    "gold_sql": "select t1.cau_thu , t1.so_nam_da_choi from cau_thu as t1 join doi as t2 on t1.doi = t2.id_doi where t2.ten = \"columbus crew\"",
+    "generated_sql": "SELECT cau_thu.cau_thu, cau_thu.so_nam_da_choi FROM cau_thu JOIN doi ON cau_thu.doi = doi.id_doi WHERE doi.ten = 'Columbus Crew'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 109181
+  },
+  {
+    "id": 162,
+    "db_id": "match_season",
+    "question": "Hiển thị vị trí của tất cả các cầu thủ và số lượng cầu thủ chơi ở từng vị trí .",
+    "gold_sql": "select vi_tri , count ( * ) from tran_dau_trong_mua_giai group by vi_tri",
+    "generated_sql": "SELECT vi_tri, COUNT(*) FROM tran_dau_trong_mua_giai GROUP BY vi_tri",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 138363
+  },
+  {
+    "id": 163,
+    "db_id": "match_season",
+    "question": "Có bao nhiêu cầu thủ chơi ở từng vị trí ?",
+    "gold_sql": "select vi_tri , count ( * ) from tran_dau_trong_mua_giai group by vi_tri",
+    "generated_sql": "SELECT vi_tri, COUNT(DISTINCT cau_thu) FROM tran_dau_trong_mua_giai GROUP BY vi_tri",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 122991
+  },
+  {
+    "id": 164,
+    "db_id": "match_season",
+    "question": "Hiển thị tên các quốc gia và số lượng cầu thủ tương ứng với từng quốc gia .",
+    "gold_sql": "select ten_quoc_gia , count ( * ) from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia group by t1.ten_quoc_gia",
+    "generated_sql": "SELECT quoc_gia.ten_quoc_gia , COUNT(DISTINCT cau_thu.cau_thu) FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia JOIN cau_thu ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu GROUP BY quoc_gia.id_quoc_gia",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 168416
+  },
+  {
+    "id": 165,
+    "db_id": "match_season",
+    "question": "Có bao nhiêu cầu thủ đến từ mỗi quốc gia ?",
+    "gold_sql": "select ten_quoc_gia , count ( * ) from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia group by t1.ten_quoc_gia",
+    "generated_sql": "SELECT quoc_gia , COUNT(DISTINCT cau_thu.cau_thu) FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu GROUP BY quoc_gia",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 145033
+  },
+  {
+    "id": 166,
+    "db_id": "match_season",
+    "question": "Liệt kê tất cả các cầu thủ theo thứ tự bảng chữ cái tăng dần của các trường đại học .",
+    "gold_sql": "select cau_thu from tran_dau_trong_mua_giai order by truong_dai_hoc asc",
+    "generated_sql": "SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu ORDER BY tran_dau_trong_mua_giai.truong_dai_hoc ASC",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 104349
+  },
+  {
+    "id": 167,
+    "db_id": "match_season",
+    "question": "Cho biết tất cả các cầu thủ đã chơi trong một số mùa giải ? Sắp xếp kết quả theo thứ tự bảng chữ cái tăng dần của các trường đại học mà từng cầu thủ theo học .",
+    "gold_sql": "select cau_thu from tran_dau_trong_mua_giai order by truong_dai_hoc asc",
+    "generated_sql": "SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu ORDER BY tran_dau_trong_mua_giai.truong_dai_hoc ASC",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 155900
+  },
+  {
+    "id": 168,
+    "db_id": "match_season",
+    "question": "Cho biết vị trí có nhiều cầu thủ nắm giữ nhất trong tất cả các mùa thi đấu ?",
+    "gold_sql": "select vi_tri from tran_dau_trong_mua_giai group by vi_tri order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT vi_tri FROM tran_dau_trong_mua_giai GROUP BY vi_tri ORDER BY COUNT(cau_thu) DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 146302
+  },
+  {
+    "id": 169,
+    "db_id": "match_season",
+    "question": "Vị trí phổ biến nhất trong tất cả các mùa thi đấu là vị trí nào ?",
+    "gold_sql": "select vi_tri from tran_dau_trong_mua_giai group by vi_tri order by count ( * ) desc limit 1",
+    "generated_sql": "SELECT vi_tri FROM tran_dau_trong_mua_giai GROUP BY vi_tri ORDER BY COUNT(*) DESC LIMIT 1",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 78896
+  },
+  {
+    "id": 170,
+    "db_id": "match_season",
+    "question": "Hiển thị 3 trường đại học đứng đầu về số lượng cầu thủ trong các mùa giải thi đấu .",
+    "gold_sql": "select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc order by count ( * ) desc limit 3",
+    "generated_sql": "SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc ORDER BY COUNT(*) DESC LIMIT 3",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 97937
+  },
+  {
+    "id": 171,
+    "db_id": "match_season",
+    "question": "Ba trường đại học có nhiều cầu thủ nhất là những trường đại học nào ?",
+    "gold_sql": "select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc order by count ( * ) desc limit 3",
+    "generated_sql": "SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc ORDER BY COUNT(cau_thu) DESC LIMIT 3",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 143363
+  },
+  {
+    "id": 172,
+    "db_id": "match_season",
+    "question": "Hiển thị tên của các trường đại học có ít nhất 2 cầu thủ .",
+    "gold_sql": "select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc having count ( * ) >= 2",
+    "generated_sql": "SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc HAVING COUNT(DISTINCT cau_thu) >= 2",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 111293
+  },
+  {
+    "id": 173,
+    "db_id": "match_season",
+    "question": "Những trường đại học có hai hoặc nhiều hơn 2 cầu thủ có tên là gì ?",
+    "gold_sql": "select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc having count ( * ) >= 2",
+    "generated_sql": "SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc HAVING COUNT(*) >= 2",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 110914
+  },
+  {
+    "id": 174,
+    "db_id": "match_season",
+    "question": "Hiển thị tên của các trường đại học có ít nhất hai cầu thủ theo thứ tự bảng chữ cái giảm dần .",
+    "gold_sql": "select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc having count ( * ) >= 2 order by truong_dai_hoc desc",
+    "generated_sql": "SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc HAVING COUNT(*) >= 2 ORDER BY truong_dai_hoc DESC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 64833
+  },
+  {
+    "id": 175,
+    "db_id": "match_season",
+    "question": "Cho biết tên của các trường đại học có hai hoặc nhiều hơn 2 cầu thủ , đồng thời liệt kê kết quả theo thứ tự bảng chữ cái giảm dần .",
+    "gold_sql": "select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc having count ( * ) >= 2 order by truong_dai_hoc desc",
+    "generated_sql": "SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc HAVING COUNT(*) >= 2 ORDER BY truong_dai_hoc DESC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 84702
+  },
+  {
+    "id": 176,
+    "db_id": "match_season",
+    "question": "Những đội không có hồ sơ mùa giải thi đấu có tên là gì ?",
+    "gold_sql": "select ten from doi where id_doi not in ( select doi from tran_dau_trong_mua_giai )",
+    "generated_sql": "SELECT ten FROM doi WHERE id_doi NOT IN (SELECT doi FROM tran_dau_trong_mua_giai)",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 58255
+  },
+  {
+    "id": 177,
+    "db_id": "match_season",
+    "question": "Cho biết tên của các đội bóng không có hồ sơ mùa giải thi đấu .",
+    "gold_sql": "select ten from doi where id_doi not in ( select doi from tran_dau_trong_mua_giai )",
+    "generated_sql": "SELECT ten FROM doi WHERE id_doi NOT IN (SELECT doi FROM tran_dau_trong_mua_giai)",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 54919
+  },
+  {
+    "id": 178,
+    "db_id": "match_season",
+    "question": "Cho biết tên của các quốc gia có cả các cầu thủ chơi ở vị trí ' tiền đạo ' và các cầu thủ chơi ở vị trí ' hậu vệ ' .",
+    "gold_sql": "select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = \"forward\" intersect select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = \"defender\"",
+    "generated_sql": "SELECT quoc_gia.ten_quoc_gia FROM tran_dau_trong_mua_giai JOIN quoc_gia ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.vi_tri = 'tiền đạo' INTERSECT SELECT quoc_gia.ten_quoc_gia FROM tran_dau_trong_mua_giai JOIN quoc_gia ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.vi_tri = 'hậu vệ'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 122028
+  },
+  {
+    "id": 179,
+    "db_id": "match_season",
+    "question": "Những quốc gia có một số cầu thủ chơi ở vị trí ' tiền đạo ' và một số cầu thủ chơi vị trí ' hậu vệ ' có tên là gì ?",
+    "gold_sql": "select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = \"forward\" intersect select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = \"defender\"",
+    "generated_sql": "SELECT ten_quoc_gia FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.vi_tri = 'tiền đạo' INTERSECT SELECT ten_quoc_gia FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.vi_tri = 'hậu vệ'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 99985
+  },
+  {
+    "id": 180,
+    "db_id": "match_season",
+    "question": "Trường đại học nào có các cầu thủ ở vị trí ' tiền vệ ' cũng như là các cầu thủ ở vị trí ' hậu vệ ' ?",
+    "gold_sql": "select truong_dai_hoc from tran_dau_trong_mua_giai where vi_tri = \"midfielder\" intersect select truong_dai_hoc from tran_dau_trong_mua_giai where vi_tri = \"defender\"",
+    "generated_sql": "SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai WHERE vi_tri = 'tiền vệ' INTERSECT SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai WHERE vi_tri = 'hậu vệ'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 96987
+  },
+  {
+    "id": 181,
+    "db_id": "match_season",
+    "question": "Cho biết các trường đại học có một số cầu thủ chơi vị trí ' tiền vệ ' và một số cầu thủ chơi vị trí ' hậu vệ ' .",
+    "gold_sql": "select truong_dai_hoc from tran_dau_trong_mua_giai where vi_tri = \"midfielder\" intersect select truong_dai_hoc from tran_dau_trong_mua_giai where vi_tri = \"defender\"",
+    "generated_sql": "SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai WHERE vi_tri = 'tiền vệ' INTERSECT SELECT truong_dai_hoc FROM tran_dau_trong_mua_giai WHERE vi_tri = 'hậu vệ'",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 98132
+  },
+  {
+    "id": 184,
+    "db_id": "perpetrator",
+    "question": "Liệt kê số người bị thương bởi những kẻ tội phạm theo thứ tự tăng dần .",
+    "gold_sql": "select so_nguoi_bi_thuong from toi_pham order by so_nguoi_bi_thuong asc",
+    "generated_sql": "SELECT T1.id_ca_nhan, T1.ten, SUM(T2.so_nguoi_bi_thuong) FROM ca_nhan AS T1 JOIN toi_pham AS T2 ON T1.id_ca_nhan = T2.id_ca_nhan GROUP BY T1.id_ca_nhan ORDER BY SUM(T2.so_nguoi_bi_thuong) ASC",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 113912
+  },
+  {
+    "id": 185,
+    "db_id": "perpetrator",
+    "question": "Số người trung bình bị thương bởi tất cả các kẻ tội phạm là bao nhiêu ?",
+    "gold_sql": "select avg ( so_nguoi_bi_thuong ) from toi_pham",
+    "generated_sql": "SELECT SUM(so_nguoi_bi_thuong) / COUNT(DISTINCT id_ca_nhan) FROM toi_pham",
+    "exact_match": false,
+    "eval_error": "Error col: /",
+    "duration_ms": 153517
+  },
+  {
+    "id": 186,
+    "db_id": "perpetrator",
+    "question": "Cho biết địa điểm nơi kẻ phạm tội đã giết nhiều người nhất sống tại ?",
+    "gold_sql": "select dia_diem from toi_pham order by so_nguoi_bi_giet desc limit 1",
+    "generated_sql": "SELECT T1.que_quan FROM ca_nhan AS T1 JOIN toi_pham AS T2 ON T1.id_ca_nhan = T2.id_ca_nhan GROUP BY T1.id_ca_nhan ORDER BY SUM(T2.so_nguoi_bi_giet) DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 103743
+  },
+  {
+    "id": 187,
+    "db_id": "perpetrator",
+    "question": "Cho biết tên của tất cả cá nhân theo thứ tự tăng dần về chiều cao .",
+    "gold_sql": "select ten from ca_nhan order by chieu_cao asc",
+    "generated_sql": "SELECT ten FROM ca_nhan ORDER BY chieu_cao ASC",
+    "exact_match": true,
+    "eval_error": null,
+    "duration_ms": 68707
+  },
+  {
+    "id": 190,
+    "db_id": "perpetrator",
+    "question": "Cho biết tên của kẻ phạm tội có trọng lượng lớn nhất .",
+    "gold_sql": "select t1.ten from ca_nhan as t1 join toi_pham as t2 on t1.id_ca_nhan = t2.id_ca_nhan order by t1.can_nang desc limit 1",
+    "generated_sql": "SELECT ten FROM ca_nhan ORDER BY can_nang DESC LIMIT 1",
+    "exact_match": false,
+    "eval_error": null,
+    "duration_ms": 84228
+  }
+]

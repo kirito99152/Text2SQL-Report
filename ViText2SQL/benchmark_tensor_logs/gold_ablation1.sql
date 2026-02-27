@@ -256,7 +256,6 @@ select so_dien_thoai , so_phong , toa_nha from giang_vien where ten = "jerry" an
 select count ( * ) from giang_vien where ngach = "professor" and toa_nha = "neb"	activity_1
 select count ( * ) from giang_vien where ngach = "professor" and toa_nha = "neb"	activity_1
 select ten , ho from giang_vien where ngach = "instructor"	activity_1
-select ten , ho from giang_vien where ngach = "instructor"	activity_1
 select toa_nha , count ( * ) from giang_vien group by toa_nha	activity_1
 select toa_nha , count ( * ) from giang_vien group by toa_nha	activity_1
 select toa_nha from giang_vien group by toa_nha order by count ( * ) desc limit 1	activity_1
@@ -386,7 +385,6 @@ select max ( ty_le_ung_ho ) , min ( ty_le_xem_xet ) , min ( ty_le_phan_doi ) fro
 select t1.ten from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t1.gioi_tinh = "f" order by t1.ten	candidate_poll
 select t1.ten from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t1.gioi_tinh = "f" order by t1.ten	candidate_poll
 select ten from ca_nhan where chieu_cao < ( select avg ( chieu_cao ) from ca_nhan )	candidate_poll
-select ten from ca_nhan where chieu_cao < ( select avg ( chieu_cao ) from ca_nhan )	candidate_poll
 select * from ca_nhan	candidate_poll
 select * from ca_nhan	candidate_poll
 select thanh_pho_chu_nha from thanh_pho_chu_nha order by nam desc limit 1	city_record
@@ -477,7 +475,6 @@ select count ( * ) , ma_khoa from sinh_vien group by ma_khoa	college_1
 select count ( * ) , ma_khoa from sinh_vien group by ma_khoa	college_1
 select sum ( gio_hoc_cua_sinh_vien ) , ma_khoa from sinh_vien group by ma_khoa	college_1
 select sum ( gio_hoc_cua_sinh_vien ) , ma_khoa from sinh_vien group by ma_khoa	college_1
-select max ( gpa_cua_sinh_vien ) , avg ( gpa_cua_sinh_vien ) , min ( gpa_cua_sinh_vien ) , ma_khoa from sinh_vien group by ma_khoa	college_1
 select max ( gpa_cua_sinh_vien ) , avg ( gpa_cua_sinh_vien ) , min ( gpa_cua_sinh_vien ) , ma_khoa from sinh_vien group by ma_khoa	college_1
 select t2.ten_khoa , avg ( t1.gpa_cua_sinh_vien ) from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by avg ( t1.gpa_cua_sinh_vien ) desc limit 1	college_1
 select t2.ten_khoa , avg ( t1.gpa_cua_sinh_vien ) from sinh_vien as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_khoa order by avg ( t1.gpa_cua_sinh_vien ) desc limit 1	college_1
@@ -638,8 +635,6 @@ select so_dien_thoai_khach_hang , dia_chi_email_khach_hang from khach_hang_1 whe
 select so_dien_thoai_khach_hang , dia_chi_email_khach_hang from khach_hang_1 where ten_khach_hang = "harold"	cre_Drama_Workshop_Groups
 select ten_cua_hang from nhom_hoi_thao_kich	cre_Drama_Workshop_Groups
 select ten_cua_hang from nhom_hoi_thao_kich	cre_Drama_Workshop_Groups
-select min ( so_luong_dat_hang ) , avg ( so_luong_dat_hang ) , max ( so_luong_dat_hang ) from hoa_don	cre_Drama_Workshop_Groups
-select min ( so_luong_dat_hang ) , avg ( so_luong_dat_hang ) , max ( so_luong_dat_hang ) from hoa_don	cre_Drama_Workshop_Groups
 select distinct ma_phuong_thuc_thanh_toan from hoa_don	cre_Drama_Workshop_Groups
 select distinct ma_phuong_thuc_thanh_toan from hoa_don	cre_Drama_Workshop_Groups
 select mo_ta_ve_khu_vuc_tiep_thi from khu_vuc_tiep_thi where ten_khu_vuc_tiep_thi = "china"	cre_Drama_Workshop_Groups
@@ -722,7 +717,6 @@ select t2.ten_khach_hang , t2.ho_cua_khach_hang from tai_khoan as t1 join khach_
 select t2.ten_khach_hang , t2.ho_cua_khach_hang from tai_khoan as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ten_tai_khoan = "900"	customers_and_invoices
 select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from tai_khoan )	customers_and_invoices
 select count ( * ) from khach_hang where id_khach_hang not in ( select id_khach_hang from tai_khoan )	customers_and_invoices
-select distinct t1.ten_khach_hang , t1.ho_cua_khach_hang , t1.so_dien_thoai from khach_hang as t1 join tai_khoan as t2 on t1.id_khach_hang = t2.id_khach_hang	customers_and_invoices
 select distinct t1.ten_khach_hang , t1.ho_cua_khach_hang , t1.so_dien_thoai from khach_hang as t1 join tai_khoan as t2 on t1.id_khach_hang = t2.id_khach_hang	customers_and_invoices
 select id_khach_hang from khach_hang except select id_khach_hang from tai_khoan	customers_and_invoices
 select id_khach_hang from khach_hang except select id_khach_hang from tai_khoan	customers_and_invoices
@@ -1168,7 +1162,6 @@ select ma_loai_chinh_sach from chinh_sach group by ma_loai_chinh_sach order by c
 select ma_loai_chinh_sach from chinh_sach group by ma_loai_chinh_sach order by count ( * ) desc limit 1	insurance_and_eClaims
 select ma_loai_chinh_sach from chinh_sach group by ma_loai_chinh_sach having count ( * ) > 2	insurance_and_eClaims
 select ma_loai_chinh_sach from chinh_sach group by ma_loai_chinh_sach having count ( * ) > 2	insurance_and_eClaims
-select sum ( so_tien_duoc_tra ) , avg ( so_tien_duoc_tra ) from tieu_de_cua_yeu_cau	insurance_and_eClaims
 select sum ( so_tien_duoc_tra ) , avg ( so_tien_duoc_tra ) from tieu_de_cua_yeu_cau	insurance_and_eClaims
 select sum ( t1.so_tien_duoc_yeu_cau ) from tieu_de_cua_yeu_cau as t1 join tai_lieu_cua_yeu_cau as t2 on t1.id_tieu_de_cua_yeu_cau = t2.id_yeu_cau where t2.ngay_tao_ra = ( select ngay_tao_ra from tai_lieu_cua_yeu_cau order by ngay_tao_ra limit 1 )	insurance_and_eClaims
 select sum ( t1.so_tien_duoc_yeu_cau ) from tieu_de_cua_yeu_cau as t1 join tai_lieu_cua_yeu_cau as t2 on t1.id_tieu_de_cua_yeu_cau = t2.id_yeu_cau where t2.ngay_tao_ra = ( select ngay_tao_ra from tai_lieu_cua_yeu_cau order by ngay_tao_ra limit 1 )	insurance_and_eClaims
@@ -1745,7 +1738,6 @@ select t3.so_di_dong from ung_cu_vien as t1 join danh_gia_ung_cu_vien as t2 on t
 select t3.so_di_dong from ung_cu_vien as t1 join danh_gia_ung_cu_vien as t2 on t1.id_ung_cu_vien = t2.id_ung_cu_vien join ca_nhan as t3 on t1.id_ung_cu_vien = t3.id_ca_nhan where t2.ma_ket_qua_danh_gia = "fail"	student_assessment
 select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien where id_khoa_hoc = 301	student_assessment
 select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien where id_khoa_hoc = 301	student_assessment
-select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien where id_khoa_hoc = 301 order by ngay_tham_du desc limit 1	student_assessment
 select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien where id_khoa_hoc = 301 order by ngay_tham_du desc limit 1	student_assessment
 select distinct t1.thanh_pho from dia_chi as t1 join dia_chi_ca_nhan as t2 on t1.id_dia_chi = t2.id_dia_chi	student_assessment
 select distinct t1.thanh_pho from dia_chi as t1 join dia_chi_ca_nhan as t2 on t1.id_dia_chi = t2.id_dia_chi	student_assessment

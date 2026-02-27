@@ -8,9 +8,9 @@ echo "Running benchmarks with WORKERS=$WORKERS and DATASET=$DATASET"
 
 # 1. Base Pipeline (Full Pipeline)
 # Features: Logical Planning + SQL Generation + Self-Check + Execution Correction
-echo "Starting Base Pipeline (Full Pipeline)..."
-python3 -u benchmark_tensor.py --pipeline base --dataset "$DATASET" --workers $WORKERS > base.log 2>&1 &
-PID1=$!
+# echo "Starting Base Pipeline (Full Pipeline)..."
+# python3 -u benchmark_tensor.py --pipeline base --dataset "$DATASET" --workers $WORKERS > base.log 2>&1 &
+# PID1=$!
 
 # 2. Ablation 1 (No Planning)
 # Features: SQL Generation + Self-Check + Execution Correction
@@ -29,8 +29,8 @@ PID3=$!
 echo "All 3 pipelines are running concurrently. Check .log files for progress."
 echo "Waiting for them to finish..."
 
-wait $PID1
-echo "Base Pipeline finished."
+# wait $PID1
+# echo "Base Pipeline finished."
 
 wait $PID2
 echo "Ablation 1 finished."
