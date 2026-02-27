@@ -13,9 +13,11 @@ class SchemaSelectionService {
      * 
      * @param {string} question - The Vietnamese question
      * @param {Object} enrichedSchema - The enriched schema object with tables[]
+     * @param {string} linkingText - Optional linking hints from token matching
+     * @param {Set<string>|null} tokenMatchedTables - Tables already matched by tokens
      * @returns {Set<string>} - Set of relevant table names (max MAX_TABLES)
      */
-    async selectRelevantTables(question, enrichedSchema) {
+    async selectRelevantTables(question, enrichedSchema, linkingText = "", tokenMatchedTables = null) {
         const allTableNames = enrichedSchema.tables.map(t => t.name);
 
         // If schema is small enough, skip AI selection
@@ -32,13 +34,14 @@ class SchemaSelectionService {
             tableList += `- ${table.name} (${cols})${desc}\n`;
         }
 
-        // Removed schema linking hints injection
-
         // --- Attempt 1: Original prompt ---
         try {
             let prompt = prompts.SCHEMA_SELECTION_PROMPT;
             prompt = prompt.replace('{{table_list}}', tableList);
             prompt = prompt.replace('{{question}}', question);
+            prompt = prompt.replace('{{schema_linking_hints}}', linkingText
+                ? `SCHEMA LINKING HINTS (token matching):\n${linkingText}`
+                : '');
 
             const messages = [
                 { role: 'system', content: 'You are a precise schema selector. Output ONLY a JSON array.' },
@@ -47,8 +50,21 @@ class SchemaSelectionService {
 
             console.log(`[SchemaSelection] Asking AI to select from ${allTableNames.length} tables...`);
             const response = await aiService.generateJson(messages, false);
-            const result = this._processSelectionResult(response, allTableNames);
-            if (result) return result;
+            const selectedTables = this._parseTableList(response, allTableNames);
+
+            if (selectedTables.size === 0) {
+                console.warn('[SchemaSelection] AI returned empty list, falling back to token matching.');
+                return tokenMatchedTables || new Set(allTableNames.slice(0, MAX_TABLES));
+            }
+
+            // Merge with token-matched tables
+            if (tokenMatchedTables) {
+                for (const t of tokenMatchedTables) {
+                    selectedTables.add(t);
+                }
+            }
+
+            return this._capResults(selectedTables);
 
         } catch (error) {
             console.warn('[SchemaSelection] Original prompt failed, retrying with compact prompt...', error.message);
@@ -59,6 +75,9 @@ class SchemaSelectionService {
             let prompt = promptsRetry.SCHEMA_SELECTION_PROMPT;
             prompt = prompt.replace('{{table_list}}', tableList);
             prompt = prompt.replace('{{question}}', question);
+            prompt = prompt.replace('{{schema_linking_hints}}', linkingText
+                ? `SCHEMA LINKING HINTS (token matching):\n${linkingText}`
+                : '');
 
             const messages = [
                 { role: 'system', content: 'You are a precise schema selector. Output ONLY a JSON array.' },
@@ -67,16 +86,38 @@ class SchemaSelectionService {
 
             console.log(`[SchemaSelection] RETRY: Asking AI with compact prompt...`);
             const response = await aiService.generateJson(messages, false);
-            const result = this._processSelectionResult(response, allTableNames);
-            if (result) return result;
+            const selectedTables = this._parseTableList(response, allTableNames);
+
+            if (selectedTables.size > 0) {
+                if (tokenMatchedTables) {
+                    for (const t of tokenMatchedTables) {
+                        selectedTables.add(t);
+                    }
+                }
+                return this._capResults(selectedTables);
+            }
 
         } catch (retryError) {
             console.error('[SchemaSelection] Retry also failed:', retryError.message);
         }
 
-        // Fallback to all tables if AI fails completely
-        console.warn('[SchemaSelection] Both attempts failed, falling back to basic cap.');
-        return new Set(allTableNames.slice(0, MAX_TABLES));
+        // Fallback to token matching or all tables
+        console.warn('[SchemaSelection] Both attempts failed, falling back to token matching or basic cap.');
+        return tokenMatchedTables || new Set(allTableNames.slice(0, MAX_TABLES));
+    }
+
+    _capResults(selectedTables) {
+        if (selectedTables.size > MAX_TABLES) {
+            const capped = new Set();
+            for (const t of selectedTables) {
+                if (capped.size >= MAX_TABLES) break;
+                capped.add(t);
+            }
+            console.log(`[SchemaSelection] Capped from ${selectedTables.size} to ${MAX_TABLES} tables: [${[...capped].join(', ')}]`);
+            return capped;
+        }
+        console.log(`[SchemaSelection] Selected ${selectedTables.size} tables: [${[...selectedTables].join(', ')}]`);
+        return selectedTables;
     }
 
     /**

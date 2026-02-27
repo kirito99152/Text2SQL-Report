@@ -272,12 +272,17 @@ class SchemaService {
      * 
      * @param {Object} schema - The enriched schema object
      * @param {Set<string>|null} relevantTables - Set of relevant table names, or null for full
+     * @param {string} linkingText - Optional schema linking hints to prepend
      * @returns {string} - The filtered schema context
      */
-    buildFilteredSchemaContext(schema, relevantTables) {
+    buildFilteredSchemaContext(schema, relevantTables, linkingText = "") {
         // Fallback to full schema if no relevant tables identified
         if (!relevantTables || (relevantTables instanceof Set ? relevantTables.size === 0 : relevantTables.length === 0)) {
-            return this.buildSchemaContext(schema);
+            let context = this.buildSchemaContext(schema);
+            if (linkingText) {
+                context = linkingText + "\n\n" + context;
+            }
+            return context;
         }
 
         // Ensure it's a Set if it's an Array
@@ -285,7 +290,7 @@ class SchemaService {
             relevantTables = new Set(relevantTables);
         }
 
-        let sb = "";
+        let sb = linkingText ? linkingText + "\n\n" : "";
         const includedTables = new Set();
 
         for (const table of schema.tables) {

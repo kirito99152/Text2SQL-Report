@@ -219,6 +219,8 @@ DATABASE TABLES:
 
 QUESTION: "{{question}}"
 
+{{schema_linking_hints}}
+
 RULES:
 - Select ONLY tables needed (max 10)
 - Include junction tables for M:N relationships

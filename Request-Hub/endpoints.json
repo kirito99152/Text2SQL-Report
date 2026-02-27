@@ -1,24 +1,32 @@
 [
   {
-    "url": "http://149.36.1.166/generate_output",
-    "status": "idle",
-    "completed": 3488,
-    "activeRequests": [],
-    "isHealthy": true,
-    "maxConcurrent": 4
-  },
-  {
     "url": "http://94.101.98.245/generate_output",
-    "status": "busy",
-    "completed": 3330,
+    "status": "idle",
+    "completed": 4211,
     "activeRequests": [],
     "isHealthy": true,
     "maxConcurrent": 1
   },
   {
+    "url": "http://149.36.1.166/generate_output",
+    "status": "idle",
+    "completed": 7091,
+    "activeRequests": [],
+    "isHealthy": true,
+    "maxConcurrent": 4
+  },
+  {
+    "url": "http://149.36.1.19/generate_output",
+    "status": "down",
+    "completed": 2983,
+    "activeRequests": [],
+    "isHealthy": false,
+    "maxConcurrent": 4
+  },
+  {
     "url": "http://149.36.0.108/generate_output",
     "status": "down",
-    "completed": 437,
+    "completed": 3669,
     "activeRequests": [],
     "isHealthy": false,
     "maxConcurrent": 4
@@ -26,7 +34,7 @@
   {
     "url": "http://149.36.0.67/generate_output",
     "status": "down",
-    "completed": 3408,
+    "completed": 6579,
     "activeRequests": [],
     "isHealthy": false,
     "maxConcurrent": 4

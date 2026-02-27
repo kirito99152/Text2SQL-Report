@@ -422,6 +422,8 @@ DATABASE TABLES:
 
 QUESTION: "{{question}}"
 
+{{schema_linking_hints}}
+
 RULES:
 - Select ONLY tables needed to answer the question (max 15)
 - Include junction/bridge tables needed for M:N relationships

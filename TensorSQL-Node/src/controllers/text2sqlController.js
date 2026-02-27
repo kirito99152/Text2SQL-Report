@@ -4,15 +4,20 @@ const schemaSelectionService = require('../services/schemaSelectionService');
 const planningService = require('../services/planningService');
 const sqlService = require('../services/sqlService');
 const selfCheckService = require('../services/selfCheckService');
+const schemaLinkingService = require('../services/schemaLinkingService');
 const fs = require('fs');
 const path = require('path');
 
-const logFilePath = path.join(__dirname, '../../logs/pipeline_execution.log');
+const logDir = path.join(__dirname, '../../logs');
 
 function logStep(pipeline, question, step, status) {
     const timestamp = new Date().toISOString();
+    const logFilePath = path.join(logDir, `pipeline_execution_${pipeline}.log`);
     const logLine = `[${timestamp}] [${pipeline}] - Q: "${question.substring(0, 30)}..." - Step: ${step} - Status: ${status}\n`;
     try {
+        if (!fs.existsSync(logDir)) {
+            fs.mkdirSync(logDir, { recursive: true });
+        }
         fs.appendFileSync(logFilePath, logLine);
     } catch (err) {
         console.error("Error writing to log file", err);
@@ -39,6 +44,17 @@ exports.generate = async (req, res) => {
 
         // AI Schema Selection will handle table filtering
         const dbId = req.body.dbId || null;
+        let linkingText = "";
+        let tokenMatchedTables = null;
+
+        if (dbId) {
+            const linkingResult = schemaLinkingService.generateLinkingWithRelevantTables(question, dbId);
+            linkingText = linkingResult.linkingText;
+            tokenMatchedTables = linkingResult.relevantTables;
+            if (linkingText) {
+                console.log(`[Controller] ${workerPrefix}Schema linking: ${linkingText.split('\n').length - 1} matches`);
+            }
+        }
 
         if (req.body.schema) {
             // 1a. Direct Schema provided (Bootstrap mode)
@@ -48,16 +64,21 @@ exports.generate = async (req, res) => {
             // Enrich schema (using Cache if available)
             enrichedSchema = await schemaService.enrichSchema(enrichedSchema, workerId);
 
-            // AI Schema Selection skipped - using all tables
-            logStep(pipeline, question, "Schema Selection", "SKIPPED");
-            const relevantTables = new Set(enrichedSchema.tables.map(t => t.name));
+            // AI Schema Selection
+            logStep(pipeline, question, "Schema Selection", "EXECUTED");
+            const relevantTables = await schemaSelectionService.selectRelevantTables(
+                question, enrichedSchema, linkingText, tokenMatchedTables
+            );
 
-            // Build FILTERED context (used for ALL steps — small context window)
-            schemaContext = schemaService.buildFilteredSchemaContext(enrichedSchema, relevantTables);
+            // Build FILTERED context
+            schemaContext = schemaService.buildFilteredSchemaContext(enrichedSchema, relevantTables, linkingText);
 
         } else if (req.body.schemaContext) {
             // Legacy/Test mode where text is provided directly
             schemaContext = req.body.schemaContext;
+            if (linkingText) {
+                schemaContext += "\n" + linkingText + "\n";
+            }
         } else if (req.body.connectionString) {
             // 1b. Reverse Engineer from DB
             console.log("[Controller] Reverse engineering schema from connection string...");
@@ -67,11 +88,14 @@ exports.generate = async (req, res) => {
             // Enrich
             enrichedSchema = await schemaService.enrichSchema(enrichedSchema, workerId);
 
-            // AI Schema Selection skipped
-            const relevantTables = new Set(enrichedSchema.tables.map(t => t.name));
+            // AI Schema Selection
+            logStep(pipeline, question, "Schema Selection", "EXECUTED");
+            const relevantTables = await schemaSelectionService.selectRelevantTables(
+                question, enrichedSchema, linkingText, tokenMatchedTables
+            );
 
             // Build filtered context
-            schemaContext = schemaService.buildFilteredSchemaContext(enrichedSchema, relevantTables);
+            schemaContext = schemaService.buildFilteredSchemaContext(enrichedSchema, relevantTables, linkingText);
         } else {
             return res.status(400).json({ status: "error", message: "Missing connectionString, schema, or schemaContext" });
         }
@@ -92,7 +116,7 @@ exports.generate = async (req, res) => {
             logStep(pipeline, question, "Planning", "EXECUTED");
             plan = await planningService.generatePlan(question, schemaContext, pipeline);
         } else {
-            logStep(pipeline, question, "Planning", "SKIPPED (ablation1)");
+            logStep(pipeline, question, "Planning", "SKIPPED");
         }
 
         // 4. Generate SQL (filtered schema)
@@ -104,7 +128,7 @@ exports.generate = async (req, res) => {
             logStep(pipeline, question, "Self-Check", "EXECUTED");
             sql = await selfCheckService.verifyAndCorrectSql(plan, schemaContext, sql, pipeline);
         } else {
-            logStep(pipeline, question, "Self-Check", "SKIPPED (ablation2)");
+            logStep(pipeline, question, "Self-Check", "SKIPPED");
         }
 
         // 5. Execution-Based Correction
