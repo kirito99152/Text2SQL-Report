@@ -1,9 +1,9 @@
-FROM node:alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package.json của bootstrap để cài đặt dependencies
-COPY bootstrap/package*.json ./bootstrap/
+# Copy application code (excluding node_modules via .dockerignore)
+COPY . .
 
 # Cài đặt công cụ build cho better-sqlite3
 RUN apk add --no-cache python3 make g++
@@ -11,8 +11,4 @@ RUN apk add --no-cache python3 make g++
 WORKDIR /app/bootstrap
 RUN npm install
 
-WORKDIR /app
-COPY . .
-
-WORKDIR /app/bootstrap
 CMD ["node", "index.js"]

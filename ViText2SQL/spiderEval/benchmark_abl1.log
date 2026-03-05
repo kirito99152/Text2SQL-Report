@@ -1,0 +1,9 @@
+[Benchmark] Loading data...
+[Benchmark] Processing range 0 to 1905 (1906 total)
+[Benchmark] NEW: Processing 1906 fresh items.
+[Benchmark] Total Work Queue: 1906
+[Benchmark] API: http://tensorsql-node:5002/api/text2sql/generate
+[Benchmark] Workers: 4
+
+[Benchmark] Loaded 166 enriched schemas from cache.
+[Benchmark] All 166 schemas are already enriched in cache.

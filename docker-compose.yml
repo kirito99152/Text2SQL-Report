@@ -22,6 +22,7 @@ services:
     environment:
       - PORT=5002
       - LLM_ENDPOINT_URL=http://request-hub:5001/generate_output
+      - BOOTSTRAP_ENDPOINT=http://bootstrap:3001/api/execute-sql
     depends_on:
       - request-hub
     networks:

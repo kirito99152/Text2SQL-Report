@@ -11,7 +11,7 @@ PIPELINES=("base" "no_planning" "no_self_check" "remove_schema_linking")
 
 for pipeline in "${PIPELINES[@]}"; do
     echo "Evaluating pipeline: $pipeline"
-    GOLD_FILE="$BASE_DIR/gold_base.sql"
+    GOLD_FILE="$BASE_DIR/gold_$pipeline.sql"
     PRED_FILE="$BASE_DIR/pred_$pipeline.sql"
     OUTPUT_FILE="$BASE_DIR/output_$pipeline.txt"
     

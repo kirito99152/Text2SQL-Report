@@ -47,13 +47,16 @@ exports.generate = async (req, res) => {
         let linkingText = "";
         let tokenMatchedTables = null;
 
-        if (dbId) {
+        if (dbId && pipeline !== 'ablation3') {
             const linkingResult = schemaLinkingService.generateLinkingWithRelevantTables(question, dbId);
             linkingText = linkingResult.linkingText;
             tokenMatchedTables = linkingResult.relevantTables;
             if (linkingText) {
                 console.log(`[Controller] ${workerPrefix}Schema linking: ${linkingText.split('\n').length - 1} matches`);
             }
+        } else if (dbId && pipeline === 'ablation3') {
+            console.log(`[Controller] ${workerPrefix}Schema linking SKIPPED (ablation3).`);
+            logStep(pipeline, question, "Schema-Linking", "SKIPPED (ablation3)");
         }
 
         if (req.body.schema) {
@@ -111,17 +114,28 @@ exports.generate = async (req, res) => {
         }
 
         // 3. Generate Query Plan (filtered schema)
-        let plan = null;
-        if (pipeline !== 'ablation1') {
-            logStep(pipeline, question, "Planning", "EXECUTED");
-            plan = await planningService.generatePlan(question, schemaContext, pipeline);
+        let plan = req.body.initialPlan || null;
+        if (!plan) {
+            if (pipeline !== 'ablation1') {
+                logStep(pipeline, question, "Planning", "EXECUTED");
+                plan = await planningService.generatePlan(question, schemaContext, pipeline);
+            } else {
+                logStep(pipeline, question, "Planning", "SKIPPED");
+            }
         } else {
-            logStep(pipeline, question, "Planning", "SKIPPED");
+            console.log(`[Controller] ${workerPrefix}Using provided initialPlan.`);
+            logStep(pipeline, question, "Planning", "PROVIDED");
         }
 
         // 4. Generate SQL (filtered schema)
-        logStep(pipeline, question, "SQL Generation", "EXECUTED");
-        let sql = await sqlService.generateSql(plan, schemaContext, question, pipeline);
+        let sql = req.body.initialSql || null;
+        if (!sql) {
+            logStep(pipeline, question, "SQL Generation", "EXECUTED");
+            sql = await sqlService.generateSql(plan, schemaContext, question, pipeline);
+        } else {
+            console.log(`[Controller] ${workerPrefix}Using provided initialSql.`);
+            logStep(pipeline, question, "SQL Generation", "PROVIDED");
+        }
 
         // 4b. Self-Correction (filtered schema)
         if (pipeline !== 'ablation2') {

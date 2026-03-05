@@ -1,0 +1,22 @@
+============================================================
+  BRIDGE TO FULL PIPELINE
+  Input:   /app/benchmark_tensor_logs/benchmark_results_ablation2.json
+  Output:  /app/benchmark_tensor_logs/benchmark_results_base.json
+  Workers: 4
+============================================================
+
+[Bridge] Loading input data from /app/benchmark_tensor_logs/benchmark_results_ablation2.json...
+[Bridge] Loading schemas...
+[Bridge] Loading reference gold queries from /app/data/syllable-level/test.json...
+[Bridge] Synced 8 gold_sql entries from test.json.
+[Bridge] Loaded 130 previous results.
+[Bridge] Successfully processed: 130
+
+[Bridge] Total entries: 1906
+[Bridge] RESUME: Skipping 130 already processed items.
+[Bridge] NEW: Processing 1776 fresh items.
+[Bridge] Total Work Queue: 1776
+[Bridge] API: http://tensorsql-node:5002/api/text2sql/generate
+
+[Benchmark] Loaded 166 enriched schemas from cache.
+[Benchmark] All 166 schemas are already enriched in cache.

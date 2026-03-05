@@ -1,0 +1,1722 @@
+============================================================
+  RE-RUN EVAL ERRORS: ablation3
+  Results: /app/benchmark_tensor_logs/benchmark_results_ablation3.json
+  Workers: 8
+============================================================
+
+[ReRun] Loading existing results from /app/benchmark_tensor_logs/benchmark_results_ablation3.json...
+[ReRun] Total entries in file: 1906
+[ReRun] RESUME: Found 1745 already successful entries. Skipping.
+[ReRun] WORK: Found 161 entries still having eval errors to re-run.
+[ReRun] Loading schemas...
+[Benchmark] Loaded 166 enriched schemas from cache.
+[Benchmark] All 166 schemas are already enriched in cache.
+
+============================================================
+  PROGRESS [ablation3]: 1745/1906 | EM: 1062 (60.9%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1745/1906 | EM: 1062 (60.9%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1745/1906 | EM: 1062 (60.9%) | Errors: 0
+============================================================
+
+[114/1906] ✗ NO MATCH  | DB: election_representative | 93109ms
+  Q: Săp xếp tên của các đại diện theo thứ tự giảm dần về số lượng phiếu bầu .
+  Gold: select t2.ten from cuoc_bau_cu as t1 join dai_dien as t2 on t1.id_dai_dien = t2.id_dai_dien order by so_luong_phieu_bau desc
+  Old:  SELECT dai_dien.ten, SUM(cuoc_bau_cu.so_luong_phieu_bau) AS total_votes FROM dai_dien JOIN cuoc_bau_cu ON dai_dien.id_dai_dien = cuoc_bau_cu.id_dai_dien GROUP BY dai_dien.id_dai_dien ORDER BY total_votes DESC
+  New:  SELECT dai_dien.ten, SUM(cuoc_bau_cu.so_luong_phieu_bau) AS total_votes FROM dai_dien JOIN cuoc_bau_cu ON dai_dien.id_dai_dien = cuoc_bau_cu.id_dai_dien GROUP BY dai_dien.id_dai_dien ORDER BY total_votes DESC
+  Old Error: Error col: as
+  New Error: Error col: as
+
+[111/1906] ✓ MATCH FIXED! | DB: election_representative | 100728ms
+  Q: Tuổi thọ của các đại diện từ tiểu bang New York hoặc tiểu bang Indiana là bao nhiêu ?
+  Gold: select tuoi_tho from dai_dien where tieu_bang = "new york" or tieu_bang = "indiana"
+  Old:  SELECT tuoi_tho FROM dai_dien WHERE tieu_bang = 'New York' OR tieu_bau_cu.tieu_bang = 'Indiana'
+  New:  SELECT tuoi_tho FROM dai_dien WHERE tieu_bang = 'NY' OR tieu_bang = 'IN'
+  Old Error: 'tieu_bau_cu'
+
+[135/1906] ✗ NO MATCH  | DB: match_season | 109055ms
+  Q: Hiển thị những vị trí khác nhau của các cầu thủ đến từ trường đại học UCLA hoặc Duke .
+  Gold: select distinct vi_tri from tran_dau_trong_mua_giai where truong_dai_hoc = "ucla" or truong_dai_hoc = "duke"
+  Old:  SELECT DISTINCT vi_tri FROM tran_dau_trong_mua_giai WHERE truong_dai_hoc IN ('UCLA', 'Duke')
+  New:  SELECT DISTINCT vi_tri FROM tran_dau_trong_mua_giai WHERE truong_dai_hoc IN ('UCLA', 'Duke')
+
+[123/1906] ✗ NO MATCH  | DB: election_representative | 120078ms
+  Q: Hiển thị các đảng có cả người đại diện ở tiểu bang New York và người đại diện ở tiểu bang Pennsylvania .
+  Gold: select dang from dai_dien where tieu_bang = "new york" intersect select dang from dai_dien where tieu_bang = "pennsylvania"
+  Old:  SELECT T1.dang FROM dai_dien T1 JOIN cuoc_bau_cu T2 ON T1.id_dai_dien = T2.id_dai_dien WHERE T2.vi_tri = 'New York' INTERSECT SELECT T1.dang FROM dai_dien T1 JOIN cuoc_bau_cu T2 ON T1.id_dai_dien = T2.id_dai_dien WHERE T2.vi_tri = 'Pennsylvania'
+  New:  SELECT T1.dang FROM dai_dien T1 JOIN cuoc_bau_cu T2 ON T1.id_dai_dien = T2.id_dai_dien WHERE T2.vi_tri IN (1, 2) GROUP BY T1.dang HAVING COUNT(DISTINCT T2.vi_tri) = 2
+  Old Error: 't1'
+  New Error: 't1'
+
+
+============================================================
+  PROGRESS [ablation3]: 1749/1906 | EM: 1063 (60.8%) | Errors: 0
+============================================================
+
+[31/1906] ✗ NO MATCH  | DB: assets_maintenance | 140864ms
+  Q: Cho biết mẫu mã của những tài sản không phát sinh bất cứ lỗi nào .
+  Gold: select mau_ma_tai_san from tai_san where id_tai_san not in (select id_tai_san from nhat_ky_loi)
+  Old:  SELECT T1.mau_ma_tai_san FROM tai_san AS T1 WHERE NOT EXISTS (SELECT 1 FROM nhat_ky_loi WHERE id_tai_san = T1.id_tai_san)
+  New:  SELECT T1.mau_ma_tai_san FROM tai_san AS T1 WHERE NOT EXISTS (SELECT 1 FROM nhat_ky_loi WHERE id_tai_san = T1.id_tai_san)
+  Old Error: Error col: not
+  New Error: Error col: not
+
+
+============================================================
+  PROGRESS [ablation3]: 1750/1906 | EM: 1063 (60.7%) | Errors: 0
+============================================================
+
+[14/1906] ✓ MATCH FIXED! | DB: assets_maintenance | 162324ms
+  Q: Cho biết các tình trạng lỗi khác nhau đã được ghi lại .
+  Gold: select distinct tinh_trang_loi from nhat_ky_cua_loi_bo_phan
+  Old:  SELECT DISTINCT tinh_trang_loi FROM nhat_ky_loi
+  New:  SELECT DISTINCT tinh_trang_loi FROM nhat_ky_cua_loi_bo_phan
+  Old Error: Error col: tinh_trang_loi
+
+[11/1906] ✓ MATCH FIXED! | DB: assets_maintenance | 177498ms
+  Q: Cho biết mô tả lỗi và tình trạng lỗi của tất cả các lỗi được ghi lại trong nhật ký .
+  Gold: select t1.mo_ta_ve_loi , t2.tinh_trang_loi from nhat_ky_loi as t1 join nhat_ky_cua_loi_bo_phan as t2 on t1.id_muc_nhap_cua_nhat_ky_loi = t2.id_muc_nhap_cua_nhat_ky_loi
+  Old:  SELECT mo_ta_ve_loi, tinh_trang_loi FROM nhat_ky_loi
+  New:  SELECT mo_ta_ve_loi, tinh_trang_loi FROM nhat_ky_loi JOIN nhat_ky_cua_loi_bo_phan ON nhat_ky_loi.id_muc_nhap_cua_nhat_ky_loi = nhat_ky_cua_loi_bo_phan.id_muc_nhap_cua_nhat_ky_loi
+  Old Error: Error col: tinh_trang_loi
+
+
+============================================================
+  PROGRESS [ablation3]: 1752/1906 | EM: 1065 (60.8%) | Errors: 0
+============================================================
+
+[4/1906] ✗ NO MATCH  | DB: assets_maintenance | 206634ms
+  Q: Công ty bên thứ ba nào có ít nhất 2 kỹ sư bảo trì hoặc có ít nhất 2 hợp đồng bảo trì ? Liệt kê tên và id của những công ty này .
+  Gold: select t1.id_cong_ty , t1.ten_cong_ty from cong_ty_ben_thu_ba as t1 join ky_su_bao_tri as t2 on t1.id_cong_ty = t2.id_cong_ty group by t1.id_cong_ty having count ( * ) >= 2 union select t3.id_cong_ty , t3.ten_cong_ty from cong_ty_ben_thu_ba as t3 join hop_dong_bao_tri as t4 on t3.id_cong_ty = t4.id_hop_dong_bao_tri_cua_cong_ty group by t3.id_cong_ty having count ( * ) >= 2
+  Old:  SELECT T1.id_cong_ty, T1.ten_cong_ty FROM cong_ty_ben_thu_ba AS T1 JOIN hop_dong_bao_tri AS T2 ON T1.id_cong_ty = T2.id_hop_dong_bao_tri_cua_cong_ty GROUP BY T1.id_cong_ty HAVING COUNT(*) >= 2 UNION SELECT T1.id_cong_ty, T1.ten_cong_ty FROM cong_ty_ben_thu_ba AS T1 JOIN ky_su_bao_tri AS T2 ON T1.id_cong_ty = T2.id_cong_ty GROUP BY T1.id_cong_ty HAVING COUNT(*) >= 2
+  New:  SELECT T1.id_cong_ty, T1.ten_cong_ty FROM cong_ty_ben_thu_ba AS T1 JOIN hop_dong_bao_tri AS T2 ON T1.id_cong_ty = T2.id_hop_dong_bao_tri_cua_cong_ty GROUP BY T1.id_cong_ty HAVING COUNT(*) >= 2 UNION SELECT T1.id_cong_ty, T1.ten_cong_ty FROM cong_ty_ben_thu_ba AS T1 JOIN ky_su_bao_tri AS T2 ON T1.id_cong_ty = T2.id_cong_ty GROUP BY T1.id_cong_ty HAVING COUNT(*) >= 2
+  Old Error: 'ky_su_bao_tri.id_hop_dong_bao_tri_cua_cong_ty'
+  New Error: 'ky_su_bao_tri.id_hop_dong_bao_tri_cua_cong_ty'
+
+
+============================================================
+  PROGRESS [ablation3]: 1753/1906 | EM: 1065 (60.8%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1753/1906 | EM: 1065 (60.8%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1753/1906 | EM: 1065 (60.8%) | Errors: 0
+============================================================
+
+[136/1906] ✗ NO MATCH  | DB: match_season | 183733ms
+  Q: Những cầu thủ đến từ các trường đại học UCLA hoặc Duke chơi ở các vị trí khác nhau nào ?
+  Gold: select distinct vi_tri from tran_dau_trong_mua_giai where truong_dai_hoc = "ucla" or truong_dai_hoc = "duke"
+  Old:  SELECT vi_tri FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu WHERE truong_dai_hoc IN ('UCLA', 'Duke')
+  New:  SELECT vi_tri FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu WHERE truong_dai_hoc IN ('UCLA', 'Duke')
+
+[151/1906] ✗ NO MATCH  | DB: match_season | 169245ms
+  Q: Cho biết ngôn ngữ chính thức của các quốc gia có các cầu thủ đến từ đại học Maryland hoặc Duke .
+  Gold: select t1.ngon_ngu_ban_dia_chinh_thuc from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.truong_dai_hoc = "maryland" or t2.truong_dai_hoc = "duke"
+  Old:  SELECT quoc_gia.ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.truong_dai_hoc IN ('Maryland', 'Duke')
+  New:  SELECT quoc_gia.ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE tran_dau_trong_mua_giai.truong_dai_hoc IN ('Maryland', 'Duke')
+
+[152/1906] ✗ NO MATCH  | DB: match_season | 159027ms
+  Q: Ngôn ngữ bản địa chính thức của các quốc gia có cầu thủ đến từ các trường đại học Maryland hoặc Duke là ngôn ngữ nào ?
+  Gold: select t1.ngon_ngu_ban_dia_chinh_thuc from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.truong_dai_hoc = "maryland" or t2.truong_dai_hoc = "duke"
+  Old:  SELECT ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE truong_dai_hoc IN ('Maryland', 'Duke')
+  New:  SELECT ngon_ngu_ban_dia_chinh_thuc FROM quoc_gia JOIN tran_dau_trong_mua_giai ON quoc_gia.id_quoc_gia = tran_dau_trong_mua_giai.quoc_gia WHERE truong_dai_hoc IN ('Maryland', 'Duke')
+
+
+============================================================
+  PROGRESS [ablation3]: 1756/1906 | EM: 1065 (60.6%) | Errors: 0
+============================================================
+
+[148/1906] ✗ NO MATCH  | DB: match_season | 200380ms
+  Q: Những cầu thủ đến từ Indonesia là những cầu thủ nào ?
+  Gold: select t2.cau_thu from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t1.ten_quoc_gia = "indonesia"
+  Old:  SELECT cau_thu.cau_thu FROM cau_thu JOIN quoc_gia ON cau_thu.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.ten_quoc_gia = 'Indonesia'
+  New:  SELECT cau_thu.cau_thu FROM cau_thu JOIN quoc_gia ON cau_thu.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.ten_quoc_gia = 'Indonesia'
+  Old Error: 'cau_thu.quoc_gia'
+  New Error: 'cau_thu.quoc_gia'
+
+[147/1906] ✗ NO MATCH FIXED! | DB: match_season | 221491ms
+  Q: Những cầu thủ nào đến từ Indonesia ?
+  Gold: select t2.cau_thu from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t1.ten_quoc_gia = "indonesia"
+  Old:  SELECT cau_thu.cau_thu FROM cau_thu JOIN quoc_gia ON cau_thu.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.ten_quoc_gia = 'Indonesia'
+  New:  SELECT cau_thu.cau_thu FROM cau_thu JOIN tran_dau_trong_mua_giai ON cau_thu.cau_thu = tran_dau_trong_mua_giai.cau_thu JOIN quoc_gia ON tran_dau_trong_mua_giai.quoc_gia = quoc_gia.id_quoc_gia WHERE quoc_gia.ten_quoc_gia = 'Indonesia'
+  Old Error: 'cau_thu.quoc_gia'
+
+[171/1906] ✗ NO MATCH  | DB: match_season | 163404ms
+  Q: Hiển thị 3 trường đại học đứng đầu về số lượng cầu thủ trong các mùa giải thi đấu .
+  Gold: select truong_dai_hoc from tran_dau_trong_mua_giai group by truong_dai_hoc order by count ( * ) desc limit 3
+  Old:  SELECT truong_dai_hoc, COUNT(*) AS so_luong_cau_thu FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc ORDER BY so_luong_cau_thu DESC LIMIT 3
+  New:  SELECT truong_dai_hoc, COUNT(*) AS so_luong_cau_thu FROM tran_dau_trong_mua_giai GROUP BY truong_dai_hoc ORDER BY so_luong_cau_thu DESC LIMIT 3
+  Old Error: Error col: as
+  New Error: Error col: as
+
+
+============================================================
+  PROGRESS [ablation3]: 1759/1906 | EM: 1065 (60.5%) | Errors: 0
+============================================================
+
+[180/1906] ✗ NO MATCH  | DB: match_season | 173155ms
+  Q: Những quốc gia có một số cầu thủ chơi ở vị trí ' tiền đạo ' và một số cầu thủ chơi vị trí ' hậu vệ ' có tên là gì ?
+  Gold: select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = "forward" intersect select t1.ten_quoc_gia from quoc_gia as t1 join tran_dau_trong_mua_giai as t2 on t1.id_quoc_gia = t2.quoc_gia where t2.vi_tri = "defender"
+  Old:  SELECT q.ten_quoc_gia FROM quoc_gia q JOIN tran_dau_trong_mua_giai t ON q.id_quoc_gia = t.quoc_gia GROUP BY q.id_quoc_gia HAVING SUM(CASE WHEN t.vi_tri = 'tiền đạo' THEN 1 ELSE 0 END) > 0 AND SUM(CASE WHEN t.vi_tri = 'hậu vệ' THEN 1 ELSE 0 END) > 0
+  New:  SELECT q.ten_quoc_gia FROM quoc_gia q JOIN tran_dau_trong_mua_giai t ON q.id_quoc_gia = t.quoc_gia GROUP BY q.id_quoc_gia HAVING SUM(CASE WHEN t.vi_tri = 'tiền đạo' THEN 1 ELSE 0 END) > 0 AND SUM(CASE WHEN t.vi_tri = 'hậu vệ' THEN 1 ELSE 0 END) > 0
+  Old Error: 'q'
+  New Error: 'q'
+
+
+============================================================
+  PROGRESS [ablation3]: 1760/1906 | EM: 1065 (60.5%) | Errors: 0
+============================================================
+
+[193/1906] ✗ NO MATCH  | DB: perpetrator | 160292ms
+  Q: Liệt kê tên của những kẻ phạm tội ở quốc gia ' Trung Quốc ' hoặc ' Nhật Bản ' .
+  Gold: select t1.ten from ca_nhan as t1 join toi_pham as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t2.quoc_gia = "china" or t2.quoc_gia = "japan"
+  Old:  SELECT ca_nhan.ten FROM ca_nhan JOIN toi_pham ON ca_nhan.id_ca_nhan = toi_pham.id_ca_nhan WHERE toi_pham.quoc_gia IN ('Trung Quốc', 'Nhật Bản')
+  New:  SELECT ca_nhan.ten FROM ca_nhan JOIN toi_pham ON ca_nhan.id_ca_nhan = toi_pham.id_ca_nhan WHERE toi_pham.quoc_gia IN ('Trung Quốc', 'Nhật Bản')
+
+
+============================================================
+  PROGRESS [ablation3]: 1761/1906 | EM: 1065 (60.5%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1761/1906 | EM: 1065 (60.5%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1761/1906 | EM: 1065 (60.5%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1761/1906 | EM: 1065 (60.5%) | Errors: 0
+============================================================
+
+[228/1906] ✗ NO MATCH  | DB: wedding | 196742ms
+  Q: Hiển thị những quốc gia có một số cá nhân trên 30 tuổi và một số cá nhân dưới 25 tuổi .
+  Gold: select quoc_gia from ca_nhan where tuoi < 25 intersect select quoc_gia from ca_nhan where tuoi > 30
+  Old:  SELECT quoc_gia FROM ca_nhan GROUP BY quoc_gia HAVING COUNT(CASE WHEN tuoi > 30 THEN 1 END) > 0 AND COUNT(CASE WHEN tuoi < 25 THEN 1 END) > 0
+  New:  SELECT quoc_gia FROM ca_nhan GROUP BY quoc_gia HAVING COUNT(CASE WHEN tuoi > 30 THEN 1 END) > 0 AND COUNT(CASE WHEN tuoi < 25 THEN 1 END) > 0
+  Old Error: Error col: case
+  New Error: Error col: case
+
+
+============================================================
+  PROGRESS [ablation3]: 1762/1906 | EM: 1065 (60.4%) | Errors: 0
+============================================================
+
+[213/1906] ✗ NO MATCH  | DB: station_weather | 227514ms
+  Q: Cho biết nhiệt độ thấp cao nhất và lượng mưa trung bình tại ga tàu Amersham .
+  Gold: select max ( t1.nhiet_do_thap ) , avg ( t1.luong_mua ) from thoi_tiet_hang_tuan as t1 join nha_ga as t2 on t1.id_nha_ga = t2.id where t2.ten_mang_luoi = "amersham"
+  Old:  SELECT MAX(th.nhiet_do_thap), AVG(th.luong_mua) FROM nha_ga ng JOIN thoi_tiet_hang_tuan th ON ng.id = th.id_nha_ga WHERE ng.ten_mang_luoi = 'Amersham'
+  New:  SELECT MAX(th.nhiet_do_thap), AVG(th.luong_mua) FROM nha_ga ng JOIN thoi_tiet_hang_tuan th ON ng.id = th.id_nha_ga WHERE ng.ten_mang_luoi = 'Amersham'
+  Old Error: 'ng'
+  New Error: 'ng'
+
+[197/1906] ✗ NO MATCH  | DB: perpetrator | 242854ms
+  Q: Những quốc gia có ít nhất hai tội phạm là những quốc gia nào ?
+  Gold: select quoc_gia , count ( * ) from toi_pham group by quoc_gia having count ( * ) >= 2
+  Old:  SELECT quốc_gia FROM toi_pham GROUP BY quốc_gia HAVING COUNT(*) >= 2
+  New:  SELECT quốc_gia FROM toi_pham GROUP BY quốc_gia HAVING COUNT(*) >= 2
+  Old Error: Error col: quốc_gia
+  New Error: Error col: quốc_gia
+
+  [Retry 1/3] 500 Error encountered, retrying in 2s...
+[268/1906] ✗ NO MATCH  | DB: activity_1 | 188602ms
+  Q: Hiển thị tất cả các ngạch cũng như là số lượng giảng viên nam và số lượng giảng viên nữ thuộc về mỗi ngạch .
+  Gold: select ngach , gioi_tinh , count ( * ) from giang_vien group by ngach , gioi_tinh
+  Old:  SELECT ngach, COUNT(CASE WHEN gioi_tinh = 'nam' THEN 1 END) AS nam, COUNT(CASE WHEN gioi_tinh = 'nu' THEN 1 END) AS nu FROM giang_vien GROUP BY ngach
+  New:  SELECT ngach, COUNT(CASE WHEN gioi_tinh = 'nam' THEN 1 END) AS nam, COUNT(CASE WHEN gioi_tinh = 'nu' THEN 1 END) AS nu FROM giang_vien GROUP BY ngach
+  Old Error: Error col: case
+  New Error: Error col: case
+
+
+============================================================
+  PROGRESS [ablation3]: 1765/1906 | EM: 1065 (60.3%) | Errors: 0
+============================================================
+
+[233/1906] ✗ NO MATCH FIXED! | DB: wedding | 227410ms
+  Q: Hiển thị tên của tất cả các nhà thờ nơi đã tổ chức các đám cưới ngoại trừ những nơi đã tổ chức đám cưới vào năm 2015 .
+  Gold: select ten from nha_tho except select t1.ten from nha_tho as t1 join le_cuoi as t2 on t1.id_nha_tho = t2.id_nha_tho where t2.nam = 2015
+  Old:  SELECT T1.ten FROM nha_tho AS T1 JOIN le_cuoi AS T2 ON T1.id_nha_tho = T2.id_nha_tho WHERE T2.ngay_mo_cua != 2015
+  New:  SELECT T1.ten FROM nha_tho AS T1 JOIN le_cuoi AS T2 ON T1.id_nha_tho = T2.id_nha_tho WHERE T1.ngay_mo_cua != 2015
+  Old Error: 'le_cuoi.ngay_mo_cua'
+
+
+============================================================
+  PROGRESS [ablation3]: 1766/1906 | EM: 1065 (60.3%) | Errors: 0
+============================================================
+
+[298/1906] ✗ NO MATCH  | DB: activity_1 | 210527ms
+  Q: Hiển thị id của các giảng viên vừa tham gia vào một số hoạt động vừa tư vấn cho các sinh viên .
+  Gold: select id_giang_vien from giang_vien_tham_gia_vao intersect select co_van from sinh_vien
+  Old:  SELECT id_giang_vien FROM giang_vien_tham_gia_vao INTERSECT SELECT co_van FROM sinh_vien WHERE co_van IS NOT NULL
+  New:  SELECT id_giang_vien FROM giang_vien_tham_gia_vao INTERSECT SELECT co_van FROM sinh_vien WHERE co_van IS NOT NULL
+  Old Error: Error col: not
+  New Error: Error col: not
+
+  [Retry 1/3] 500 Error encountered, retrying in 2s...
+
+============================================================
+  PROGRESS [ablation3]: 1767/1906 | EM: 1065 (60.3%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1767/1906 | EM: 1065 (60.3%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1767/1906 | EM: 1065 (60.3%) | Errors: 0
+============================================================
+
+[321/1906] ✗ NO MATCH  | DB: activity_1 | 161813ms
+  Q: Những giảng viên nào đã tham gia hoạt động ' Bơi xuồng ' hoặc hoạt động ' Chèo thuyền Kayak ' ? Cho biết tên của những giảng viên này .
+  Gold: select distinct t1.ho from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien join hoat_dong as t3 on t2.id_hoat_dong = t2.id_hoat_dong where t3.ten_hoat_dong = "canoeing" or t3.ten_hoat_dong = "kayaking"
+  Old:  SELECT giang_vien.ho, giang_vien.ten FROM giang_vien JOIN giang_vien_tham_gia_vao ON giang_vien.id_giang_vien = giang_vien_tham_gia_vao.id_giang_vien JOIN hoat_dong ON giang_vien_tham_gia_vao.id_hoat_dong = hoat_dong.id_hoat_dong WHERE hoat_dong.ten_hoat_dong IN ('Bơi xuồng', 'Chèo thuyền Kayak')
+  New:  SELECT giang_vien.ho, giang_vien.ten FROM giang_vien JOIN giang_vien_tham_gia_vao ON giang_vien.id_giang_vien = giang_vien_tham_gia_vao.id_giang_vien JOIN hoat_dong ON giang_vien_tham_gia_vao.id_hoat_dong = hoat_dong.id_hoat_dong WHERE hoat_dong.ten_hoat_dong IN ('Bơi xuồng', 'Chèo thuyền Kayak')
+
+[320/1906] ✗ NO MATCH  | DB: activity_1 | 165418ms
+  Q: Tìm tên của các giảng viên đã tham gia hoạt động ' Bơi xuồng ' hoặc hoạt động ' Chèo thuyền Kayak ' .
+  Gold: select distinct t1.ho from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien join hoat_dong as t3 on t2.id_hoat_dong = t2.id_hoat_dong where t3.ten_hoat_dong = "canoeing" or t3.ten_hoat_dong = "kayaking"
+  Old:  SELECT giang_vien.ho, giang_vien.ten FROM giang_vien JOIN giang_vien_tham_gia_vao ON giang_vien.id_giang_vien = giang_vien_tham_gia_vao.id_giang_vien JOIN hoat_dong ON giang_vien_tham_gia_vao.id_hoat_dong = hoat_dong.id_hoat_dong WHERE hoat_dong.ten_hoat_dong IN ('Bơi xuồng', 'Chèo thuyền Kayak')
+  New:  SELECT giang_vien.ho, giang_vien.ten FROM giang_vien JOIN giang_vien_tham_gia_vao ON giang_vien.id_giang_vien = giang_vien_tham_gia_vao.id_giang_vien JOIN hoat_dong ON giang_vien_tham_gia_vao.id_hoat_dong = hoat_dong.id_hoat_dong WHERE hoat_dong.ten_hoat_dong IN ('Bơi xuồng', 'Chèo thuyền Kayak')
+
+[311/1906] ✗ NO MATCH  | DB: activity_1 | 185076ms
+  Q: Hoạt động nào thu hút sự tham gia của nhiều giảng viên nhất ? Cho biết tên của hoạt động này .
+  Gold: select t1.ten_hoat_dong from hoat_dong as t1 join giang_vien_tham_gia_vao as t2 on t1.id_hoat_dong = t2.id_hoat_dong group by t1.id_hoat_dong order by count ( * ) desc limit 1
+  Old:  SELECT T1.ten_hoat_dong FROM hoat_dong AS T1 LEFT JOIN tham_gia_vao AS T2 ON T1.id_hoat_dong = T2.id_hoat_dong LEFT JOIN giang_vien_tham_gia_vao AS T3 ON T1.id_hoat_dong = T3.id_hoat_dong GROUP BY T1.id_hoat_dong ORDER BY COUNT(*) DESC LIMIT 1
+  New:  SELECT T1.ten_hoat_dong FROM hoat_dong AS T1 LEFT JOIN tham_gia_vao AS T2 ON T1.id_hoat_dong = T2.id_hoat_dong LEFT JOIN giang_vien_tham_gia_vao AS T3 ON T1.id_hoat_dong = T3.id_hoat_dong GROUP BY T1.id_hoat_dong ORDER BY COUNT(*) DESC LIMIT 1
+  Old Error: 'left'
+  New Error: 'left'
+
+
+============================================================
+  PROGRESS [ablation3]: 1770/1906 | EM: 1065 (60.2%) | Errors: 0
+============================================================
+
+[218/1906] ✗ NO MATCH  | DB: station_weather | 411537ms
+  Q: Hiển thị nhiệt độ thấp thấp nhất và tốc độ gió mạnh nhất tính theo dặm trên giờ .
+  Gold: select min ( nhiet_do_thap ) , max ( toc_do_gio_mph ) from thoi_tiet_hang_tuan
+  Old:  SELECT MIN(nhiet_do_thap) AS min_nhiet_do_thap, MAX(toc_do_gio_mph) AS max_toc_do_gio FROM thoi_tiet_hang_tuan
+  New:  SELECT MIN(nhiet_do_thap) AS min_nhiet_do_thap, MAX(toc_do_gio_mph) AS max_toc_do_gio FROM thoi_tiet_hang_tuan
+  Old Error: Error col: as
+  New Error: Error col: as
+
+
+============================================================
+  PROGRESS [ablation3]: 1771/1906 | EM: 1065 (60.1%) | Errors: 0
+============================================================
+
+[323/1906] ✗ NO MATCH  | DB: activity_1 | 197994ms
+  Q: Những giáo sư nào đã không tham gia hoạt động ' Bơi xuồng ' hoặc hoạt động ' Chèo thuyền Kayak ' ? Cho biết tên của những giáo sư này .
+  Gold: select ho from giang_vien where ngach = "professor" except select distinct t1.ho from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien join hoat_dong as t3 on t2.id_hoat_dong = t2.id_hoat_dong where t3.ten_hoat_dong = "canoeing" or t3.ten_hoat_dong = "kayaking"
+  Old:  SELECT ho, ten FROM giang_vien WHERE id_giang_vien NOT IN (SELECT T2.id_giang_vien FROM giang_vien_tham_gia_vao AS T2 JOIN hoat_dong AS T3 ON T2.id_hoat_dong = T3.id_hoat_dong WHERE T3.ten_hoat_dong IN ('Bơi xuồng', 'Chèo thuyền Kayak'))
+  New:  SELECT ho, ten FROM giang_vien WHERE id_giang_vien NOT IN (SELECT T2.id_giang_vien FROM giang_vien_tham_gia_vao AS T2 JOIN hoat_dong AS T3 ON T2.id_hoat_dong = T3.id_hoat_dong WHERE T3.ten_hoat_dong IN ('Bơi xuồng', 'Chèo thuyền Kayak'))
+
+[331/1906] ✗ NO MATCH  | DB: body_builder | 172292ms
+  Q: Điểm cử giật trung bình của những người tập thể hình là bao nhiêu ?
+  Gold: select avg ( cu_giat ) from nguoi_luyen_the_hinh
+  Old:  The requested calculation cannot be performed with the provided schema. No column exists for bench press data.
+  New:  The requested calculation cannot be performed with the provided schema. No column exists for bench press data.
+  Old Error: 'from' not found
+  New Error: 'from' not found
+
+
+============================================================
+  PROGRESS [ablation3]: 1773/1906 | EM: 1065 (60.1%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1773/1906 | EM: 1065 (60.1%) | Errors: 0
+============================================================
+
+[322/1906] ✗ NO MATCH  | DB: activity_1 | 247437ms
+  Q: Cho biết tên của các giáo sư đã không tham gia hoạt động ' Bơi xuồng ' hoặc hoạt động ' Chèo thuyền Kayak ' .
+  Gold: select ho from giang_vien where ngach = "professor" except select distinct t1.ho from giang_vien as t1 join giang_vien_tham_gia_vao as t2 on t1.id_giang_vien = t2.id_giang_vien join hoat_dong as t3 on t2.id_hoat_dong = t2.id_hoat_dong where t3.ten_hoat_dong = "canoeing" or t3.ten_hoat_dong = "kayaking"
+  Old:  SELECT ho , ten FROM giang_vien WHERE id_giang_vien NOT IN (SELECT id_giang_vien FROM giang_vien_tham_gia_vao WHERE id_hoat_dong IN (SELECT id_hoat_dong FROM hoat_dong WHERE ten_hoat_dong IN ('Bơi xuồng', 'Chèo thuyền Kayak')))
+  New:  SELECT ho , ten FROM giang_vien WHERE id_giang_vien NOT IN (SELECT id_giang_vien FROM giang_vien_tham_gia_vao WHERE id_hoat_dong IN (SELECT id_hoat_dong FROM hoat_dong WHERE ten_hoat_dong IN ('Bơi xuồng', 'Chèo thuyền Kayak')))
+
+[345/1906] ✗ NO MATCH FIXED! | DB: body_builder | 115943ms
+  Q: Hiển thị tất cả các thông tin về những người tập thể hình .
+  Gold: select * from nguoi_luyen_the_hinh
+  Old:  SELECT nguoi_luyen_the_hinh.id_nguoi_luyen_the_hinh, nguoi_luyen_the_hinh.id_ca_nhan, nguoi_luyen_the_hinh.cu_giat, nguoi_luyen_the_hinh.cu_day, nguoi_luyen_the_hinh.tong, ca_nhan.ten, ca_nhan.chieu_cao, ca_nhan.can_nang, ca_nhan.ngay_sinh, ca_nhan.no_i_sinh FROM nguoi_luyen_the_hinh JOIN ca_nhan ON nguoi_luyen_the_hinh.id_ca_nhan = ca_nhan.id_ca_nhan
+  New:  SELECT nguoi_luyen_the_hinh.id_nguoi_luyen_the_hinh, nguoi_luyen_the_hinh.id_ca_nhan, nguoi_luyen_the_hinh.cu_giat, nguoi_luyen_the_hinh.cu_day, nguoi_luyen_the_hinh.tong, ca_nhan.ten, ca_nhan.chieu_cao, ca_nhan.can_nang, ca_nhan.ngay_sinh, ca_nhan.noi_sinh FROM nguoi_luyen_the_hinh JOIN ca_nhan ON nguoi_luyen_the_hinh.id_ca_nhan = ca_nhan.id_ca_nhan
+  Old Error: 'ca_nhan.no_i_sinh'
+
+[239/1906] ✗ NO MATCH  | DB: wedding | 482291ms
+  Q: Có bao nhiêu nhà thờ có một đám cưới trong năm 2016 ?
+  Gold: select count ( distinct id_nha_tho ) from le_cuoi where nam = 2016
+  Old:  The schema does not provide a date field for weddings in the `le_cuoi` table, making it impossible to answer the query as posed.
+  New:  SELECT COUNT(DISTINCT T1.id_nha_tho) FROM nha_tho T1 JOIN le_cuoi T2 ON T1.id_nha_tho = T2.id_nha_tho WHERE T2.ngay_mo_cua BETWEEN 20160101 AND 20161231
+  Old Error: 'from' not found
+  New Error: 't1'
+
+
+============================================================
+  PROGRESS [ablation3]: 1776/1906 | EM: 1065 (60.0%) | Errors: 0
+============================================================
+
+[350/1906] ✗ NO MATCH  | DB: body_builder | 139933ms
+  Q: Tổng số điểm của những người tập thể hình có sinh nhật vào tháng một là bao nhiêu ?
+  Gold: select t1.tong from nguoi_luyen_the_hinh as t1 join ca_nhan as t2 on t1.id_ca_nhan = t2.id_ca_nhan where t2.ngay_sinh like "%january%"
+  Old:  SELECT SUM(nguoi_luyen_the_hinh.tong) FROM ca_nhan JOIN nguoi_luyen_the_hinh ON ca_nhan.id_ca_nhan = nguoi_luyen_the_hinh.id_ca_nhan WHERE SUBSTR(ca_nhan.ngay_sinh, 6, 2) = '01'
+  New:  SELECT SUM(nguoi_luyen_the_hinh.tong) FROM ca_nhan JOIN nguoi_luyen_the_hinh ON ca_nhan.id_ca_nhan = nguoi_luyen_the_hinh.id_ca_nhan WHERE SUBSTR(ca_nhan.ngay_sinh, 6, 2) = '01'
+  Old Error: Error col: substr
+  New Error: Error col: substr
+
+[411/1906] ✗ NO MATCH  | DB: city_record | 112236ms
+  Q: Trong tháng hai , thành phố nào đã từng có nhiệt độ cao nhất ?
+  Gold: select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho order by t2.thang_hai desc limit 1
+  Old:  SELECT thanh_pho.thanh_pho FROM thanh_pho JOIN nhiet_do ON thanh_pho.id_thanh_pho = nhiet_do.id_thanh_pho WHERE nhiet_do.thang_hai IS NOT NULL ORDER BY nhiet_do.thang_hai DESC LIMIT 1
+  New:  SELECT thanh_pho.thanh_pho FROM thanh_pho JOIN nhiet_do ON thanh_pho.id_thanh_pho = nhiet_do.id_thanh_pho WHERE nhiet_do.thang_hai IS NOT NULL ORDER BY nhiet_do.thang_hai DESC LIMIT 1
+  Old Error: Error col: not
+  New Error: Error col: not
+
+[399/1906] ✗ NO MATCH FIXED! | DB: city_record | 136969ms
+  Q: Tìm thành phố tổ chức nhiều sự kiện nhất .
+  Gold: select t1.thanh_pho from thanh_pho as t1 join thanh_pho_chu_nha as t2 on t1.id_thanh_pho = t2.thanh_pho_chu_nha group by t2.thanh_pho_chu_nha order by count ( * ) desc limit 1
+  Old:  SELECT thanh_pho.thanh_pho , COUNT ( * ) AS so_luong_su_kien FROM thanh_pho JOIN thanh_pho_chu_nha ON thanh_pho.id_thanh_pho = thanh_pho_chu_nha.thanh_pho_chu_nha GROUP BY thanh_pho.id_thanh_pho ORDER BY COUNT ( * ) DESC LIMIT 1
+  New:  SELECT thanh_pho.thanh_pho FROM thanh_pho JOIN thanh_pho_chu_nha ON thanh_pho.id_thanh_pho = thanh_pho_chu_nha.thanh_pho_chu_nha GROUP BY thanh_pho.id_thanh_pho ORDER BY COUNT(*) DESC LIMIT 1
+  Old Error: Error col: as
+
+
+============================================================
+  PROGRESS [ablation3]: 1779/1906 | EM: 1065 (59.9%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1779/1906 | EM: 1065 (59.9%) | Errors: 0
+============================================================
+
+[415/1906] ✗ NO MATCH  | DB: city_record | 139123ms
+  Q: Những thành phố nào có nhiệt độ vào tháng 3 thấp hơn nhiệt độ vào tháng 7 và đã từng là thành phố chủ nhà ?
+  Gold: select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t2.thang_ba < t2.thang_bay intersect select t3.thanh_pho from thanh_pho as t3 join thanh_pho_chu_nha as t4 on t3.id_thanh_pho = t4.thanh_pho_chu_nha
+  Old:  SELECT thanh_pho.thanh_pho FROM thanh_pho JOIN nhiet_do ON thanh_pho.id_thanh_pho = nhiet_do.id_thanh_pho JOIN thanh_pho_chu_nha ON thanh_pho.id_thanh_pho = thanh_pho_chu_nha.thanh_pho_chu_nha WHERE nhiet_do.thang_ba < nhiet_do.thang_bay AND thanh_pho_chu_nha.nam IS NOT NULL
+  New:  SELECT thanh_pho.thanh_pho FROM thanh_pho JOIN nhiet_do ON thanh_pho.id_thanh_pho = nhiet_do.id_thanh_pho JOIN thanh_pho_chu_nha ON thanh_pho.id_thanh_pho = thanh_pho_chu_nha.thanh_pho_chu_nha WHERE nhiet_do.thang_ba < nhiet_do.thang_bay AND thanh_pho_chu_nha.nam IS NOT NULL
+  Old Error: Error col: not
+  New Error: Error col: not
+
+[414/1906] ✗ NO MATCH  | DB: city_record | 145972ms
+  Q: Cho tôi danh sách các thành phố có nhiệt độ vào tháng 3 thấp hơn nhiệt độ vào tháng 7 và đồng thời là thành phố chủ nhà ?
+  Gold: select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t2.thang_ba < t2.thang_bay intersect select t3.thanh_pho from thanh_pho as t3 join thanh_pho_chu_nha as t4 on t3.id_thanh_pho = t4.thanh_pho_chu_nha
+  Old:  SELECT thanh_pho.thanh_pho FROM thanh_pho JOIN nhiet_do ON thanh_pho.id_thanh_pho = nhiet_do.id_thanh_pho JOIN thanh_pho_chu_nha ON thanh_pho.id_thanh_pho = thanh_pho_chu_nha.thanh_pho_chu_nha WHERE nhiet_do.thang_ba < nhiet_do.thang_tam AND thanh_pho_chu_nha.nam IS NOT NULL
+  New:  SELECT thanh_pho.thanh_pho FROM thanh_pho JOIN nhiet_do ON thanh_pho.id_thanh_pho = nhiet_do.id_thanh_pho JOIN thanh_pho_chu_nha ON thanh_pho.id_thanh_pho = thanh_pho_chu_nha.thanh_pho_chu_nha WHERE nhiet_do.thang_ba < nhiet_do.thang_tam AND thanh_pho_chu_nha.nam IS NOT NULL
+  Old Error: Error col: not
+  New Error: Error col: not
+
+
+============================================================
+  PROGRESS [ablation3]: 1781/1906 | EM: 1065 (59.8%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1781/1906 | EM: 1065 (59.8%) | Errors: 0
+============================================================
+
+[418/1906] ✗ NO MATCH  | DB: city_record | 143482ms
+  Q: Cho biết danh sách các thành phố có nhiệt độ vào tháng hai cao hơn nhiệt độ vào tháng sáu hoặc đã từng là thành phố chủ nhà ?
+  Gold: select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t2.thang_hai > t2.thang_sau union select t3.thanh_pho from thanh_pho as t3 join thanh_pho_chu_nha as t4 on t3.id_thanh_pho = t4.thanh_pho_chu_nha
+  Old:  SELECT thanh_pho.thanh_pho FROM thanh_pho LEFT JOIN nhiet_do ON thanh_pho.id_thanh_pho = nhiet_do.id_thanh_pho LEFT JOIN thanh_pho_chu_nha ON thanh_pho.id_thanh_pho = thanh_pho_chu_nha.thanh_pho_chu_nha WHERE (nhiet_do.thang_hai > nhiet_do.thang_sau) OR (thanh_pho_chu_nha.thanh_pho_chu_nha IS NOT NULL)
+  New:  SELECT thanh_pho.thanh_pho FROM thanh_pho LEFT JOIN nhiet_do ON thanh_pho.id_thanh_pho = nhiet_do.id_thanh_pho LEFT JOIN thanh_pho_chu_nha ON thanh_pho.id_thanh_pho = thanh_pho_chu_nha.thanh_pho_chu_nha WHERE (nhiet_do.thang_hai > nhiet_do.thang_sau) OR (thanh_pho_chu_nha.thanh_pho_chu_nha IS NOT NULL)
+  Old Error: 'left'
+  New Error: 'left'
+
+[457/1906] ✗ NO MATCH  | DB: college_1 | 129698ms
+  Q: Những trường học có ít hơn 5 khoa có số lượng khoa ở mỗi trường là bao nhiêu ?
+  Gold: select count ( distinct ten_khoa ) , ma_truong from khoa group by ma_truong having count ( distinct ten_khoa ) < 5
+  Old:  SELECT ma_truong, COUNT(*) AS so_luong_khoa FROM khoa GROUP BY ma_truong HAVING COUNT(*) < 5
+  New:  SELECT ma_truong, COUNT(*) AS so_luong_khoa FROM khoa GROUP BY ma_truong HAVING COUNT(*) < 5
+  Old Error: Error col: as
+  New Error: Error col: as
+
+[417/1906] ✗ NO MATCH  | DB: city_record | 162501ms
+  Q: Những thành phố nào có nhiệt độ vào tháng 3 thấp hơn so với nhiệt độ vào tháng 12 và chưa bao giờ đóng vai trò là thành phố chủ nhà ?
+  Gold: select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t2.thang_ba < t2.thang_muoi_hai except select t3.thanh_pho from thanh_pho as t3 join thanh_pho_chu_nha as t4 on t3.id_thanh_pho = t4.thanh_pho_chu_nha
+  Old:  SELECT thanh_pho.thanh_pho FROM thanh_pho JOIN nhiet_do ON thanh_pho.id_thanh_pho = nhiet_do.id_thanh_pho WHERE nhiet_do.thang_ba < nhiet_do.thang_muoi_hai AND thanh_pho.id_thanh_pho NOT IN (SELECT id_thanh_pho FROM thanh_pho_chu_nha)
+  New:  SELECT thanh_pho.thanh_pho FROM thanh_pho JOIN nhiet_do ON thanh_pho.id_thanh_pho = nhiet_do.id_thanh_pho WHERE nhiet_do.thang_ba < nhiet_do.thang_muoi_hai AND thanh_pho.id_thanh_pho NOT IN (SELECT id_thanh_pho FROM thanh_pho_chu_nha)
+  Old Error: Error col: id_thanh_pho
+  New Error: Error col: id_thanh_pho
+
+
+============================================================
+  PROGRESS [ablation3]: 1784/1906 | EM: 1065 (59.7%) | Errors: 0
+============================================================
+
+[416/1906] ✗ NO MATCH FIXED! | DB: city_record | 192488ms
+  Q: Cho biết danh sách các thành phố có nhiệt độ vào tháng 3 thấp hơn nhiệt độ vào tháng 12 và chưa bao giờ là thành phố chủ nhà .
+  Gold: select t1.thanh_pho from thanh_pho as t1 join nhiet_do as t2 on t1.id_thanh_pho = t2.id_thanh_pho where t2.thang_ba < t2.thang_muoi_hai except select t3.thanh_pho from thanh_pho as t3 join thanh_pho_chu_nha as t4 on t3.id_thanh_pho = t4.thanh_pho_chu_nha
+  Old:  SELECT thanh_pho.thanh_pho FROM thanh_pho JOIN nhiet_do ON thanh_pho.id_thanh_pho = nhiet_do.id_thanh_pho WHERE nhiet_do.thang_ba < nhiet_do.thang_muoi_hai AND thanh_pho.id_thanh_pho NOT IN (SELECT id_thanh_pho FROM thanh_pho_chu_nha)
+  New:  SELECT thanh_pho.thanh_pho FROM thanh_pho JOIN nhiet_do ON thanh_pho.id_thanh_pho = nhiet_do.id_thanh_pho WHERE nhiet_do.thang_ba < nhiet_do.thang_muoi_hai AND thanh_pho.id_thanh_pho NOT IN (SELECT thanh_pho_chu_nha FROM thanh_pho_chu_nha)
+  Old Error: Error col: id_thanh_pho
+
+[462/1906] ✗ NO MATCH  | DB: college_1 | 159502ms
+  Q: Cho biết số lượng lớp học đã được tổ chức ở các phòng học là nơi học tập của ít nhất 2 lớp học .
+  Gold: select count ( * ) , phong_hoc from lop_hoc group by phong_hoc having count ( * ) >= 2
+  Old:  SELECT SUM(class_count) FROM (SELECT COUNT(*) AS class_count FROM lop_hoc GROUP BY phong_hoc HAVING COUNT(*) >= 2) AS subquery
+  New:  SELECT SUM(class_count) FROM (SELECT COUNT(*) AS class_count FROM lop_hoc GROUP BY phong_hoc HAVING COUNT(*) >= 2) AS subquery
+  Old Error: Error col: as
+  New Error: Error col: as
+
+[472/1906] ✗ NO MATCH  | DB: college_1 | 162130ms
+  Q: Trường nào có số lượng giáo sư ít nhất ?
+  Gold: select t1.ma_truong from khoa as t1 join giao_su as t2 on t1.ma_khoa = t2.ma_khoa group by t1.ma_truong order by count ( * ) limit 1
+  Old:  SELECT khoa.ma_truong, COUNT(*) AS so_giao_su FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa GROUP BY khoa.ma_truong ORDER BY so_giao_su ASC LIMIT 1
+  New:  SELECT khoa.ma_truong, COUNT(*) AS so_giao_su FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa GROUP BY khoa.ma_truong ORDER BY so_giao_su ASC LIMIT 1
+  Old Error: Error col: as
+  New Error: Error col: as
+
+
+============================================================
+  PROGRESS [ablation3]: 1787/1906 | EM: 1065 (59.6%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1787/1906 | EM: 1065 (59.6%) | Errors: 0
+============================================================
+
+[537/1906] ✗ NO MATCH  | DB: college_1 | 131017ms
+  Q: Những giáo sư đến từ khoa ' Lịch sử ' có họ là gì ? Cho biết địa điểm văn phòng của những giáo sư này .
+  Gold: select t1.ho_cua_nhan_vien , t2.van_phong_giao_su from nhan_vien as t1 join giao_su as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t2.ma_khoa = t3.ma_khoa where t3.ten_khoa = "history"
+  Old:  SELECT ho_cua_nhan_vien, van_phong_giao_su FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa = 'Lịch sử'
+  New:  SELECT ho_cua_nhan_vien, van_phong_giao_su FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa = 'Lịch sử'
+  Old Error: Error col: ho_cua_nhan_vien
+  New Error: Error col: ho_cua_nhan_vien
+
+[546/1906] ✗ NO MATCH  | DB: college_1 | 96694ms
+  Q: Có bao nhiêu giáo sư có bằng ' Tiến sĩ ' hoặc ' Thạc sĩ ' ?
+  Gold: select count ( * ) from giao_su where bang_cap_cao_nhat = "ph.d." or bang_cap_cao_nhat = "ma"
+  Old:  SELECT COUNT(*) FROM giao_su WHERE bang_cap_cao_nhat IN ('Tiến sĩ', 'Thạc sĩ')
+  New:  SELECT COUNT(*) FROM giao_su WHERE bang_cap_cao_nhat IN ('Tiến sĩ', 'Thạc sĩ')
+
+
+============================================================
+  PROGRESS [ablation3]: 1789/1906 | EM: 1065 (59.5%) | Errors: 0
+============================================================
+
+[549/1906] ✗ NO MATCH  | DB: college_1 | 96988ms
+  Q: Đếm số lượng các giáo sư thuộc khoa ' Kế toán ' hoặc khoa ' Sinh học ' .
+  Gold: select count ( * ) from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa where t2.ten_khoa = "accounting" or t2.ten_khoa = "biology"
+  Old:  SELECT COUNT(*) FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa IN ('Kế toán', 'Sinh học')
+  New:  SELECT COUNT(*) FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa IN ('Kế toán', 'Sinh học')
+
+[505/1906] ✗ NO MATCH  | DB: college_1 | 172231ms
+  Q: Những sinh viên đã đăng ký khoá học ACCT-211 và đạt được điểm C có tên là gì ?
+  Gold: select t3.ten_cua_sinh_vien from lop_hoc as t1 join dang_ky_khoa_hoc as t2 on t1.ma_lop_hoc = t2.ma_lop join sinh_vien as t3 on t2.ma_so_sinh_vien = t3.ma_so_sinh_vien where t1.ma_khoa_hoc = "acct-211" and t2.diem_so = "c"
+  Old:  SELECT sinh_vien.ho_cua_sinh_vien , sinh_vien.ten_cua_sinh_vien FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.ma_so_sinh_vien = dang_ky_khoa_hoc.ma_so_sinh_vien JOIN lop_hoc ON dang_ky_khoa_hoc.ma_lop = lop_hoc.ma_lop WHERE lop_hoc.ma_khoa_hoc = 'ACCT-211' AND dang_ky_khoa_hoc.diem_so = 'C'
+  New:  SELECT sinh_vien.ho_cua_sinh_vien , sinh_vien.ten_cua_sinh_vien FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.ma_so_sinh_vien = dang_ky_khoa_hoc.ma_so_sinh_vien JOIN lop_hoc ON dang_ky_khoa_hoc.ma_lop = lop_hoc.ma_lop WHERE lop_hoc.ma_khoa_hoc = 'ACCT-211' AND dang_ky_khoa_hoc.diem_so = 'C'
+  Old Error: 'lop_hoc.ma_lop'
+  New Error: 'lop_hoc.ma_lop'
+
+[548/1906] ✗ NO MATCH  | DB: college_1 | 124153ms
+  Q: Có bao nhiêu giáo sư đến từ khoa ' Kế toán ' hoặc khoa ' Sinh học ' ?
+  Gold: select count ( * ) from giao_su as t1 join khoa as t2 on t1.ma_khoa = t2.ma_khoa where t2.ten_khoa = "accounting" or t2.ten_khoa = "biology"
+  Old:  SELECT COUNT(*) FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa IN ('Kế toán', 'Sinh học')
+  New:  SELECT COUNT(*) FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa IN ('Kế toán', 'Sinh học')
+
+
+============================================================
+  PROGRESS [ablation3]: 1792/1906 | EM: 1065 (59.4%) | Errors: 0
+============================================================
+
+[551/1906] ✗ NO MATCH  | DB: college_1 | 107145ms
+  Q: Những giáo sư nào đang giảng dạy khoá học có mã là ' CIS-220 ' và khoá học có mã là ' QM-261 ' ? Cho biết tên của những giáo sư này .
+  Gold: select t1.ten_cua_nhan_vien from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su where ma_khoa_hoc = "cis-220" intersect select t1.ten_cua_nhan_vien from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su where ma_khoa_hoc = "qm-261"
+  Old:  SELECT nhan_vien.ho_cua_nhan_vien, nhan_vien.ten_cua_nhan_vien FROM lop_hoc JOIN nhan_vien ON lop_hoc.ma_so_nhan_vien_cua_giao_su = nhan_vien.ma_so_nhan_vien WHERE lop_hoc.ma_khoa_hoc IN ('CIS-220', 'QM-261')
+  New:  SELECT nhan_vien.ho_cua_nhan_vien, nhan_vien.ten_cua_nhan_vien FROM lop_hoc JOIN nhan_vien ON lop_hoc.ma_so_nhan_vien_cua_giao_su = nhan_vien.ma_so_nhan_vien WHERE lop_hoc.ma_khoa_hoc IN ('CIS-220', 'QM-261')
+
+[550/1906] ✗ NO MATCH  | DB: college_1 | 131254ms
+  Q: Cho biết tên của các giáo sư đang giảng dạy khoá học có mã là ' CIS-220 ' và khoá học có mã là ' QM-261 ' .
+  Gold: select t1.ten_cua_nhan_vien from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su where ma_khoa_hoc = "cis-220" intersect select t1.ten_cua_nhan_vien from nhan_vien as t1 join lop_hoc as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien_cua_giao_su where ma_khoa_hoc = "qm-261"
+  Old:  SELECT nhan_vien.ho_cua_nhan_vien, nhan_vien.ten_cua_nhan_vien FROM lop_hoc JOIN nhan_vien ON lop_hoc.ma_so_nhan_vien_cua_giao_su = nhan_vien.ma_so_nhan_vien WHERE lop_hoc.ma_khoa_hoc IN ('CIS-220', 'QM-261')
+  New:  SELECT nhan_vien.ho_cua_nhan_vien, nhan_vien.ten_cua_nhan_vien FROM lop_hoc JOIN khoa_hoc ON lop_hoc.ma_khoa_hoc = khoa_hoc.ma_khoa_hoc JOIN nhan_vien ON lop_hoc.ma_so_nhan_vien_cua_giao_su = nhan_vien.ma_so_nhan_vien WHERE khoa_hoc.ma_khoa_hoc IN ('CIS-220', 'QM-261')
+
+
+============================================================
+  PROGRESS [ablation3]: 1794/1906 | EM: 1065 (59.4%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1794/1906 | EM: 1065 (59.4%) | Errors: 0
+============================================================
+
+[578/1906] ✗ NO MATCH  | DB: college_1 | 101035ms
+  Q: Tìm tên của tất cả các sinh viên đã tham gia một số khoá học và nhận được điểm A hoặc C.
+  Gold: select t1.ten_cua_sinh_vien , t1.ho_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien where t2.diem_so = "c" or t2.diem_so = "a"
+  Old:  SELECT ten_cua_sinh_vien FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.ma_so_sinh_vien = dang_ky_khoa_hoc.ma_so_sinh_vien WHERE diem_so IN ('A', 'C')
+  New:  SELECT ten_cua_sinh_vien FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.ma_so_sinh_vien = dang_ky_khoa_hoc.ma_so_sinh_vien WHERE diem_so IN ('A', 'C')
+
+[579/1906] ✗ NO MATCH  | DB: college_1 | 100122ms
+  Q: Những sinh viên nào đã tham gia một số khoá học và nhận được điểm A hoặc C ? Cho biết tên của những sinh viên này .
+  Gold: select t1.ten_cua_sinh_vien , t1.ho_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien where t2.diem_so = "c" or t2.diem_so = "a"
+  Old:  SELECT ten_cua_sinh_vien FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.ma_so_sinh_vien = dang_ky_khoa_hoc.ma_so_sinh_vien WHERE diem_so IN ('A', 'C')
+  New:  SELECT ho_cua_sinh_vien, ten_cua_sinh_vien FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.ma_so_sinh_vien = dang_ky_khoa_hoc.ma_so_sinh_vien WHERE diem_so IN ('A', 'C')
+
+
+============================================================
+  PROGRESS [ablation3]: 1796/1906 | EM: 1065 (59.3%) | Errors: 0
+============================================================
+
+[552/1906] ✗ NO MATCH  | DB: college_1 | 195986ms
+  Q: Những sinh viên nào hiện đang theo học một số lớp học của khoa ' Kế toán ' và một số lớp học của khoa ' Hệ thống thông tin máy tính ' ? Cho biết tên của những sinh viên này .
+  Gold: select t1.ten_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien join lop_hoc as t3 on t2.ma_lop = t3.ma_lop_hoc join khoa_hoc as t4 on t3.ma_khoa_hoc = t4.ma_khoa_hoc join khoa as t5 on t5.ma_khoa = t4.ma_khoa where t5.ten_khoa = "accounting" intersect select t1.ten_cua_sinh_vien from sinh_vien as t1 join dang_ky_khoa_hoc as t2 on t1.ma_so_sinh_vien = t2.ma_so_sinh_vien join lop_hoc as t3 on t2.ma_lop = t3.ma_lop_hoc join khoa_hoc as t4 on t3.ma_khoa_hoc = t4.ma_khoa_hoc join khoa as t5 on t5.ma_khoa = t4.ma_khoa where t5.ten_khoa = "computer info. systems"
+  Old:  SELECT T1.ho_cua_sinh_vien , T1.ten_cua_sinh_vien FROM sinh_vien AS T1 JOIN dang_ky_khoa_hoc AS T2 ON T1.ma_so_sinh_vien = T2.ma_so_sinh_vien JOIN lop_hoc AS T3 ON T2.ma_lop = T3.ma_lop_hoc JOIN khoa_hoc AS T4 ON T3.ma_khoa_hoc = T4.ma_khoa_hoc JOIN khoa AS T5 ON T4.ma_khoa = T5.ma_khoa WHERE T5.ten_khoa IN ('Kế toán', 'Hệ thống thông tin máy tính') GROUP BY T1.ma_so_sinh_vien HAVING COUNT(DISTINCT T5.ma_khoa) = 2
+  New:  SELECT sinh_vien.ho_cua_sinh_vien, sinh_vien.ten_cua_sinh_vien FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.ma_so_sinh_vien = dang_ky_khoa_hoc.ma_so_sinh_vien JOIN lop_hoc ON dang_ky_khoa_hoc.ma_lop = lop_hoc.ma_lop_hoc JOIN khoa_hoc ON lop_hoc.ma_khoa_hoc = khoa_hoc.ma_khoa_hoc JOIN khoa ON khoa_hoc.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa = 'Accounting' INTERSECT SELECT sinh_vien.ho_cua_sinh_vien, sinh_vien.ten_cua_sinh_vien FROM sinh_vien JOIN dang_ky_khoa_hoc ON sinh_vien.ma_so_sinh_vien = dang_ky_khoa_hoc.ma_so_sinh_vien JOIN lop_hoc ON dang_ky_khoa_hoc.ma_lop = lop_hoc.ma_lop_hoc JOIN khoa_hoc ON lop_hoc.ma_khoa_hoc = khoa_hoc.ma_khoa_hoc JOIN khoa ON khoa_hoc.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa = 'Computer Information Systems'
+
+[586/1906] ✓ MATCH FIXED! | DB: college_1 | 111702ms
+  Q: Cho biết tên cũng như là văn phòng của các giáo sư thuộc khoa ' Lịch sử ' nhưng không có bằng ' Tiến sĩ ' .
+  Gold: select t2.ten_cua_nhan_vien , t1.van_phong_giao_su from giao_su as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien = t2.ma_so_nhan_vien join khoa as t3 on t1.ma_khoa = t3.ma_khoa where t3.ten_khoa = "history" and t1.bang_cap_cao_nhat != "ph.d."
+  Old:  SELECT giao_su.ten_cua_nhan_vien, giao_su.van_phong_giao_su FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa = 'Lịch sử' AND giao_su.bang_cap_cao_nhat != 'Tiến sĩ'
+  New:  SELECT nhan_vien.ten_cua_nhan_vien, giao_su.van_phong_giao_su FROM giao_su JOIN khoa ON giao_su.ma_khoa = khoa.ma_khoa JOIN nhan_vien ON giao_su.ma_so_nhan_vien = nhan_vien.ma_so_nhan_vien WHERE khoa.ten_khoa = 'Lịch sử' AND giao_su.bang_cap_cao_nhat != 'Tiến sĩ'
+  Old Error: 'giao_su.ten_cua_nhan_vien'
+
+[573/1906] ✗ NO MATCH  | DB: college_1 | 169654ms
+  Q: Những giảng viên nào đã tham gia giảng dạy một số khoá học ? Cho biết tên và địa điểm văn phòng của những giảng viên này cũng như là mô tả về các khoá học mà họ đã giảng dạy .
+  Gold: select t2.ten_cua_nhan_vien , t4.van_phong_giao_su , t3.mo_ta_ve_khoa_hoc from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join khoa_hoc as t3 on t1.ma_khoa_hoc = t3.ma_khoa_hoc join giao_su as t4 on t2.ma_so_nhan_vien = t4.ma_so_nhan_vien
+  Old:  SELECT giao_su.ten_cua_nhan_vien, giao_su.van_phong_giao_su, khoa_hoc.mo_ta_ve_khoa_hoc FROM giao_su JOIN lop_hoc ON giao_su.ma_so_nhan_vien = lop_hoc.ma_so_nhan_vien_cua_giao_su JOIN khoa_hoc ON lop_hoc.ma_khoa_hoc = khoa_hoc.ma_khoa_hoc
+  New:  SELECT giao_su.ten_cua_nhan_vien, giao_su.van_phong_giao_su, khoa_hoc.mo_ta_ve_khoa_hoc FROM giao_su JOIN lop_hoc ON giao_su.ma_so_nhan_vien = lop_hoc.ma_so_nhan_vien_cua_giao_su JOIN khoa_hoc ON lop_hoc.ma_khoa_hoc = khoa_hoc.ma_khoa_hoc
+  Old Error: 'giao_su.ten_cua_nhan_vien'
+  New Error: 'giao_su.ten_cua_nhan_vien'
+
+
+============================================================
+  PROGRESS [ablation3]: 1799/1906 | EM: 1066 (59.3%) | Errors: 0
+============================================================
+
+[582/1906] ✗ NO MATCH FIXED! | DB: college_1 | 143421ms
+  Q: Cho biết tên của tất cả các giáo sư đang giảng dạy một số môn học thuộc khoa ' Hệ thống Thông tin Máy tính ' cũng như là loại bằng cấp cao nhất mà từng giáo sư đã đạt được .
+  Gold: select distinct t2.ten_cua_nhan_vien , t3.bang_cap_cao_nhat from lop_hoc as t1 join nhan_vien as t2 on t1.ma_so_nhan_vien_cua_giao_su = t2.ma_so_nhan_vien join giao_su as t3 on t2.ma_so_nhan_vien = t3.ma_so_nhan_vien join khoa as t4 on t4.ma_khoa = t3.ma_khoa where t4.ten_khoa = "computer info. systems"
+  Old:  SELECT giao_su.ten_cua_nhan_vien, giao_su.bang_cap_cao_nhat FROM giao_su JOIN lop_hoc ON giao_su.ma_so_nhan_vien = lop_hoc.ma_so_nhan_vien_cua_giao_su JOIN khoa_hoc ON lop_hoc.ma_khoa_hoc = khoa_hoc.ma_khoa_hoc JOIN khoa ON khoa_hoc.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa = 'Hệ thống Thông tin Máy tính'
+  New:  SELECT nhan_vien.ho_cua_nhan_vien, nhan_vien.ten_cua_nhan_vien, giao_su.bang_cap_cao_nhat FROM giao_su JOIN nhan_vien ON giao_su.ma_so_nhan_vien = nhan_vien.ma_so_nhan_vien JOIN lop_hoc ON nhan_vien.ma_so_nhan_vien = lop_hoc.ma_so_nhan_vien_cua_giao_su JOIN khoa_hoc ON lop_hoc.ma_khoa_hoc = khoa_hoc.ma_khoa_hoc JOIN khoa ON khoa_hoc.ma_khoa = khoa.ma_khoa WHERE khoa.ten_khoa = 'Hệ thống Thông tin Máy tính'
+  Old Error: 'giao_su.ten_cua_nhan_vien'
+
+[639/1906] ✓ MATCH FIXED! | DB: cre_Drama_Workshop_Groups | 114421ms
+  Q: Cho biết tên các cửa hàng của các nhóm hội thảo kịch .
+  Gold: select ten_cua_hang from nhom_hoi_thao_kich
+  Old:  SELECT cua_hang.ten_cua_hang FROM cua_hang JOIN nhom_hoi_thao_kich ON cua_hang.id_nhom_hoi_thao_kich = nhom_hoi_thao_kich.id_nhom_hoi_thao_kich
+  New:  SELECT ten_cua_hang FROM nhom_hoi_thao_kich
+  Old Error: 'cua_hang.id_nhom_hoi_thao_kich'
+
+
+============================================================
+  PROGRESS [ablation3]: 1801/1906 | EM: 1067 (59.2%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1801/1906 | EM: 1067 (59.2%) | Errors: 0
+============================================================
+
+[672/1906] ✗ NO MATCH  | DB: cre_Drama_Workshop_Groups | 108461ms
+  Q: Những nhóm hội thảo kịch nào có các dịch vụ được thực hiện ? Cho biết email và số điện thoại của những nhóm này .
+  Gold: select t1.so_dien_thoai_cua_hang , t1.dia_chi_email_cua_hang from nhom_hoi_thao_kich as t1 join dich_vu as t2 on t1.id_nhom_hoi_thao_kich = t2.id_nhom_hoi_thao_kich
+  Old:  SELECT nhom_hoi_thao_kich.dia_chi_email_cua_hang, nhom_hoi_thao_kich.so_dien_thoai_cua_hang FROM nhom_hoi_thao_kich INNER JOIN dich_vu ON dich_vu.id_nhom_hoi_thao_kich = nhom_hoi_thao_kich.id_nhom_hoi_thao_kich
+  New:  SELECT nhom_hoi_thao_kich.dia_chi_email_cua_hang, nhom_hoi_thao_kich.so_dien_thoai_cua_hang FROM nhom_hoi_thao_kich INNER JOIN dich_vu ON dich_vu.id_nhom_hoi_thao_kich = nhom_hoi_thao_kich.id_nhom_hoi_thao_kich
+  Old Error: 'inner'
+  New Error: 'inner'
+
+[641/1906] ✗ NO MATCH  | DB: cre_Drama_Workshop_Groups | 118583ms
+  Q: Cho biết số lượng đặt hàng tối thiểu , trung bình và tối đa trên tất cả các hoá đơn .
+  Gold: select min ( so_luong_dat_hang ) , avg ( so_luong_dat_hang ) , max ( so_luong_dat_hang ) from hoa_don
+  Old:  SELECT min(CAST(so_luong_dat_hang AS INTEGER)), avg(CAST(so_luong_dat_hang AS INTEGER)), max(CAST(so_luong_dat_hang AS INTEGER)) FROM hoa_don
+  New:  SELECT min(CAST(so_luong_dat_hang AS INTEGER)), avg(CAST(so_luong_dat_hang AS INTEGER)), max(CAST(so_luong_dat_hang AS INTEGER)) FROM hoa_don
+  Old Error: Error col: cast
+  New Error: Error col: cast
+
+[686/1906] ✗ NO MATCH  | DB: cre_Drama_Workshop_Groups | 100845ms
+  Q: Tìm ngày đặt hàng của các đơn hàng có giá trên 1000 .
+  Gold: select t1.ngay_dat_hang from luot_dat_hang_cua_khach_hang as t1 join mat_hang_duoc_dat as t2 on t1.id_don_hang = t2.id_don_hang join cac_san_pham as t3 on t2.id_san_pham = t3.id_san_pham where t3.gia_san_pham > 1000
+  Old:  SELECT luot_dat_hang.ngay_dat_hang FROM luot_dat_hang JOIN hoa_don ON luot_dat_hang.id_luot_dat_hang = hoa_don.id_don_hang JOIN mat_hang_trong_hoa_don ON hoa_don.id_hoa_don = mat_hang_trong_hoa_don.id_hoa_don JOIN cac_san_pham ON mat_hang_trong_hoa_don.id_san_pham = cac_san_pham.id_san_pham GROUP BY luot_dat_hang.id_luot_dat_hang HAVING SUM(cac_san_pham.gia_san_pham * mat_hang_trong_hoa_don.so_luong_dat_hang) > 1000
+  New:  SELECT luot_dat_hang.ngay_dat_hang FROM luot_dat_hang JOIN hoa_don ON luot_dat_hang.id_luot_dat_hang = hoa_don.id_don_hang JOIN cac_san_pham ON hoa_don.id_san_pham = cac_san_pham.id_san_pham WHERE cac_san_pham.gia_san_pham > 1000
+
+
+============================================================
+  PROGRESS [ablation3]: 1804/1906 | EM: 1067 (59.1%) | Errors: 0
+============================================================
+
+[627/1906] ✗ NO MATCH  | DB: cre_Doc_Control_Systems | 204250ms
+  Q: Những nhân viên nào đã xuất hiện nhiều lần nhất trong lịch sử lưu hành của từng tài liệu ? Liệt kê tên của các nhân viên này và số lần từng nhân viên xuất hiện trong lịch sử lưu hành của tài liệu tương ứng .
+  Gold: select nhan_vien.ten_nhan_vien , count ( * ) from nhan_vien join lich_su_luu_hanh on lich_su_luu_hanh.id_nhan_vien = nhan_vien.id_nhan_vien group by lich_su_luu_hanh.id_tai_lieu , lich_su_luu_hanh.so_luong_du_thao , lich_su_luu_hanh.so_luong_ban_sao order by count ( * ) desc limit 1
+  Old:  SELECT T2.ten_nhan_vien, COUNT(*) AS so_lan_xuat_hien FROM lich_su_luu_hanh AS T1 JOIN nhan_vien AS T2 ON T1.id_nhan_vien = T2.id_nhan_vien GROUP BY T1.id_tai_lieu, T2.id_nhan_vien ORDER BY COUNT(*) DESC LIMIT 1
+  New:  SELECT T2.ten_nhan_vien, COUNT(*) AS so_lan_xuat_hien FROM lich_su_luu_hanh AS T1 JOIN nhan_vien AS T2 ON T1.id_nhan_vien = T2.id_nhan_vien GROUP BY T1.id_tai_lieu, T2.id_nhan_vien ORDER BY COUNT(*) DESC LIMIT 1
+  Old Error: Error col: as
+  New Error: Error col: as
+
+
+============================================================
+  PROGRESS [ablation3]: 1805/1906 | EM: 1067 (59.1%) | Errors: 0
+============================================================
+
+[685/1906] ✗ NO MATCH  | DB: cre_Drama_Workshop_Groups | 143949ms
+  Q: Ngày đặt hàng của những đơn hàng có giá cao hơn 1000 là những ngày nào ?
+  Gold: select t1.ngay_dat_hang from luot_dat_hang_cua_khach_hang as t1 join mat_hang_duoc_dat as t2 on t1.id_don_hang = t2.id_don_hang join cac_san_pham as t3 on t2.id_san_pham = t3.id_san_pham where t3.gia_san_pham > 1000
+  Old:  SELECT T1.ngay_dat_hang FROM luot_dat_hang_cua_khach_hang AS T1 JOIN mat_hang_duoc_dat AS T2 ON T1.id_don_hang = T2.id_don_hang JOIN cac_san_pham AS T3 ON T2.id_san_pham = T3.id_san_pham GROUP BY T1.id_don_hang HAVING SUM(T2.so_luong_dat_hang * T3.gia_san_pham) > 1000
+  New:  SELECT T1.ngay_dat_hang FROM luot_dat_hang AS T1 JOIN mat_hang_duoc_dat AS T2 ON T1.id_luot_dat_hang = T2.id_don_hang JOIN cac_san_pham AS T3 ON T2.id_san_pham = T3.id_san_pham GROUP BY T1.id_luot_dat_hang HAVING SUM(T2.so_luong_dat_hang * T3.gia_san_pham) > 1000
+
+[706/1906] ✗ NO MATCH FIXED! | DB: cre_Drama_Workshop_Groups | 127039ms
+  Q: Cho biết số lượng đặt hàng trung bình trên tất cả các hoá đơn với phương thức thanh toán là ' Mastercard ' .
+  Gold: select avg ( so_luong_dat_hang ) from hoa_don where ma_phuong_thuc_thanh_toan = "mastercard"
+  Old:  SELECT AVG(total_orders) FROM (SELECT COUNT(*) AS total_orders FROM hoa_don JOIN luot_dat_hang ON hoa_don.id_don_hang = luot_dat_hang.id_luot_dat_hang WHERE hoa_don.ma_phuong_thuc_thanh_toan = 'Mastercard' GROUP BY hoa_don.id_don_hang) AS subquery
+  New:  SELECT AVG(hoa_don.so_luong_dat_hang) FROM hoa_don JOIN phuong_thuc_thanh_toan ON hoa_don.ma_phuong_thuc_thanh_toan = phuong_thuc_thanh_toan.ma_phuong_thuc_thanh_toan WHERE phuong_thuc_thanh_toan.ma_phuong_thuc_thanh_toan = 'Mastercard'
+  Old Error: Error col: as
+
+[692/1906] ✗ NO MATCH  | DB: cre_Drama_Workshop_Groups | 144588ms
+  Q: Cho biết địa chỉ email của các nhóm hội thảo kịch ở tiểu bang Alaska .
+  Gold: select t2.dia_chi_email_cua_hang from dia_chi as t1 join nhom_hoi_thao_kich as t2 on t1.id_dia_chi = t2.id_dia_chi where t1.quan_hat = "alaska"
+  Old:  SELECT dia_chi.dia_chi_email_cua_hang FROM nhom_hoi_thao_kich JOIN dia_chi ON nhom_hoi_thao_kich.id_dia_chi = dia_chi.id_dia_chi WHERE dia_chi.nhung_chi_tiet_khac LIKE '%Alaska%'
+  New:  SELECT dia_chi.dia_chi_email_cua_hang FROM nhom_hoi_thao_kich JOIN dia_chi ON nhom_hoi_thao_kich.id_dia_chi = dia_chi.id_dia_chi WHERE dia_chi.nhung_chi_tiet_khac LIKE '%Alaska%'
+  Old Error: 'dia_chi.dia_chi_email_cua_hang'
+  New Error: 'dia_chi.dia_chi_email_cua_hang'
+
+[725/1906] ✗ NO MATCH  | DB: customers_and_invoices | 119617ms
+  Q: Hiển thị danh sách không trùng lặp bao gồm tên , họ và số điện thoại của tất cả các khách hàng có tài khoản .
+  Gold: select distinct t1.ten_khach_hang , t1.ho_cua_khach_hang , t1.so_dien_thoai from khach_hang as t1 join tai_khoan as t2 on t1.id_khach_hang = t2.id_khach_hang
+  Old:  SELECT DISTINCT kh.ten_khach_hang, kh.ho_cua_khach_hang, kh.so_dien_thoai FROM khach_hang kh JOIN tai_khoan tk ON kh.id_khach_hang = tk.id_khach_hang
+  New:  SELECT DISTINCT kh.ten_khach_hang, kh.ho_cua_khach_hang, kh.so_dien_thoai FROM khach_hang kh JOIN tai_khoan tk ON kh.id_khach_hang = tk.id_khach_hang
+  Old Error: 'kh'
+  New Error: 'kh'
+
+
+============================================================
+  PROGRESS [ablation3]: 1809/1906 | EM: 1067 (59.0%) | Errors: 0
+============================================================
+
+[726/1906] ✗ NO MATCH  | DB: customers_and_invoices | 91014ms
+  Q: Danh sách không trùng lặp bao gồm tên , họ và số điện thoại của các khách hàng có tài khoản ?
+  Gold: select distinct t1.ten_khach_hang , t1.ho_cua_khach_hang , t1.so_dien_thoai from khach_hang as t1 join tai_khoan as t2 on t1.id_khach_hang = t2.id_khach_hang
+  Old:  SELECT DISTINCT khach_hang.ten_khach_hang, khach_hang.ho_cua_khach_hang, khach_hang.so_dien_thoai FROM khach_hang INNER JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang
+  New:  SELECT DISTINCT khach_hang.ten_khach_hang, khach_hang.so_dien_thoai FROM khach_hang INNER JOIN tai_khoan ON khach_hang.id_khach_hang = tai_khoan.id_khach_hang
+  Old Error: 'inner'
+  New Error: 'inner'
+
+[769/1906] ✓ MATCH FIXED! | DB: customers_and_invoices | 104874ms
+  Q: Hiển thị ngày lập hoá đơn , id đơn hàng và chi tiết của tất cả các hoá đơn .
+  Gold: select t1.ngay_lap_hoa_don , t1.id_don_hang , t2.chi_tiet_dat_hang from hoa_don as t1 join don_dat_hang as t2 on t1.id_don_hang = t2.id_don_hang
+  Old:  SELECT hoa_don.ngay_lap_hoa_don, hoa_don.id_don_hang, hoa_don_mat_hang.chi_tiet_khac_ve_mat_hang FROM hoa_don JOIN hoa_don_mat_hang ON hoa_don.so_hoa_don = hoa_don_mat_hang.so_hoa_don
+  New:  SELECT hoa_don.ngay_lap_hoa_don, hoa_don.id_don_hang, don_dat_hang.chi_tiet_dat_hang FROM hoa_don JOIN don_dat_hang ON hoa_don.id_don_hang = don_dat_hang.id_don_hang
+  Old Error: 'hoa_don_mat_hang.chi_tiet_khac_ve_mat_hang'
+
+
+============================================================
+  PROGRESS [ablation3]: 1811/1906 | EM: 1068 (59.0%) | Errors: 0
+============================================================
+
+[779/1906] ✗ NO MATCH  | DB: customers_and_invoices | 98876ms
+  Q: Hiển thị tên của tất cả các sản phẩm và tổng số lượng đặt hàng của từng sản phẩm .
+  Gold: select t2.ten_san_pham , sum ( t1.so_luong_san_pham ) from mat_hang_duoc_dat as t1 join san_pham as t2 on t1.id_san_pham = t2.id_san_pham group by t2.ten_san_pham
+  Old:  SELECT T1.ten_san_pham , SUM(CAST(T2.so_luong_san_pham AS NUMBER)) FROM san_pham AS T1 JOIN mat_hang_duoc_dat AS T2 ON T1.id_san_pham = T2.id_san_pham GROUP BY T1.id_san_pham
+  New:  SELECT T1.ten_san_pham , SUM(CAST(T2.so_luong_san_pham AS NUMBER)) FROM san_pham AS T1 JOIN mat_hang_duoc_dat AS T2 ON T1.id_san_pham = T2.id_san_pham GROUP BY T1.id_san_pham
+  Old Error: Error col: cast
+  New Error: Error col: cast
+
+
+============================================================
+  PROGRESS [ablation3]: 1812/1906 | EM: 1068 (58.9%) | Errors: 0
+============================================================
+
+[801/1906] ✗ NO MATCH  | DB: customers_and_products_contacts | 86861ms
+  Q: Hiển thị tên của các sản phẩm và tổng số lượng đặt hàng cho mỗi sản phẩm .
+  Gold: select t1.ten_san_pham , sum ( t2.so_luong_dat_hang ) from san_pham as t1 join mat_hang_duoc_dat as t2 on t1.id_san_pham = t2.id_san_pham group by t1.id_san_pham
+  Old:  SELECT san_pham.ten_san_pham, SUM(CAST(mat_hang_duoc_dat.so_luong_dat_hang AS INTEGER)) FROM san_pham JOIN mat_hang_duoc_dat ON san_pham.id_san_pham = mat_hang_duoc_dat.id_san_pham GROUP BY san_pham.id_san_pham
+  New:  SELECT san_pham.ten_san_pham, SUM(CAST(mat_hang_duoc_dat.so_luong_dat_hang AS INTEGER)) FROM san_pham JOIN mat_hang_duoc_dat ON san_pham.id_san_pham = mat_hang_duoc_dat.id_san_pham GROUP BY san_pham.id_san_pham
+  Old Error: Error col: cast
+  New Error: Error col: cast
+
+[806/1906] ✗ NO MATCH  | DB: customers_and_products_contacts | 91891ms
+  Q: Tên và số điện thoại của khách hàng có số lượng sản phẩm đặt hàng nhiều nhất ?
+  Gold: select t1.ten_khach_hang , t1.dien_thoai_khach_hang from khach_hang as t1 join luot_dat_hang_cua_khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang join mat_hang_duoc_dat as t3 on t3.id_don_hang = t2.id_don_hang group by t1.id_khach_hang order by sum ( t3.so_luong_dat_hang ) desc limit 1
+  Old:  SELECT khach_hang.ten_khach_hang, khach_hang.dien_thoai_khach_hang FROM khach_hang JOIN luot_dat_hang_cua_khach_hang ON khach_hang.id_khach_hang = luot_dat_hang_cua_khach_hang.id_khach_hang JOIN mat_hang_duoc_dat ON luot_dat_hang_cua_khach_hang.id_don_hang = mat_hang_duoc_dat.id_don_hang GROUP BY khach_hang.id_khach_hang ORDER BY CAST(mat_hang_duoc_dat.so_luong_dat_hang AS INTEGER) DESC LIMIT 1
+  New:  SELECT khach_hang.ten_khach_hang, khach_hang.dien_thoai_khach_hang FROM khach_hang JOIN luot_dat_hang_cua_khach_hang ON khach_hang.id_khach_hang = luot_dat_hang_cua_khach_hang.id_khach_hang JOIN mat_hang_duoc_dat ON luot_dat_hang_cua_khach_hang.id_don_hang = mat_hang_duoc_dat.id_don_hang GROUP BY khach_hang.id_khach_hang ORDER BY CAST(mat_hang_duoc_dat.so_luong_dat_hang AS INTEGER) DESC LIMIT 1
+  Old Error: Error col: cast
+  New Error: Error col: cast
+
+[817/1906] ✗ NO MATCH  | DB: department_management | 93676ms
+  Q: Hiển thị tên và số lượng nhân viên trong các bộ được quản lý bởi những người lãnh đạo tạm thời ?
+  Gold: select t1.ten , t1.so_luong_nhan_vien from cac_bo as t1 join su_quan_ly as t2 on t1.id_cac_bo = t2.id_cac_bo where t2.vai_tro_tam_thoi = "yes"
+  Old:  SELECT cac_bo.ten, cac_bo.so_luong_nhan_vien FROM cac_bo JOIN su_quan_ly ON cac_bo.id_cac_bo = su_quan_ly.id_cac_bo JOIN bo_truong ON su_quan_ly.id_nguoi_dung_dau = bo_truong.id_nguoi_dung_dau WHERE su_quan_ly.vai_tro_tam_thoi IS NOT NULL
+  New:  SELECT cac_bo.ten, cac_bo.so_luong_nhan_vien FROM cac_bo JOIN su_quan_ly ON cac_bo.id_cac_bo = su_quan_ly.id_cac_bo JOIN bo_truong ON su_quan_ly.id_nguoi_dung_dau = bo_truong.id_nguoi_dung_dau WHERE su_quan_ly.vai_tro_tam_thoi IS NOT NULL
+  Old Error: Error col: not
+  New Error: Error col: not
+
+[787/1906] ✗ NO MATCH  | DB: customers_and_invoices | 146650ms
+  Q: Hiển thị id đơn hàng và số lượng sản phẩm trong từng đơn hàng .
+  Gold: select id_don_hang , count ( distinct id_san_pham ) from mat_hang_duoc_dat group by id_don_hang
+  Old:  SELECT T1.id_don_hang , SUM(CAST(T2.so_luong_san_pham AS NUMBER)) FROM don_dat_hang AS T1 JOIN mat_hang_duoc_dat AS T2 ON T1.id_don_hang = T2.id_don_hang GROUP BY T1.id_don_hang
+  New:  SELECT T1.id_don_hang , SUM(CAST(T2.so_luong_san_pham AS NUMBER)) FROM don_dat_hang AS T1 JOIN mat_hang_duoc_dat AS T2 ON T1.id_don_hang = T2.id_don_hang GROUP BY T1.id_don_hang
+  Old Error: Error col: cast
+  New Error: Error col: cast
+
+[811/1906] ✗ NO MATCH  | DB: department_management | 104572ms
+  Q: Ngân sách tối đa và tối thiểu của các bộ là bao nhiêu ?
+  Gold: select max ( ngan_sach_tinh_theo_ty ) , min ( ngan_sach_tinh_theo_ty ) from cac_bo
+  Old:  SELECT MAX(ngan_sach_tinh_theo_ty) AS max_budget, MIN(ngan_sach_tinh_theo_ty) AS min_budget FROM cac_bo
+  New:  SELECT MAX(ngan_sach_tinh_theo_ty) AS max_budget, MIN(ngan_sach_tinh_theo_ty) AS min_budget FROM cac_bo
+  Old Error: Error col: as
+  New Error: Error col: as
+
+
+============================================================
+  PROGRESS [ablation3]: 1817/1906 | EM: 1068 (58.8%) | Errors: 0
+============================================================
+
+[822/1906] ✗ NO MATCH  | DB: department_management | 103353ms
+  Q: Liệt kê id , tên và số lượng những người lãnh đạo của từng bộ nơi có nhiều hơn 1 người lãnh đạo ở cùng một thời điểm .
+  Gold: select t1.id_cac_bo , t1.ten , count ( * ) from su_quan_ly as t2 join cac_bo as t1 on t1.id_cac_bo = t2.id_cac_bo group by t1.id_cac_bo having count ( * ) > 1
+  Old:  SELECT cac_bo.id_cac_bo, cac_bo.ten, COUNT(*) AS so_luong FROM cac_bo JOIN su_quan_ly ON cac_bo.id_cac_bo = su_quan_ly.id_cac_bo GROUP BY cac_bo.id_cac_bo HAVING COUNT(*) > 1
+  New:  SELECT cac_bo.id_cac_bo, cac_bo.ten, COUNT(*) AS so_luong FROM cac_bo JOIN su_quan_ly ON cac_bo.id_cac_bo = su_quan_ly.id_cac_bo GROUP BY cac_bo.id_cac_bo HAVING COUNT(*) > 1
+  Old Error: Error col: as
+  New Error: Error col: as
+
+[914/1906] ✗ NO MATCH  | DB: driving_school | 80798ms
+  Q: Cho biêt tên của những nhân viên không tham gia dạy bài giảng nào .
+  Gold: select ten from nhan_vien except select t2.ten from bai_giang as t1 join nhan_vien as t2 on t1.id_nhan_vien = t2.id_nhan_vien
+  Old:  SELECT ten, ho FROM nhan_vien EXCEPT SELECT T1.ten, T1.ho FROM nhan_vien AS T1 INNER JOIN bai_giang AS T2 ON T1.id_nhan_vien = T2.id_nhan_vien
+  New:  SELECT ten, ho FROM nhan_vien EXCEPT SELECT T1.ten, T1.ho FROM nhan_vien AS T1 INNER JOIN bai_giang AS T2 ON T1.id_nhan_vien = T2.id_nhan_vien
+  Old Error: 'inner'
+  New Error: 'inner'
+
+
+============================================================
+  PROGRESS [ablation3]: 1819/1906 | EM: 1068 (58.7%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1819/1906 | EM: 1068 (58.7%) | Errors: 0
+============================================================
+
+[856/1906] ✗ NO MATCH  | DB: driving_school | 151658ms
+  Q: Thành phố nào có nhiều nhân viên nhất ? Liệt kê tên và số lượng nhân viên của thành phố này .
+  Gold: select t1.thanh_pho , count ( * ) from dia_chi as t1 join nhan_vien as t2 on t1.id_dia_chi = t2.id_dia_chi_nhan_vien group by t1.thanh_pho order by count ( * ) desc limit 1
+  Old:  SELECT dia_chi.thanh_pho, COUNT(*) AS so_luong_nhan_vien FROM nhan_vien JOIN dia_chi ON nhan_vien.id_dia_chi_nhan_vien = dia_chi.id_dia_chi GROUP BY dia_chi.thanh_pho ORDER BY COUNT(*) DESC LIMIT 1
+  New:  SELECT dia_chi.thanh_pho, COUNT(*) AS so_luong_nhan_vien FROM nhan_vien JOIN dia_chi ON nhan_vien.id_dia_chi_nhan_vien = dia_chi.id_dia_chi GROUP BY dia_chi.thanh_pho ORDER BY COUNT(*) DESC LIMIT 1
+  Old Error: Error col: as
+  New Error: Error col: as
+
+
+============================================================
+  PROGRESS [ablation3]: 1820/1906 | EM: 1068 (58.7%) | Errors: 0
+============================================================
+
+[1031/1906] ✗ NO MATCH  | DB: flight_2 | 98465ms
+  Q: Số lượng chuyến bay hạ cánh ở thành phố ' Aberdeen ' hoặc ' Abilene ' là bao nhiêu ?
+  Gold: select count ( * ) from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_dich = t2.ma_san_bay where t2.thanh_pho = "aberdeen" or t2.thanh_pho = "abilene"
+  Old:  SELECT COUNT(*) FROM chuyen_bay JOIN san_bay ON chuyen_bay.san_bay_dich = san_bay.ma_san_bay WHERE san_bay.thanh_pho IN ('Aberdeen', 'Abilene')
+  New:  SELECT COUNT(*) FROM chuyen_bay JOIN san_bay ON chuyen_bay.san_bay_dich = san_bay.ma_san_bay WHERE san_bay.thanh_pho IN ('Aberdeen', 'Abilene')
+
+
+============================================================
+  PROGRESS [ablation3]: 1821/1906 | EM: 1068 (58.6%) | Errors: 0
+============================================================
+
+[1032/1906] ✗ NO MATCH  | DB: flight_2 | 129968ms
+  Q: Có bao nhiêu chuyến bay hạ cánh ở ' Aberdeen ' hoặc ' Abilene ' ?
+  Gold: select count ( * ) from chuyen_bay as t1 join san_bay as t2 on t1.san_bay_dich = t2.ma_san_bay where t2.thanh_pho = "aberdeen" or t2.thanh_pho = "abilene"
+  Old:  SELECT COUNT(*) FROM chuyen_bay JOIN san_bay ON chuyen_bay.san_bay_dich = san_bay.ma_san_bay WHERE san_bay.thanh_pho IN ('Aberdeen', 'Abilene')
+  New:  SELECT COUNT(*) FROM chuyen_bay JOIN san_bay ON chuyen_bay.san_bay_dich = san_bay.ma_san_bay WHERE san_bay.thanh_pho IN ('Aberdeen', 'Abilene')
+
+[1045/1906] ✗ NO MATCH  | DB: game_injury | 117259ms
+  Q: Mùa giải nào và sân vận động nào đã chứng kiến một số cầu thủ bị chấn thương liên quan đến ' chân ' hoặc ' đầu gối ' ?
+  Gold: select t1.mua_giai , t2.ten from tran_dau as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id join chan_thuong as t3 on t1.id = t3.id_tran_dau where t3.chan_thuong = "foot injury" or t3.chan_thuong = "knee problem"
+  Old:  SELECT T2.mua_giai , T3.ten FROM chan_thuong AS T1 JOIN tran_dau AS T2 ON T1.id_tran_dau = T2.id JOIN san_van_dong AS T3 ON T2.id_san_van_dong = T3.id WHERE T1.chan_thuong IN ('chân', 'đầu gối')
+  New:  SELECT T2.mua_giai , T3.ten FROM chan_thuong AS T1 JOIN tran_dau AS T2 ON T1.id_tran_dau = T2.id JOIN san_van_dong AS T3 ON T2.id_san_van_dong = T3.id WHERE T1.chan_thuong IN ('chân', 'đầu gối')
+
+[929/1906] ✗ NO MATCH FIXED! | DB: employee_hire_evaluation | 174688ms
+  Q: Số lượng sản phẩm của cửa hàng có nhiều sản phẩm nhất và số lượng sản phẩm của cửa hàng có ít sản phẩm nhất lần lượt là bao nhiêu ?
+  Gold: select min ( so_luong_san_pham ) , max ( so_luong_san_pham ) from cua_hang
+  Old:  SELECT MAX(so_luong_san_pham) AS so_luong_san_pham_max, MIN(so_luong_san_pham) AS so_luong_san_pham_min FROM cua_hang
+  New:  SELECT so_luong_san_pham FROM cua_hang ORDER BY so_luong_san_pham DESC LIMIT 1
+  Old Error: Error col: as
+
+
+============================================================
+  PROGRESS [ablation3]: 1824/1906 | EM: 1068 (58.6%) | Errors: 0
+============================================================
+
+  [Retry 1/3] 500 Error encountered, retrying in 2s...
+
+============================================================
+  PROGRESS [ablation3]: 1824/1906 | EM: 1068 (58.6%) | Errors: 0
+============================================================
+
+  [Retry 1/3] 500 Error encountered, retrying in 2s...
+
+============================================================
+  PROGRESS [ablation3]: 1824/1906 | EM: 1068 (58.6%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1824/1906 | EM: 1068 (58.6%) | Errors: 0
+============================================================
+
+  [Retry 1/3] 500 Error encountered, retrying in 2s...
+[1120/1906] ✗ NO MATCH  | DB: imdb | 126752ms
+  Q: Tìm tất cả các diễn viên đến từ ' Canada ' và đã đóng phim ' James Bond ' .
+  Gold: select t1.ten from phan_vai as t2 join dien_vien as t1 on t2.id_dien_vien = t1.id_dien_vien join bo_phim as t3 on t3.id_bo_phim = t2.id_se_ri_phim where t1.quoc_tich = "canada" and t3.tieu_de = "james bond"
+  Old:  SELECT dien_vien.* FROM dien_vien JOIN phan_vai ON dien_vien.id_dien_vien = phan_vai.id_dien_vien JOIN ban_quyen ON phan_vai.id_se_ri_phim = ban_quyen.id_se_ri_phim JOIN bo_phim ON ban_quyen.id_se_ri_phim = bo_phim.id_bo_phim WHERE dien_vien.quoc_tich = 'Canada' AND bo_phim.tieu_de = 'James Bond'
+  New:  SELECT dien_vien.* FROM dien_vien JOIN phan_vai ON dien_vien.id_dien_vien = phan_vai.id_dien_vien JOIN bo_phim ON phan_vai.id_se_ri_phim = bo_phim.id_bo_phim WHERE dien_vien.quoc_tich = 'Canada' AND bo_phim.tieu_de = 'James Bond'
+  Old Error: Error col: dien_vien
+  New Error: Error col: dien_vien
+
+[1049/1906] ✗ NO MATCH  | DB: game_injury | 183822ms
+  Q: Liệt kê tên của sân vận động nơi cả cầu thủ ' Walter Samuel ' và cầu thủ ' Thiago Motta ' bị chấn thương .
+  Gold: select t2.ten from tran_dau as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id join chan_thuong as t3 on t1.id = t3.id_tran_dau where t3.cau_thu = "walter samuel" intersect select t2.ten from tran_dau as t1 join san_van_dong as t2 on t1.id_san_van_dong = t2.id join chan_thuong as t3 on t1.id = t3.id_tran_dau where t3.cau_thu = "thiago motta"
+  Old:  SELECT T1.ten FROM san_van_dong T1 JOIN tran_dau T2 ON T1.id_san_van_dong = T2.id_san_van_dong JOIN chan_thuong T3 ON T2.id = T3.id_tran_dau WHERE T3.cau_thu = 'Walter Samuel' INTERSECT SELECT T1.ten FROM san_van_dong T1 JOIN tran_dau T2 ON T1.id_san_van_dong = T2.id_san_van_dong JOIN chan_thuong T3 ON T2.id = T3.id_tran_dau WHERE T3.cau_thu = 'Thiago Motta'
+  New:  SELECT T1.ten FROM san_van_dong T1 JOIN tran_dau T2 ON T1.id = T2.id_san_van_dong JOIN chan_thuong T3 ON T2.id = T3.id_tran_dau WHERE T3.cau_thu = 'Walter Samuel' INTERSECT SELECT T1.ten FROM san_van_dong T1 JOIN tran_dau T2 ON T1.id = T2.id_san_van_dong JOIN chan_thuong T3 ON T2.id = T3.id_tran_dau WHERE T3.cau_thu = 'Thiago Motta'
+  Old Error: 't1'
+  New Error: 't1'
+
+
+============================================================
+  PROGRESS [ablation3]: 1826/1906 | EM: 1068 (58.5%) | Errors: 0
+============================================================
+
+[1106/1906] ✗ NO MATCH FIXED! | DB: imdb | 183185ms
+  Q: Ai đã đóng vai ' Olivia Pope ' trong loạt phim ' Scandal ' ?
+  Gold: select t1.ten from phan_vai as t3 join dien_vien as t1 on t3.id_dien_vien = t1.id_dien_vien join phim_truyen_hinh_nhieu_tap as t2 on t2.id_se_ri_phim_truyen_hinh = t3.id_se_ri_phim where t3.vai_dien = "olivia pope" and t2.tieu_de = "scandal"
+  Old:  SELECT T1.ten FROM dien_vien AS T1 JOIN phan_vai AS T2 ON T1.id_dien_vien = T2.id_dien_vien JOIN phim_truyen_hinh_nhieu_tap AS T3 ON T2.id_se_ri_phim = T3.id_se_ri_phim WHERE T3.tieu_de = 'Scandal' AND T2.vai_dien = 'Olivia Pope'
+  New:  SELECT T1.ten FROM dien_vien AS T1 JOIN phan_vai AS T2 ON T1.id_dien_vien = T2.id_dien_vien JOIN bo_phim AS T3 ON T2.id_se_ri_phim = T3.id_bo_phim WHERE T3.tieu_de = 'Scandal' AND T2.vai_dien = 'Olivia Pope'
+  Old Error: 'phim_truyen_hinh_nhieu_tap.id_se_ri_phim'
+
+
+============================================================
+  PROGRESS [ablation3]: 1827/1906 | EM: 1068 (58.5%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1827/1906 | EM: 1068 (58.5%) | Errors: 0
+============================================================
+
+[1001/1906] ✗ NO MATCH FIXED! | DB: flight_2 | 352587ms
+  Q: Sân bay nào có số lượng chuyến bay nhiều nhất ? Cho biết mã của những chuyến bay này .
+  Gold: select t1.ma_san_bay from san_bay as t1 join chuyen_bay as t2 on t1.ma_san_bay = t2.san_bay_dich or t1.ma_san_bay = t2.san_bay_khoi_hanh group by t1.ma_san_bay order by count ( * ) desc limit 1
+  Old:  SELECT san_bay.ma_san_bay, COUNT(*) AS flight_count FROM san_bay JOIN chuyen_bay ON san_bay.ma_san_bay = chuyen_bay.san_bay_khoi_hanh OR san_bay.ma_san_bay = chuyen_bay.san_bay_dich GROUP BY san_bay.ma_san_bay ORDER BY flight_count DESC LIMIT 1
+  New:  SELECT san_bay.ma_san_bay, chuyen_bay.so_hieu_chuyen_bay FROM san_bay JOIN chuyen_bay ON san_bay.ma_san_bay = chuyen_bay.san_bay_khoi_hanh OR san_bay.ma_san_bay = chuyen_bay.san_bay_dich GROUP BY san_bay.ma_san_bay, chuyen_bay.so_hieu_chuyen_bay ORDER BY COUNT(*) DESC LIMIT 1
+  Old Error: Error col: as
+
+[1124/1906] ✗ NO MATCH  | DB: imdb | 194371ms
+  Q: Cho biết thể loại của những bộ phim đã được ' Asghar Farhadi ' đạo diễn .
+  Gold: select t3.the_loai from dao_dien as t5 join dao_dien_boi as t2 on t5.id_dao_dien = t2.id_dao_dien join bo_phim as t4 on t4.id_bo_phim = t2.id_se_ri_phim join phan_loai as t1 on t4.id_bo_phim = t1.id_se_ri_phim join the_loai as t3 on t3.id_the_loai = t1.id_the_loai where t5.ten = "asghar farhadi"
+  Old:  SELECT phan_loai.the_loai FROM dao_dien JOIN dao_dien_boi ON dao_dien.id_dao_dien = dao_dien_boi.id_dao_dien JOIN phan_loai ON dao_dien_boi.id_se_ri_phim = phan_loai.id_se_ri_phim WHERE dao_dien.ten = 'Asghar Farhadi'
+  New:  SELECT the_loai FROM the_loai JOIN phan_loai ON the_loai.id_the_loai = phan_loai.id_the_loai JOIN bo_phim ON phan_loai.id_se_ri_phim = bo_phim.id_bo_phim WHERE bo_phim.id_bo_phim IN (SELECT id_se_ri_phim FROM dao_dien_boi WHERE ten = 'Asghar Farhadi')
+  Old Error: 'phan_loai.the_loai'
+  New Error: Error col: ten
+
+[1153/1906] ✗ NO MATCH  | DB: imdb | 195378ms
+  Q: Những bộ phim có sự tham gia của cả ' Woody Strode ' và ' Jason Robards ' là những bộ phim nào ? Cho biết tiêu đề .
+  Gold: select t4.tieu_de from phan_vai as t5 join dien_vien as t1 on t5.id_dien_vien = t1.id_dien_vien join bo_phim as t4 on t4.id_bo_phim = t5.id_se_ri_phim join phan_vai as t3 on t4.id_bo_phim = t3.id_se_ri_phim join dien_vien as t2 on t3.id_dien_vien = t2.id_dien_vien where t1.ten = "woody strode" and t2.ten = "jason robards"
+  Old:  SELECT T4.tieu_de FROM phan_vai T1 JOIN dien_vien T3 ON T1.id_dien_vien = T3.id_dien_vien JOIN ban_quyen T2 ON T1.id_se_ri_phim = T2.id_se_ri_phim JOIN bo_phim T4 ON T2.id_se_ri_phim = T4.id_bo_phim WHERE T3.ten = 'Woody Strode' INTERSECT SELECT T4.tieu_de FROM phan_vai T1 JOIN dien_vien T3 ON T1.id_dien_vien = T3.id_dien_vien JOIN ban_quyen T2 ON T1.id_se_ri_phim = T2.id_se_ri_phim JOIN bo_phim T4 ON T2.id_se_ri_phim = T4.id_bo_phim WHERE T3.ten = 'Jason Robards'
+  New:  SELECT T4.tieu_de FROM phan_vai T1 JOIN dien_vien T3 ON T1.id_dien_vien = T3.id_dien_vien JOIN bo_phim T4 ON T1.id_se_ri_phim = T4.id_bo_phim WHERE T3.ten = 'Woody Strode' INTERSECT SELECT T4.tieu_de FROM phan_vai T1 JOIN dien_vien T3 ON T1.id_dien_vien = T3.id_dien_vien JOIN bo_phim T4 ON T1.id_se_ri_phim = T4.id_bo_phim WHERE T3.ten = 'Jason Robards'
+  Old Error: 't1'
+  New Error: 't1'
+
+
+============================================================
+  PROGRESS [ablation3]: 1830/1906 | EM: 1068 (58.4%) | Errors: 0
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1830/1906 | EM: 1068 (58.4%) | Errors: 0
+============================================================
+
+[1189/1906] ✗ NO MATCH  | DB: insurance_and_eClaims | 117501ms
+  Q: Cho biết chi tiết về các khách hàng hiện đang sử dụng chính sách ' Uỷ quyền ' hoặc chính sách ' Thống nhất ' .
+  Gold: select distinct t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ma_loai_chinh_sach = "deputy" or t1.ma_loai_chinh_sach = "uniform"
+  Old:  SELECT khach_hang.id_khach_hang, khach_hang.chi_tiet_khach_hang FROM khach_hang JOIN chinh_sach ON khach_hang.id_khach_hang = chinh_sach.id_khach_hang WHERE chinh_sach.ma_loai_chinh_sach IN ('Uỷ quyền', 'Thống nhất')
+  New:  SELECT khach_hang.id_khach_hang, khach_hang.chi_tiet_khach_hang FROM khach_hang JOIN chinh_sach ON khach_hang.id_khach_hang = chinh_sach.id_khach_hang WHERE chinh_sach.ma_loai_chinh_sach IN ('Uỷ quyền', 'Thống nhất')
+
+  [Retry 2/3] 500 Error encountered, retrying in 4s...
+
+============================================================
+  PROGRESS [ablation3]: 1831/1906 | EM: 1068 (58.3%) | Errors: 0
+============================================================
+
+[1190/1906] ✗ NO MATCH  | DB: insurance_and_eClaims | 97926ms
+  Q: Những khách hàng nào đang sử dụng chính sách bảo hiểm với mã loại là ' Uỷ quyền ' hoặc ' Thống nhất ' ? Cho biết chi tiết về những khách hàng này .
+  Gold: select distinct t2.chi_tiet_khach_hang from chinh_sach as t1 join khach_hang as t2 on t1.id_khach_hang = t2.id_khach_hang where t1.ma_loai_chinh_sach = "deputy" or t1.ma_loai_chinh_sach = "uniform"
+  Old:  SELECT khach_hang.id_khach_hang, khach_hang.chi_tiet_khach_hang FROM khach_hang JOIN chinh_sach ON khach_hang.id_khach_hang = chinh_sach.id_khach_hang WHERE chinh_sach.ma_loai_chinh_sach IN ('Uỷ quyền', 'Thống nhất')
+  New:  SELECT khach_hang.id_khach_hang, khach_hang.chi_tiet_khach_hang FROM khach_hang JOIN chinh_sach ON khach_hang.id_khach_hang = chinh_sach.id_khach_hang WHERE chinh_sach.ma_loai_chinh_sach IN ('Uỷ quyền', 'Thống nhất')
+
+
+============================================================
+  PROGRESS [ablation3]: 1832/1906 | EM: 1068 (58.3%) | Errors: 0
+============================================================
+
+  [Retry 2/3] 500 Error encountered, retrying in 4s...
+[1191/1906] ✗ NO MATCH  | DB: insurance_and_eClaims | 122060ms
+  Q: Cho biết chi tiết về tất cả các khách hàng cũng như là chi tiết về tất cả các nhân viên .
+  Gold: select chi_tiet_khach_hang from khach_hang union select chi_tiet_nhan_vien from nhan_vien
+  Old:  SELECT id_khach_hang, chi_tiet_khach_hang FROM khach_hang UNION ALL SELECT id_nhan_vien, chi_tiet_nhan_vien FROM nhan_vien
+  New:  SELECT id_khach_hang, chi_tiet_khach_hang FROM khach_hang UNION ALL SELECT id_nhan_vien, chi_tiet_nhan_vien FROM nhan_vien
+  Old Error: 'select' not found
+  New Error: 'select' not found
+
+[1184/1906] ✗ NO MATCH  | DB: insurance_and_eClaims | 194998ms
+  Q: Giai đoạn xử lý yêu cầu nào đang có nhiều yêu cầu nhất ? Hiển thị tình trạng của các yêu cầu hiện đang thuộc giai đoạn này .
+  Gold: select t2.ten_tinh_trang_yeu_cau from xu_ly_yeu_cau as t1 join giai_doan_xu_ly_yeu_cau as t2 on t1.id_giai_doan_xu_ly_yeu_cau = t2.id_giai_doan_yeu_cau group by t1.id_giai_doan_xu_ly_yeu_cau order by count ( * ) desc limit 1
+  Old:  SELECT T1.ten_tinh_trang_yeu_cau FROM giai_doan_xu_ly_yeu_cau AS T1 JOIN xu_ly_yeu_cau AS T2 ON T1.id_giai_doan_xu_ly_yeu_cau = T2.id_giai_doan_xu_ly_yeu_cau GROUP BY T1.id_giai_doan_xu_ly_yeu_cau ORDER BY COUNT(*) DESC LIMIT 1
+  New:  SELECT T1.ten_tinh_trang_yeu_cau FROM giai_doan_xu_ly_yeu_cau AS T1 JOIN xu_ly_yeu_cau AS T2 ON T1.id_giai_doan_xu_ly_yeu_cau = T2.id_giai_doan_xu_ly_yeu_cau GROUP BY T1.id_giai_doan_xu_ly_yeu_cau ORDER BY COUNT(*) DESC LIMIT 1
+  Old Error: 'giai_doan_xu_ly_yeu_cau.id_giai_doan_xu_ly_yeu_cau'
+  New Error: 'giai_doan_xu_ly_yeu_cau.id_giai_doan_xu_ly_yeu_cau'
+
+[1192/1906] ✗ NO MATCH  | DB: insurance_and_eClaims | 129588ms
+  Q: Chi tiết về các khách hàng và chi tiết về các nhân viên .
+  Gold: select chi_tiet_khach_hang from khach_hang union select chi_tiet_nhan_vien from nhan_vien
+  Old:  SELECT khach_hang.id_khach_hang, khach_hang.chi_tiet_khach_hang, nhan_vien.id_nhan_vien, nhan_vien.chi_tiet_nhan_vien FROM khach_hang, nhan_vien
+  New:  SELECT khach_hang.id_khach_hang, khach_hang.chi_tiet_khach_hang, nhan_vien.id_nhan_vien, nhan_vien.chi_tiet_nhan_vien FROM khach_hang, nhan_vien
+  Old Error: ','
+  New Error: ','
+
+
+============================================================
+  PROGRESS [ablation3]: 1835/1906 | EM: 1068 (58.2%) | Errors: 0
+============================================================
+
+[1154/1906] ✗ NO MATCH  | DB: imdb | 243478ms
+  Q: ' Tom Hanks ' đã đóng phim cùng với những diễn viên nào ?
+  Gold: select t1.ten from phan_vai as t4 join dien_vien as t1 on t4.id_dien_vien = t1.id_dien_vien join bo_phim as t5 on t5.id_bo_phim = t4.id_se_ri_phim join phan_vai as t3 on t5.id_bo_phim = t3.id_se_ri_phim join dien_vien as t2 on t3.id_dien_vien = t2.id_dien_vien where t2.ten = "tom hanks"
+  Old:  SELECT T2.ten FROM dien_vien T1 JOIN phan_vai T2 ON T1.id_dien_vien = T2.id_dien_vien JOIN phan_vai T3 ON T3.id_se_ri_phim = T2.id_se_ri_phim WHERE T1.ten = 'Tom Hanks' AND T2.id_dien_vien != T1.id_dien_vien
+  New:  SELECT T3.ten FROM phan_vai T1 JOIN phan_vai T2 ON T1.id_se_ri_phim = T2.id_se_ri_phim JOIN dien_vien T3 ON T2.id_dien_vien = T3.id_dien_vien WHERE T1.id_dien_vien = (SELECT id_dien_vien FROM dien_vien WHERE ten = 'Tom Hanks') AND T3.id_dien_vien != T1.id_dien_vien
+  Old Error: 't1'
+  New Error: 't1'
+
+
+============================================================
+  PROGRESS [ablation3]: 1836/1906 | EM: 1068 (58.2%) | Errors: 0
+============================================================
+
+[1214/1906] ✗ NO MATCH  | DB: local_govt_in_alabama | 92926ms
+  Q: Những sự kiện nào không có người tham dự với chi tiết là ' Kenyatta Kuhn ' ? Cho biết id của những sự kiện này .
+  Gold: select id_su_kien from su_kien except select t1.id_su_kien from nguoi_tham_gia_su_kien as t1 join nguoi_tham_gia as t2 on t1.id_nguoi_tham_gia = t2.id_nguoi_tham_gia where chi_tiet_nguoi_tham_gia = "kenyatta kuhn"
+  Old:  SELECT id_su_kien FROM su_kien EXCEPT SELECT T1.id_su_kien FROM su_kien AS T1 INNER JOIN nguoi_tham_gia_su_kien AS T2 ON T1.id_su_kien = T2.id_su_kien INNER JOIN nguoi_tham_gia AS T3 ON T2.id_nguoi_tham_gia = T3.id_nguoi_tham_gia WHERE T3.chi_tiet_nguoi_tham_gia = 'Kenyatta Kuhn'
+  New:  SELECT id_su_kien FROM su_kien EXCEPT SELECT T1.id_su_kien FROM su_kien AS T1 INNER JOIN nguoi_tham_gia_su_kien AS T2 ON T1.id_su_kien = T2.id_su_kien INNER JOIN nguoi_tham_gia AS T3 ON T2.id_nguoi_tham_gia = T3.id_nguoi_tham_gia WHERE T3.chi_tiet_nguoi_tham_gia = 'Kenyatta Kuhn'
+  Old Error: 'inner'
+  New Error: 'inner'
+
+[1257/1906] ✗ NO MATCH  | DB: mountain_photos | 63618ms
+  Q: Cho biết tên của các bức ảnh được chụp bởi nhãn hiệu ống kính máy ảnh ' Sigma ' hoặc ' Olympus ' .
+  Gold: select t1.ten from ong_kinh_may_anh as t1 join anh as t2 on t2.id_ong_kinh_may_anh = t1.id where t1.nhan_hieu = "sigma" or t1.nhan_hieu = "olympus"
+  Old:  SELECT anh.ten FROM anh JOIN ong_kinh_may_anh ON anh.id_ong_kinh_may_anh = ong_kinh_may_anh.id WHERE ong_kinh_may_anh.nhan_hieu IN ('Sigma', 'Olympus')
+  New:  SELECT anh.ten FROM anh JOIN ong_kinh_may_anh ON anh.id_ong_kinh_may_anh = ong_kinh_may_anh.id WHERE ong_kinh_may_anh.nhan_hieu IN ('Sigma', 'Olympus')
+
+
+============================================================
+  PROGRESS [ablation3]: 1838/1906 | EM: 1068 (58.1%) | Errors: 0
+============================================================
+
+[1198/1906] ✗ NO MATCH  | DB: insurance_and_eClaims | 154029ms
+  Q: Mô tả về tình trạng của các yêu cầu có tình trạng là ' Mở ' ?
+  Gold: select mo_ta_ve_tinh_trang_yeu_cau from giai_doan_xu_ly_yeu_cau where ten_tinh_trang_yeu_cau = "open"
+  Old:  SELECT T2.mo_ta_ve_tinh_trang_yeu_cau FROM tieu_de_cua_yeu_cau AS T1 JOIN giai_doan_xu_ly_yeu_cau AS T2 ON T1.id_giai_doan_xu_ly_yeu_cau = T2.id_giai_doan_xu_ly_yeu_cau WHERE T1.ma_tinh_trang_yeu_cau = 'Mở'
+  New:  SELECT T2.mo_ta_ve_tinh_trang_yeu_cau FROM tieu_de_cua_yeu_cau AS T1 JOIN giai_doan_xu_ly_yeu_cau AS T2 ON T1.id_giai_doan_xu_ly_yeu_cau = T2.id_giai_doan_xu_ly_yeu_cau WHERE T1.ma_tinh_trang_yeu_cau = 'Mở'
+  Old Error: 'tieu_de_cua_yeu_cau.id_giai_doan_xu_ly_yeu_cau'
+  New Error: 'tieu_de_cua_yeu_cau.id_giai_doan_xu_ly_yeu_cau'
+
+[1229/1906] ✗ NO MATCH  | DB: machine_repair | 94233ms
+  Q: Năm bắt đầu làm việc của kỹ thuật viên có thời gian làm việc lâu năm nhất là năm nào ?
+  Gold: select nam_bat_dau from ky_thuat_vien order by tuoi desc limit 1
+  Old:  SELECT nam_bat_dau FROM ky_thuat_vien ORDER BY (2026 - nam_bat_dau) DESC LIMIT 1
+  New:  SELECT nam_bat_dau FROM ky_thuat_vien ORDER BY (2026 - nam_bat_dau) DESC LIMIT 1
+  Old Error: Error col: 2026
+  New Error: Error col: 2026
+
+
+============================================================
+  PROGRESS [ablation3]: 1840/1906 | EM: 1068 (58.0%) | Errors: 0
+============================================================
+
+[1261/1906] ✗ NO MATCH  | DB: mountain_photos | 74915ms
+  Q: Liệt kê các nhãn hiệu ống kính máy ảnh đã chụp ảnh cho các núi thuộc dãy ' Toubkal Atlas ' và các núi thuộc dãy ' Lasta Massif ' .
+  Gold: select t3.nhan_hieu from nui as t1 join anh as t2 on t1.id = t2.id_nui join ong_kinh_may_anh as t3 on t2.id_ong_kinh_may_anh = t3.id where t1.day_nui = "toubkal atlas" intersect select t3.nhan_hieu from nui as t1 join anh as t2 on t1.id = t2.id_nui join ong_kinh_may_anh as t3 on t2.id_ong_kinh_may_anh = t3.id where t1.day_nui = "lasta massif"
+  Old:  SELECT T1.nhan_hieu FROM ong_kinh_may_anh AS T1 JOIN anh AS T2 ON T1.id = T2.id_ong_kinh_may_anh JOIN nui AS T3 ON T3.id = T2.id_nui WHERE T3.ten IN ('Toubkal Atlas', 'Lasta Massif')
+  New:  SELECT T1.nhan_hieu FROM ong_kinh_may_anh AS T1 JOIN anh AS T2 ON T1.id = T2.id_ong_kinh_may_anh JOIN nui AS T3 ON T3.id = T2.id_nui WHERE T3.ten IN ('Toubkal Atlas', 'Lasta Massif')
+
+
+============================================================
+  PROGRESS [ablation3]: 1841/1906 | EM: 1068 (58.0%) | Errors: 0
+============================================================
+
+[1215/1906] ✗ NO MATCH  | DB: local_govt_in_alabama | 146997ms
+  Q: Những loại hình dịch vụ nào có chi tiết sự kiện là ' Thành công ' và ' Thất bại ' ?
+  Gold: select t1.ma_loai_dich_vu from dich_vu as t1 join su_kien as t2 on t1.id_dich_vu = t2.id_dich_vu where t2.chi_tiet_su_kien = "success" intersect select t1.ma_loai_dich_vu from dich_vu as t1 join su_kien as t2 on t1.id_dich_vu = t2.id_dich_vu where t2.chi_tiet_su_kien = "fail"
+  Old:  SELECT dich_vu.ma_loai_dich_vu FROM dich_vu JOIN su_kien ON dich_vu.id_dich_vu = su_kien.id_dich_vu WHERE su_kien.chi_tiet_su_kien IN ('Thành công', 'Thất bại')
+  New:  SELECT dich_vu.ma_loai_dich_vu FROM dich_vu JOIN su_kien ON dich_vu.id_dich_vu = su_kien.id_dich_vu WHERE su_kien.chi_tiet_su_kien IN ('Thành công', 'Thất bại')
+
+  [Retry 3/3] 500 Error encountered, retrying in 8s...
+
+============================================================
+  PROGRESS [ablation3]: 1842/1906 | EM: 1068 (58.0%) | Errors: 0
+============================================================
+
+[1358/1906] ✗ NO MATCH  | DB: music_2 | 82985ms
+  Q: Những bài hát không có giọng hát ' phụ ' ' có tiêu đề là gì ?
+  Gold: select distinct tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat except select t2.tieu_de from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where loai = "back"
+  Old:  SELECT bai_hat.tieu_de FROM bai_hat WHERE NOT EXISTS (SELECT 1 FROM giong_hat WHERE giong_hat.id_bai_hat = bai_hat.id_bai_hat AND giong_hat.loai = 'phụ')
+  New:  SELECT bai_hat.tieu_de FROM bai_hat WHERE NOT EXISTS (SELECT 1 FROM giong_hat WHERE giong_hat.id_bai_hat = bai_hat.id_bai_hat AND giong_hat.loai = 'phụ')
+  Old Error: Error col: not
+  New Error: Error col: not
+
+[1343/1906] ✗ NO MATCH  | DB: music_2 | 127115ms
+  Q: Có bao nhiêu bài hát có giọng hát được ' chia sẻ ' ' bởi nhiều nghệ sĩ ?
+  Gold: select count ( distinct tieu_de ) from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where loai = "shared"
+  Old:  SELECT COUNT(*) FROM (SELECT giong_hat.id_bai_hat FROM giong_hat GROUP BY giong_hat.id_bai_hat HAVING COUNT(giong_hat.nghe_si_trong_ban_nhac) > 1) AS subquery
+  New:  SELECT COUNT(*) FROM (SELECT giong_hat.id_bai_hat FROM giong_hat GROUP BY giong_hat.id_bai_hat HAVING COUNT(giong_hat.nghe_si_trong_ban_nhac) > 1) AS subquery
+  Old Error: 'as'
+  New Error: 'as'
+
+[1344/1906] ✗ NO MATCH  | DB: music_2 | 116235ms
+  Q: Cho biết số lượng các bài hát khác nhau có giọng hát được ' chia sẻ ' bởi nhiều nghệ sĩ .
+  Gold: select count ( distinct tieu_de ) from giong_hat as t1 join bai_hat as t2 on t1.id_bai_hat = t2.id_bai_hat where loai = "shared"
+  Old:  SELECT COUNT(*) FROM (SELECT bai_hat.id_bai_hat FROM bai_hat JOIN giong_hat ON bai_hat.id_bai_hat = giong_hat.id_bai_hat WHERE giong_hat.loai = 'chia sẻ' GROUP BY bai_hat.id_bai_hat HAVING COUNT(giong_hat.nghe_si_trong_ban_nhac) > 1) AS subquery
+  New:  SELECT COUNT(*) FROM (SELECT bai_hat.id_bai_hat FROM bai_hat JOIN giong_hat ON bai_hat.id_bai_hat = giong_hat.id_bai_hat WHERE giong_hat.loai = 'chia sẻ' GROUP BY bai_hat.id_bai_hat HAVING COUNT(giong_hat.nghe_si_trong_ban_nhac) > 1) AS subquery
+  Old Error: 'as'
+  New Error: 'as'
+
+
+============================================================
+  PROGRESS [ablation3]: 1845/1906 | EM: 1068 (57.9%) | Errors: 0
+============================================================
+
+  [Retry 3/3] 500 Error encountered, retrying in 8s...
+[1371/1906] ✗ NO MATCH  | DB: products_for_hire | 96828ms
+  Q: Ngày bắt đầu và ngày kết thúc của lượt đặt hàng đã đặt sản phẩm có tên ' Bộ sưu tập sách ' là những ngày nào ?
+  Gold: select t3.ngay_bat_dau_dat_mua , t3.ngay_ket_thuc_dat_mua from san_pham_cho_thue as t1 join san_pham_duoc_dat as t2 on t1.id_san_pham = t2.id_san_pham join luot_dat_mua as t3 on t2.id_dat_mua = t3.id_dat_mua where t1.ten_san_pham = "book collection a"
+  Old:  SELECT T1.ngay_bat_dau_dat_mua, T1.ngay_ket_thuc_dat_mua FROM luot_dat_mua T1 JOIN san_pham_duoc_dat T2 ON T1.id_dat_mua = T2.id_dat_mua JOIN san_pham_cho_thue T3 ON T2.id_san_pham = T3.id_san_pham WHERE T3.ten_san_pham = 'Bộ sưu tập sách'
+  New:  SELECT T1.ngay_bat_dau_dat_mua, T1.ngay_ket_thuc_dat_mua FROM luot_dat_mua T1 JOIN san_pham_duoc_dat T2 ON T1.id_dat_mua = T2.id_dat_mua JOIN san_pham_cho_thue T3 ON T2.id_san_pham = T3.id_san_pham WHERE T3.ten_san_pham = 'Bộ sưu tập sách'
+  Old Error: 't1'
+  New Error: 't1'
+
+
+============================================================
+  PROGRESS [ablation3]: 1846/1906 | EM: 1068 (57.9%) | Errors: 0
+============================================================
+
+[1366/1906] ✗ NO MATCH  | DB: products_for_hire | 162699ms
+  Q: Có bao nhiêu lượt đặt hàng đã được thực hiện bởi mỗi khách hàng ? Liệt kê id khách hàng , tên và số lượng lượt đặt hàng .
+  Gold: select t1.id_khach_hang , t1.ten , count ( * ) from khach_hang as t1 join luot_dat_mua as t2 on t1.id_khach_hang = t2.id_khach_hang group by t1.id_khach_hang
+  Old:  SELECT khach_hang.id_khach_hang, khach_hang.ten, COUNT(*) AS so_luong_dat_mua FROM khach_hang JOIN luot_dat_mua ON khach_hang.id_khach_hang = luot_dat_mua.id_khach_hang GROUP BY khach_hang.id_khach_hang
+  New:  SELECT khach_hang.id_khach_hang, khach_hang.ten, COUNT(*) AS so_luong_dat_mua FROM khach_hang JOIN luot_dat_mua ON khach_hang.id_khach_hang = luot_dat_mua.id_khach_hang GROUP BY khach_hang.id_khach_hang
+  Old Error: Error col: as
+  New Error: Error col: as
+
+
+============================================================
+  PROGRESS [ablation3]: 1847/1906 | EM: 1068 (57.8%) | Errors: 0
+============================================================
+
+[1038/1906] ✗ Error for id 1037: 500 Server Error: Internal Server Error for url: http://tensorsql-node:5002/api/text2sql/generate
+
+============================================================
+  PROGRESS [ablation3]: 1848/1906 | EM: 1068 (57.8%) | Errors: 1
+============================================================
+
+[1379/1906] ✗ NO MATCH  | DB: products_for_hire | 137336ms
+  Q: Có bao nhiêu sản phẩm không bao giờ được đặt hàng với số tiền cao hơn 200 ?
+  Gold: select count ( * ) from san_pham_cho_thue where id_san_pham not in ( select id_san_pham from san_pham_duoc_dat where so_tien_da_dat > 200 )
+  Old:  SELECT COUNT(*) FROM san_pham_cho_thue WHERE NOT EXISTS (SELECT 1 FROM san_pham_duoc_dat JOIN luot_dat_mua ON san_pham_duoc_dat.id_dat_mua = luot_dat_mua.id_dat_mua WHERE san_pham_duoc_dat.id_san_pham = san_pham_cho_thue.id_san_pham AND luot_dat_mua.so_tien_phai_tra > 200)
+  New:  SELECT COUNT(*) FROM san_pham_cho_thue WHERE NOT EXISTS (SELECT 1 FROM san_pham_duoc_dat JOIN luot_dat_mua ON san_pham_duoc_dat.id_dat_mua = luot_dat_mua.id_dat_mua WHERE san_pham_duoc_dat.id_san_pham = san_pham_cho_thue.id_san_pham AND luot_dat_mua.so_tien_phai_tra > 200)
+  Old Error: Error col: not
+  New Error: Error col: not
+
+
+============================================================
+  PROGRESS [ablation3]: 1849/1906 | EM: 1068 (57.8%) | Errors: 1
+============================================================
+
+[1380/1906] ✗ NO MATCH  | DB: products_for_hire | 141265ms
+  Q: Số tiền giảm giá của những phiếu giảm giá thuộc sở hữu của cả khách hàng ' tốt ' và khách hàng ' xấu ' là bao nhiêu ?
+  Gold: select t1.so_tien_giam_gia from phieu_giam_gia as t1 join khach_hang as t2 on t1.id_phieu_giam_gia = t2.id_phieu_giam_gia where t2.khach_hang_tot_hay_xau = "good" intersect select t1.so_tien_giam_gia from phieu_giam_gia as t1 join khach_hang as t2 on t1.id_phieu_giam_gia = t2.id_phieu_giam_gia where t2.khach_hang_tot_hay_xau = "bad"
+  Old:  SELECT SUM(phieu_giam_gia.so_tien_giam_gia) FROM khach_hang JOIN phieu_giam_gia ON khach_hang.id_phieu_giam_gia = phieu_giam_gia.id_phieu_giam_gia WHERE khach_hang.khach_hang_tot_hay_xau IN ('tốt', 'xấu')
+  New:  SELECT SUM(phieu_giam_gia.so_tien_giam_gia) FROM khach_hang JOIN phieu_giam_gia ON khach_hang.id_phieu_giam_gia = phieu_giam_gia.id_phieu_giam_gia WHERE khach_hang.khach_hang_tot_hay_xau IN ('tốt', 'xấu')
+
+  [Retry 1/3] 500 Error encountered, retrying in 2s...
+
+============================================================
+  PROGRESS [ablation3]: 1850/1906 | EM: 1068 (57.8%) | Errors: 1
+============================================================
+
+[1003/1906] ✗ Error for id 1002: 500 Server Error: Internal Server Error for url: http://tensorsql-node:5002/api/text2sql/generate
+[1395/1906] ✗ NO MATCH  | DB: restaurant_1 | 168732ms
+  Q: Chuyên ngành nào có số lượng sinh viên theo học ít nhất ? Cho biết chuyên ngành này và số lượng sinh viên tương ứng .
+  Gold: select chuyen_nganh , count ( * ) from sinh_vien group by chuyen_nganh order by count ( chuyen_nganh ) asc limit 1
+  Old:  SELECT chuyen_nganh, COUNT(*) AS so_luong FROM sinh_vien GROUP BY chuyen_nganh ORDER BY so_luong ASC LIMIT 1
+  New:  SELECT chuyen_nganh, COUNT(*) AS so_luong FROM sinh_vien GROUP BY chuyen_nganh ORDER BY so_luong ASC LIMIT 1
+  Old Error: Error col: as
+  New Error: Error col: as
+
+
+============================================================
+  PROGRESS [ablation3]: 1852/1906 | EM: 1068 (57.7%) | Errors: 2
+============================================================
+
+[1394/1906] ✗ NO MATCH  | DB: restaurant_1 | 190243ms
+  Q: Cố vấn nào có nhiều sinh viên nhất ? Liệt kê tên của cố vấn và số lượng sinh viên tương ứng .
+  Gold: select co_van , count ( * ) from sinh_vien group by co_van order by count ( co_van ) desc limit 1
+  Old:  SELECT co_van , COUNT(*) AS so_luong FROM sinh_vien GROUP BY co_van ORDER BY COUNT(*) DESC LIMIT 1
+  New:  SELECT co_van, COUNT(*) AS so_luong FROM sinh_vien GROUP BY co_van ORDER BY COUNT(*) DESC LIMIT 1
+  Old Error: Error col: as
+  New Error: Error col: as
+
+[1415/1906] ✗ NO MATCH  | DB: sakila_1 | 146102ms
+  Q: Thành phố nào có nhiều địa chỉ nhất ? Cho biết tên , số lượng địa chỉ và id của thành phố này .
+  Gold: select t2.thanh_pho , count ( * ) , t1.id_thanh_pho from dia_chi as t1 join thanh_pho as t2 on t1.id_thanh_pho = t2.id_thanh_pho group by t1.id_thanh_pho order by count ( * ) desc limit 1
+  Old:  SELECT thanh_pho.thanh_pho, thanh_pho.id_thanh_pho, COUNT(*) AS so_luong_dia_chi FROM dia_chi JOIN thanh_pho ON dia_chi.id_thanh_pho = thanh_pho.id_thanh_pho GROUP BY thanh_pho.id_thanh_pho ORDER BY COUNT(*) DESC LIMIT 1
+  New:  SELECT thanh_pho.thanh_pho, thanh_pho.id_thanh_pho, COUNT(*) AS so_luong_dia_chi FROM dia_chi JOIN thanh_pho ON dia_chi.id_thanh_pho = thanh_pho.id_thanh_pho GROUP BY thanh_pho.id_thanh_pho ORDER BY COUNT(*) DESC LIMIT 1
+  Old Error: Error col: as
+  New Error: Error col: as
+
+
+============================================================
+  PROGRESS [ablation3]: 1854/1906 | EM: 1068 (57.7%) | Errors: 2
+============================================================
+
+[1434/1906] ✗ NO MATCH  | DB: sakila_1 | 158483ms
+  Q: Cho biết tên đầy đủ và id của nam diễn viên hoặc nữ diễn viên đóng vai chính trong nhiều bộ phim nhất .
+  Gold: select t2.ten , t2.ho , t2.id_dien_vien from dien_vien_dien_anh as t1 join dien_vien as t2 on t1.id_dien_vien = t2.id_dien_vien group by t2.id_dien_vien order by count ( * ) desc limit 1
+  Old:  SELECT d.id_dien_vien, d.ho, d.ten FROM dien_vien d JOIN dien_vien_dien_anh dva ON d.id_dien_vien = dva.id_dien_vien GROUP BY d.id_dien_vien ORDER BY COUNT(*) DESC LIMIT 1
+  New:  SELECT d.id_dien_vien, d.ho, d.ten FROM dien_vien d JOIN dien_vien_dien_anh dva ON d.id_dien_vien = dva.id_dien_vien GROUP BY d.id_dien_vien ORDER BY COUNT(*) DESC LIMIT 1
+  Old Error: 'd'
+  New Error: 'd'
+
+
+============================================================
+  PROGRESS [ablation3]: 1855/1906 | EM: 1068 (57.6%) | Errors: 2
+============================================================
+
+[1474/1906] ✗ NO MATCH  | DB: sakila_1 | 121859ms
+  Q: Những bộ phim dài hơn 100 phút hoặc được đánh giá xếp hạng PG nhưng không có giá thay thế cao hơn 200 có tiêu đề là gì ?
+  Gold: select tieu_de from phim where thoi_luong_phim > 100 or danh_gia_xep_hang = "pg" except select tieu_de from phim where gia_thay_the > 200
+  Old:  SELECT tieu_de FROM phim WHERE (thoi_luong_phim > 100 OR danh_gia_xep_hang = 'PG') AND gia_thay_the <= 200
+  New:  SELECT tieu_de FROM phim WHERE (thoi_luong_phim > 100 OR danh_gia_xep_hang = 'PG') AND gia_thay_the <= 200
+
+[1569/1906] ✓ MATCH FIXED! | DB: store_product | 77632ms
+  Q: Quận nào có diện tích nhỏ nhất ?
+  Gold: select ten_quan from quan order by dien_tich_cua_cac_thanh_pho asc limit 1
+  Old:  SELECT ten_quan FROM quan ORDER BY dien_tich ASC LIMIT 1
+  New:  SELECT ten_quan FROM quan ORDER BY dien_tich_cua_cac_thanh_pho ASC LIMIT 1
+  Old Error: Error col: dien_tich
+
+[1570/1906] ✗ NO MATCH  | DB: store_product | 75996ms
+  Q: Cho biết tên của quận có diện tích nhỏ nhất .
+  Gold: select ten_quan from quan order by dien_tich_cua_cac_thanh_pho asc limit 1
+  Old:  SELECT ten_quan FROM quan ORDER BY dien_tich ASC LIMIT 1
+  New:  SELECT ten_quan FROM quan ORDER BY dien_tich ASC LIMIT 1
+  Old Error: Error col: dien_tich
+  New Error: Error col: dien_tich
+
+[1632/1906] ✗ NO MATCH  | DB: storm_record | 62699ms
+  Q: Những cơn bão không ảnh hưởng đến bất kỳ khu vực nào trong hồ sơ có tên là gì ?
+  Gold: select ten from bao where id_con_bao not in ( select id_bao from khu_vuc_bi_anh_huong )
+  Old:  SELECT ten FROM bao LEFT JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao WHERE khu_vuc_bi_anh_huong.id_bao IS NULL
+  New:  SELECT ten FROM bao LEFT JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao WHERE khu_vuc_bi_anh_huong.id_bao IS NULL
+  Old Error: 'left'
+  New Error: 'left'
+
+[1473/1906] ✗ NO MATCH  | DB: sakila_1 | 158297ms
+  Q: Cho biết tiêu đề của tất cả các bộ phim dài hơn 100 phút hoặc được đánh giá xếp hạng PG nhưng không có giá thay thế cao hơn 200 .
+  Gold: select tieu_de from phim where thoi_luong_phim > 100 or danh_gia_xep_hang = "pg" except select tieu_de from phim where gia_thay_the > 200
+  Old:  SELECT tieu_de FROM phim WHERE (thoi_luong_phim > 100 OR (danh_gia_xep_hang = 'PG' AND gia_thay_the <= 200))
+  New:  SELECT tieu_de FROM phim WHERE (thoi_luong_phim > 100 OR danh_gia_xep_hang = 'PG') AND gia_thay_the <= 200
+
+[1581/1906] ✗ NO MATCH  | DB: store_product | 88641ms
+  Q: Tìm số lượng cửa hàng ở mỗi thành phố .
+  Gold: select t3.thanh_pho_cua_cac_tru_so , count ( * ) from cua_hang as t1 join quan_cua_cua_hang as t2 on t1.id_cua_hang = t2.id_cua_hang join quan as t3 on t2.id_quan = t3.id_quan group by t3.thanh_pho_cua_cac_tru_so
+  Old:  SELECT quan.thanh_pho_cua_cac_tru_so, COUNT(*) FROM cua_hang JOIN quan ON cua_hang.id_quan = quan.id_quan GROUP BY quan.thanh_pho_cua_cac_tru_so
+  New:  SELECT quan.thanh_pho_cua_cac_tru_so, COUNT(*) FROM cua_hang JOIN quan ON cua_hang.id_quan = quan.id_quan GROUP BY quan.thanh_pho_cua_cac_tru_so
+  Old Error: 'cua_hang.id_quan'
+  New Error: 'cua_hang.id_quan'
+
+
+============================================================
+  PROGRESS [ablation3]: 1861/1906 | EM: 1069 (57.5%) | Errors: 2
+============================================================
+
+[1640/1906] ✗ NO MATCH  | DB: storm_record | 43807ms
+  Q: Những cơn bão đã ảnh hưởng đến Đan Mạch có tên là gì ?
+  Gold: select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_con_bao = t3.id_con_bao where t2.ten_khu_vuc = "denmark"
+  Old:  SELECT bao.ten FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc WHERE khu_vuc.ten_khu_vuc = 'Đan Mạch'
+  New:  SELECT bao.ten FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc WHERE khu_vuc.ten_khu_vuc = 'Đan Mạch'
+  Old Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+  New Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+
+
+============================================================
+  PROGRESS [ablation3]: 1862/1906 | EM: 1069 (57.5%) | Errors: 2
+============================================================
+
+[1637/1906] ✗ NO MATCH  | DB: storm_record | 80906ms
+  Q: Cho biết tên của khu vực bị ảnh hưởng bởi cơn bão đã khiến ít nhất 10 người chết .
+  Gold: select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_con_bao = t3.id_con_bao where t3.so_luong_nguoi_chet >= 10
+  Old:  SELECT T1.ten_khu_vuc FROM khu_vuc AS T1 JOIN khu_vuc_bi_anh_huong AS T2 ON T1.id_khu_vuc = T2.id_khu_vuc JOIN bao AS T3 ON T2.id_bao = T3.id_con_bao WHERE T3.so_luong_nguoi_chet >= 10
+  New:  SELECT T1.ten_khu_vuc FROM khu_vuc AS T1 JOIN khu_vuc_bi_anh_huong AS T2 ON T1.id_khu_vuc = T2.id_khu_vuc JOIN bao AS T3 ON T2.id_bao = T3.id_con_bao WHERE T3.so_luong_nguoi_chet >= 10
+  Old Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+  New Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+
+[1376/1906] ✗ NO MATCH  | DB: products_for_hire | 368047ms
+  Q: Số lượng đặt hàng nhiều nhất , ít nhất và trung bình của tất cả các sản phẩm đã được đặt là bao nhiêu ?
+  Gold: select max ( so_luong_dat_mua ) , min ( so_luong_dat_mua ) , avg ( so_luong_dat_mua ) from san_pham_duoc_dat
+  Old:  SELECT MAX(so_luong_dat_hang), MIN(so_luong_dat_hang), AVG(so_luong_dat_hang) FROM (SELECT COUNT(*) AS so_luong_dat_hang FROM san_pham_cho_thue JOIN san_pham_duoc_dat ON san_pham_cho_thue.id_san_pham = san_pham_duoc_dat.id_san_pham GROUP BY san_pham_cho_thue.id_san_pham) AS subquery
+  New:  SELECT MAX(so_luong_dat_hang), MIN(so_luong_dat_hang), AVG(so_luong_dat_hang) FROM (SELECT COUNT(*) AS so_luong_dat_hang FROM san_pham_cho_thue JOIN san_pham_duoc_dat ON san_pham_cho_thue.id_san_pham = san_pham_duoc_dat.id_san_pham GROUP BY san_pham_cho_thue.id_san_pham) AS subquery
+  Old Error: Error col: as
+  New Error: Error col: as
+
+[1639/1906] ✗ NO MATCH  | DB: storm_record | 66600ms
+  Q: Hiển thị tên của tất cả các cơn bão đã ảnh hưởng đến khu vực ' Đan Mạch ' .
+  Gold: select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_con_bao = t3.id_con_bao where t2.ten_khu_vuc = "denmark"
+  Old:  SELECT bao.ten FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc WHERE khu_vuc.ten_khu_vuc = 'Đan Mạch'
+  New:  SELECT bao.ten FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc WHERE khu_vuc.ten_khu_vuc = 'Đan Mạch'
+  Old Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+  New Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+
+[1638/1906] ✗ NO MATCH  | DB: storm_record | 68755ms
+  Q: Những khu vực bị ảnh hưởng bởi các cơn bão gây ra số người chết ít nhất là 10 có tên là gì ?
+  Gold: select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_con_bao = t3.id_con_bao where t3.so_luong_nguoi_chet >= 10
+  Old:  SELECT ten_khu_vuc FROM khu_vuc JOIN khu_vuc_bi_anh_huong ON khu_vuc.id_khu_vuc = khu_vuc_bi_anh_huong.id_khu_vuc JOIN bao ON khu_vuc_bi_anh_huong.id_bao = bao.id_con_bao WHERE bao.so_luong_nguoi_chet >= 10
+  New:  SELECT ten_khu_vuc FROM khu_vuc JOIN khu_vuc_bi_anh_huong ON khu_vuc.id_khu_vuc = khu_vuc_bi_anh_huong.id_khu_vuc JOIN bao ON khu_vuc_bi_anh_huong.id_bao = bao.id_con_bao WHERE bao.so_luong_nguoi_chet >= 10
+  Old Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+  New Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+
+
+============================================================
+  PROGRESS [ablation3]: 1866/1906 | EM: 1069 (57.3%) | Errors: 2
+============================================================
+
+[1644/1906] ✗ NO MATCH  | DB: storm_record | 76813ms
+  Q: Những khu vực bị ảnh hưởng bởi cơn bão gây ra nhiều ca tử vong nhất có tên là gì ?
+  Gold: select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_con_bao = t3.id_con_bao order by t3.so_luong_nguoi_chet desc limit 1
+  Old:  SELECT khu_vuc.ten_khu_vuc FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc ORDER BY bao.so_luong_nguoi_chet DESC LIMIT 1
+  New:  SELECT khu_vuc.ten_khu_vuc FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc ORDER BY bao.so_luong_nguoi_chet DESC LIMIT 1
+  Old Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+  New Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+
+[1643/1906] ✗ NO MATCH  | DB: storm_record | 84285ms
+  Q: Tìm tên của các khu vực bị ảnh hưởng bởi cơn bão đã giết chết nhiều người nhất .
+  Gold: select t2.ten_khu_vuc from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_con_bao = t3.id_con_bao order by t3.so_luong_nguoi_chet desc limit 1
+  Old:  SELECT khu_vuc.ten_khu_vuc FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc ORDER BY bao.so_luong_nguoi_chet DESC LIMIT 1
+  New:  SELECT khu_vuc.ten_khu_vuc FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc ORDER BY bao.so_luong_nguoi_chet DESC LIMIT 1
+  Old Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+  New Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+
+[1732/1906] ✗ NO MATCH  | DB: student_assessment | 48828ms
+  Q: Tìm id của ứng cử viên có email là stanley.monahan@example.org?
+  Gold: select t2.id_ung_cu_vien from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ung_cu_vien where t1.dia_chi_email = "stanley.monahan@example.org"
+  Old:  SELECT ung_cu_vien.id_ung_cu_vien FROM ung_cu_vien JOIN ca_nhan ON ung_cu_vien.id_ca_nhan = ca_nhan.id_ca_nhan WHERE ca_nhan.dia_chi_email = 'stanley.monahan@example.org'
+  New:  SELECT ung_cu_vien.id_ung_cu_vien FROM ung_cu_vien JOIN ca_nhan ON ung_cu_vien.id_ca_nhan = ca_nhan.id_ca_nhan WHERE ca_nhan.dia_chi_email = 'stanley.monahan@example.org'
+  Old Error: 'ung_cu_vien.id_ca_nhan'
+  New Error: 'ung_cu_vien.id_ca_nhan'
+
+
+============================================================
+  PROGRESS [ablation3]: 1869/1906 | EM: 1069 (57.3%) | Errors: 2
+============================================================
+
+[1700/1906] ✗ NO MATCH  | DB: student_1 | 60468ms
+  Q: Cho biết khối lớp , số lượng phòng học cũng như là số lượng học sinh thuộc quản lý của từng khối lớp .
+  Gold: select khoi_lop , count ( distinct phong_hoc ) , count ( * ) from danh_sach group by khoi_lop
+  Old:  SELECT khoi_lop, COUNT(*) AS so_hoc_sinh, COUNT(DISTINCT phong_hoc) AS so_phong_hoc FROM danh_sach GROUP BY khoi_lop
+  New:  SELECT khoi_lop, COUNT(*) AS so_hoc_sinh, COUNT(DISTINCT phong_hoc) AS so_phong_hoc FROM danh_sach GROUP BY khoi_lop
+  Old Error: Error col: as
+  New Error: Error col: as
+
+[1733/1906] ✗ NO MATCH  | DB: student_assessment | 44124ms
+  Q: Ứng cử viên có email stanley.monahan@example.org có id là gì ?
+  Gold: select t2.id_ung_cu_vien from ca_nhan as t1 join ung_cu_vien as t2 on t1.id_ca_nhan = t2.id_ung_cu_vien where t1.dia_chi_email = "stanley.monahan@example.org"
+  Old:  SELECT id_ung_cu_vien FROM ung_cu_vien JOIN ca_nhan ON ung_cu_vien.id_ca_nhan = ca_nhan.id_ca_nhan WHERE ca_nhan.dia_chi_email = 'stanley.monahan@example.org'
+  New:  SELECT T1.id_ung_cu_vien FROM ung_cu_vien T1 JOIN ca_nhan T2 ON T1.id_ca_nhan = T2.id_ca_nhan WHERE T2.dia_chi_email = 'stanley.monahan@example.org'
+  Old Error: 'ung_cu_vien.id_ca_nhan'
+  New Error: 't1'
+
+[1645/1906] ✗ NO MATCH  | DB: storm_record | 101978ms
+  Q: Tìm tên của cơn bão đã ảnh hưởng đến cả khu vực Afghanistan và khu vực Albania .
+  Gold: select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_con_bao = t3.id_con_bao where t2.ten_khu_vuc = "afghanistan" intersect select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_con_bao = t3.id_con_bao where t2.ten_khu_vuc = "albania"
+  Old:  SELECT bao.ten FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc WHERE khu_vuc.ten_khu_vuc = 'Afghanistan' INTERSECT SELECT bao.ten FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc WHERE khu_vuc.ten_khu_vuc = 'Albania'
+  New:  SELECT bao.ten FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc WHERE khu_vuc.ten_khu_vuc = 'Afghanistan' INTERSECT SELECT bao.ten FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc WHERE khu_vuc.ten_khu_vuc = 'Albania'
+  Old Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+  New Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+
+[1744/1906] ✗ NO MATCH  | DB: student_assessment | 59839ms
+  Q: Tìm số điện thoại di động của các ứng cử viên có mã kết quả đánh giá là ' Trượt ' ?
+  Gold: select t3.so_di_dong from ung_cu_vien as t1 join danh_gia_ung_cu_vien as t2 on t1.id_ung_cu_vien = t2.id_ung_cu_vien join ca_nhan as t3 on t1.id_ung_cu_vien = t3.id_ca_nhan where t2.ma_ket_qua_danh_gia = "fail"
+  Old:  SELECT T3.so_di_dong FROM ung_cu_vien AS T1 JOIN danh_gia_ung_cu_vien AS T2 ON T1.id_ung_cu_vien = T2.id_ung_cu_vien JOIN ca_nhan AS T3 ON T1.id_ca_nhan = T3.id_ca_nhan WHERE T2.ma_ket_qua_danh_gia = 'Trượt'
+  New:  SELECT T3.so_di_dong FROM ung_cu_vien AS T1 JOIN danh_gia_ung_cu_vien AS T2 ON T1.id_ung_cu_vien = T2.id_ung_cu_vien JOIN ca_nhan AS T3 ON T1.id_ca_nhan = T3.id_ca_nhan WHERE T2.ma_ket_qua_danh_gia = 'Trượt'
+  Old Error: 'ung_cu_vien.id_ca_nhan'
+  New Error: 'ung_cu_vien.id_ca_nhan'
+
+[1796/1906] ✗ NO MATCH  | DB: yelp | 28100ms
+  Q: Liệt kê tên của tất cả các doanh nghiệp có đánh giá trên 4,5 sao .
+  Gold: select ten from doanh_nghiep where anh_gia_xep_hang > 4.5
+  Old:  SELECT ten FROM doanh_nghiep WHERE danh_gia_xep_hang > 4.5
+  New:  SELECT ten FROM doanh_nghiep WHERE danh_gia_xep_hang > 4.5
+  Old Error: Error col: anh_gia_xep_hang
+  New Error: Error col: anh_gia_xep_hang
+
+
+============================================================
+  PROGRESS [ablation3]: 1874/1906 | EM: 1069 (57.1%) | Errors: 2
+============================================================
+
+[1801/1906] ✗ NO MATCH  | DB: yelp | 28564ms
+  Q: Tìm thành phố của các doanh nghiệp được xếp hạng thấp hơn 1,5 .
+  Gold: select thanh_pho from doanh_nghiep where anh_gia_xep_hang < 1.5
+  Old:  SELECT thanh_pho FROM doanh_nghiep WHERE danh_gia_xep_hang < 1.5
+  New:  SELECT thanh_pho FROM doanh_nghiep WHERE danh_gia_xep_hang < 1.5
+  Old Error: Error col: anh_gia_xep_hang
+  New Error: Error col: anh_gia_xep_hang
+
+[1646/1906] ✗ NO MATCH  | DB: storm_record | 94727ms
+  Q: Những cơn bão ảnh hưởng đến cả khu vực Afghanistan và khu vực Albania có tên là gì ?
+  Gold: select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_con_bao = t3.id_con_bao where t2.ten_khu_vuc = "afghanistan" intersect select t3.ten from khu_vuc_bi_anh_huong as t1 join khu_vuc as t2 on t1.id_khu_vuc = t2.id_khu_vuc join bao as t3 on t1.id_con_bao = t3.id_con_bao where t2.ten_khu_vuc = "albania"
+  Old:  SELECT bao.ten FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc WHERE khu_vuc.ten_khu_vuc = 'Afghanistan' INTERSECT SELECT bao.ten FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc WHERE khu_vuc.ten_khu_vuc = 'Albania'
+  New:  SELECT bao.ten FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc WHERE khu_vuc.ten_khu_vuc = 'Afghanistan' INTERSECT SELECT bao.ten FROM bao JOIN khu_vuc_bi_anh_huong ON bao.id_con_bao = khu_vuc_bi_anh_huong.id_bao JOIN khu_vuc ON khu_vuc_bi_anh_huong.id_khu_vuc = khu_vuc.id_khu_vuc WHERE khu_vuc.ten_khu_vuc = 'Albania'
+  Old Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+  New Error: 'khu_vuc_bi_anh_huong.id_con_bao'
+
+[1797/1906] ✗ NO MATCH  | DB: yelp | 40263ms
+  Q: Liệt kê tên của tất cả các doanh nghiệp được đánh giá 3,5 sao .
+  Gold: select ten from doanh_nghiep where anh_gia_xep_hang = 3.5
+  Old:  SELECT ten FROM doanh_nghiep WHERE danh_gia_xep_hang = 3.5
+  New:  SELECT ten FROM doanh_nghiep WHERE danh_gia_xep_hang = 3.5
+  Old Error: Error col: anh_gia_xep_hang
+  New Error: Error col: anh_gia_xep_hang
+
+[1762/1906] ✗ NO MATCH  | DB: student_assessment | 58376ms
+  Q: Cho biết tất cả thông tin về các sinh viên đã đăng ký các khoá học nhưng không tham dự các khoá học ?
+  Gold: select * from luot_dang_ky_khoa_hoc_cua_sinh_vien where id_sinh_vien not in ( select id_sinh_vien from lan_tham_du_khoa_hoc_cua_sinh_vien )
+  Old:  SELECT T1.* FROM sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien EXCEPT SELECT T1.* FROM sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien JOIN lan_tham_du_khoa_hoc_cua_sinh_vien AS T3 ON T2.id_khoa_hoc = T3.id_khoa_hoc AND T1.id_sinh_vien = T3.id_sinh_vien
+  New:  SELECT T1.* FROM sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien EXCEPT SELECT T1.* FROM sinh_vien AS T1 JOIN luot_dang_ky_khoa_hoc_cua_sinh_vien AS T2 ON T1.id_sinh_vien = T2.id_sinh_vien JOIN lan_tham_du_khoa_hoc_cua_sinh_vien AS T3 ON T2.id_khoa_hoc = T3.id_khoa_hoc AND T1.id_sinh_vien = T3.id_sinh_vien
+  Old Error: Error col: t1
+  New Error: Error col: t1
+
+
+============================================================
+  PROGRESS [ablation3]: 1878/1906 | EM: 1069 (57.0%) | Errors: 2
+============================================================
+
+[1745/1906] ✗ NO MATCH  | DB: student_assessment | 80805ms
+  Q: Những ứng cử viên nào đã nhận được mã kết quả đánh giá là ' Trượt ' ? Cho biết số điện thoại của những ứng cử viên này .
+  Gold: select t3.so_di_dong from ung_cu_vien as t1 join danh_gia_ung_cu_vien as t2 on t1.id_ung_cu_vien = t2.id_ung_cu_vien join ca_nhan as t3 on t1.id_ung_cu_vien = t3.id_ca_nhan where t2.ma_ket_qua_danh_gia = "fail"
+  Old:  SELECT ca_nhan.so_di_dong FROM ung_cu_vien JOIN ca_nhan ON ung_cu_vien.id_ca_nhan = ca_nhan.id_ca_nhan JOIN danh_gia_ung_cu_vien ON ung_cu_vien.id_ung_cu_vien = danh_gia_ung_cu_vien.id_ung_cu_vien WHERE danh_gia_ung_cu_vien.ma_ket_qua_danh_gia = 'Trượt'
+  New:  SELECT ca_nhan.so_di_dong FROM ung_cu_vien JOIN ca_nhan ON ung_cu_vien.id_ca_nhan = ca_nhan.id_ca_nhan JOIN danh_gia_ung_cu_vien ON ung_cu_vien.id_ung_cu_vien = danh_gia_ung_cu_vien.id_ung_cu_vien WHERE danh_gia_ung_cu_vien.ma_ket_qua_danh_gia = 'Trượt'
+  Old Error: 'ung_cu_vien.id_ca_nhan'
+  New Error: 'ung_cu_vien.id_ca_nhan'
+
+[1809/1906] ✗ NO MATCH  | DB: yelp | 53977ms
+  Q: Liệt kê tất cả những đoạn văn bản mà Michelle đã viết trong các đánh giá cho các ' nhà hàng Ý ' .
+  Gold: select t4.van_ban from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t4 on t4.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t5 on t5.id_nguoi_tieu_dung = t4.id_nguoi_tieu_dung where t2.ten_loai_hinh = "italian" and t3.ten_loai_hinh = "category category name1" and t5.ten = "michelle"
+  Old:  SELECT T1.van_ban FROM danh_gia AS T1 JOIN nguoi_tieu_dung AS T2 ON T1.id_nguoi_tieu_dung = CAST(T2.id_nguoi_tieu_dung AS TEXT) JOIN loai_hinh AS T3 ON T1.id_doanh_nghiep = T3.id_doanh_nghiep WHERE T2.ten = 'Michelle' AND T3.ten_loai_hinh = 'nhà hàng Ý'
+  New:  SELECT T1.van_ban FROM danh_gia AS T1 JOIN nguoi_tieu_dung AS T2 ON T1.id_nguoi_tieu_dung = CAST(T2.id_nguoi_tieu_dung AS TEXT) JOIN loai_hinh AS T3 ON T1.id_doanh_nghiep = T3.id_doanh_nghiep WHERE T2.ten = 'Michelle' AND T3.ten_loai_hinh = 'nhà hàng Ý'
+  Old Error: Error col: cast
+  New Error: Error col: cast
+
+[1804/1906] ✗ NO MATCH  | DB: yelp | 77254ms
+  Q: Liệt kê tên của tất cả các nhà hàng được xếp hạng cao hơn 3,5 .
+  Gold: select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.anh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "restaurant"
+  Old:  SELECT ten FROM doanh_nghiep WHERE danh_gia_xep_hang > 3.5
+  New:  SELECT ten FROM doanh_nghiep JOIN loai_hinh ON doanh_nghiep.id_doanh_nghiep = loai_hinh.id_doanh_nghiep WHERE loai_hinh.ten_loai_hinh = 'nhà hàng' AND doanh_nghiep.danh_gia_xep_hang > 3.5
+  Old Error: 'doanh_nghiep.anh_gia_xep_hang'
+  New Error: 'doanh_nghiep.anh_gia_xep_hang'
+
+
+============================================================
+  PROGRESS [ablation3]: 1881/1906 | EM: 1069 (56.9%) | Errors: 2
+============================================================
+
+[1821/1906] ✗ NO MATCH  | DB: yelp | 50196ms
+  Q: liệt kê địa chỉ của những chi nhánh Walmart tại ' Los Angeles ' .
+  Gold: select ia_chi_ay_u from doanh_nghiep where thanh_pho = "los angeles" and ten = "walmart"
+  Old:  SELECT dia_chi_day_du FROM doanh_nghiep WHERE ten = 'Walmart' AND thanh_pho = 'Los Angeles'
+  New:  SELECT dia_chi_day_du FROM doanh_nghiep WHERE ten = 'Walmart' AND thanh_pho = 'Los Angeles'
+  Old Error: Error col: ia_chi_ay_u
+  New Error: Error col: ia_chi_ay_u
+
+[1813/1906] ✗ NO MATCH  | DB: yelp | 79498ms
+  Q: Liệt kê tất cả các khu phố có ' nhà hàng Ý ' được xếp hạng dưới 2,5 sao ở Madison .
+  Gold: select t1.ten_khu_pho_lan_can from loai_hinh as t3 join doanh_nghiep as t2 on t3.id_doanh_nghiep = t2.id_doanh_nghiep join loai_hinh as t4 on t4.id_doanh_nghiep = t2.id_doanh_nghiep join khu_vuc_lan_can as t1 on t1.id_doanh_nghiep = t2.id_doanh_nghiep where t2.thanh_pho = "madison" and t2.anh_gia_xep_hang < 2.5 and t3.ten_loai_hinh = "italian" and t4.ten_loai_hinh = "restaurant"
+  Old:  SELECT T1.ten_khu_pho_lan_can FROM khu_vuc_lan_can AS T1 JOIN doanh_nghiep AS T2 ON T1.id_doanh_nghiep = CAST(T2.id_doanh_nghiep AS TEXT) JOIN loai_hinh AS T3 ON CAST(T2.id_doanh_nghiep AS TEXT) = T3.id_doanh_nghiep WHERE T3.ten_loai_hinh = 'nhà hàng Ý' AND T2.thanh_pho = 'Madison' AND T2.danh_gia_xep_hang < 2.5
+  New:  SELECT T1.ten_khu_pho_lan_can FROM khu_vuc_lan_can AS T1 JOIN doanh_nghiep AS T2 ON T1.id_doanh_nghiep = CAST(T2.id_doanh_nghiep AS TEXT) JOIN loai_hinh AS T3 ON CAST(T2.id_doanh_nghiep AS TEXT) = T3.id_doanh_nghiep WHERE T3.ten_loai_hinh = 'nhà hàng Ý' AND T2.thanh_pho = 'Madison' AND T2.danh_gia_xep_hang < 2.5
+  Old Error: 'doanh_nghiep.anh_gia_xep_hang'
+  New Error: 'doanh_nghiep.anh_gia_xep_hang'
+
+
+============================================================
+  PROGRESS [ablation3]: 1883/1906 | EM: 1069 (56.8%) | Errors: 2
+============================================================
+
+[1816/1906] ✗ NO MATCH  | DB: yelp | 83941ms
+  Q: hiển thị những đoạn văn bản đã được viết trong các đánh giá cho các doanh nghiệp có loại hình kinh doanh là ' chải chuốt cho vật nuôi ' và có nhiều hơn 100 đánh giá .
+  Gold: select t3.van_ban from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.so_luong_anh_gia > 100 and t2.ten_loai_hinh = "pet groomers"
+  Old:  SELECT danh_gia.van_ban FROM danh_gia JOIN doanh_nghiep ON danh_gia.id_doanh_nghiep = doanh_nghiep.id_doanh_nghiep JOIN loai_hinh ON doanh_nghiep.id_doanh_nghiep = loai_hinh.id_doanh_nghiep WHERE loai_hinh.ten_loai_hinh = 'chải chuốt cho vật nuôi' AND doanh_nghiep.so_luong_danh_gia > 100
+  New:  SELECT danh_gia.van_ban FROM danh_gia JOIN doanh_nghiep ON danh_gia.id_doanh_nghiep = doanh_nghiep.id_doanh_nghiep JOIN loai_hinh ON doanh_nghiep.id_doanh_nghiep = loai_hinh.id_doanh_nghiep WHERE loai_hinh.ten_loai_hinh = 'chải chuốt cho vật nuôi' AND doanh_nghiep.so_luong_danh_gia > 100
+  Old Error: 'doanh_nghiep.so_luong_anh_gia'
+  New Error: 'doanh_nghiep.so_luong_anh_gia'
+
+[1827/1906] ✗ NO MATCH  | DB: yelp | 56154ms
+  Q: Tìm tất cả các doanh nghiệp ở Texas với xếp hạng dưới 2 .
+  Gold: select ten from doanh_nghiep where anh_gia_xep_hang < 2 and tieu_bang = "texas"
+  Old:  SELECT * FROM doanh_nghiep WHERE thanh_pho = 'Texas' AND danh_gia_xep_hang < 2
+  New:  SELECT * FROM doanh_nghiep WHERE thanh_pho = 'Texas' AND danh_gia_xep_hang < 2
+  Old Error: Error col: anh_gia_xep_hang
+  New Error: Error col: anh_gia_xep_hang
+
+[1812/1906] ✗ NO MATCH  | DB: yelp | 99948ms
+  Q: Liệt kê tất cả các khu phố có ' nhà hàng Ý ' ở Madison .
+  Gold: select t1.ten_khu_pho_lan_can from loai_hinh as t3 join doanh_nghiep as t2 on t3.id_doanh_nghiep = t2.id_doanh_nghiep join loai_hinh as t4 on t4.id_doanh_nghiep = t2.id_doanh_nghiep join khu_vuc_lan_can as t1 on t1.id_doanh_nghiep = t2.id_doanh_nghiep where t2.thanh_pho = "madison" and t3.ten_loai_hinh = "italian" and t4.ten_loai_hinh = "restaurant"
+  Old:  SELECT T1.ten_khu_pho_lan_can FROM khu_vuc_lan_can AS T1 JOIN loai_hinh AS T2 ON T1.id_doanh_nghiep = T2.id_doanh_nghiep JOIN doanh_nghiep AS T3 ON T2.id_doanh_nghiep = T3.id_doanh_nghiep WHERE T3.ten_loai_hinh = 'nhà hàng Ý' AND T3.thanh_pho = 'Madison'
+  New:  SELECT T1.ten_khu_pho_lan_can FROM khu_vuc_lan_can AS T1 JOIN loai_hinh AS T2 ON T1.id_doanh_nghiep = T2.id_doanh_nghiep JOIN doanh_nghiep AS T3 ON T2.id_doanh_nghiep = CAST(T3.id_doanh_nghiep AS TEXT) WHERE T2.ten_loai_hinh = 'nhà hàng Ý' AND T3.thanh_pho = 'Madison'
+  Old Error: 'doanh_nghiep.ten_loai_hinh'
+  New Error: Error col: cast
+
+
+============================================================
+  PROGRESS [ablation3]: 1886/1906 | EM: 1069 (56.7%) | Errors: 2
+============================================================
+
+[1834/1906] ✗ NO MATCH  | DB: yelp | 43303ms
+  Q: Khu phố nào có nhà hàng ' Flat Top Grill ' ?
+  Gold: select t1.ten_khu_pho_lan_can from loai_hinh as t3 join doanh_nghiep as t2 on t3.id_doanh_nghiep = t2.id_doanh_nghiep join khu_vuc_lan_can as t1 on t1.id_doanh_nghiep = t2.id_doanh_nghiep where t2.ten = "flat top grill" and t3.ten_loai_hinh = "category category name0"
+  Old:  SELECT T2.ten_khu_pho_lan_can FROM doanh_nghiep AS T1 JOIN khu_vuc_lan_can AS T2 ON CAST(T2.id_doanh_nghiep AS NUMBER) = T1.id_doanh_nghiep WHERE T1.ten = 'Flat Top Grill'
+  New:  SELECT T2.ten_khu_pho_lan_can FROM doanh_nghiep AS T1 JOIN khu_vuc_lan_can AS T2 ON CAST(T2.id_doanh_nghiep AS NUMBER) = T1.id_doanh_nghiep WHERE T1.ten = 'Flat Top Grill'
+  Old Error: Error col: cast
+  New Error: Error col: cast
+
+[1845/1906] ✗ NO MATCH  | DB: yelp | 37175ms
+  Q: Hiển thị những đoạn văn bản được viết trên các đánh giá có điểm xếp hạng là 2.5 .
+  Gold: select t2.van_ban from anh_gia as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.anh_gia_xep_hang = 2.5
+  Old:  SELECT van_ban FROM danh_gia WHERE danh_gia_xep_hang = 2.5
+  New:  SELECT van_ban FROM danh_gia WHERE danh_gia_xep_hang = 2.5
+  Old Error: 'doanh_nghiep.anh_gia_xep_hang'
+  New Error: 'doanh_nghiep.anh_gia_xep_hang'
+
+[1833/1906] ✗ NO MATCH  | DB: yelp | 68374ms
+  Q: Tìm tất cả các nhà hàng ở Dallas có xếp hạng trên 4,5 .
+  Gold: select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t1.anh_gia_xep_hang > 4.5 and t2.ten_loai_hinh = "restaurant"
+  Old:  SELECT ten FROM doanh_nghiep JOIN loai_hinh ON doanh_nghiep.id_doanh_nghiep = loai_hinh.id_doanh_nghiep WHERE loai_hinh.ten_loai_hinh = 'nhà hàng' AND doanh_nghiep.thanh_pho = 'Dallas' AND doanh_nghiep.danh_gia_xep_hang > 4.5
+  New:  SELECT ten FROM doanh_nghiep JOIN loai_hinh ON doanh_nghiep.id_doanh_nghiep = loai_hinh.id_doanh_nghiep WHERE loai_hinh.ten_loai_hinh = 'nhà hàng' AND doanh_nghiep.thanh_pho = 'Dallas' AND doanh_nghiep.danh_gia_xep_hang > 4.5
+  Old Error: 'doanh_nghiep.anh_gia_xep_hang'
+  New Error: 'doanh_nghiep.anh_gia_xep_hang'
+
+[1811/1906] ✗ NO MATCH  | DB: yelp | 140501ms
+  Q: liệt kê tất cả các ' nhà hàng Ý ' được xếp hạng 5 sao .
+  Gold: select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.anh_gia_xep_hang = 5 and t2.ten_loai_hinh = "italian" and t3.ten_loai_hinh = "restaurant"
+  Old:  SELECT T1.id_doanh_nghiep, T1.ten, T1.dia_chi_day_du, T1.thanh_pho, T1.vi_do, T1.kinh_do, T1.so_luong_danh_gia, T1.co_mo_cua_hay_khong, T1.danh_gia_xep_hang, T1.tieu_bang FROM doanh_nghiep AS T1 JOIN loai_hinh AS T2 ON T1.id_doanh_nghiep = T2.id_doanh_nghiep WHERE T2.ten_loai_hinh = 'nhà hàng Ý' AND T1.danh_gia_xep_hang = 5
+  New:  SELECT T1.ten, T1.dia_chi_day_du, T1.thanh_pho, T1.vi_do, T1.kinh_do, T1.so_luong_danh_gia, T1.co_mo_cua_hay_khong, T1.danh_gia_xep_hang, T1.tieu_bang FROM doanh_nghiep AS T1 JOIN loai_hinh AS T2 ON CAST(T1.id_doanh_nghiep AS TEXT) = T2.id_doanh_nghiep WHERE T2.ten_loai_hinh = 'nhà hàng Ý' AND T1.danh_gia_xep_hang = 5
+  Old Error: 'doanh_nghiep.anh_gia_xep_hang'
+  New Error: 'doanh_nghiep.anh_gia_xep_hang'
+
+[1830/1906] ✗ NO MATCH  | DB: yelp | 79945ms
+  Q: Tìm tất cả các nhà hàng phục vụ ' Hải sản ' ở ' Los Angeles ' .
+  Gold: select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t2.ten_loai_hinh = "seafood" and t3.ten_loai_hinh = "restaurant"
+  Old:  SELECT doanh_nghiep.id_doanh_nghiep, doanh_nghiep.ten, doanh_nghiep.dia_chi_day_du, doanh_nghiep.thanh_pho, doanh_nghiep.vi_do, doanh_nghiep.kinh_do, doanh_nghiep.so_luong_danh_gia, doanh_nghiep.co_mo_cua_hay_khong, doanh_nghiep.danh_gia_xep_hang, doanh_nghiep.tieu_bang FROM doanh_nghiep JOIN loai_hinh ON CAST(doanh_nghiep.id_doanh_nghiep AS TEXT) = loai_hinh.id_doanh_nghiep WHERE loai_hinh.ten_loai_hinh = 'Hải sản' AND doanh_nghiep.thanh_pho = 'Los Angeles'
+  New:  SELECT doanh_nghiep.id_doanh_nghiep, doanh_nghiep.ten, doanh_nghiep.dia_chi_day_du, doanh_nghiep.thanh_pho, doanh_nghiep.vi_do, doanh_nghiep.kinh_do, doanh_nghiep.so_luong_danh_gia, doanh_nghiep.co_mo_cua_hay_khong, doanh_nghiep.danh_gia_xep_hang, doanh_nghiep.tieu_bang FROM doanh_nghiep JOIN loai_hinh ON CAST(doanh_nghiep.id_doanh_nghiep AS TEXT) = loai_hinh.id_doanh_nghiep WHERE loai_hinh.ten_loai_hinh = 'Hải sản' AND doanh_nghiep.thanh_pho = 'Los Angeles'
+  Old Error: Error col: cast
+  New Error: Error col: cast
+
+[1825/1906] ✗ NO MATCH  | DB: yelp | 113459ms
+  Q: Tìm tất cả các quán bar được Patrick đánh giá từ 3 sao trở lên .
+  Gold: select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join anh_gia as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep join nguoi_tieu_dung as t4 on t4.id_nguoi_tieu_dung = t3.id_nguoi_tieu_dung where t1.anh_gia_xep_hang >= 3 and t2.ten_loai_hinh = "bars" and t4.ten = "patrick"
+  Old:  SELECT doanh_nghiep.id_doanh_nghiep , doanh_nghiep.ten , loai_hinh.ten_loai_hinh , danh_gia.danh_gia_xep_hang FROM doanh_nghiep JOIN danh_gia ON doanh_nghiep.id_doanh_nghiep = danh_gia.id_doanh_nghiep JOIN nguoi_tieu_dung ON danh_gia.id_nguoi_tieu_dung = nguoi_tieu_dung.id_nguoi_tieu_dung JOIN loai_hinh ON doanh_nghiep.id_doanh_nghiep = loai_hinh.id_doanh_nghiep WHERE nguoi_tieu_dung.ten = 'Patrick' AND danh_gia.danh_gia_xep_hang >= 3 AND loai_hinh.ten_loai_hinh = 'bar'
+  New:  SELECT doanh_nghiep.ten, doanh_nghiep.dia_chi_day_du, danh_gia.danh_gia_xep_hang FROM doanh_nghiep JOIN danh_gia ON doanh_nghiep.id_doanh_nghiep = danh_gia.id_doanh_nghiep JOIN nguoi_tieu_dung ON danh_gia.id_nguoi_tieu_dung = nguoi_tieu_dung.id_nguoi_tieu_dung JOIN loai_hinh ON doanh_nghiep.id_doanh_nghiep = loai_hinh.id_doanh_nghiep WHERE nguoi_tieu_dung.ten = 'Patrick' AND danh_gia.danh_gia_xep_hang >= 3 AND loai_hinh.ten_loai_hinh = 'bar'
+  Old Error: 'doanh_nghiep.anh_gia_xep_hang'
+  New Error: 'doanh_nghiep.anh_gia_xep_hang'
+
+
+============================================================
+  PROGRESS [ablation3]: 1892/1906 | EM: 1069 (56.6%) | Errors: 2
+============================================================
+
+[1846/1906] ✗ NO MATCH  | DB: yelp | 60969ms
+  Q: số lượng doanh nghiệp ở Madison hiện đang theo loại hình kinh doanh ' trò chơi trốn thoát ' là bao nhiêu ?
+  Gold: select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "madison" and t2.ten_loai_hinh = "escape games"
+  Old:  SELECT COUNT(*) FROM doanh_nghiep JOIN loai_hinh ON CAST(doanh_nghiep.id_doanh_nghiep AS TEXT) = loai_hinh.id_doanh_nghiep WHERE doanh_nghiep.thanh_pho = 'Madison' AND loai_hinh.ten_loai_hinh = 'trò chơi trốn thoát'
+  New:  SELECT COUNT(*) FROM doanh_nghiep JOIN loai_hinh ON CAST(doanh_nghiep.id_doanh_nghiep AS TEXT) = loai_hinh.id_doanh_nghiep WHERE doanh_nghiep.thanh_pho = 'Madison' AND loai_hinh.ten_loai_hinh = 'trò chơi trốn thoát'
+  Old Error: Error col: cast
+  New Error: Error col: cast
+
+[1851/1906] ✗ NO MATCH  | DB: yelp | 42215ms
+  Q: tìm số lượng các nhà hàng được xếp hạng cao hơn 3,5 .
+  Gold: select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.anh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "restaurant"
+  Old:  SELECT COUNT(*) FROM doanh_nghiep WHERE danh_gia_xep_hang > 3.5
+  New:  SELECT COUNT(*) FROM doanh_nghiep WHERE danh_gia_xep_hang > 3.5
+  Old Error: 'doanh_nghiep.anh_gia_xep_hang'
+  New Error: 'doanh_nghiep.anh_gia_xep_hang'
+
+
+============================================================
+  PROGRESS [ablation3]: 1894/1906 | EM: 1069 (56.5%) | Errors: 2
+============================================================
+
+[1850/1906] ✗ NO MATCH  | DB: yelp | 83610ms
+  Q: Madison có bao nhiêu doanh nghiệp đang theo loại hình kinh doanh ' trò chơi trốn thoát ' ?
+  Gold: select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "madison" and t2.ten_loai_hinh = "escape games"
+  Old:  SELECT COUNT(*) FROM dbo.doanh_nghiep JOIN dbo.loai_hinh ON dbo.doanh_nghiep.id_doanh_nghiep = dbo.loai_hinh.id_doanh_nghiep WHERE dbo.doanh_nghiep.thanh_pho = 'Madison' AND dbo.loai_hinh.ten_loai_hinh = 'trò chơi trốn thoát'
+  New:  SELECT COUNT(*) FROM dbo.doanh_nghiep JOIN dbo.loai_hinh ON dbo.doanh_nghiep.id_doanh_nghiep = dbo.loai_hinh.id_doanh_nghiep WHERE dbo.doanh_nghiep.thanh_pho = 'Madison' AND dbo.loai_hinh.ten_loai_hinh = 'trò chơi trốn thoát'
+  Old Error: 'dbo.doanh_nghiep'
+  New Error: 'dbo.doanh_nghiep'
+
+[1860/1906] ✗ NO MATCH  | DB: yelp | 55786ms
+  Q: có bao nhiêu nhà hàng ở Pittsburgh được xếp hạng trên 4,5 ?
+  Gold: select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "pittsburgh" and t1.anh_gia_xep_hang = 4.5 and t2.ten_loai_hinh = "restaurant"
+  Old:  SELECT COUNT(*) FROM doanh_nghiep WHERE thanh_pho = 'Pittsburgh' AND danh_gia_xep_hang > 4.5
+  New:  SELECT COUNT(*) FROM doanh_nghiep WHERE thanh_pho = 'Pittsburgh' AND danh_gia_xep_hang > 4.5
+  Old Error: 'doanh_nghiep.anh_gia_xep_hang'
+  New Error: 'doanh_nghiep.anh_gia_xep_hang'
+
+[1869/1906] ✗ NO MATCH  | DB: yelp | 63107ms
+  Q: có bao nhiêu quán bar ở Dallas có xếp hạng trên 3,5 ?
+  Gold: select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t1.anh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "bars"
+  Old:  SELECT COUNT(*) FROM doanh_nghiep WHERE thanh_pho = 'Dallas' AND danh_gia_xep_hang > 3.5
+  New:  SELECT COUNT(*) FROM doanh_nghiep JOIN loai_hinh ON doanh_nghiep.id_doanh_nghiep = loai_hinh.id_doanh_nghiep WHERE doanh_nghiep.thanh_pho = 'Dallas' AND loai_hinh.ten_loai_hinh = 'bar' AND doanh_nghiep.danh_gia_xep_hang > 3.5
+  Old Error: 'doanh_nghiep.anh_gia_xep_hang'
+  New Error: 'doanh_nghiep.anh_gia_xep_hang'
+
+
+============================================================
+  PROGRESS [ablation3]: 1897/1906 | EM: 1069 (56.4%) | Errors: 2
+============================================================
+
+[1870/1906] ✗ NO MATCH  | DB: yelp | 75647ms
+  Q: Dallas có bao nhiêu quán bar có điểm xếp hạng cao hơn 3,5 ?
+  Gold: select count ( distinct t1.ten ) from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t1.anh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "bars"
+  Old:  SELECT COUNT(*) FROM doanh_nghiep JOIN loai_hinh ON doanh_nghiep.id_doanh_nghiep = loai_hinh.id_doanh_nghiep WHERE doanh_nghiep.thanh_pho = 'Dallas' AND loai_hinh.ten_loai_hinh = 'Quán bar' AND doanh_nghiep.danh_gia_xep_hang > 3.5
+  New:  SELECT COUNT(*) FROM doanh_nghiep JOIN loai_hinh ON doanh_nghiep.id_doanh_nghiep = loai_hinh.id_doanh_nghiep WHERE doanh_nghiep.thanh_pho = 'Dallas' AND loai_hinh.ten_loai_hinh = 'Quán bar' AND doanh_nghiep.danh_gia_xep_hang > 3.5
+  Old Error: 'doanh_nghiep.anh_gia_xep_hang'
+  New Error: 'doanh_nghiep.anh_gia_xep_hang'
+
+
+============================================================
+  PROGRESS [ablation3]: 1898/1906 | EM: 1069 (56.4%) | Errors: 2
+============================================================
+
+[1894/1906] ✗ NO MATCH  | DB: yelp | 86131ms
+  Q: Có bao nhiêu khu vực lân cận ở Madison có một số doanh nghiệp được xếp hạng 5 ?
+  Gold: select count ( distinct t1.ten_khu_pho_lan_can ) from khu_vuc_lan_can as t1 join doanh_nghiep as t2 on t1.id_doanh_nghiep = t2.id_doanh_nghiep where t2.thanh_pho = "madison" and t2.anh_gia_xep_hang = 5
+  Old:  SELECT COUNT(*) FROM khu_vuc_lan_can JOIN doanh_nghiep ON khu_vuc_lan_can.id_doanh_nghiep = doanh_nghiep.id_doanh_nghiep WHERE doanh_nghiep.thanh_pho = 'Madison' AND doanh_nghiep.danh_gia_xep_hang = 5
+  New:  SELECT COUNT(*) FROM khu_vuc_lan_can JOIN doanh_nghiep ON khu_vuc_lan_can.id_doanh_nghiep = doanh_nghiep.id_doanh_nghiep WHERE doanh_nghiep.thanh_pho = 'Madison' AND doanh_nghiep.danh_gia_xep_hang = 5
+  Old Error: 'doanh_nghiep.anh_gia_xep_hang'
+  New Error: 'doanh_nghiep.anh_gia_xep_hang'
+
+[1904/1906] ✗ NO MATCH  | DB: yelp | 50326ms
+  Q: cho biết những người dùng đã đưa ra các đánh giá với giá trị trung bình thấp hơn 3 .
+  Gold: select t2.ten from nguoi_tieu_dung as t2 join anh_gia as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung group by t2.ten having avg ( t1.anh_gia_xep_hang ) < 3
+  Old:  SELECT T1.ten FROM nguoi_tieu_dung AS T1 JOIN danh_gia AS T2 ON T1.id_nguoi_tieu_dung = CAST(T2.id_nguoi_tieu_dung AS NUMBER) GROUP BY T1.id_nguoi_tieu_dung HAVING AVG(T2.danh_gia_xep_hang) < 3
+  New:  SELECT T1.ten FROM nguoi_tieu_dung AS T1 JOIN danh_gia AS T2 ON T1.id_nguoi_tieu_dung = CAST(T2.id_nguoi_tieu_dung AS NUMBER) GROUP BY T1.id_nguoi_tieu_dung HAVING AVG(T2.danh_gia_xep_hang) < 3
+  Old Error: Error col: cast
+  New Error: Error col: cast
+
+[1899/1906] ✗ NO MATCH  | DB: yelp | 78826ms
+  Q: cho biết các nhà hàng Mexico với xếp hạng từ 3,5 trở lên ở Dallas .
+  Gold: select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t1.anh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "mexican" and t3.ten_loai_hinh = "restaurant"
+  Old:  SELECT ten FROM doanh_nghiep JOIN loai_hinh ON doanh_nghiep.id_doanh_nghiep = loai_hinh.id_doanh_nghiep WHERE thanh_pho = 'Dallas' AND danh_gia_xep_hang >= 3.5 AND loai_hinh.ten_loai_hinh = 'Mexico'
+  New:  SELECT ten FROM doanh_nghiep JOIN loai_hinh ON doanh_nghiep.id_doanh_nghiep = loai_hinh.id_doanh_nghiep WHERE thanh_pho = 'Dallas' AND danh_gia_xep_hang >= 3.5 AND loai_hinh.ten_loai_hinh = 'Mexico'
+  Old Error: 'doanh_nghiep.anh_gia_xep_hang'
+  New Error: 'doanh_nghiep.anh_gia_xep_hang'
+
+[1898/1906] ✗ NO MATCH  | DB: yelp | 83826ms
+  Q: liệt kê tất cả các nhà hàng Mexico với ít nhất 3,5 sao ở Dallas .
+  Gold: select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep join loai_hinh as t3 on t3.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "dallas" and t1.anh_gia_xep_hang > 3.5 and t2.ten_loai_hinh = "mexican" and t3.ten_loai_hinh = "restaurant"
+  Old:  SELECT T1.ten FROM doanh_nghiep AS T1 JOIN loai_hinh AS T2 ON T1.id_doanh_nghiep = T2.id_doanh_nghiep WHERE T1.thanh_pho = 'Dallas' AND T1.danh_gia_xep_hang >= 3.5 AND T2.ten_loai_hinh = 'Mexico'
+  New:  SELECT T1.ten, T1.dia_chi_day_du, T1.thanh_pho, T1.vi_do, T1.kinh_do, T1.so_luong_danh_gia, T1.co_mo_cua_hay_khong, T1.danh_gia_xep_hang, T1.tieu_bang FROM doanh_nghiep AS T1 JOIN loai_hinh AS T2 ON T1.id_doanh_nghiep = T2.id_doanh_nghiep WHERE T1.thanh_pho = 'Dallas' AND T1.danh_gia_xep_hang >= 3.5 AND T2.ten_loai_hinh = 'Mexican'
+  Old Error: 'doanh_nghiep.anh_gia_xep_hang'
+  New Error: 'doanh_nghiep.anh_gia_xep_hang'
+
+
+============================================================
+  PROGRESS [ablation3]: 1902/1906 | EM: 1069 (56.3%) | Errors: 2
+============================================================
+
+[1902/1906] ✗ NO MATCH  | DB: yelp | 71371ms
+  Q: những quán bar nào ở Los Angeles đã nhận được ít nhất 30 đánh giá và có xếp hạng trung bình trên 3 sao ?
+  Gold: select t1.ten from loai_hinh as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "los angeles" and t1.anh_gia_xep_hang > 3 and t1.so_luong_anh_gia > 30 and t2.ten_loai_hinh = "bars"
+  Old:  SELECT ten FROM doanh_nghiep JOIN loai_hinh ON doanh_nghiep.id_doanh_nghiep = loai_hinh.id_doanh_nghiep JOIN danh_gia ON doanh_nghiep.id_doanh_nghiep = danh_gia.id_doanh_nghiep WHERE loai_hinh.ten_loai_hinh = 'Bar' AND doanh_nghiep.thanh_pho = 'Los Angeles' AND doanh_nghiep.so_luong_danh_gia >= 30 GROUP BY doanh_nghiep.id_doanh_nghiep HAVING AVG(danh_gia.danh_gia_xep_hang) > 3
+  New:  SELECT ten FROM doanh_nghiep JOIN loai_hinh ON doanh_nghiep.id_doanh_nghiep = loai_hinh.id_doanh_nghiep JOIN danh_gia ON doanh_nghiep.id_doanh_nghiep = danh_gia.id_doanh_nghiep WHERE loai_hinh.ten_loai_hinh = 'Bar' AND doanh_nghiep.thanh_pho = 'Los Angeles' AND doanh_nghiep.so_luong_danh_gia >= 30 GROUP BY doanh_nghiep.id_doanh_nghiep HAVING AVG(danh_gia.danh_gia_xep_hang) > 3
+  Old Error: 'doanh_nghiep.anh_gia_xep_hang'
+  New Error: 'doanh_nghiep.anh_gia_xep_hang'
+
+[1875/1906] ✗ NO MATCH  | DB: yelp | 132999ms
+  Q: Acacia Cafe ' nhận được bao nhiêu lượt đánh giá ?
+  Gold: select so_luong_anh_gia from doanh_nghiep where ten = "acacia cafe"
+  Old:  SELECT COUNT(*) FROM doanh_nghiep JOIN danh_gia ON doanh_nghiep.id_doanh_nghiep = CAST(danh_gia.id_doanh_nghiep AS INTEGER) WHERE doanh_nghiep.ten = 'Acacia Cafe'
+  New:  SELECT COUNT(*) FROM doanh_nghiep JOIN danh_gia ON doanh_nghiep.id_doanh_nghiep = CAST(danh_gia.id_doanh_nghiep AS INTEGER) WHERE doanh_nghiep.ten = 'Acacia Cafe'
+  Old Error: Error col: so_luong_anh_gia
+  New Error: Error col: so_luong_anh_gia
+
+
+============================================================
+  PROGRESS [ablation3]: 1904/1906 | EM: 1069 (56.2%) | Errors: 2
+============================================================
+
+[1877/1906] ✗ NO MATCH  | DB: yelp | 142462ms
+  Q: có bao nhiêu doanh nghiệp nằm ở khu vực lân cận Stone Meadows thuộc Madison ?
+  Gold: select count ( distinct t1.ten ) from khu_vuc_lan_can as t2 join doanh_nghiep as t1 on t2.id_doanh_nghiep = t1.id_doanh_nghiep where t1.thanh_pho = "madison" and t2.ten_khu_pho_lan_can = "stone meadows"
+  Old:  SELECT COUNT(*) FROM doanh_nghiep JOIN khu_vuc_lan_can ON doanh_nghiep.id_doanh_nghiep = CAST(khu_vuc_lan_can.id_doanh_nghiep AS NUMBER) WHERE khu_vuc_lan_can.ten_khu_pho_lan_can = 'Stone Meadows' AND doanh_nghiep.thanh_pho = 'Madison'
+  New:  SELECT COUNT(*) FROM doanh_nghiep JOIN khu_vuc_lan_can ON doanh_nghiep.id_doanh_nghiep = CAST(khu_vuc_lan_can.id_doanh_nghiep AS NUMBER) WHERE khu_vuc_lan_can.ten_khu_pho_lan_can = 'Stone Meadows' AND doanh_nghiep.thanh_pho = 'Madison'
+  Old Error: Error col: cast
+  New Error: Error col: cast
+
+  [Retry 1/3] 500 Error encountered, retrying in 2s...
+
+============================================================
+  PROGRESS [ablation3]: 1905/1906 | EM: 1069 (56.2%) | Errors: 2
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1905/1906 | EM: 1069 (56.2%) | Errors: 2
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1905/1906 | EM: 1069 (56.2%) | Errors: 2
+============================================================
+
+
+============================================================
+  PROGRESS [ablation3]: 1905/1906 | EM: 1069 (56.2%) | Errors: 2
+============================================================
+
+[1867/1906] ✗ NO MATCH  | DB: yelp | 310786ms
+  Q: Michelle đã viết bao nhiêu đánh giá trong các khoản tiền boa vào tháng tư .
+  Gold: select count ( distinct t1.van_ban ) from nguoi_tieu_dung as t2 join khoan_tien_boa as t1 on t2.id_nguoi_tieu_dung = t1.id_nguoi_tieu_dung where t1.thang = "april" and t2.ten = "michelle"
+  Old:  SELECT COUNT(*) FROM danh_gia T1 JOIN nguoi_tieu_dung T2 ON T1.id_nguoi_tieu_dung = T2.id_nguoi_tieu_dung WHERE T2.ten = 'Michelle' AND T1.thang = '4'
+  New:  SELECT COUNT(*) FROM khoan_tien_boa T1 JOIN nguoi_tieu_dung T2 ON T1.id_nguoi_tieu_dung = T2.id_nguoi_tieu_dung WHERE T2.ten = 'Michelle' AND T1.thang = '4'
+  Old Error: 't1'
+  New Error: 't1'
+
+
+==================================================
+  RE-RUN RESULTS (ablation3)
+==================================================
+Total entries:       1906
+Success:             1904
+Errors:              2
+Exact Match:         1069/1904 (56.1%)
+Eval errors fixed:   19/161
+Remaining errors:    142
+Execution time:      2941s (49.0m)
+
+Files saved:
+  /app/benchmark_tensor_logs/benchmark_results_ablation3.json
+  /app/benchmark_tensor_logs/pred_ablation3.sql
+  /app/benchmark_tensor_logs/gold_ablation3.sql

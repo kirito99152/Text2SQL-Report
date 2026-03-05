@@ -3,6 +3,7 @@ const cors = require('cors');
 const axios = require('axios');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -14,6 +15,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // State
 const queue = []; // Array of pending requests: { body, res, id, timestamp, retryCount, auth }
 const endpoints = []; // Array of { url: string, status: 'idle' | 'busy' | 'down', completed: number, activeRequests: Array<{id, startTime}>, isHealthy: boolean, lastHealthCheck: number | null, maxConcurrent: number, currentRequests: number }
+const requestCache = {}; // Map of hashedBody -> responseData
+const inFlightRequests = {}; // Map of cacheKey -> Array of { res, id }
 let requestIdCounter = 1;
 const MAX_RETRIES = 3;
 
@@ -162,7 +165,20 @@ function processQueue() {
         .then(response => {
             console.log(`[Worker] ${availableEndpoint.url} completed Request #${pendingRequest.id}`);
             availableEndpoint.completed += 1;
-            pendingRequest.res.json(response.data);
+
+            // Store in cache and resolve all waiting requests
+            if (pendingRequest.cacheKey) {
+                requestCache[pendingRequest.cacheKey] = response.data;
+                const waiting = inFlightRequests[pendingRequest.cacheKey] || [];
+                console.log(`[Coalesce] Resolving ${waiting.length + 1} requests for cacheKey ${pendingRequest.cacheKey}`);
+                // Resolve the original request and all coalesced requests
+                pendingRequest.res.json(response.data);
+                waiting.forEach(p => p.res.json(response.data));
+                delete inFlightRequests[pendingRequest.cacheKey];
+            } else {
+                // If no cacheKey, just resolve the original request
+                pendingRequest.res.json(response.data);
+            }
         })
         .catch(async (error) => {
             console.error(`[Worker] ${availableEndpoint.url} failed Request #${pendingRequest.id}:`, error.message);
@@ -183,12 +199,20 @@ function processQueue() {
                 queue.unshift(pendingRequest); // Put back to front
                 processQueue();
             } else {
-                pendingRequest.res.status(500).json({
+                const errorResponse = {
                     error: "Upstream LLM Error",
                     details: error.message,
                     endpoint: availableEndpoint.url,
                     isHealthy: availableEndpoint.isHealthy
-                });
+                };
+
+                if (pendingRequest.cacheKey) {
+                    const waiting = inFlightRequests[pendingRequest.cacheKey] || [];
+                    waiting.forEach(p => p.res.status(500).json(errorResponse));
+                    delete inFlightRequests[pendingRequest.cacheKey];
+                }
+
+                pendingRequest.res.status(500).json(errorResponse);
             }
         })
         .finally(() => {
@@ -210,7 +234,25 @@ app.post('/generate_output', (req, res) => {
     const id = requestIdCounter++;
     const authHeader = req.headers['authorization'];
 
+    // Hash the body for caching
+    const bodyStr = JSON.stringify(req.body);
+    const cacheKey = crypto.createHash('md5').update(bodyStr).digest('hex');
+
+    // Check cache
+    if (requestCache[cacheKey]) {
+        console.log(`[API] Cache HIT for request #${id}. Returning cached result.`);
+        return res.json(requestCache[cacheKey]);
+    }
+
+    // Check in-flight
+    if (inFlightRequests[cacheKey]) {
+        console.log(`[API] Request already in-flight for cacheKey ${cacheKey}. Adding request #${id} to waiting list.`);
+        inFlightRequests[cacheKey].push({ res, id });
+        return;
+    }
+
     console.log(`[API] Received new request #${id}, adding to queue.`);
+    inFlightRequests[cacheKey] = []; // Initialize waiting list
 
     queue.push({
         id: id,
@@ -218,7 +260,8 @@ app.post('/generate_output', (req, res) => {
         body: req.body,
         res: res,
         auth: authHeader,
-        retryCount: 0
+        retryCount: 0,
+        cacheKey: cacheKey
     });
 
     // Try to process immediately if any worker is free

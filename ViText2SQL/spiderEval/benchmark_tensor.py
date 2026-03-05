@@ -250,9 +250,12 @@ def pre_enrich_schemas(schemas_map, api_url, num_workers=1):
     return enriched_schemas
 
 
-def call_tensor_api(question, schema_context, api_url, db_id=None, timeout=1000, schema_obj=None, raw_schema=None, pipeline='base'):
+def call_tensor_api(question, schema_context, api_url, db_id=None, timeout=1000, schema_obj=None, raw_schema=None, pipeline='base', initial_sql=None):
     """Call TensorSQL-Node API to generate SQL with retries on 500 errors."""
     payload = {"question": question, "pipeline": pipeline}
+    
+    if initial_sql:
+        payload["initialSql"] = initial_sql
     
     if schema_obj:
         payload["schema"] = schema_obj

@@ -4,7 +4,7 @@ class ExecutionService {
     constructor() {
         // Default to the docker-compose service name if env is missing
         // This endpoint logic depends on bootstrap/index.js exposing /api/execute-sql
-        this.bootstrapUrl = process.env.BOOTSTRAP_ENDPOINT || 'http://vitext2sql:3001/api/execute-sql';
+        this.bootstrapUrl = process.env.BOOTSTRAP_ENDPOINT || 'http://bootstrap:3001/api/execute-sql';
     }
 
     /**
